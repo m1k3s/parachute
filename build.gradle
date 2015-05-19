@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.8.0-1.0.0-79"
+version = "1.8.0-1.0.0-82"
 group= "com.crackedEgg.parachutemod"
 archivesBaseName = "parachutemod-ng"
 
@@ -25,7 +25,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 minecraft {
-    version = "1.8-11.14.1.1338"
+    version = "1.8-11.14.1.1344"
     runDir = "eclipse"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -70,4 +70,11 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+idea
+{
+	module {
+		inheritOutputDirs = true
+	}
 }
