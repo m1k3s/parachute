@@ -55,7 +55,7 @@ public class ItemParachute extends Item {
 
 			EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
 			chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
-			chute.playSound("step.cloth", volume, pitch());
+			chute.playSound("parachutemod:chuteopen", volume, pitch());
 			
 			if (world.isRemote) {
 				RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
