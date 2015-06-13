@@ -35,7 +35,7 @@ import org.apache.logging.log4j.Logger;
 public class ParachuteCommonProxy {
 
 	private static final Logger logger = FMLLog.getLogger();
-	private final int entityID = EntityRegistry.findGlobalUniqueEntityId();
+	//	private final int entityID = EntityRegistry.findGlobalUniqueEntityId();
 	static ItemArmor.ArmorMaterial NYLON = EnumHelper.addArmorMaterial("nylon", "", 15, new int[] {2, 5, 4, 1}, 12); // same as CHAIN
 	static Item.ToolMaterial RIPSTOP = EnumHelper.addToolMaterial("ripstop", 0, 59, 2.0F, 0, 15); // same as WOOD
 	private static final int armorType = 1; // armor type: 0 = helmet, 1 = chestplate, 2 = leggings,   3 = boots
@@ -46,6 +46,7 @@ public class ParachuteCommonProxy {
 	public static final String aadName = "auto_activation_device";
 	private static boolean deployed = false;
 	private static final double offsetY = 2.5;
+	private static int entityID = 1;
 
 	public void preInit()
 	{
