@@ -35,7 +35,7 @@ import org.apache.logging.log4j.Logger;
 public class ParachuteCommonProxy {
 
 	private static final Logger logger = LogManager.getLogger(Parachute.modid);
-	private final int entityID = EntityRegistry.findGlobalUniqueEntityId();
+	private final int entityID = 1; //EntityRegistry.findGlobalUniqueEntityId();
 	private static final int armorType = 1; // armor type: 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
 	public static final int armorSlot = 2;  // armor slot: 3 = helmet, 2 = chestplate, 1 = leggings, 0 = boots    
 	public static final String parachuteName = "parachute";
