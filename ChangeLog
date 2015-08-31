@@ -1,3 +1,856 @@
+commit 0d2725f5e6baddec66595dbf25efb55bb3922a09
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jun 13 13:37:38 2015 -0400
+
+    changed to mod level entity registration
+
+commit 3d3f7699f9d05fd8ef82a7bf7dee478233854f86
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat May 23 10:01:22 2015 -0400
+
+    changed sound directory scheme and correctly added sounds.
+
+commit 73c9ca0240d87bc59debc2e66e50961360678ab0
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat May 23 08:20:57 2015 -0400
+
+    added parachute opening sounds to make the parachute sound more
+    realistic
+    when using other resource packs.
+
+commit c5faf3c7f6d01e789eda8a2d17b06defeb901e52
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue May 19 11:34:27 2015 -0400
+
+    added cs_CZ.lang file, thanks to DeRigeurEx
+
+commit cfe46333a68a4dd915d275ab89a680633d52ce55
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue May 19 11:07:06 2015 -0400
+
+    no source changes
+
+commit aa1c7537e7ad8f5e62ebaa0bae877eb625740c09
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Mar 19 12:50:00 2015 -0400
+
+    changed variable name MSL in getCurrentAltitude() to referenceMSL,
+    something
+    a little more readable .
+
+commit 5439ef9051e59ef591834d1f7bcc670e3a71ae6a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 17 15:03:16 2015 -0400
+
+    Also removed unneccessary static declarations.
+
+commit 89245a9435e5a8062f48d3cfa3df7dadbc8c9226
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 17 15:02:01 2015 -0400
+
+    Moved altitude string formatting to the AltitudeDisplay class.
+
+commit b21b9edeeb655e9e7cf24d3ee637d491f89781cc
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 17 13:56:16 2015 -0400
+
+    changed comments for DecimalFormat in EntityParachute
+
+commit cfa20a434f923ae8fee7bb3828dfa5cf9cd240bb
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 17 13:15:57 2015 -0400
+
+    Made DecimalFormat more locale friendly, hopefully.
+
+commit 9dfe42b8382d0160735c749814c77276c17d54c9
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 17 07:52:22 2015 -0400
+
+    Not sure what changed, I should have committed sooner.
+
+commit 38d1266f4a654cf99ab3c47798a33c87d44c12f4
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Mar 5 16:16:51 2015 -0500
+
+    added the player fall event class back in. I guess it got removed.
+
+commit c1397863e57098bcafd90a1e937dd059901c47fc
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Mar 5 14:22:58 2015 -0500
+
+    build version increment.
+
+commit 53b13640313df88c294f228c6e19b1807e57ff24
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Mar 2 08:03:43 2015 -0500
+
+    version change in build file.
+
+commit 3498f9be21f3b2ef8ac67229212a31f2a408b1da
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 22 17:07:26 2015 -0500
+
+    Added the (dis)mountEntity function call in EntityParachute. Maybe
+    this will
+    help with the dismount bug that causes the player to get stuck.
+
+commit 344d1597005490816f945f7f7e899fcc72df0fee
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Feb 14 11:14:25 2015 -0500
+
+    playing around with constant glide rate. changed word 'rider' to
+    'pilot'.
+
+commit 268d851c82c927ac75c3dfe8d2dc35e0ebe4f84b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Feb 10 18:13:57 2015 -0500
+
+    Changed the riders pos Y to the bounding box minY in checking
+    for ground
+    proximity.
+
+commit 9c0b210d3356915ac18c1b6d3543efea3b8bb92e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 8 08:37:59 2015 -0500
+
+    added better comments, failed attempt to make shouldRiderSit
+    work. Bailed.
+
+commit 77976b03400609427fa67d02f73fe3c0e92ad206
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 6 15:51:08 2015 -0500
+
+    build.gradle changed while experimenting with my shell script
+
+commit 9334a36a58f2e4c6b37182be7a2666774e95e0c9
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 6 15:22:03 2015 -0500
+
+    removed unnecessary test in cord rendering. edited build.gradle,
+    changed back.
+
+commit 28ec4449567feb6caca685ee2d41ffc8aab11b78
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 6 14:57:56 2015 -0500
+
+    Hide the parachute cords if first person. Not really a good way to
+    display them.
+    Add a build number to the version string; 1.8.0-1.0.0-25 for
+    instance. The build
+    number is incremented in my update-project shell script.
+
+commit 977815f79643c69f1fa05bc2d2c121ad604e1c80
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 6 08:01:41 2015 -0500
+
+    minor code cleanup.
+
+commit cbe50956afc36717d4bd7e133979d43c5379d80f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 19:46:16 2015 -0500
+
+    removed unneccessary tests from KeyPressTick and KeyPressMessage
+    classes.
+
+commit c878285321fdfbebdd3232d9e2ae8ede1a4c568a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 15:59:35 2015 -0500
+
+    Code cleanup.
+
+commit 7fe8fe48a150da7fe33ccd27085ba66f1254de0d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 13:08:27 2015 -0500
+
+    moved KeyPressTick class to client directory.
+
+commit 1d0209e75098f98ddc3106b61bde4026e88ad991
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 12:59:06 2015 -0500
+
+    reworked and enabled the configurable jump key code. Now it works on
+    the server too. Removed the keycode on the server end, no need for it.
+
+commit d47b2d5eb10ab2ca5eb9dbb19f7714da9018d672
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 11:54:50 2015 -0500
+
+    disabled jump key retrieval, causes a server crash.
+
+commit 4be0a12aff649ae170d98789ab4f119698858e3c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Feb 2 16:17:14 2015 -0500
+
+    tried to change altitude algorithm, didn't work.
+
+commit 486e6568219af359a98dc146ab062a75f49c4258
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 31 08:19:03 2015 -0500
+
+    changed parachute orientation equation in
+    ItemParachute.onDeploy. Renamed
+    getHopAndPopDamageAmount to getParachuteDamageAmount. Removed stale
+    imports.
+
+commit b6f03a017317e1091e99dce86a1239733bd5a185
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 30 18:54:19 2015 -0500
+
+    committing just in case, no real changes. I think.
+
+commit 9f29a02e6f4c2b9fff0e13c7b52269d6e86c61dc
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 30 11:57:57 2015 -0500
+
+    added a check to the player tick to look for the parachute removed
+    from
+    the hot bar slot while wearing the pack. changed a custom texture.
+
+commit d54b7c0c1254b2169be66837ce60822a3a8f2f99
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 27 20:34:33 2015 -0500
+
+    added a new altitude method. the new method starts at the entity
+    posY and
+    checks blocks downward until a non-airblock is encountered.
+
+commit 6458e2b83f8f7f45a87b70f492dbc9774912337e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 27 18:04:31 2015 -0500
+
+    minor change to rendering stuff
+
+commit cc0fe4b50b6cf0a367aaf1ab4a21264799936de3
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 26 16:37:35 2015 -0500
+
+    removed dropParachute method, it wasn't doing anything.
+
+commit ffcc00d25ee3eeecbe33d6c233abfd5f40cd7b11
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 26 13:01:37 2015 -0500
+
+    messed with the altitude display string spacing.
+
+commit 42edbb0d747a8bd5d5c9e103580884d9c55df1a0
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 17:37:06 2015 -0500
+
+    removed stale imports and commented code.
+
+commit 82035b6adf68b888dcfd22f08d704dd1e85d8cac
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 16:25:40 2015 -0500
+
+    Changed the ascend key from a hard wired Keyboard.SPACE_KEY to grab
+    the 'jump'
+    key specified by the game settings configuration. The user can change
+    the jump key
+    and the parachute ascend key will use that.
+
+commit 7e6291a2fb75315ed583d16189d397e71e4326d5
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 15:10:42 2015 -0500
+
+    minor changes to make the offset value a final in the common proxy
+    file.
+
+commit 9eeb14cd959d4d400c265849bb224d0d34093513
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 12:05:28 2015 -0500
+
+    removed commented code from dropParachute.
+
+commit 693d0d77a7269aa0fbfcd440f0f6d185eb0f6741
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 12:01:02 2015 -0500
+
+    fixed a dismount bug in dropParachute method. I rediculously
+    included the
+    mounting code from Entity.mountEntity. :(
+
+commit 077a78ec876fbbf6a6a4b2bc9a02f875046aaa50
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 09:28:46 2015 -0500
+
+    Changed altitude colors, white for "altitude", red if the altitude
+    is between
+    0 and 8, green if above 8, and yellow if < 0; below sea level.
+
+commit 1223eac310d696d2847743393ae5c92b829eae3f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 24 20:00:18 2015 -0500
+
+    forgot to comment out shouldRiderSit method
+
+commit d2c1dc882665acaa641dee3c305d735975cf90dc
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 24 19:51:06 2015 -0500
+
+    minor code changes for readability.
+
+commit 365236fae2f652e379fb3e711805554ddbc1d00a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 24 17:07:21 2015 -0500
+
+    Adjusted the contrails back to the rear edge of the parachute.
+
+commit d77b0bd8162452e78dbe936d74084ea36e8bfde7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 20:20:48 2015 -0500
+
+    removed PlayerFallEvent.java. The fall event doesn't seem to do
+    much even
+    though it's being called. Player still gets fall damage. Probably
+    my logic
+    is bad.
+
+commit e398edaeb0d5dedfbed83eda2d21e99256695cff
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 16:45:45 2015 -0500
+
+    Changed crafting recipe to include leather in the bottom middle slot
+    instead of string.
+
+commit 144125829ce2d30dfa62c8fed002b32e0baef102
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 16:07:33 2015 -0500
+
+    Added the player fall event back in. figured out how to check
+    if playerr
+    was on chute. I'll figure out if this event is worth subscribing to.
+
+commit 6ba8fe222a8087b067fa51f88b38dacc68035444
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 11:47:15 2015 -0500
+
+    fix a silent NPE in togglePlayerParachutePack.
+
+commit 60ca09624309a5ec7783820194091a9c7f2daee7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 09:58:32 2015 -0500
+
+    removed stale imports
+
+commit b0544eb38bd13681b1105544f5213cc3785ec761
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 09:43:10 2015 -0500
+
+    changed version to 1.0.0 and JAR name to parachutemod-ng
+
+commit 367ad1c87d206d3e6740bb6eec61957f0613cb22
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 09:36:23 2015 -0500
+
+    changed pack texture. added build.gradle to git
+
+commit 102e58d1824c9d483604101f88c6e10cfd74ea8a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 08:11:33 2015 -0500
+
+    removed code related to large/small canopies. This parachute uses
+    the small 3 section panel only. Cleaned up more code relating to the
+    old parachute mod.
+
+commit 3d9bf1512d2b9a89de351537e71d20e1df1c6afa
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 22 18:39:48 2015 -0500
+
+    Removed all files not erlated to the old hop and pop. Renamed h&p to
+    parachute.
+
+commit c84817bf57bcb60ed64e3e36fe514eaf01165266
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 22 16:44:29 2015 -0500
+
+    created new branch for hop and pop with a pack. This will be my
+    personal
+    parachute mod that I use. I don't use the ripcord or aad or the
+    associated
+    parachute item.
+
+commit d25cc8881b1df86767e0bb8733a82986aa834990
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 20 16:05:21 2015 -0500
+
+    Removed all import static references.
+
+commit 53686f8a9fb7472de60f2269d1d8be8a19146706
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 20 15:56:53 2015 -0500
+
+    Reformatted all source files. No code changes.
+
+commit e846c4a01e016214f190c5002e7c8df5deecf5e4
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 20 13:10:34 2015 -0500
+
+    Added comments to checkForGroundProximity. Also removed more
+    commented/unused code.
+
+commit 8dc06337a926ab6960d76843a452fd8228c7ad66
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 20 08:02:55 2015 -0500
+
+    Fixed a bug in the ground proximity detection code. Thanks to
+    Silvercatcher!
+    Some minor code cleanup by removing more commented out code.
+
+commit 61b6dc514e96e2cde977e5d66581d0949327f001
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 19 12:52:36 2015 -0500
+
+    Added custom parachute colors to the random option.
+
+commit eb84497f15376489cb43ee6ccc2324899c3d3b9c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 18 15:09:21 2015 -0500
+
+    Changed the randomly returned altitude equation to use nextGausian()
+    which will return a number between -1.0 and 1.0. this value multiplied
+    by 1000.0 is returned when the world is not a surface world.
+
+commit dc477251b997428bdd70eb1bd5fe5bc395de481e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 18 12:36:59 2015 -0500
+
+    Better altitude detection, excludes the nether and end dimensions from
+    the calculations and instead returns a weirdly random number between
+    0.0 and -1000. Weird huh?
+
+commit eb9147955af2d4f9c3d1c23983fa0a8703ee0323
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 18 10:12:04 2015 -0500
+
+    Made the "Altitude: " string private final to the class. Easier
+    to change
+    if I want to.
+
+commit c7863b2da3377cc20cb9c127d275d4d1c6a9fe8c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 18 08:33:56 2015 -0500
+
+    Changed the altitude calculations, now the altitude is either meters
+    above the ground or meters above the mean sea level (63). Changed
+    the display
+    to account for the string length of the altitude digits.
+
+commit 0628f1a234632255ed312b9aedeb6a09d12bfc2e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 17 15:35:55 2015 -0500
+
+    fixed indentation in method.
+
+commit 2c82bd6992c3bf16097a9d86cd25f584fb3036d1
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 17 15:30:30 2015 -0500
+
+    Changed to altitude display to "meters MSL". Added a function to
+    calculate
+    the altitude above "mean sea level". The rivers and oceans are
+    at block
+    level 63. The function counts the blocks starting at Y=63 upwards
+    until
+    the first air block. Then subtract that value from the
+    riddenByEntity.posY.
+
+commit e9f803051584976c534ed383d871bbcd1c9ae5ef
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 14 21:40:44 2015 -0500
+
+    Fixed a potential server side bug and adjusted the text spacing on the
+    altitude display.
+
+commit a76da645f29461358dd5fbbdcc3c5b344f5bc562
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 14 19:53:13 2015 -0500
+
+    Changed wording on config info tooltip. Modified updateRiderPosition
+    method.
+
+commit 01c73f91c349b76e1d3a285ebf72ac9c9f72b2c5
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 13 17:45:32 2015 -0500
+
+    Added a minecraft version string to use in config file.
+
+commit 3176f575ec2704767e83a48c64b8f6fbf1db5fad
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 12 12:35:36 2015 -0500
+
+    finally removed that unused variable "ridingThermals".
+
+commit 6b94eb5a7705a9f4168886790e66d8463c822151
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 12 11:57:38 2015 -0500
+
+    Updated copyright year to 2015
+
+commit 521f2a0826a9df400c77a701ea072389a45732b5
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 12 10:41:45 2015 -0500
+
+    removed erroneous comment
+
+commit 5901a78d8e9b9807e85c90067b73316b404aa063
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 12 09:54:44 2015 -0500
+
+    changed the color comment style in ConfigHandler
+
+commit 2e715688ff0049a1ebcbf4b0e1057a5a8b42271c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 12 09:29:28 2015 -0500
+
+    changed the initConfigInfo method name to updateConfigInfo. Code house
+    keeping, removed more commented out code.
+
+commit 18f410004f6d6e631c42f31a61d04dce7c8c232c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 12 09:10:34 2015 -0500
+
+    removed some commented code sections.
+
+commit 4eae39a370d50018309d0a405523f81ebb8c44df
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 12 08:31:55 2015 -0500
+
+    moved config file loading to preinit in common proxy. The config
+    file only
+    needs to read loaded once. The GUI config code takes care of
+    saving any
+    changes to the file.
+
+    Bumped version to 3.1.0 for latest changes.
+
+commit 602718a350fc387c867f13b57d207d3b80447eef
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 11 22:04:39 2015 -0500
+
+    Added FML mod config ability. The parachute config can be modified
+    using
+    the FML mod config button from the main menu.
+
+commit 55be8f9b3745fc377f6e91f0dded905116e310b5
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 11 09:18:32 2015 -0500
+
+    Added a configuration class and moved all config set/get methods
+    to this class. Moved the message handler in KetPressMessage to
+    a static inline class.
+
+commit 9d46db9235fbe766da919e3d8374e0e47d01f2ff
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 10 20:06:23 2015 -0500
+
+    Added an altitude display while on the parachute. Added a new
+    class called
+    AltitudeDisplay in the client directory.
+
+commit ba701adb7aef96945f56698a10e4948a6de3dbe9
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 10 13:30:45 2015 -0500
+
+    Updated MCP mappings. Reworked ground proximity code.
+
+commit 366ed7e4a1fc141731600de54fbdd5995c3737e8
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 6 18:04:42 2015 -0500
+
+    Bump mod version, change version string in Parachute.java.
+
+commit c74cc9a67b94f835a0b7b192cd98c1849c31be26
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 6 13:58:47 2015 -0500
+
+    Fix server side bug, BlockPos().subtract() is client only. Replaced
+    with BlockPos().add() using a negative value.
+
+commit 67d2017f26ea7121d58787883cccac151ef23330
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 5 19:57:47 2015 -0500
+
+    code clean up.
+
+commit 83a5cb6dc4bba21d5465d4c4ea0afc0dd93e8eba
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 5 19:49:10 2015 -0500
+
+    Added the newly renamed files.
+
+commit e09152d410a29b9254e6342365436a0de5a302a1
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 5 19:47:16 2015 -0500
+
+    Finished moving all common variables and methods to common proxy
+    class.
+    Renamed proxy classes.
+
+commit 31326375e6b917bc3e548f6a199f2b17c1dc5a22
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 5 17:40:14 2015 -0500
+
+    Made more changes by moving code from Parachute.java to the proxy
+    classes.
+
+commit 4589cbc15f2a4677ac9825e5ac1953fee4866bdb
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 5 16:07:38 2015 -0500
+
+    changing the sided proxy structure. Added a dedicated server proxy
+    which
+    freed up the common proxy to be just that, common. rearranged the
+    preInit,
+    Init, and postInit code so that client only code gets called on
+    the client,
+    server only code on the server and common code on both.
+
+commit fbdf74ad1dc27f6e73993d51660e878ff1c9aada
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 4 14:20:30 2015 -0500
+
+    Added an alternate ground test function, acts more like the original.
+
+commit 8d47807e19a8fe712c2e4371b29ce3d5405eaaaf
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 1 14:10:59 2015 -0500
+
+    updated MCP mappings.
+
+commit 0e372feda096cc08023cbec59a8e8212a4786a88
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 31 14:26:01 2014 -0500
+
+    Bump version, added new features/bugs
+
+commit 26f07d4dfb3eeead0cacc625b516741e837d7583
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 31 12:30:52 2014 -0500
+
+    Fix client/server side ttesting bug in ItemParachute and
+    ItemHopAndPop.
+
+commit 933aac983382d8021b09094f5a6ebebbeca77e3a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 29 18:10:14 2014 -0500
+
+    Code cleanup associated with armour render index.
+
+commit d1c2553331abc4ecbe1a3a0ba7c88b5bfa418e29
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 29 18:00:02 2014 -0500
+
+    Still playing with the near ground detection. Also made a change
+    to the
+    armour proxy rendering registery. There doesn't appear to be a way, or
+    need?, to register the armour renderer. The render index is fixed
+    at zero
+    for now.
+
+commit 68d8c086699d2fa2b15007fba2a00e1a86988edd
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Dec 28 17:43:06 2014 -0500
+
+    Removed updateRiderPosition override. Changed the contrail code some,
+    trying to get
+    the contrails to start at the rear edge of the parachute.
+
+commit c069eec3548b3bc2836012fe13d15ed30aef2cf7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Dec 28 12:47:39 2014 -0500
+
+    Added contrails option to parachute and config. Default is no
+    contrails.
+
+commit 744de7b500fb67093f35098f56325f673ff6f31b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Dec 25 18:52:28 2014 -0500
+
+    Modified the lava thermals code. Using raytracing to determine if
+    lava is below upto the maxThermalRise value. If so then ride the
+    thermals. This way you don't have to be just above the lava to
+    get started.
+
+commit dabff083d5135ac303b2a3ca0f116de1d88749fa
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 24 20:11:06 2014 -0500
+
+    Added more custom canopy textures.
+
+commit eaa1a62d645c61d42dbdb38022656f66a7dda76c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 24 19:41:42 2014 -0500
+
+    Now, I added the actual texture directory and textures. Will add
+    'custom0' through 'custom9'. These can of course be replaced in the
+    jar by the user.
+
+commit c3e3cc4c3c1a142e06b2b603f1d52a1669df635f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 24 19:40:19 2014 -0500
+
+    Added custom textures and supporting code for the parachute
+    canopy. Now I need to add the directory, doh!
+
+commit 85183553c7dc527f687dac33267247019b2f5104
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 24 16:49:26 2014 -0500
+
+    bump version to 3.0.1 for future dev.
+
+commit a160c00407a225f02a34b14b75fb6d721adaf253
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Dec 23 20:31:14 2014 -0500
+
+    Added click sound to AAD. Added more checks to near ground code.
+
+commit 5053eb65f90debee6bd3681b68513e07b3e69972
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Dec 23 10:47:24 2014 -0500
+
+    Changed some GL11 calls to GlStateManager calls in render
+    code. Testing will ensue...
+
+commit 90d72f29be4d41cec1f23d2f6987571b213e7b4e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 22 13:30:31 2014 -0500
+
+    added Changelog to git
+
+commit 416572c0addc3a578f977def683e781ed333f325
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 22 13:28:51 2014 -0500
+
+    Added turbulence option to config. Also turbulence occurs when it's
+    raining or thundering.
+
+commit 35a552f1637a829b9230f89abf3a7c57d7f9f0c6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Dec 21 21:18:49 2014 -0500
+
+    modified near ground checking code to use BlockPos. Cleaned up near
+    ground code as well.
+
+commit 76c6a25bd6915a3c1d8341673e3ee2ecbd2ba377
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Dec 21 09:26:11 2014 -0500
+
+    Removed old commented out network code.
+
+commit 6e00d6dff504c806ba631cec4e9e42f6f2b84902
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Dec 20 18:16:08 2014 -0500
+
+    Fixed some typos in the config file. Changed some text to better
+    explain the variables.
+
+commit 7feb08cdc13f3dc38545e09cfee8c36dc846c3e0
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Dec 20 16:45:13 2014 -0500
+
+    Removed AADActive variable from config file and all associated
+    code. This did nothing. Fixed bug where AAD fired even if
+    inactive. Removed check for creative mode disabling AAD from firing.
+
+commit 939f12bbc4b2a4775289837fd56f821722a6612c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Dec 20 14:41:11 2014 -0500
+
+    added lava thermals to the mod. There are config file variables
+    you can change. Also figured out how to get the AAD to change
+    textures. Still haven't figured out how to change the item texture
+    in the inventory slot.
+
+commit 5ede7e3ba6027d195506fe50f357c00ac99dc712
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 17 08:01:05 2014 -0500
+
+    Still trying to fix that dismount bug. Changed local function
+    dropParachute to mountEntity.
+
+commit 67a5d8f5594b4abb7dc4acbaca51376d32a88b5f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 10 16:27:38 2014 -0500
+
+    Porting to 1.8
+
+commit b201f2d82f5f953f38fb156f87de5b2082186920
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 8 20:09:39 2014 -0500
+
+    fixed parachute jerky movement. The setPositionAndRotation2()
+    function has changed names. Yes!
+
+commit 846aec3edb8cbf6230b38b490af3cc45d42c58e4
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 1 17:18:30 2014 -0500
+
+    added the new files back in
+
+commit 74681ecc2f42f60c388e7833266afe03c2240288
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 1 17:17:22 2014 -0500
+
+    lower cased all resource files in an attempt to fix item rendering.
+
+commit dbf5f298212ff7892e2b8dd793580febb674dc4c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 1 10:03:17 2014 -0500
+
+    fixed the rendering bug by moving proxy.registerRenderers from
+    preInit to Init function.
+
+commit 206ded87c2ca9f9583cd4814a0c5a4d27900f869
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Nov 30 18:17:33 2014 -0500
+
+    updating JSON files
+
+commit 250e15a37ef9747dce49c19b36ba8b027b904009
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Nov 29 16:10:20 2014 -0500
+
+    comment out SideOnly stuff.
+
+commit de8c05477f5594cbd39260b9ce6cfd087e167351
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Nov 28 14:32:45 2014 -0500
+
+    added the json files and directories
+
+commit 5aac60a9e2783eb09c71f74bb5184ce80eadefd5
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Nov 27 17:59:32 2014 -0500
+
+    initial commit changes to 1.8
+
+commit 769f65d779a88272e3829fea4252b0d26802e94c
+Merge: c9f7cb7 147a2af
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Nov 2 19:31:42 2014 -0500
+
+    Merge branch '1.7.10' of github.com:m1k3s/parachute into 1.7.10
+
+    re-creating github
+
+commit 147a2afba06210a349a22cd4875c939d9373c628
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Sun Nov 2 19:26:56 2014 -0500
+
+    Create README.md
+
+commit 4bd340623bb7fa7097b574bf8f58741ed67e1c69
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Sun Nov 2 19:26:43 2014 -0500
+
+    Initial commit
+
+commit c9f7cb739d94f8597e58f145221a06f3e872bdb5
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jun 25 16:38:21 2014 -0400
+
+    Updated to 1.7.10-pre4 and branched
+
 commit ad68de8fc4a16b38d666e66f74aab6ce5942544e
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Thu Jun 12 10:34:17 2014 -0400
