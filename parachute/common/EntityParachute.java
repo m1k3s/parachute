@@ -268,8 +268,8 @@ public class EntityParachute extends Entity {
 				motionX += -Math.sin(yaw * d2r) * motionFactor * 0.049;
 				motionZ += Math.cos(yaw * d2r) * motionFactor * 0.049;
 			} else { // forward speed determined by 'W' keypress
-				motionX += -Math.sin(yaw * d2r) * motionFactor * 0.05 * pilot.moveForward;
-				motionZ += Math.cos(yaw * d2r) * motionFactor * 0.05 * pilot.moveForward;
+				motionX += -Math.sin(yaw * d2r) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+				motionZ += Math.cos(yaw * d2r) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
 			}
 		}
 
