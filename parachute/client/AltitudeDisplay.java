@@ -50,8 +50,8 @@ public class AltitudeDisplay {
 		screenX = sr.getScaledWidth();
 		screenY = sr.getScaledHeight();
 		
-		char sep = df.getDecimalFormatSymbols().getDecimalSeparator();
-		df.applyPattern("###" + sep + "#"); // for the alitude display
+//		char sep = df.getDecimalFormatSymbols().getDecimalSeparator();
+//		df.applyPattern("###" + sep + "#"); // for the alitude display
 	}
 
 	// the altitudeStr display is placed in the food bar space because
@@ -89,8 +89,8 @@ public class AltitudeDisplay {
 	
 	public String format(double d)
 	{
-		double dstr = new Double(df.format(d));
-		return String.format("%s", dstr);
+//		double dstr = new Double(df.format(d));
+		return String.format("%s", d);
 	}
 	
 	public static void setAltitudeDouble(double alt)

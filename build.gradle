@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.8.0-3.1.1-23"
+version = "1.8.0-3.1.2-23"
 group= "com.crackedEgg.parachutemod"
 archivesBaseName = "parachutemod"
 
