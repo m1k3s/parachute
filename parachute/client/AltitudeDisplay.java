@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class AltitudeDisplay {
 
-	private final DecimalFormat df = new DecimalFormat();
+//	private final DecimalFormat df = new DecimalFormat();
 	public static double altitude = 0.0;
 	private final Minecraft mc = Minecraft.getMinecraft();
 	private int screenX;
@@ -50,8 +50,8 @@ public class AltitudeDisplay {
 		screenX = sr.getScaledWidth();
 		screenY = sr.getScaledHeight();
 		
-		char sep = df.getDecimalFormatSymbols().getDecimalSeparator();
-		df.applyPattern("###" + sep + "#"); // for the alitude display
+//		char sep = df.getDecimalFormatSymbols().getDecimalSeparator();
+//		df.applyPattern("###" + sep + "#"); // for the alitude display
 	}
 
 	// the altitudeStr display is placed in the food bar space because
@@ -89,8 +89,8 @@ public class AltitudeDisplay {
 	
 	public String format(double d)
 	{
-		double dstr = new Double(df.format(d));
-		return String.format("%s", dstr);
+//		double dstr = new Double(df.format(d));
+		return String.format("%s", d);
 	}
 	
 	public static void setAltitudeDouble(double alt)
