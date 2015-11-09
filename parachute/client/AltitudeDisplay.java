@@ -51,7 +51,7 @@ public class AltitudeDisplay {
 		screenY = sr.getScaledHeight();
 		
 		char sep = df.getDecimalFormatSymbols().getDecimalSeparator();
-		df.applyPattern("##0" + sep + "0"); // for the alitude display
+		df.applyPattern("###" + sep + "#"); // for the alitude display
 	}
 
 	// the altitudeStr display is placed in the food bar space because
