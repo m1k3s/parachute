@@ -90,7 +90,7 @@ public class AltitudeDisplay {
 	public String format(double d)
 	{
 //		double dstr = new Double(df.format(d));
-		return String.format("%s", d);
+		return String.format("%.1f", d);
 	}
 	
 	public static void setAltitudeDouble(double alt)

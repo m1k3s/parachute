@@ -13,12 +13,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-// for people who want stable
-//plugins {
-//    id "net.minecraftforge.gradle.forge" version "2.0.1"
-//}
-
-version = "1.8.0-1.0.0-104"
+version = "1.8.0-1.0.1-155"
 group= "com.crackedEgg.parachutemod"
 archivesBaseName = "parachutemod-ng"
 
@@ -26,7 +21,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 minecraft {
-    version = "1.8-11.14.3.1513"
+    version = "1.8-11.14.3.1556"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -34,7 +29,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20141130"
+    mappings = "snapshot_nodoc_20150130"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
