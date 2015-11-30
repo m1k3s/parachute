@@ -46,7 +46,7 @@ public class AltitudeDisplay {
 	public AltitudeDisplay()
 	{
 		super();
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution sr = new ScaledResolution(mc);
 		screenX = sr.getScaledWidth();
 		screenY = sr.getScaledHeight();
 		
@@ -59,7 +59,7 @@ public class AltitudeDisplay {
 	// when in creativemode we lower the display a bit
 	public void updateWindowScale()
 	{
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution sr = new ScaledResolution(mc);
 		screenX = (sr.getScaledWidth() / 2) + 10;
 		if (mc.thePlayer.capabilities.isCreativeMode) {
 			screenY = sr.getScaledHeight() - 30;

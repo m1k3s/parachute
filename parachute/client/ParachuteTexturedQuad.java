@@ -22,7 +22,9 @@ package com.parachute.client;
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Vec3;
+import org.lwjgl.opengl.GL11;
 
 public class ParachuteTexturedQuad {
 
@@ -59,26 +61,42 @@ public class ParachuteTexturedQuad {
 		vertexPositions = texCoords;
 	}
 
-	public void draw(WorldRenderer worldrenderer, float face)
+	public void draw(WorldRenderer worldrenderer, float scale)
 	{
 		Vec3 vec3 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[0].vector3D);
 		Vec3 vec31 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[2].vector3D);
 		Vec3 vec32 = vec31.crossProduct(vec3).normalize();
-		worldrenderer.startDrawingQuads();
+//		worldrenderer.startDrawingQuads();
 
-		if (invertNormal) {
-			worldrenderer.setNormal(-((float) vec32.xCoord), -((float) vec32.yCoord), -((float) vec32.zCoord));
-		} else {
-			worldrenderer.setNormal((float) vec32.xCoord, (float) vec32.yCoord, (float) vec32.zCoord);
-		}
+		float x = (float)vec32.xCoord;
+        float y = (float)vec32.yCoord;
+        float z = (float)vec32.zCoord;
+
+        if (invertNormal) {
+            x = -x;
+            y = -y;
+            z = -z;
+        }
+
+        worldrenderer.func_181668_a(GL11.GL_QUADS, DefaultVertexFormats.field_181703_c);
+
+//		if (invertNormal) {
+//			worldrenderer.setNormal(-((float) vec32.xCoord), -((float) vec32.yCoord), -((float) vec32.zCoord));
+//		} else {
+//			worldrenderer.setNormal((float) vec32.xCoord, (float) vec32.yCoord, (float) vec32.zCoord);
+//		}
 
 		for (int i = 0; i < 4; ++i) {
 			PositionTextureVertex positiontexturevertex = this.vertexPositions[i];
-			worldrenderer.addVertexWithUV(positiontexturevertex.vector3D.xCoord * (double) face, 
-					positiontexturevertex.vector3D.yCoord * (double) face,
-					positiontexturevertex.vector3D.zCoord * (double) face,
-					(double) positiontexturevertex.texturePositionX,
-					(double) positiontexturevertex.texturePositionY);
+			worldrenderer.func_181662_b(positiontexturevertex.vector3D.xCoord * (double)scale, 
+				positiontexturevertex.vector3D.yCoord * (double)scale,
+				positiontexturevertex.vector3D.zCoord * (double)scale).func_181673_a((double)positiontexturevertex.texturePositionX,
+				(double)positiontexturevertex.texturePositionY).func_181663_c(x, y, z).func_181675_d();
+//			worldrenderer.addVertexWithUV(positiontexturevertex.vector3D.xCoord * (double) scale, 
+//					positiontexturevertex.vector3D.yCoord * (double) scale,
+//					positiontexturevertex.vector3D.zCoord * (double) scale,
+//					(double) positiontexturevertex.texturePositionX,
+//					(double) positiontexturevertex.texturePositionY);
 		}
 
 		Tessellator.getInstance().draw();
