@@ -56,6 +56,7 @@ public class EntityParachute extends Entity {
 	private boolean altitudeMSL;
 	private boolean autoDismount;
 	private boolean fixedGlideRate;
+	private boolean dismountInWater;
 //	final private DecimalFormat df;
 
 	final static int Damping = 5; // value of 10 allows the altitude display to update about every half second
@@ -91,6 +92,7 @@ public class EntityParachute extends Entity {
 		altitudeMSL = ConfigHandler.getAltitudeMSL();
 		autoDismount = ConfigHandler.isAutoDismount();
 		fixedGlideRate = ConfigHandler.getFixedGlideRate();
+		dismountInWater = ConfigHandler.getDismountInWater();
 
 		curLavaDistance = lavaDistance;
 		worldObj = world;
@@ -170,7 +172,7 @@ public class EntityParachute extends Entity {
 	@Override
 	public boolean shouldDismountInWater(Entity pilot)
 	{
-		return true;
+		return dismountInWater;
 	}
 
 	@Override
