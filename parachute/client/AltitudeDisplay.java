@@ -20,7 +20,6 @@
 package com.parachute.client;
 
 import com.parachute.common.ParachuteCommonProxy;
-import java.text.DecimalFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -28,17 +27,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class AltitudeDisplay {
 
-//	private final DecimalFormat df = new DecimalFormat();
 	public static double altitude = 0.0;
 	private final Minecraft mc = Minecraft.getMinecraft();
 	private int screenX;
 	private int screenY;
-	private final int colorWhite = 0xffffffff;
-	private final int colorYellow = 0xffffff00;
-	private final int colorRed = 0xffcc0000; // format: alpha.red.green.blue
-	private final int colorGreen = 0xff00cc00;
 
-	private final String altitudeLabel = "Altitude: ";
+    private final String altitudeLabel = "Altitude: ";
 	private final int titleWidth = mc.fontRendererObj.getStringWidth(altitudeLabel);
 	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0");
 	private final int totalWidth = titleWidth + fieldWidth;
@@ -49,9 +43,6 @@ public class AltitudeDisplay {
 		ScaledResolution sr = new ScaledResolution(mc);
 		screenX = sr.getScaledWidth();
 		screenY = sr.getScaledHeight();
-		
-//		char sep = df.getDecimalFormatSymbols().getDecimalSeparator();
-//		df.applyPattern("###" + sep + "#"); // for the alitude display
 	}
 
 	// the altitudeStr display is placed in the food bar space because
@@ -81,6 +72,7 @@ public class AltitudeDisplay {
 				String altitudeStr = format(altitude);
 				int stringWidth = mc.fontRendererObj.getStringWidth(altitudeStr);
 				int nextX = totalWidth - stringWidth;
+				int colorWhite = 0xffffffff;
 				mc.fontRendererObj.drawStringWithShadow(altitudeLabel, screenX, screenY, colorWhite);
 				mc.fontRendererObj.drawStringWithShadow(altitudeStr, screenX + nextX, screenY, colorString());
 			}
@@ -89,7 +81,6 @@ public class AltitudeDisplay {
 	
 	public String format(double d)
 	{
-//		double dstr = new Double(df.format(d));
 		return String.format("%.1f", d);
 	}
 	
@@ -100,6 +91,9 @@ public class AltitudeDisplay {
 
 	private int colorString()
 	{
-		return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
+		int colorYellow = 0xffffff00;
+        int colorRed = 0xffcc0000;
+        int colorGreen = 0xff00cc00;
+        return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
 	}
 }
