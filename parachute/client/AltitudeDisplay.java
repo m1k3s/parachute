@@ -92,8 +92,8 @@ public class AltitudeDisplay {
 	private int colorString()
 	{
 		int colorYellow = 0xffffff00;
-        int colorRed = 0xffcc0000;
-        int colorGreen = 0xff00cc00;
+        int colorRed = 0xffaa0000;
+        int colorGreen = 0xff00aa00;
         return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
 	}
 }

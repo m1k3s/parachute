@@ -31,8 +31,6 @@ import net.minecraft.item.Item;
 
 public class ItemParachute extends Item {
 
-	final private float volume = 1.0F;
-
 	public ItemParachute(ToolMaterial toolmaterial)
 	{
 		super();
@@ -55,6 +53,7 @@ public class ItemParachute extends Item {
 
 			EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
 			chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
+			float volume = 1.0F;
 			chute.playSound("parachutemod:chuteopen", volume, pitch());
 			
 			if (world.isRemote) {
@@ -64,6 +63,7 @@ public class ItemParachute extends Item {
 			}
 			entityplayer.mountEntity(chute);
 			ParachuteCommonProxy.setDeployed(true);
+			entityplayer.addStat(Parachute.parachuteDeployed, 1); // add to the parachute statistics
 
 			if (itemstack != null) {
 				boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, itemstack) > 0;
@@ -83,7 +83,7 @@ public class ItemParachute extends Item {
 	@Override
 	public boolean getIsRepairable(ItemStack itemstack1, ItemStack itemstack2)
 	{
-		return Items.string == itemstack2.getItem() ? true : super.getIsRepairable(itemstack1, itemstack2);
+		return Items.string == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
 	}
 	
 }

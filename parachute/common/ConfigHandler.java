@@ -41,6 +41,7 @@ public class ConfigHandler {
 	private static boolean altitudeMSL;
 	private static boolean fixedGlideRate;
 	private static boolean dismountInWater;
+	private static boolean lavaDisablesThermals;
 
 	private static final String aboutComments = Parachute.name + " Config\nMichael Sheppard (crackedEgg)"
 			+ " For Minecraft Version " + Parachute.mcversion + "\n";
@@ -59,6 +60,7 @@ public class ConfigHandler {
 	private static final String altitudeMSLComment = "false to show altitude above ground, true shows altitude above ground (MSL)"; // false
 	private static final String glideRateComment = "true to use a constant glide rate, forward speed"; // false
 	private static final String dismountComment = "true to dismount in water"; // false
+	private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
 	private static final String colorComment = "Parachute Colors Allowed:\n"
 			+ "black, blue, brown, cyan, gray, green, light_blue, lime,\n"
 			+ "magenta, orange, pink, purple, red, silver, white, yellow,\n"
@@ -91,10 +93,11 @@ public class ConfigHandler {
 			altitudeMSL = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, altitudeMSLComment).getBoolean(false);
 			fixedGlideRate = config.get(Configuration.CATEGORY_GENERAL, "fixedGlideRate", false, glideRateComment).getBoolean(false);
 			dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
+			lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
 
-			// if using lava thermals disable space bar thermals, clamp the minimum lava distance.
+			// if using lava thermals check allow/disallow space bar thermals, clamp the minimum lava distance.
 			if (lavaThermals) {
-				thermals = false;
+				thermals = lavaDisablesThermals ? false : true;
 				minLavaDistance = minLavaDistance < 2.0 ? 2.0 : minLavaDistance;
 			}
 		} catch (Exception e) {

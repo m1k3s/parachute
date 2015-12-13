@@ -50,7 +50,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
 
-		net.minecraftforge.fml.common.FMLCommonHandler.instance().bus().register(new KeyPressTick(ascendKey));
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new AltitudeDisplay());
 //		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new ParachuteViewRenderEvent());
 

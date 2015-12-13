@@ -25,8 +25,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+//import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -35,8 +36,7 @@ import org.apache.logging.log4j.Logger;
 public class ParachuteCommonProxy {
 
 	private static final Logger logger = LogManager.getLogger(Parachute.modid);
-	private final int entityID = 1; //EntityRegistry.findGlobalUniqueEntityId();
-	private static final int armorType = 1; // armor type: 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
+    private static final int armorType = 1; // armor type: 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
 	public static final int armorSlot = 2;  // armor slot: 3 = helmet, 2 = chestplate, 1 = leggings, 0 = boots    
 	public static final String parachuteName = "parachute";
 	public static final String packName = "pack";
@@ -45,14 +45,15 @@ public class ParachuteCommonProxy {
 
 	public void preInit()
 	{
-		EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 20, true);
+        int entityID = 1;
+        EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 20, true);
 
-		Parachute.parachuteItem = (ItemParachute) (new ItemParachute(ToolMaterial.IRON));
+		Parachute.parachuteItem = new ItemParachute(ToolMaterial.IRON);
 		Parachute.parachuteItem.setUnlocalizedName(parachuteName);
 		GameRegistry.registerItem(Parachute.parachuteItem, parachuteName);
 
-		final int renderIndex = 0;
-		Parachute.packItem = (ItemParachutePack) (new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType));
+		final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
+		Parachute.packItem = new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType);
 		Parachute.packItem.setUnlocalizedName(packName);
 		GameRegistry.registerItem(Parachute.packItem, packName);
 
@@ -61,14 +62,16 @@ public class ParachuteCommonProxy {
 
 	public void Init()
 	{
-		FMLCommonHandler.instance().bus().register(Parachute.instance);
-		FMLCommonHandler.instance().bus().register(new PlayerTickEventHandler());
+        MinecraftForge.EVENT_BUS.register(Parachute.instance);
+        MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
 
 		// recipe to craft the parachute
-		GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), new Object[] {
-			"###", "X X", " L ", '#', Blocks.wool, 'X', Items.string, 'L', Items.leather
-		});
+		GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.wool, 'X', Items.string, 'L', Items.leather);
+
+        // add the parachute statistic
+        Parachute.parachuteDeployed.registerStat();
+        StatList.allStats.add(Parachute.parachuteDeployed);
 	}
 
 	public void postInit()

@@ -362,7 +362,9 @@ public class EntityParachute extends Entity {
 
 		if (lavaThermals) {
 			descentRate = doLavaThermals();
-			return descentRate;
+			if (!allowThermals) {
+    			return descentRate;
+    		}
 		}
 
 		if (ascendMode) {
