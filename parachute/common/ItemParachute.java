@@ -63,7 +63,7 @@ public class ItemParachute extends Item {
 			}
 			entityplayer.mountEntity(chute);
 			ParachuteCommonProxy.setDeployed(true);
-			entityplayer.addStat(Parachute.parachuteDeployed, 1); // add to the parachute statistics
+			entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
 			if (itemstack != null) {
 				boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, itemstack) > 0;

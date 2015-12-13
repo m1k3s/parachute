@@ -69,9 +69,11 @@ public class ParachuteCommonProxy {
 		// recipe to craft the parachute
 		GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.wool, 'X', Items.string, 'L', Items.leather);
 
-        // add the parachute statistic
+        // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
         StatList.allStats.add(Parachute.parachuteDeployed);
+		Parachute.parachuteDistance.initIndependentStat().registerStat();
+		StatList.allStats.add(Parachute.parachuteDistance);
 	}
 
 	public void postInit()

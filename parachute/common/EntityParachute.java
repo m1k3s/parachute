@@ -25,6 +25,7 @@ import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -325,6 +326,14 @@ public class EntityParachute extends Entity {
 		}
 		// increment tick count for altitude display damping
 		tickCount++;
+
+        // update distance by parachute statistics
+        if (riddenByEntity != null) {
+            double dX = posX - prevPosX;
+            double dZ = posZ - prevPosZ;
+            int distance = Math.round(MathHelper.sqrt_double(dX * dX + dZ * dZ) * 100.0F);
+            ((EntityPlayer) riddenByEntity).addStat(Parachute.parachuteDistance, distance);
+        }
 	}
 	
 	public void killParachute()
