@@ -25,8 +25,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
-//import net.minecraftforge.common.AchievementPage;
+import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -65,9 +67,15 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(Parachute.instance);
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
+        MinecraftForge.EVENT_BUS.register(new ParachuteItemCraftedEvent());
 
 		// recipe to craft the parachute
 		GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.wool, 'X', Items.string, 'L', Items.leather);
+
+		// add parachute crafting achievement
+        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.buildWorkBench);
+        Parachute.buildParachute.registerStat();
+        AchievementPage.registerAchievementPage(new AchievementPage("Parachute", Parachute.buildParachute));
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();

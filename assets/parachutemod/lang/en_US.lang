@@ -4,3 +4,5 @@ stat.parachuteDeployed=Parachutes deployed
 stat.parachuteDeployed.desc=Number of times you deployed a parachute
 stat.parachuteDistance=Distance by Parachute
 stat.parachuteDistance.desc=Distance traveled by parachute
+achievement.buildParachute=Parachute crafted
+achievement.buildParachute.desc=You have crafted a parachute!
