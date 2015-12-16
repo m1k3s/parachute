@@ -19,12 +19,10 @@
 //
 package com.parachute.common;
 
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.Sys;
 
 public class PlayerTickEventHandler {
 

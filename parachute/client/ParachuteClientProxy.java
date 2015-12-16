@@ -52,7 +52,6 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new AltitudeDisplay());
-//		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new ParachuteViewRenderEvent());
 
 		ItemModelMesher mm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		mm.register(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));

@@ -185,11 +185,6 @@ public class ConfigHandler {
         return isAADActive;
     }
 
-    public static void setAADActive(boolean active)
-    {
-        isAADActive = active;
-    }
-
     public static double getAADAltitude()
     {
         return aadAltitude;

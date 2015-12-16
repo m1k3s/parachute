@@ -20,7 +20,6 @@
 package com.parachute.common;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item.ToolMaterial;
@@ -46,7 +45,6 @@ public class ParachuteCommonProxy {
 	public static final String packName = "pack";
 	private static boolean deployed = false;
 	private static final double offsetY = 2.5;
-//    private static double altitude = ConfigHandler.getAADAltitude();
 
 	public void preInit()
 	{
@@ -121,19 +119,6 @@ public class ParachuteCommonProxy {
 		return altitudeReached;
 	}
 
-    // search inventory for a parachute
-//    public static ItemStack inventoryContainsParachute(InventoryPlayer inventory)
-//    {
-//        ItemStack itemstack = null;
-//        for (ItemStack s : inventory.mainInventory) {
-//            if (s != null && s.getItem() instanceof ItemParachute) {
-//                itemstack = s;
-//                break;
-//            }
-//        }
-//        return itemstack;
-//    }
-
 	public static boolean isFalling(EntityPlayer entity)
 	{
 		return (entity.fallDistance > 0.0F && !entity.onGround && !entity.isOnLadder());
@@ -143,11 +128,6 @@ public class ParachuteCommonProxy {
 	{
 		return entity.isRiding() && deployed;
 	}
-
-//	public static boolean getDeployed()
-//	{
-//		return deployed;
-//	}
 
 	public static void setDeployed(boolean isDeployed)
 	{
