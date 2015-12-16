@@ -19,10 +19,12 @@
 //
 package com.parachute.common;
 
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.Sys;
 
 public class PlayerTickEventHandler {
 
@@ -30,7 +32,8 @@ public class PlayerTickEventHandler {
 	public void onTick(TickEvent.PlayerTickEvent event)
 	{
 		if (event.phase.equals(TickEvent.Phase.START) && event.side.isServer()) {
-			togglePlayerParachutePack((EntityPlayer) event.player);
+            autoActivateDevice(event.player);
+			togglePlayerParachutePack(event.player);
 		}
 	}
 
@@ -47,16 +50,32 @@ public class PlayerTickEventHandler {
 			boolean deployed = ParachuteCommonProxy.onParachute(player);
 			if (armor != null && heldItem == null) { // parachute item has been removed from slot in the hot bar
 				if (!deployed && armor.getItem() instanceof ItemParachutePack) {
-					player.inventory.armorInventory[ParachuteCommonProxy.armorSlot] = (ItemStack) null;
+					player.inventory.armorInventory[ParachuteCommonProxy.armorSlot] = null;
 				}
-			} else if (armor != null && heldItem != null) { // player has selected another slot in the hot bar
+			} else if (armor != null) { // player has selected another slot in the hot bar
 				if (!deployed && armor.getItem() instanceof ItemParachutePack && !(heldItem.getItem() instanceof ItemParachute)) {
-					player.inventory.armorInventory[ParachuteCommonProxy.armorSlot] = (ItemStack) null;
+					player.inventory.armorInventory[ParachuteCommonProxy.armorSlot] = null;
 				}
 			} else { // player has selected the parachute in the hot bar
 				if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
 					player.inventory.armorInventory[ParachuteCommonProxy.armorSlot] = new ItemStack(Parachute.packItem);
 				}
+			}
+		}
+	}
+
+	// Handles the Automatic Activation Device, if the AAD is active
+    // and the player is actually wearing the parachute, check the
+    // altitude, if autoAltitude has been reached, deploy.
+	private void autoActivateDevice(EntityPlayer player)
+	{
+		if (ConfigHandler.getIsAADActive() && !ParachuteCommonProxy.onParachute(player)) {
+			boolean autoAltitudeReached = ParachuteCommonProxy.getAutoActivateAltitude(player);
+			if (autoAltitudeReached && ParachuteCommonProxy.isFalling(player)) {
+                ItemStack heldItem = player.getHeldItem();
+                if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
+                    ((ItemParachute)heldItem.getItem()).deployParachute(player.worldObj, player);
+                }
 			}
 		}
 	}

@@ -27,11 +27,11 @@ public class ConfigHandler {
 	public static Configuration config;
 	public static final String aboutCategory = "About";
 
-	private static boolean singleUse = false;
-	private static int heightLimit = 256;
-	private static String chuteColor = "random";
-	private static boolean thermals = true;
-	private static boolean autoDismount = true;
+	private static boolean singleUse;
+	private static int heightLimit;
+	private static String chuteColor;
+	private static boolean thermals;
+	private static boolean autoDismount;
 	private static boolean weatherAffectsDrift;
 	private static boolean lavaThermals;
 	private static double minLavaDistance;
@@ -42,6 +42,8 @@ public class ConfigHandler {
 	private static boolean fixedGlideRate;
 	private static boolean dismountInWater;
 	private static boolean lavaDisablesThermals;
+	private static boolean isAADActive;
+	private static double aadAltitude;
 
 	private static final String aboutComments = Parachute.name + " Config\nMichael Sheppard (crackedEgg)"
 			+ " For Minecraft Version " + Parachute.mcversion + "\n";
@@ -61,6 +63,8 @@ public class ConfigHandler {
 	private static final String glideRateComment = "true to use a constant glide rate, forward speed"; // false
 	private static final String dismountComment = "true to dismount in water"; // false
 	private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
+    private static final String isAADActiveComment = "whether or not the AAD is active"; // false
+    private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
 	private static final String colorComment = "Parachute Colors Allowed:\n"
 			+ "black, blue, brown, cyan, gray, green, light_blue, lime,\n"
 			+ "magenta, orange, pink, purple, red, silver, white, yellow,\n"
@@ -94,6 +98,8 @@ public class ConfigHandler {
 			fixedGlideRate = config.get(Configuration.CATEGORY_GENERAL, "fixedGlideRate", false, glideRateComment).getBoolean(false);
 			dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
 			lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
+            isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
+            aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment).getDouble(10.0);
 
 			// if using lava thermals check allow/disallow space bar thermals, clamp the minimum lava distance.
 			if (lavaThermals) {
@@ -173,6 +179,21 @@ public class ConfigHandler {
 	{
 		return altitudeMSL;
 	}
+
+    public static boolean getIsAADActive()
+    {
+        return isAADActive;
+    }
+
+    public static void setAADActive(boolean active)
+    {
+        isAADActive = active;
+    }
+
+    public static double getAADAltitude()
+    {
+        return aadAltitude;
+    }
 
 	public static int getParachuteDamageAmount()
 	{

@@ -42,10 +42,11 @@ public class ItemParachute extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
-		return deployParachute(itemstack, world, entityplayer);
-	}
+		/* return */deployParachute(/*itemstack, */world, entityplayer);
+        return itemstack;
+    }
 
-	public ItemStack deployParachute(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public /*ItemStack*/ void deployParachute(/*ItemStack itemstack, */World world, EntityPlayer entityplayer)
 	{
 		// only deploy if entityplayer exists and if player is falling and not already on a parachute.
 		if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
@@ -65,6 +66,7 @@ public class ItemParachute extends Item {
 			ParachuteCommonProxy.setDeployed(true);
 			entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
+            ItemStack itemstack = entityplayer.getHeldItem();
 			if (itemstack != null) {
 				boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, itemstack) > 0;
 				if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
@@ -72,7 +74,7 @@ public class ItemParachute extends Item {
 				}
 			}
 		}
-		return itemstack;
+//		return itemstack;
 	}
 
 	private float pitch()
