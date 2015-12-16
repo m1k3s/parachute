@@ -1,6 +1,8 @@
 item.parachute.name=Parachute
-item.hop_and_pop.name=Hop And Pop
 item.pack.name=Pack
-item.ripcord.name=RipCord
-item.auto_activation_device.name=Active AAD
-item.auto_activation_device_off.name=Inactive AAD
+stat.parachuteDeployed=Parachutes deployed
+stat.parachuteDeployed.desc=Number of times you deployed a parachute
+stat.parachuteDistance=Distance by Parachute
+stat.parachuteDistance.desc=Distance traveled by parachute
+achievement.buildParachute=Parachute crafted
+achievement.buildParachute.desc=You have crafted a parachute!

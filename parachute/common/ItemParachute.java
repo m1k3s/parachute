@@ -31,8 +31,6 @@ import net.minecraft.item.Item;
 
 public class ItemParachute extends Item {
 
-	final private float volume = 1.0F;
-
 	public ItemParachute(ToolMaterial toolmaterial)
 	{
 		super();
@@ -44,10 +42,11 @@ public class ItemParachute extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
-		return deployParachute(itemstack, world, entityplayer);
+		/* return */deployParachute(/*itemstack, */world, entityplayer);
+		return itemstack;
 	}
 
-	public ItemStack deployParachute(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public /*ItemStack*/ void deployParachute(/*ItemStack itemstack, */World world, EntityPlayer entityplayer)
 	{
 		// only deploy if entityplayer exists and if player is falling and not already on a parachute.
 		if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
@@ -55,6 +54,7 @@ public class ItemParachute extends Item {
 
 			EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
 			chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
+			float volume = 1.0F;
 			chute.playSound("parachutemod:chuteopen", volume, pitch());
 			
 			if (world.isRemote) {
@@ -64,7 +64,9 @@ public class ItemParachute extends Item {
 			}
 			entityplayer.mountEntity(chute);
 			ParachuteCommonProxy.setDeployed(true);
+			entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
+			ItemStack itemstack = entityplayer.getHeldItem();
 			if (itemstack != null) {
 				boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, itemstack) > 0;
 				if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
@@ -72,7 +74,7 @@ public class ItemParachute extends Item {
 				}
 			}
 		}
-		return itemstack;
+//		return itemstack;
 	}
 
 	private float pitch()
@@ -83,7 +85,7 @@ public class ItemParachute extends Item {
 	@Override
 	public boolean getIsRepairable(ItemStack itemstack1, ItemStack itemstack2)
 	{
-		return Items.string == itemstack2.getItem() ? true : super.getIsRepairable(itemstack1, itemstack2);
+		return Items.string == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
 	}
 	
 }

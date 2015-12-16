@@ -27,6 +27,7 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 //import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -56,15 +57,15 @@ public class EntityParachute extends Entity {
 	private boolean altitudeMSL;
 	private boolean autoDismount;
 	private boolean fixedGlideRate;
-//	final private DecimalFormat df;
+	private boolean dismountInWater;
 
 	final static int Damping = 5; // value of 10 allows the altitude display to update about every half second
 	final static double MSL = 63.0; // sea level - Mean Sea Level
 	final static double drift = 0.004; // value applied to motionY to descend or drift downward
 	final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
-	final static int modeDrift = 0;  // key up
-	final static int modeAscend = 1; // key down
+//	final static int modeDrift = 0;  // key up
+//	final static int modeAscend = 1; // key down
 
 	private final double d2r = 0.0174532925199433; // degrees to radians
 	private final double r2d = 57.2957795130823;   // radians to degrees
@@ -74,13 +75,6 @@ public class EntityParachute extends Entity {
 	public EntityParachute(World world)
 	{
 		super(world);
-		// This should get the locale appropriate number separator.
-		// Not all countries use the decimal point to separate fractional
-		// parts, some use a comma.
-//		df = new DecimalFormat();
-//		char sep = df.getDecimalFormatSymbols().getDecimalSeparator();
-//		df.applyPattern("##0" + sep + "0"); // for the alitude display
-
 		weatherAffectsDrift = ConfigHandler.getWeatherAffectsDrift();
 		allowTurbulence = ConfigHandler.getAllowturbulence();
 		showContrails = ConfigHandler.getShowContrails();
@@ -91,6 +85,7 @@ public class EntityParachute extends Entity {
 		altitudeMSL = ConfigHandler.getAltitudeMSL();
 		autoDismount = ConfigHandler.isAutoDismount();
 		fixedGlideRate = ConfigHandler.getFixedGlideRate();
+        dismountInWater = ConfigHandler.getDismountInWater();
 
 		curLavaDistance = lavaDistance;
 		worldObj = world;
@@ -170,7 +165,7 @@ public class EntityParachute extends Entity {
 	@Override
 	public boolean shouldDismountInWater(Entity pilot)
 	{
-		return true;
+        return dismountInWater;
 	}
 
 	@Override
@@ -210,12 +205,6 @@ public class EntityParachute extends Entity {
 		velocityY = motionY = y;
 		velocityZ = motionZ = z;
 	}
-
-	// format the altitude number to a string
-//	public String format(double d)
-//	{
-//		return String.format("%s", new Double(df.format(d)));
-//	}
 
 	@Override
 	public void onUpdate()
@@ -314,7 +303,7 @@ public class EntityParachute extends Entity {
 
 		// update direction (yaw)
 		if (delta_X * delta_X + delta_Z * delta_Z > 0.001D) {
-			yaw = Math.atan2(delta_Z, delta_X) * r2d;
+            yaw = Math.atan2(delta_Z, delta_X) * 57.2957795130823;
 		}
 
 		// update and clamp yaw between -180 and 180
@@ -330,7 +319,7 @@ public class EntityParachute extends Entity {
 		rotationYaw += adjustedYaw;
 		setRotation(rotationYaw, rotationPitch);
 		// finally apply turbulence if flags allow
-		if (((weatherAffectsDrift && isBadWeather()) || allowTurbulence) && rand.nextBoolean() == true) {
+		if (((weatherAffectsDrift && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
 			applyTurbulence(worldObj.isThundering());
 		}
 
@@ -340,6 +329,14 @@ public class EntityParachute extends Entity {
 		}
 		// increment tick count for altitude display damping
 		tickCount++;
+
+        // update distance by parachute statistics
+        if (riddenByEntity != null) {
+            double dX = posX - prevPosX;
+            double dZ = posZ - prevPosZ;
+            int distance = Math.round(MathHelper.sqrt_double(dX * dX + dZ * dZ) * 100.0F);
+            ((EntityPlayer) riddenByEntity).addStat(Parachute.parachuteDistance, distance);
+        }
 	}
 	
 	public void killParachute()
@@ -377,7 +374,9 @@ public class EntityParachute extends Entity {
 
 		if (lavaThermals) {
 			descentRate = doLavaThermals();
-			return descentRate;
+            if (!allowThermals) {
+                return descentRate;
+            }
 		}
 
 		if (ascendMode) {
@@ -509,7 +508,7 @@ public class EntityParachute extends Entity {
 			double y = posY - 0.25;
 			double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;
 
-			worldObj.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ, new int[0]);
+			worldObj.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
 		}
 	}
 
@@ -564,14 +563,6 @@ public class EntityParachute extends Entity {
 		// calculate the entity's current altitude above the ground
 		return entityPos.getY() - bp1.getY();
 	}
-
-	// calculate the altitude above Mean Sea Level (64)
-	// this method produces negative number below the sea level
-//	public double getAltitudeAboveMSL(BlockPos entityPos)
-//	{
-//		// calculate the entity's current altitude above MSL
-//		return entityPos.getY() - MSL;
-//	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt)
