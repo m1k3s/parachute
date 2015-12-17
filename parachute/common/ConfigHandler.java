@@ -41,8 +41,7 @@ public class ConfigHandler {
 	private static boolean altitudeMSL;
 	private static boolean fixedGlideRate;
 	private static boolean dismountInWater;
-	private static boolean lavaDisablesThermals;
-	private static boolean isAADActive;
+    private static boolean isAADActive;
 	private static double aadAltitude;
 
 	private static final String aboutComments = Parachute.name + " Config\nMichael Sheppard (crackedEgg)"
@@ -97,13 +96,13 @@ public class ConfigHandler {
 			altitudeMSL = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, altitudeMSLComment).getBoolean(false);
 			fixedGlideRate = config.get(Configuration.CATEGORY_GENERAL, "fixedGlideRate", false, glideRateComment).getBoolean(false);
 			dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
-			lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
+            boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
             isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
             aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment).getDouble(10.0);
 
 			// if using lava thermals check allow/disallow space bar thermals, clamp the minimum lava distance.
 			if (lavaThermals) {
-				thermals = lavaDisablesThermals ? false : true;
+				thermals = !lavaDisablesThermals;
 				minLavaDistance = minLavaDistance < 2.0 ? 2.0 : minLavaDistance;
 			}
 		} catch (Exception e) {
@@ -184,6 +183,11 @@ public class ConfigHandler {
     {
         return isAADActive;
     }
+
+	public static void setAADState(boolean state)
+	{
+		isAADActive = state;
+	}
 
     public static double getAADAltitude()
     {

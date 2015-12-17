@@ -141,11 +141,11 @@ public class EntityParachute extends Entity {
 	}
 	
 	//
-	// FIXME: Unfortunately this stopped working around 1.6.x, movement packets
-	// are not sent to the server if the 'shouldRiderSit' method returns false.
-	// We need for the 'shouldRiderSit' method to return true in order to send
-	// packets, we need for it to return false for player to not be in the sitting
-	// position on the parachute.
+	// FIXME: Unfortunately this stopped working around 1.6.x
+	// movement packets are not sent to the server if the 'shouldRiderSit' method
+	// returns false. We need for the 'shouldRiderSit' method to return true in
+	// order to send packets, we need for it to return false for player to not
+	// be in the sitting position on the parachute.
 	//
 	// skydiver should 'hang' when on the parachute and then
 	// 'pick up legs' when landing.
@@ -431,7 +431,7 @@ public class EntityParachute extends Entity {
 		return thermals;
 	}
 
-	// BlockPos bp is the pilot's position. The pilot's posY - 1.0
+	// BlockPos bp is the pilot's position. The pilot's feet posY - 1.0
 	// to be exact. We check for air blocks, flowers, leaves, and grass at
 	// that position Y. The check for leaves means the parachute can get 
 	// hung up in the trees. Also means that the pilot must manually
@@ -493,7 +493,8 @@ public class EntityParachute extends Entity {
 	// of the parachute. Yes I know that most parachutes
 	// aren't fast or high enough to generate contrails,
 	// but most worlds aren't made of blocks with cubic
-	// cows either.
+	// cows either. If you like, you can think of the
+	// trails as chemtrails.
 	public void generateContrails(double velocity)
 	{
 		double cosYaw = 2.0 * Math.cos(rotationYaw * d2r);
@@ -526,7 +527,7 @@ public class EntityParachute extends Entity {
 	{
 		if (worldObj.provider.isSurfaceWorld()) {
 			if (referenceMSL) {
-				return getAltitudeAboveGroundMSL(entityPos); // altitude above ground (MSL)
+				return getAltitudeMSL(entityPos); // altitude MSL
 			} else {
 				return getAltitudeAboveGround(entityPos); // altitude above ground
 			}
@@ -551,7 +552,7 @@ public class EntityParachute extends Entity {
 	// this method produces negative numbers below the sea level (64)
 	// Also it won't get overhangs, the counting will stop at the first
 	// airblock encountered while counting up.
-	public double getAltitudeAboveGroundMSL(BlockPos entityPos)
+	public double getAltitudeMSL(BlockPos entityPos)
 	{
 		BlockPos bp1 = new BlockPos(entityPos.getX(), MSL, entityPos.getZ());
 		while (!worldObj.isAirBlock(bp1.up())) {
