@@ -43,6 +43,7 @@ public class ConfigHandler {
 	private static boolean dismountInWater;
     private static boolean isAADActive;
 	private static double aadAltitude;
+	private static double minFallDistance;
 
 	private static final String aboutComments = Parachute.name + " Config\nMichael Sheppard (crackedEgg)"
 			+ " For Minecraft Version " + Parachute.mcversion + "\n";
@@ -64,6 +65,7 @@ public class ConfigHandler {
 	private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
     private static final String isAADActiveComment = "whether or not the AAD is active"; // false
     private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
+    private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
 	private static final String colorComment = "Parachute Colors Allowed:\n"
 			+ "black, blue, brown, cyan, gray, green, light_blue, lime,\n"
 			+ "magenta, orange, pink, purple, red, silver, white, yellow,\n"
@@ -99,6 +101,7 @@ public class ConfigHandler {
             boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
             isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
             aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment).getDouble(10.0);
+            minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment).getDouble(5.0);
 
 			// if using lava thermals check allow/disallow space bar thermals, clamp the minimum lava distance.
 			if (lavaThermals) {
@@ -194,7 +197,11 @@ public class ConfigHandler {
         return aadAltitude;
     }
 
-	public static int getParachuteDamageAmount()
+    public static double getMinFallDistance() {
+        return minFallDistance;
+    }
+
+    public static int getParachuteDamageAmount()
 	{
 		if (singleUse) {
 			return Parachute.parachuteItem.getMaxDamage() + 1;

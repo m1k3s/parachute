@@ -22,12 +22,17 @@ package com.parachute.client;
 import com.parachute.common.ParachuteCommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class AltitudeDisplay {
 
 	public static double altitude = 0.0;
+	private double spawnDir;
+//	private String indicator;
+//	private int indicatorColor;
 	private final Minecraft mc = Minecraft.getMinecraft();
 	private int screenX;
 	private int screenY;
@@ -36,6 +41,10 @@ public class AltitudeDisplay {
 	private final int titleWidth = mc.fontRendererObj.getStringWidth(altitudeLabel);
 	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0");
 	private final int totalWidth = titleWidth + fieldWidth;
+	private final int colorYellow = 0xffffff00;
+	private final int colorRed = 0xffaa0000;
+	private final int colorGreen = 0xff00aa00;
+	private final int colorWhite = 0xffffffff;
 
 	public AltitudeDisplay()
 	{
@@ -70,11 +79,16 @@ public class AltitudeDisplay {
 			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
 				updateWindowScale();
 				String altitudeStr = format(altitude);
+				spawnDir = getSpawnDirection();
+				String heading = format(spawnDir);
+//				calcSpawnDirectionIndicator();
 				int stringWidth = mc.fontRendererObj.getStringWidth(altitudeStr);
 				int nextX = totalWidth - stringWidth;
-				int colorWhite = 0xffffffff;
 				mc.fontRendererObj.drawStringWithShadow(altitudeLabel, screenX, screenY, colorWhite);
-				mc.fontRendererObj.drawStringWithShadow(altitudeStr, screenX + nextX, screenY, colorString());
+				mc.fontRendererObj.drawStringWithShadow(altitudeStr, screenX + nextX, screenY, colorAltitude());
+				nextX = totalWidth + 5;
+				mc.fontRendererObj.drawStringWithShadow("(" + heading + ")", screenX + nextX, screenY, colorSpawnDir());
+//				mc.fontRendererObj.drawStringWithShadow(indicator, screenX + nextX, screenY, indicatorColor);
 			}
 		}
 	}
@@ -89,11 +103,38 @@ public class AltitudeDisplay {
 		altitude = alt;
 	}
 
-	private int colorString()
+	// differnece angle in degrees the player is facing from the spawn point.
+	// zero degrees means the player is facing the spawn point.
+	public double getSpawnDirection()
 	{
-		int colorYellow = 0xffffff00;
-        int colorRed = 0xffaa0000;
-        int colorGreen = 0xff00aa00;
-        return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
+		BlockPos blockpos = mc.theWorld.getSpawnPoint();
+		double d0 = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
+		double relAngle = d0 - (mc.thePlayer.rotationYaw * 0.0174532925199433); // radians
+		return MathHelper.wrapAngleTo180_double((relAngle * 57.2957795130823) - 90.0); // degrees
 	}
+
+	private int colorAltitude()
+	{
+		return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
+	}
+
+	private int colorSpawnDir()
+	{
+		return (spawnDir >= -5.0 && spawnDir <= 5.0) ? colorWhite : colorYellow;
+	}
+
+//	private void calcSpawnDirectionIndicator()
+//	{
+//		if (spawnDir >= -5.0 && spawnDir <= 5.0) {
+//			indicator = "<*>";
+//			indicatorColor = colorGreen;
+//		} else if (spawnDir >= -90.0 && spawnDir <= 90.0) {
+//			indicator = "< >";
+//			indicatorColor = colorYellow;
+//		} else {
+//			indicator = "<< >>";
+//			indicatorColor = colorRed;
+//		}
+//	}
+
 }

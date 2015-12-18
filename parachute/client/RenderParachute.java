@@ -80,7 +80,6 @@ public class RenderParachute extends Render {
 		final float zOffset = 3.0F;
 		
 		float zl = -zOffset;
-		float zr = zOffset;
 		float b = rider.getBrightness(unused);
 
 		GlStateManager.pushMatrix();
@@ -110,17 +109,17 @@ public class RenderParachute extends Render {
 		GlStateManager.color(b * 0.65F, b * 0.5F, b * 0.5F); // slightly red
 
 		GL11.glVertex3f(-8F, 0.25F, 23.5F);
-		GL11.glVertex3f(x, y, zr);
+		GL11.glVertex3f(x, y, zOffset);
 
 		GL11.glVertex3f(8F, 0.25F, 23.5F);
-		GL11.glVertex3f(x, y, zr);
+		GL11.glVertex3f(x, y, zOffset);
 
 		// back
 		GL11.glVertex3f(-8F, 0F, 8F);
-		GL11.glVertex3f(x, y, zr);
+		GL11.glVertex3f(x, y, zOffset);
 
 		GL11.glVertex3f(8F, 0F, 8F);
-		GL11.glVertex3f(x, y, zr);
+		GL11.glVertex3f(x, y, zOffset);
 		GL11.glEnd();
 
 		GL11.glEnable(GL11.GL_LIGHTING);
