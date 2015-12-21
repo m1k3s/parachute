@@ -47,7 +47,7 @@ public class Parachute {
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
 	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new ChatComponentTranslation("stat.parachuteDeployed"));
-	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new ChatComponentTranslation("stat.parachuteDistance", new Object[0]), StatBase.distanceStatType);
+	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new ChatComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
     public static Achievement buildParachute;
 
 	@SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")

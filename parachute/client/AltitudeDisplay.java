@@ -37,23 +37,34 @@ public class AltitudeDisplay  extends Gui {
 	public static double altitude = 0.0;
 	private final Minecraft mc = Minecraft.getMinecraft();
 
-	private final int guiWidth = 182;
-	private final int guiHeight = 39;
-	private final int ledWidth = 11;
-	private final int ledHeight = 5;
+	private final int guiWidth;
+	private final int guiHeight;
+	private final int ledWidth;
+	private final int ledHeight;
 	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0") / 2;
-	private final int colorWhite = 0xffffffff;
-	private final int colorYellow = 0xffffff00;
-	private final int colorRed = 0xffaa0000;
-	private final int colorGreen = 0xff00aa00;
+	private final int colorWhite;
+	private final int colorYellow;
+	private final int colorRed;
+	private final int colorGreen;
 	// AAD icon
-	private final int aadWidth = 16;
-	private final int aadHeight = 25;
-	private final int ledY = 39;
+	private final int aadWidth;
+	private final int aadHeight;
+	private final int ledY;
 
 	public AltitudeDisplay()
 	{
 		super();
+		guiWidth = 182;
+		guiHeight = 39;
+		ledWidth = 11;
+		ledHeight = 5;
+		colorWhite = 0xffffffff;
+		colorYellow = 0xffffff00;
+		colorRed = 0xffaa0000;
+		colorGreen = 0xff00aa00;
+		aadWidth = 16;
+		aadHeight = 25;
+		ledY = 39;
 	}
 
 	@SubscribeEvent
