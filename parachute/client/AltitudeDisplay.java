@@ -33,27 +33,23 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class AltitudeDisplay  extends Gui {
 
-	protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/hud.png");
+	protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
 	public static double altitude = 0.0;
-	private double spawnDir;
 	private final Minecraft mc = Minecraft.getMinecraft();
 
 	private final int guiWidth = 182;
-	private final int guiHeight = 32;
-	private final int ledWidth = 10;
-	private final int ledHeight = 10;
+	private final int guiHeight = 39;
+	private final int ledWidth = 11;
+	private final int ledHeight = 5;
 	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0") / 2;
+	private final int colorWhite = 0xffffffff;
 	private final int colorYellow = 0xffffff00;
 	private final int colorRed = 0xffaa0000;
 	private final int colorGreen = 0xff00aa00;
-	// LED dimensions are 10x10
-	private final int ledY = 32;
-	private final int redLEDX = 0;
-	private final int greenLEDX = 10;
-	private final int yellowLEDX = 20;
 	// AAD icon
 	private final int aadWidth = 16;
 	private final int aadHeight = 25;
+	private final int ledY = 39;
 
 	public AltitudeDisplay()
 	{
@@ -69,88 +65,48 @@ public class AltitudeDisplay  extends Gui {
 		ScaledResolution sr = new ScaledResolution(mc);
 		int guiX = sr.getScaledWidth() / 2 - (guiWidth / 2); // left edge of GUI
 		int guiY = 2; // top edge of GUI
-		int textX = guiX + 45;
-		int textY = guiY + 22; // y coord for text
-		int ledX = 6;
-		int ledType = redLEDX;
+		int textX = guiX + 45; // xcoord for text
+		int textY = guiY + 22; // ycoord for text
+		int ledX = 1;
 
 		if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
 			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
 				// render the hud gui
 				mc.getTextureManager().bindTexture(hudTexPath);
 
-				spawnDir = getSpawnDirection();
+				double spawnDir = getSpawnDirection();
 				String altitudeStr = format(altitude);
 
 				// int x, int y, int textureX, int textureY, int width, int height
-				drawTexturedModalRect(guiX, guiY, 0, 0, guiWidth, guiHeight); // draw the gui outline
+				drawTexturedModalRect(guiX, guiY, 0, 0, guiWidth, guiHeight); // draw the main gui
 
-				if (spawnDir > 80) {
-					ledX = 6;
-					ledType = redLEDX;
-				} else if (spawnDir <= 80 && spawnDir > 70) {
-					ledX = 16;
-					ledType = redLEDX;
-				} else if (spawnDir <= 70 && spawnDir > 60) {
-					ledX = 26;
-					ledType = redLEDX;
-				} else if (spawnDir <= 60 && spawnDir > 50) {
-					ledX = 36;
-					ledType = redLEDX;
-				} else if (spawnDir <= 50 && spawnDir > 40) {
-					ledX = 46;
-					ledType = yellowLEDX;
-				} else if (spawnDir <= 40 && spawnDir > 30) {
-					ledX = 56;
-					ledType = yellowLEDX;
-				} else if (spawnDir <= 30 && spawnDir > 20) {
-					ledX = 66;
-					ledType = yellowLEDX;
-				} else if (spawnDir <= 20 && spawnDir > 5) {
-					ledX = 76;
-					ledType = yellowLEDX;
-				} else if (spawnDir <= 5 && spawnDir >= -5) {
-					ledX = 86;
-					ledType = greenLEDX;
-				} else if (spawnDir >= -20 && spawnDir < -5) {
-					ledX = 96;
-					ledType = yellowLEDX;
-				} else if (spawnDir >= -30 && spawnDir < -20) {
-					ledX = 106;
-					ledType = yellowLEDX;
-				} else if (spawnDir >= -40 && spawnDir < -30) {
-					ledX = 116;
-					ledType = yellowLEDX;
-				} else if (spawnDir >= -50 && spawnDir < -40) {
-					ledX = 126;
-					ledType = yellowLEDX;
-				} else if (spawnDir >= -60 && spawnDir < -50) {
-					ledX = 136;
-					ledType = redLEDX;
-				} else if (spawnDir >= -70 && spawnDir < -60) {
-					ledX = 146;
-					ledType = redLEDX;
-				}  else if (spawnDir >= -80 && spawnDir < -70) {
-					ledX = 156;
-					ledType = redLEDX;
-				} else if (spawnDir <= -80) {
-					ledX = 166;
-					ledType = redLEDX;
+				// determine which LED to light, spawnDir is in range -180 to 180
+				// for any value under -80 or over 80 the LED is fixed to the
+				// left or right end of the slider respectively.
+				if (spawnDir < -80) {
+					ledX = 1;
+				} else if ((spawnDir - 80) * (spawnDir - -80) < 0) {
+					ledX = (int)Math.floor((spawnDir + 80.0) + 4);
+				} else if (spawnDir > 80) {
+					ledX = 170;
 				}
-				drawTexturedModalRect(guiX + ledX, guiY + 1, ledType, ledY, ledWidth, ledHeight); // draw the LEDs
+				drawTexturedModalRect(guiX + ledX, guiY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
+
 				// AAD status
 				int aadIconX;
-				int aadIconY = 53;
+				int aadIconY = 8;
 				if (ConfigHandler.getIsAADActive()) {
-					aadIconX = 53;
+					aadIconX = 199;
 				} else {
-					aadIconX = 36;
+					aadIconX = 182;
 				}
-				drawTexturedModalRect(guiX + guiWidth, guiY + 3, aadIconX, aadIconY, aadWidth, aadHeight);
+				drawTexturedModalRect(guiX + guiWidth, guiY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
 				// finally draw the altitude and compass heading text
 				double heading = ((mc.thePlayer.rotationYaw % 360) + 360) % 360;
+				mc.fontRendererObj.drawStringWithShadow("Altitude", guiX + 23, guiY + 12, colorWhite);
 				mc.fontRendererObj.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
+				mc.fontRendererObj.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorWhite);
 				mc.fontRendererObj.drawStringWithShadow(format(heading), (textX + 91) - fieldWidth, textY, colorRed);
 			}
 		}
@@ -171,12 +127,12 @@ public class AltitudeDisplay  extends Gui {
 	public double getSpawnDirection()
 	{
 		BlockPos blockpos = mc.theWorld.getSpawnPoint();
-		double d0 = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
-		double relAngle = d0 - (mc.thePlayer.rotationYaw * 0.0174532925199433); // radians
+		double delta = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
+		double relAngle = delta - (mc.thePlayer.rotationYaw * 0.0174532925199433); // radians
 		return MathHelper.wrapAngleTo180_double((relAngle * 57.2957795130823) - 90.0); // degrees
 	}
 
-	private int colorAltitude()
+	public int colorAltitude()
 	{
 		return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
 	}

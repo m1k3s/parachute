@@ -57,7 +57,7 @@ public class EntityParachute extends Entity {
 	private boolean fixedGlideRate;
 	private boolean dismountInWater;
 
-	final static int Damping = 5; // value of 10 allows the altitude display to update about every half second
+//	final static int Damping = 5; // value of 10 allows the altitude display to update about every half second
 	final static double MSL = 63.0; // sea level - Mean Sea Level
 	final static double drift = 0.004; // value applied to motionY to descend or drift downward
 	final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
@@ -228,7 +228,7 @@ public class EntityParachute extends Entity {
 		prevPosZ = posZ;
 
 		// Altimeter, the altitude display
-		if (riddenByEntity != null && worldObj.isRemote && (tickCount % Damping == 0)) { // execute only on the client
+		if (riddenByEntity != null && worldObj.isRemote /*&& (tickCount % Damping == 0)*/) { // execute only on the client
 			// use the pilot's position for the altitude reference
 			BlockPos entityPos = new BlockPos(riddenByEntity.posX, riddenByEntity.posY, riddenByEntity.posZ);
 			AltitudeDisplay.setAltitudeDouble(getCurrentAltitude(entityPos, altitudeMSL));
