@@ -111,10 +111,11 @@ public class ParachuteCommonProxy {
     {
     	boolean altitudeReached = false;
         double altitude = ConfigHandler.getAADAltitude();
+		double minFallDistance = ConfigHandler.getMinFallDistance();
 
         BlockPos blockPos = new BlockPos(player.posX, player.posY - altitude, player.posZ);
 
-        if (!player.worldObj.isAirBlock(blockPos) && player.fallDistance > 5.0) {
+        if (!player.worldObj.isAirBlock(blockPos) && player.fallDistance > minFallDistance) {
             altitudeReached = true;
         }
         return altitudeReached;

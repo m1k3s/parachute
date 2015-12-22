@@ -40,7 +40,7 @@ import net.minecraft.world.World;
 
 public class EntityParachute extends Entity {
 
-	private long tickCount;
+//	private long tickCount;
 	private double velocityX;
 	private double velocityY;
 	private double velocityZ;
@@ -54,7 +54,7 @@ public class EntityParachute extends Entity {
 	private boolean weatherAffectsDrift;
 	private boolean allowTurbulence;
 	private boolean showContrails;
-	private boolean altitudeMSL;
+//	private boolean altitudeMSL;
 	private boolean autoDismount;
 	private boolean fixedGlideRate;
 	private boolean dismountInWater;
@@ -82,10 +82,11 @@ public class EntityParachute extends Entity {
 		allowThermals = ConfigHandler.getAllowThermals();
 		maxAltitude = ConfigHandler.getMaxAltitude();
 		lavaThermals = ConfigHandler.getAllowLavaThermals();
-		altitudeMSL = ConfigHandler.getAltitudeMSL();
+//		altitudeMSL = ConfigHandler.getAltitudeMSL();
 		autoDismount = ConfigHandler.isAutoDismount();
 		fixedGlideRate = ConfigHandler.getFixedGlideRate();
         dismountInWater = ConfigHandler.getDismountInWater();
+		maxThermalRise = ConfigHandler.getMaxLavaDistance();
 
 		curLavaDistance = lavaDistance;
 		worldObj = world;
@@ -93,8 +94,7 @@ public class EntityParachute extends Entity {
 		setSize(1.5f, 0.0625f);
 		motionFactor = 0.07;
 		ascendMode = false;
-		maxThermalRise = 48;
-		tickCount = 0;
+//		tickCount = 0;
 	}
 
 	public EntityParachute(World world, double x, double y, double z)
@@ -230,11 +230,11 @@ public class EntityParachute extends Entity {
 		prevPosZ = posZ;
 
 		// Altimeter, the altitude display
-		if (riddenByEntity != null && worldObj.isRemote && (tickCount % Damping == 0)) { // execute only on the client
+		if (riddenByEntity != null && worldObj.isRemote/* && (tickCount % Damping == 0)*/) { // execute only on the client
 			// use the pilot's position for the altitude reference
 			BlockPos entityPos = new BlockPos(riddenByEntity.posX, riddenByEntity.posY, riddenByEntity.posZ);
 //			AltitudeDisplay.setAltitudeString(format(getCurrentAltitude(entityPos, altitudeMSL)));
-			AltitudeDisplay.setAltitudeDouble(getCurrentAltitude(entityPos, altitudeMSL));
+			AltitudeDisplay.setAltitudeDouble(getCurrentAltitude(entityPos/*, altitudeMSL*/));
 		}
 
 		// drop the chute when close to ground
@@ -328,7 +328,7 @@ public class EntityParachute extends Entity {
 			killParachute();
 		}
 		// increment tick count for altitude display damping
-		tickCount++;
+//		tickCount++;
 
         // update distance by parachute statistics
         if (riddenByEntity != null) {
@@ -525,14 +525,14 @@ public class EntityParachute extends Entity {
 
 	// only allow altitude calculations in the surface world
 	// return a weirdly random number if in nether or end.
-	public double getCurrentAltitude(BlockPos entityPos, boolean referenceMSL)
+	public double getCurrentAltitude(BlockPos entityPos/*, boolean referenceMSL*/)
 	{
 		if (worldObj.provider.isSurfaceWorld()) {
-			if (referenceMSL) {
-				return getAltitudeAboveGroundMSL(entityPos); // altitude above ground (MSL)
-			} else {
+//			if (referenceMSL) {
+//				return getAltitudeAboveGroundMSL(entityPos); // altitude above ground (MSL)
+//			} else {
 				return getAltitudeAboveGround(entityPos); // altitude above ground
-			}
+//			}
 		}
 		return 1000.0 * rand.nextGaussian();
 	}
@@ -554,15 +554,15 @@ public class EntityParachute extends Entity {
 	// this method produces negative numbers below the sea level (64)
 	// Also it won't get overhangs, the counting will stop at the first
 	// airblock encountered while counting up.
-	public double getAltitudeAboveGroundMSL(BlockPos entityPos)
-	{
-		BlockPos bp1 = new BlockPos(entityPos.getX(), MSL, entityPos.getZ());
-		while (!worldObj.isAirBlock(bp1.up())) {
-			bp1 = bp1.up();
-		}
-		// calculate the entity's current altitude above the ground
-		return entityPos.getY() - bp1.getY();
-	}
+//	public double getAltitudeAboveGroundMSL(BlockPos entityPos)
+//	{
+//		BlockPos bp1 = new BlockPos(entityPos.getX(), MSL, entityPos.getZ());
+//		while (!worldObj.isAirBlock(bp1.up())) {
+//			bp1 = bp1.up();
+//		}
+//		// calculate the entity's current altitude above the ground
+//		return entityPos.getY() - bp1.getY();
+//	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt)

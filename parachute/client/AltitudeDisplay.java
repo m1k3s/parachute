@@ -19,46 +19,56 @@
 //
 package com.parachute.client;
 
+import com.parachute.common.ConfigHandler;
+import com.parachute.common.Parachute;
 import com.parachute.common.ParachuteCommonProxy;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class AltitudeDisplay {
+public class AltitudeDisplay extends Gui {
 
+	protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
 	public static double altitude = 0.0;
 	private final Minecraft mc = Minecraft.getMinecraft();
-	private int screenX;
-	private int screenY;
-	private final int colorWhite = 0xffffffff;
-
-	private final String altitudeLabel = "Altitude: ";
-	private final int titleWidth = mc.fontRendererObj.getStringWidth(altitudeLabel);
-	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0");
-	private final int totalWidth = titleWidth + fieldWidth;
+	private final int guiWidth;
+	private final int guiHeight;
+	private final int ledWidth;
+	private final int ledHeight;
+	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0") / 2;
+	private final int colorWhite;
+	private final int colorYellow;
+	private final int colorRed;
+	private final int colorGreen;
+	private final int colorBlue;
+	private final int colorDimBlue;
+	// AAD icon
+	private final int aadWidth;
+	private final int aadHeight;
+	private final int ledY;
 
 	public AltitudeDisplay()
 	{
 		super();
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		screenX = sr.getScaledWidth();
-		screenY = sr.getScaledHeight();
+		guiWidth = 182;
+		guiHeight = 39;
+		ledWidth = 11;
+		ledHeight = 5;
+		colorWhite = 0xffffffff;
+		colorYellow = 0xffaaaa00;
+		colorRed = 0xffaa0000;
+		colorGreen = 0xff00aa00;
+		colorBlue = 0xff0000aa;
+		colorDimBlue = 0xcc000088;
+		aadWidth = 16;
+		aadHeight = 25;
+		ledY = 39;
 		
-	}
-
-	// the altitudeStr display is placed in the food bar space because
-	// the food bar is removed when riding boats, parachutes, etc.
-	// when in creativemode we lower the display a bit
-	public void updateWindowScale()
-	{
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		screenX = (sr.getScaledWidth() / 2) + 10;
-		if (mc.thePlayer.capabilities.isCreativeMode) {
-			screenY = sr.getScaledHeight() - 30;
-		} else {
-			screenY = sr.getScaledHeight() - 38;
-		}
 	}
 
 	@SubscribeEvent
@@ -67,17 +77,61 @@ public class AltitudeDisplay {
 		if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.thePlayer.onGround) {
 			return;
 		}
+		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		int guiX = sr.getScaledWidth() / 2 - (guiWidth / 2); // left edge of GUI
+		int guiY = 2; // top edge of GUI
+		int textX = guiX + 50; // xcoord for text
+		int textY = guiY + 22; // ycoord for text
+		int ledX = 1;
 
 		if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
 			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
-				updateWindowScale();
+				mc.getTextureManager().bindTexture(hudTexPath);
+
+				double spawnDir = getSpawnDirection();
 				String altitudeStr = format(altitude);
-				int stringWidth = mc.fontRendererObj.getStringWidth(altitudeStr);
-				int nextX = totalWidth - stringWidth;
-				mc.fontRendererObj.drawStringWithShadow(altitudeLabel, screenX, screenY, colorWhite);
-				mc.fontRendererObj.drawStringWithShadow(altitudeStr, screenX + nextX, screenY, colorString());
+				// int x, int y, int textureX, int textureY, int width, int height
+				drawTexturedModalRect(guiX, guiY, 0, 0, guiWidth, guiHeight); // draw the main gui
+
+				// determine which LED to light, spawnDir is in range -180 to 180
+				// for any value under -80 or over 80 the LED is fixed to the
+				// left or right end of the slider respectively.
+				if (spawnDir < -80) {
+					ledX = 1;
+				} else if ((spawnDir - 80) * (spawnDir - -80) < 0) {
+					ledX = (int)Math.floor((spawnDir + 80.0) + 4);
+				} else if (spawnDir > 80) {
+					ledX = 170;
+				}
+				drawTexturedModalRect(guiX + ledX, guiY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
+
+				// AAD status
+				int aadIconX;
+				int aadIconY = 8;
+				if (ConfigHandler.getIsAADActive()) {
+					aadIconX = 199;
+				} else {
+					aadIconX = 182;
+				}
+				drawTexturedModalRect(guiX + guiWidth, guiY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
+
+				// finally draw the altitude and compass heading text
+				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
+				mc.fontRendererObj.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
+				mc.fontRendererObj.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
+				mc.fontRendererObj.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
+				mc.fontRendererObj.drawStringWithShadow(format(heading), (textX + 91) - fieldWidth, textY, colorCompass(heading));
 			}
 		}
+	}
+	// difference angle in degrees the player is facing from the spawn point.
+	// zero degrees means the player is facing the spawn point.
+	public double getSpawnDirection()
+	{
+		BlockPos blockpos = mc.theWorld.getSpawnPoint();
+		double delta = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
+		double relAngle = delta - (mc.thePlayer.rotationYaw * 0.0174532925199433); // radians
+		return MathHelper.wrapAngleTo180_double((relAngle * 57.2957795130823) - 90.0); // degrees
 	}
 	
 	public String format(double d)
@@ -90,11 +144,16 @@ public class AltitudeDisplay {
 		altitude = alt;
 	}
 
-	private int colorString()
+	public int colorAltitude()
 	{
-	    final int colorYellow = 0xffffff00;
-	    final int colorRed = 0xffcc0000; // format: alpha.red.green.blue
-	    final int colorGreen = 0xff00cc00;
 		return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
+	}
+
+	// quadrant color code
+	// 315 to 45 green, 45 to 135 yellow, 135 to 225 red, 335 to 315 blue
+	public int colorCompass(double d)
+	{
+		return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
+				(d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
 	}
 }

@@ -30,19 +30,26 @@ import net.minecraft.world.World;
 import net.minecraft.item.Item;
 
 public class ItemParachute extends Item {
+	private static boolean active;
 
 	public ItemParachute(ToolMaterial toolmaterial)
 	{
 		super();
 		setMaxDamage(toolmaterial.getMaxUses());
 		maxStackSize = 4;
+		active = ConfigHandler.getIsAADActive();
 		setCreativeTab(CreativeTabs.tabTransport); // place in the transportation tab in creative mode
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
-		/* return */deployParachute(/*itemstack, */world, entityplayer);
+		// only deploy if entityplayer exists and if player is falling and not already on a parachute.
+		if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
+		    deployParachute(world, entityplayer);
+		} else { // toggle the AAD state
+		    toggleAAD(itemstack, world, entityplayer);
+		}
 		return itemstack;
 	}
 
@@ -75,6 +82,18 @@ public class ItemParachute extends Item {
 			}
 		}
 //		return itemstack;
+	}
+
+	// this function toggles the AAD state but does not update the saved config.
+	// the player can still enable/disable the AAD in the config GUI.
+	public void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	{
+	    if (!world.isRemote) {
+	        active = !active;
+	        world.playSoundAtEntity(entityplayer, "random.click", 1.0f, 1.0f / itemRand.nextFloat() * 0.4f + 0.8f);
+	        itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
+	        ConfigHandler.setAADState(active);
+	    }
 	}
 
 	private float pitch()
