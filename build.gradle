@@ -13,7 +13,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.8.0-1.0.3-155"
+version = "1.8.0-1.0.3-158"
 group= "com.crackedEgg.parachutemod"
 archivesBaseName = "parachutemod-ng"
 
@@ -21,7 +21,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 minecraft {
-    version = "1.8-11.14.3.1556"
+    version = "1.8-11.14.4.1577"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.

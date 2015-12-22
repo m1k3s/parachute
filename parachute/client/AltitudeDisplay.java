@@ -41,7 +41,7 @@ public class AltitudeDisplay extends Gui {
 	private final int ledWidth;
 	private final int ledHeight;
 	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0") / 2;
-	private final int colorWhite;
+//	private final int colorWhite;
 	private final int colorYellow;
 	private final int colorRed;
 	private final int colorGreen;
@@ -59,7 +59,7 @@ public class AltitudeDisplay extends Gui {
 		guiHeight = 39;
 		ledWidth = 11;
 		ledHeight = 5;
-		colorWhite = 0xffffffff;
+//		colorWhite = 0xffffffff;
 		colorYellow = 0xffaaaa00;
 		colorRed = 0xffaa0000;
 		colorGreen = 0xff00aa00;

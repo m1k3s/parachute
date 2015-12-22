@@ -56,11 +56,11 @@ public class EntityParachute extends Entity {
 	private boolean showContrails;
 //	private boolean altitudeMSL;
 	private boolean autoDismount;
-	private boolean fixedGlideRate;
+//	private boolean fixedGlideRate;
 	private boolean dismountInWater;
 
-	final static int Damping = 5; // value of 10 allows the altitude display to update about every half second
-	final static double MSL = 63.0; // sea level - Mean Sea Level
+//	final static int Damping = 5; // value of 10 allows the altitude display to update about every half second
+//	final static double MSL = 63.0; // sea level - Mean Sea Level
 	final static double drift = 0.004; // value applied to motionY to descend or drift downward
 	final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
@@ -68,7 +68,7 @@ public class EntityParachute extends Entity {
 //	final static int modeAscend = 1; // key down
 
 	private final double d2r = 0.0174532925199433; // degrees to radians
-	private final double r2d = 57.2957795130823;   // radians to degrees
+//	private final double r2d = 57.2957795130823;   // radians to degrees
 
 	private static boolean ascendMode;
 
@@ -84,7 +84,7 @@ public class EntityParachute extends Entity {
 		lavaThermals = ConfigHandler.getAllowLavaThermals();
 //		altitudeMSL = ConfigHandler.getAltitudeMSL();
 		autoDismount = ConfigHandler.isAutoDismount();
-		fixedGlideRate = ConfigHandler.getFixedGlideRate();
+//		fixedGlideRate = ConfigHandler.getFixedGlideRate();
         dismountInWater = ConfigHandler.getDismountInWater();
 		maxThermalRise = ConfigHandler.getMaxLavaDistance();
 
@@ -253,13 +253,13 @@ public class EntityParachute extends Entity {
 		if (riddenByEntity != null && riddenByEntity instanceof EntityLivingBase) {
 			EntityLivingBase pilot = (EntityLivingBase) riddenByEntity;
 			double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
-			if (fixedGlideRate) { // forward motion constant, governed by glide rate
-				motionX += -Math.sin(yaw * d2r) * motionFactor * 0.049;
-				motionZ += Math.cos(yaw * d2r) * motionFactor * 0.049;
-			} else { // forward speed determined by 'W' keypress
+//			if (fixedGlideRate) { // forward motion constant, governed by glide rate
+//				motionX += -Math.sin(yaw * d2r) * motionFactor * 0.049;
+//				motionZ += Math.cos(yaw * d2r) * motionFactor * 0.049;
+//			} else { // forward speed determined by 'W' keypress
 				motionX += -Math.sin(yaw * d2r) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
 				motionZ += Math.cos(yaw * d2r) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-			}
+//			}
 		}
 
 		// forward velocity after forward movement is applied
