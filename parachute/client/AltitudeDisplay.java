@@ -46,6 +46,8 @@ public class AltitudeDisplay  extends Gui {
 	private final int colorYellow;
 	private final int colorRed;
 	private final int colorGreen;
+	private final int colorBlue;
+	private final int colorDimBlue;
 	// AAD icon
 	private final int aadWidth;
 	private final int aadHeight;
@@ -59,9 +61,11 @@ public class AltitudeDisplay  extends Gui {
 		ledWidth = 11;
 		ledHeight = 5;
 		colorWhite = 0xffffffff;
-		colorYellow = 0xffffff00;
+		colorYellow = 0xffaaaa00;
 		colorRed = 0xffaa0000;
 		colorGreen = 0xff00aa00;
+		colorBlue = 0xff0000aa;
+		colorDimBlue = 0xcc000088;
 		aadWidth = 16;
 		aadHeight = 25;
 		ledY = 39;
@@ -76,13 +80,12 @@ public class AltitudeDisplay  extends Gui {
 		ScaledResolution sr = new ScaledResolution(mc);
 		int guiX = sr.getScaledWidth() / 2 - (guiWidth / 2); // left edge of GUI
 		int guiY = 2; // top edge of GUI
-		int textX = guiX + 45; // xcoord for text
+		int textX = guiX + 50; // xcoord for text
 		int textY = guiY + 22; // ycoord for text
 		int ledX = 1;
 
 		if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
 			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
-				// render the hud gui
 				mc.getTextureManager().bindTexture(hudTexPath);
 
 				double spawnDir = getSpawnDirection();
@@ -114,11 +117,11 @@ public class AltitudeDisplay  extends Gui {
 				drawTexturedModalRect(guiX + guiWidth, guiY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
 				// finally draw the altitude and compass heading text
-				double heading = ((mc.thePlayer.rotationYaw % 360) + 360) % 360;
-				mc.fontRendererObj.drawStringWithShadow("Altitude", guiX + 23, guiY + 12, colorWhite);
+				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
+				mc.fontRendererObj.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
 				mc.fontRendererObj.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
-				mc.fontRendererObj.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorWhite);
-				mc.fontRendererObj.drawStringWithShadow(format(heading), (textX + 91) - fieldWidth, textY, colorRed);
+				mc.fontRendererObj.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
+				mc.fontRendererObj.drawStringWithShadow(format(heading), (textX + 91) - fieldWidth, textY, colorCompass(heading));
 			}
 		}
 	}
@@ -133,7 +136,7 @@ public class AltitudeDisplay  extends Gui {
 		altitude = alt;
 	}
 
-	// differnece angle in degrees the player is facing from the spawn point.
+	// difference angle in degrees the player is facing from the spawn point.
 	// zero degrees means the player is facing the spawn point.
 	public double getSpawnDirection()
 	{
@@ -146,6 +149,14 @@ public class AltitudeDisplay  extends Gui {
 	public int colorAltitude()
 	{
 		return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
+	}
+
+	// quadrant color code
+	// 315 to 45 green, 45 to 135 yellow, 135 to 225 red, 335 to 315 blue
+	public int colorCompass(double d)
+	{
+		return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
+				(d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
 	}
 
 }
