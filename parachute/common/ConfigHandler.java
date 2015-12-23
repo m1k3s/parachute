@@ -38,8 +38,6 @@ public class ConfigHandler {
 	private static double maxLavaDistance;
 	private static boolean allowTurbulence;
 	private static boolean showContrails;
-//	private static boolean altitudeMSL;
-//	private static boolean fixedGlideRate;
 	private static boolean dismountInWater;
 	private static boolean isAADActive;
 	private static double aadAltitude;
@@ -59,8 +57,6 @@ public class ConfigHandler {
 	private static final String weatherComment = "set to false if you don't want the drift rate to be affected by bad weather"; // true
 	private static final String turbulenceComment = "set to true to feel the turbulent world of Minecraft"; // false
 	private static final String trailsComment = "set to true to show contrails from parachute"; // false
-//	private static final String altitudeMSLComment = "false to show altitude above ground, true shows altitude above ground (MSL)"; // false
-//	private static final String glideRateComment = "true to use a constant glide rate, forward speed"; // false
     private static final String dismountComment = "true to dismount in water"; // false
     private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
     private static final String isAADActiveComment = "whether or not the AAD is active"; // false
@@ -95,8 +91,6 @@ public class ConfigHandler {
 			weatherAffectsDrift = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment).getBoolean(true);
 			allowTurbulence = config.get(Configuration.CATEGORY_GENERAL, "allowTurbulence", false, turbulenceComment).getBoolean(false);
 			showContrails = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment).getBoolean(false);
-//			altitudeMSL = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, altitudeMSLComment).getBoolean(false);
-//			fixedGlideRate = config.get(Configuration.CATEGORY_GENERAL, "fixedGlideRate", false, glideRateComment).getBoolean(false);
             dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
 			boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
             isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
@@ -137,11 +131,6 @@ public class ConfigHandler {
         return aadAltitude;
     }
 	
-//	public static boolean getFixedGlideRate()
-//	{
-//		return fixedGlideRate;
-//	}
-
 	public static double getMaxAltitude()
 	{
 		return heightLimit;
@@ -195,11 +184,6 @@ public class ConfigHandler {
 	public static double getMinFallDistance() {
 	    return minFallDistance;
 	}
-
-//	public static boolean getAltitudeMSL()
-//	{
-//		return altitudeMSL;
-//	}
 
 	public static int getParachuteDamageAmount()
 	{

@@ -97,16 +97,6 @@ public class ParachuteCommonProxy {
 		logger.info(s);
 	}
 
-//	public void warn(String s)
-//	{
-//		logger.warn(s);
-//	}
-//
-//	public void error(String s)
-//	{
-//		logger.error(s);
-//	}
-
     public static boolean getAutoActivateAltitude(EntityPlayer player)
     {
     	boolean altitudeReached = false;

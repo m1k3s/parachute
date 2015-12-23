@@ -33,127 +33,126 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class AltitudeDisplay extends Gui {
 
-	protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
-	public static double altitude = 0.0;
-	private final Minecraft mc = Minecraft.getMinecraft();
-	private final int guiWidth;
-	private final int guiHeight;
-	private final int ledWidth;
-	private final int ledHeight;
-	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0") / 2;
-//	private final int colorWhite;
-	private final int colorYellow;
-	private final int colorRed;
-	private final int colorGreen;
-	private final int colorBlue;
-	private final int colorDimBlue;
-	// AAD icon
-	private final int aadWidth;
-	private final int aadHeight;
-	private final int ledY;
+    protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
+    public static double altitude = 0.0;
+//    private ParachuteFontRenderer fr;
+    private final Minecraft mc = Minecraft.getMinecraft();
+    private final int guiWidth;
+    private final int guiHeight;
+    private final int ledWidth;
+    private final int ledHeight;
+    private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0") / 2;
+    private final int colorYellow;
+    private final int colorRed;
+    private final int colorGreen;
+    private final int colorBlue;
+    private final int colorDimBlue;
+    // AAD icon
+    private final int aadWidth;
+    private final int aadHeight;
+    private final int ledY;
 
-	public AltitudeDisplay()
-	{
-		super();
-		guiWidth = 182;
-		guiHeight = 39;
-		ledWidth = 11;
-		ledHeight = 5;
-//		colorWhite = 0xffffffff;
-		colorYellow = 0xffaaaa00;
-		colorRed = 0xffaa0000;
-		colorGreen = 0xff00aa00;
-		colorBlue = 0xff0000aa;
-		colorDimBlue = 0xcc000088;
-		aadWidth = 16;
-		aadHeight = 25;
-		ledY = 39;
-		
-	}
+    public AltitudeDisplay() {
+        super();
+        guiWidth = 182;
+        guiHeight = 39;
+        ledWidth = 11;
+        ledHeight = 5;
+        colorYellow = 0xffaaaa00;
+        colorRed = 0xffaa0000;
+        colorGreen = 0xff00aa00;
+        colorBlue = 0xff0000aa;
+        colorDimBlue = 0xcc000088;
+        aadWidth = 16;
+        aadHeight = 25;
+        ledY = 39;
+//        fr = new ParachuteFontRenderer(mc);
+    }
 
-	@SubscribeEvent
-	public void onRender(RenderGameOverlayEvent event)
-	{
-		if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.thePlayer.onGround) {
-			return;
-		}
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		int guiX = sr.getScaledWidth() / 2 - (guiWidth / 2); // left edge of GUI
-		int guiY = 2; // top edge of GUI
-		int textX = guiX + 50; // xcoord for text
-		int textY = guiY + 22; // ycoord for text
-		int ledX = 1;
+    @SubscribeEvent
+    public void onRender(RenderGameOverlayEvent event) {
+        if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.thePlayer.onGround) {
+            return;
+        }
+        ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+        int guiX = sr.getScaledWidth() / 2 - (guiWidth / 2); // left edge of GUI
+        int guiY = 2; // top edge of GUI
+        int textX = guiX + 50; // xcoord for text
+        int textY = guiY + 22; // ycoord for text
+        int ledX = 1;
 
-		if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
-			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
-				mc.getTextureManager().bindTexture(hudTexPath);
+        if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
+            if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
+                mc.getTextureManager().bindTexture(hudTexPath);
 
-				double spawnDir = getSpawnDirection();
-				String altitudeStr = format(altitude);
-				// int x, int y, int textureX, int textureY, int width, int height
-				drawTexturedModalRect(guiX, guiY, 0, 0, guiWidth, guiHeight); // draw the main gui
+                double spawnDir = getSpawnDirection();
+                String altitudeStr = format(altitude);
+                // int x, int y, int textureX, int textureY, int width, int height
+                drawTexturedModalRect(guiX, guiY, 0, 0, guiWidth, guiHeight); // draw the main gui
 
-				// determine which LED to light, spawnDir is in range -180 to 180
-				// for any value under -80 or over 80 the LED is fixed to the
-				// left or right end of the slider respectively.
-				if (spawnDir < -80) {
-					ledX = 1;
-				} else if ((spawnDir - 80) * (spawnDir - -80) < 0) {
-					ledX = (int)Math.floor((spawnDir + 80.0) + 4);
-				} else if (spawnDir > 80) {
-					ledX = 170;
-				}
-				drawTexturedModalRect(guiX + ledX, guiY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
+                // determine which LED to light, spawnDir is in range -180 to 180
+                // for any value under -80 or over 80 the LED is fixed to the
+                // left or right end of the slider respectively.
+                if (spawnDir < -80) {
+                    ledX = 1;
+                } else if ((spawnDir - 80) * (spawnDir - -80) < 0) {
+                    ledX = (int) Math.floor((spawnDir + 80.0) + 4);
+                } else if (spawnDir > 80) {
+                    ledX = 170;
+                }
+                drawTexturedModalRect(guiX + ledX, guiY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
 
-				// AAD status
-				int aadIconX;
-				int aadIconY = 8;
-				if (ConfigHandler.getIsAADActive()) {
-					aadIconX = 199;
-				} else {
-					aadIconX = 182;
-				}
-				drawTexturedModalRect(guiX + guiWidth, guiY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
+                // AAD status
+                int aadIconX;
+                int aadIconY = 8;
+                if (ConfigHandler.getIsAADActive()) {
+                    aadIconX = 199;
+                } else {
+                    aadIconX = 182;
+                }
+                drawTexturedModalRect(guiX + guiWidth, guiY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
-				// finally draw the altitude and compass heading text
-				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
-				mc.fontRendererObj.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
-				mc.fontRendererObj.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
-				mc.fontRendererObj.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
-				mc.fontRendererObj.drawStringWithShadow(format(heading), (textX + 91) - fieldWidth, textY, colorCompass(heading));
-			}
-		}
-	}
-	// difference angle in degrees the player is facing from the spawn point.
-	// zero degrees means the player is facing the spawn point.
-	public double getSpawnDirection()
-	{
-		BlockPos blockpos = mc.theWorld.getSpawnPoint();
-		double delta = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
-		double relAngle = delta - (mc.thePlayer.rotationYaw * 0.0174532925199433); // radians
-		return MathHelper.wrapAngleTo180_double((relAngle * 57.2957795130823) - 90.0); // degrees
-	}
-	
-	public String format(double d)
-	{
-		return String.format("%.1f", d);
-	}
-	
-	public static void setAltitudeDouble(double alt)
-	{
-		altitude = alt;
-	}
+                // finally draw the altitude and compass heading text
+                double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
 
-	public int colorAltitude()
-	{
-		return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
-	}
+//                fr.drawLEDString("Altitude", guiX + 28, guiY + 12, colorDimBlue);
+//                fr.drawLEDString(altitudeStr, textX - fieldWidth, textY, colorAltitude());
+//                fr.drawLEDString("Compass", guiX + 113, guiY + 12, colorDimBlue);
+//                fr.drawLEDString(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
+                mc.fontRendererObj.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
+                mc.fontRendererObj.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
+                mc.fontRendererObj.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
+                mc.fontRendererObj.drawStringWithShadow(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
+            }
+        }
+    }
 
-	// quadrant color code
-	// 315 to 45 green, 45 to 135 yellow, 135 to 225 red, 335 to 315 blue
-	public int colorCompass(double d)
-	{
-		return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
-				(d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
-	}
+    // difference angle in degrees the player is facing from the spawn point.
+    // zero degrees means the player is facing the spawn point.
+    public double getSpawnDirection() {
+        BlockPos blockpos = mc.theWorld.getSpawnPoint();
+        double delta = Math.atan2(blockpos.getZ() - mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
+        double relAngle = delta - (mc.thePlayer.rotationYaw * 0.0174532925199433); // radians
+        return MathHelper.wrapAngleTo180_double((relAngle * 57.2957795130823) - 90.0); // degrees
+    }
+
+    public String format(double d) {
+        return String.format("%.1f", d);
+    }
+
+    public static void setAltitudeDouble(double alt) {
+        altitude = alt;
+    }
+
+    public int colorAltitude() {
+        return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
+    }
+
+    // quadrant color code
+    // 315 to 45 green, 45 to 135 yellow, 135 to 225 red, 335 to 315 blue
+    public int colorCompass(double d) {
+        return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
+                (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
+    }
+
 }

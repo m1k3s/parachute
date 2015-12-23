@@ -13,7 +13,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.8.0-1.0.3-158"
+version = "1.8.0-1.0.3-174"
 group= "com.crackedEgg.parachutemod"
 archivesBaseName = "parachutemod-ng"
 

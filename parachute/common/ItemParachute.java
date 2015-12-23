@@ -53,7 +53,7 @@ public class ItemParachute extends Item {
 		return itemstack;
 	}
 
-	public /*ItemStack*/ void deployParachute(/*ItemStack itemstack, */World world, EntityPlayer entityplayer)
+	public void deployParachute(World world, EntityPlayer entityplayer)
 	{
 		// only deploy if entityplayer exists and if player is falling and not already on a parachute.
 		if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
@@ -81,7 +81,6 @@ public class ItemParachute extends Item {
 				}
 			}
 		}
-//		return itemstack;
 	}
 
 	// this function toggles the AAD state but does not update the saved config.
