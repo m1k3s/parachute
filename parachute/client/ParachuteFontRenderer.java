@@ -20,7 +20,7 @@ public class ParachuteFontRenderer extends FontRenderer {
     protected float posY;
 
     public ParachuteFontRenderer(Minecraft mc, ResourceLocation fontTexture) {
-        super(mc.gameSettings, fontTexture, mc.getTextureManager(), true);
+        super(mc.gameSettings, fontTexture, mc.getTextureManager(), mc.getLanguageManager().isCurrentLocaleUnicode());
         locationFontTexture = fontTexture;
         mc.getTextureManager().bindTexture(locationFontTexture);
         readFontTexture();
