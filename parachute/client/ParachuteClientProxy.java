@@ -38,7 +38,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 	public void preInit()
 	{
 		super.preInit();
-		info(Parachute.modid + " ConbinedClient preInit is complete.");
+		info(Parachute.modid + " CombinedClient preInit is complete.");
 	}
 
 	@Override
@@ -55,13 +55,13 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 		mm.register(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));
 		mm.register(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName, "inventory"));
 
-		info(Parachute.modid + " ConbinedClient Init is complete.");
+		info(Parachute.modid + " CombinedClient Init is complete.");
 	}
 
 	@Override
 	public void postInit()
 	{
-		info(Parachute.modid + " ConbinedClient postInit is complete.");
+		info(Parachute.modid + " CombinedClient postInit is complete.");
 	}
 
 }

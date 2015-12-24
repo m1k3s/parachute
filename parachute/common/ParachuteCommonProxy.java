@@ -64,6 +64,7 @@ public class ParachuteCommonProxy {
 		PacketHandler.init();
 	}
 
+	@SuppressWarnings("unchecked") // no type specifiers in minecraft StatList
 	public void Init()
 	{
 		FMLCommonHandler.instance().bus().register(Parachute.instance);

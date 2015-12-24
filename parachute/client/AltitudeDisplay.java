@@ -58,6 +58,7 @@ public class AltitudeDisplay extends Gui {
 
     public AltitudeDisplay() {
         super();
+
         guiWidth = 182;
         guiHeight = 39;
         ledWidth = 11;
@@ -72,7 +73,7 @@ public class AltitudeDisplay extends Gui {
         ledY = 39;
 
         if (renderCustomFont) {
-            fontRenderer = new FontRenderer(mc.gameSettings, locationFontTexture, mc.getTextureManager(), true);
+            fontRenderer = new ParachuteFontRenderer(mc, locationFontTexture);
         } else {
             fontRenderer = mc.fontRendererObj;
         }
@@ -101,25 +102,21 @@ public class AltitudeDisplay extends Gui {
                 drawTexturedModalRect(guiX, guiY, 0, 0, guiWidth, guiHeight); // draw the main gui
 
                 // determine which LED to light, spawnDir is in range -180 to 180
-                // for any value under -80 or over 80 the LED is fixed to the
+                // for any value under -maxAngle or over maxAngle the LED is fixed to the
                 // left or right end of the slider respectively.
-                if (spawnDir < -80) {
+                final double maxAngle = 80.0;
+                if (spawnDir < -maxAngle) {
                     ledX = 1;
-                } else if ((spawnDir - 80) * (spawnDir - -80) < 0) {
-                    ledX = (int) Math.floor((spawnDir + 80.0) + 4);
-                } else if (spawnDir > 80) {
+                } else if ((spawnDir - maxAngle) * (spawnDir - -maxAngle) < 0) {
+                    ledX = (int) Math.floor((spawnDir + maxAngle) + 4);
+                } else if (spawnDir > maxAngle) {
                     ledX = 170;
                 }
                 drawTexturedModalRect(guiX + ledX, guiY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
 
                 // AAD status
-                int aadIconX;
+                int aadIconX = ConfigHandler.getIsAADActive() ? 199 : 182;
                 int aadIconY = 8;
-                if (ConfigHandler.getIsAADActive()) {
-                    aadIconX = 199;
-                } else {
-                    aadIconX = 182;
-                }
                 drawTexturedModalRect(guiX + guiWidth, guiY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
                 // finally draw the altitude and compass heading text
