@@ -21,38 +21,49 @@ package com.parachute.common;
 
 import com.parachute.client.RenderParachute;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.item.Item;
 
-public class ItemParachute extends ItemArmor {
+public class ItemParachute extends Item {
+	private static boolean active;
 
-	private final int damageAmount = 1;
-	private final float volume = 1.0F;
-
-	public ItemParachute(ArmorMaterial armorMaterial, int renderIndex, int armorType)
+	public ItemParachute(ToolMaterial toolmaterial)
 	{
-		super(armorMaterial, renderIndex, armorType);
-		setMaxDamage(armorMaterial.getDurability(armorType));
-		maxStackSize = 1;
+		super();
+		setMaxDamage(toolmaterial.getMaxUses());
+		maxStackSize = 4;
+		active = ConfigHandler.getIsAADActive();
 		setCreativeTab(CreativeTabs.tabTransport); // place in the transportation tab in creative mode
-		ConfigHandler.setType(ParachuteCommonProxy.parachuteName);
 	}
 
-	public boolean deployParachute(World world, EntityPlayer entityplayer)
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	{
+		// only deploy if entityplayer exists and if player is falling and not already on a parachute.
+		if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
+		    deployParachute(world, entityplayer);
+		} else { // toggle the AAD state
+		    toggleAAD(itemstack, world, entityplayer);
+		}
+		return itemstack;
+	}
+
+	public void deployParachute(World world, EntityPlayer entityplayer)
 	{
 		// only deploy if entityplayer exists and if player is falling and not already on a parachute.
 		if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
 			double offset = ParachuteCommonProxy.getOffsetY();
-			if (!ConfigHandler.isSmallCanopy()) {
-				offset += 1.0; // large canopy
-			}
+
 			EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
-			chute.playSound("step.cloth", volume, pitch());
 			chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
+			float volume = 1.0F;
+			chute.playSound("parachutemod:chuteopen", volume, pitch());
+			
 			if (world.isRemote) {
 				RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
 			} else {
@@ -60,17 +71,28 @@ public class ItemParachute extends ItemArmor {
 			}
 			entityplayer.mountEntity(chute);
 			ParachuteCommonProxy.setDeployed(true);
+			entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
-			if (!entityplayer.capabilities.isCreativeMode) {
-				ItemStack parachute = entityplayer.inventory.armorItemInSlot(ParachuteCommonProxy.armorSlot);
-				if (parachute != null) {
-					parachute.damageItem(damageAmount, entityplayer);
+			ItemStack itemstack = entityplayer.getHeldItem();
+			if (itemstack != null) {
+				boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, itemstack) > 0;
+				if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
+					itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(), entityplayer);
 				}
 			}
-		} else {
-			return false;
 		}
-		return true;
+	}
+
+	// this function toggles the AAD state but does not update the saved config.
+	// the player can still enable/disable the AAD in the config GUI.
+	public void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	{
+	    if (!world.isRemote) {
+	        active = !active;
+	        world.playSoundAtEntity(entityplayer, "random.click", 1.0f, 1.0f / itemRand.nextFloat() * 0.4f + 0.8f);
+	        itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
+	        ConfigHandler.setAADState(active);
+	    }
 	}
 
 	private float pitch()
@@ -79,27 +101,9 @@ public class ItemParachute extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, String type)
-	{
-		if (itemstack.getItem() == Parachute.parachuteItem) {
-			return Parachute.modid.toLowerCase() + ":textures/models/armor/parachute-pack.png";
-		}
-		return Parachute.modid.toLowerCase() + ":textures/models/armor/parachute-pack.png";
-	}
-
-	@Override
 	public boolean getIsRepairable(ItemStack itemstack1, ItemStack itemstack2)
 	{
-		return Items.string == itemstack2.getItem() ? true : super.getIsRepairable(itemstack1, itemstack2);
+		return Items.string == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
 	}
-
-	// TODO create a custom parachute pack model
-//    @Override
-//    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-//        return new ModelParachutePack();
-//    }
-//    @Override
-//    public boolean hasColor(ItemStack itemStack) {
-//        return false;
-//    }
+	
 }

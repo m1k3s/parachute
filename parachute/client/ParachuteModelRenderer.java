@@ -19,13 +19,13 @@
 //
 package com.parachute.client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 
 import org.lwjgl.opengl.GL11;
 
@@ -33,8 +33,8 @@ public class ParachuteModelRenderer {
 
 	private PositionTextureVertex corners[];
 	private ParachuteTexturedQuad faces[];
-	private int left;
-	private int top;
+	private final int left;
+	private final int top;
 	public float rotationPointX;
 	public float rotationPointY;
 	public float rotationPointZ;
@@ -57,18 +57,19 @@ public class ParachuteModelRenderer {
 		displayList = 0;
 		mirror = false;
 		showModel = true;
-		cubeList = new ArrayList();
+		left = x;
+		top = y;
 		setTextureSize(textureWidth, textureHeight);
 	}
 
-	public void addBox(float x, float y, float z, int i, int j, int k)
+	public void addBox(float x, float y, float z, float w, float h, float d)
 	{
 		corners = new PositionTextureVertex[8];
 		faces = new ParachuteTexturedQuad[6];
 
-		float width = x + (float) i;
-		float height = y + (float) j;
-		float depth = z + (float) k;
+		float width = x + (float) w;
+		float height = y + (float) h;
+		float depth = z + (float) d;
 
 		if (mirror) {
 			float tmp = width;
@@ -86,9 +87,9 @@ public class ParachuteModelRenderer {
 		corners[7] = new PositionTextureVertex(x, height, depth, 8F, 0.0F);
 
 		// sides may be smaller than 16, need to account for that.
-		int r1 = (i > 16) ? 16 : i;
-		int r2 = (k > 16) ? 16 : k;
-		int bottom = (j > 16) ? 16 : j;
+		int r1 = (int) ((w > 16) ? 16 : w);
+		int r2 = (int) ((d > 16) ? 16 : d);
+		int bottom = (int) ((h > 16) ? 16 : h);
 
 		faces[0] = new ParachuteTexturedQuad(
 				new PositionTextureVertex[] { // right face
@@ -218,20 +219,20 @@ public class ParachuteModelRenderer {
 	{
 		displayList = GLAllocation.generateDisplayLists(1);
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
-		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer wRenderer = Tessellator.getInstance().getWorldRenderer();
 
 		for (ParachuteTexturedQuad face : faces) {
-			face.draw(tessellator.getWorldRenderer(), f);
+			face.draw(wRenderer, f);
 		}
 
 		GL11.glEndList();
 		compiled = true;
 	}
 
-	public final ParachuteModelRenderer setTextureSize(float x, float y)
+	public final ParachuteModelRenderer setTextureSize(float width, float height)
 	{
-		textureWidth = x;
-		textureHeight = y;
+		textureWidth = width;
+		textureHeight = height;
 		return this;
 	}
 

@@ -19,6 +19,10 @@
 //
 package com.parachute.common;
 
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.StatBase;
+import net.minecraft.stats.StatBasic;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -27,31 +31,30 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod(modid = Parachute.modid,
-	name = Parachute.name,
-	version = Parachute.modversion,
-	acceptedMinecraftVersions = Parachute.mcversion,
-	guiFactory = Parachute.guifactory
+@Mod(
+		modid = Parachute.modid,
+		name = Parachute.name,
+		version = Parachute.modversion,
+		acceptedMinecraftVersions = Parachute.mcversion,
+		guiFactory = Parachute.guifactory
 )
 
 public class Parachute {
 
 	public static final String modid = "parachutemod";
-	public static final String modversion = "3.1.1";
+	public static final String modversion = "1.0.4";
 	public static final String mcversion = "1.8.0";
-	public static final String name = "Parachute Mod";
+	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
+	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new ChatComponentTranslation("stat.parachuteDeployed"));
+	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new ChatComponentTranslation("stat.parachuteDistance", new Object[0]), StatBase.distanceStatType);
+	public static Achievement buildParachute;
 
-	@SidedProxy(
-			clientSide = "com.parachute.client.ParachuteClientProxy",
-			serverSide = "com.parachute.common.ParachuteServerProxy"
-	)
+	@SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
 	public static ParachuteCommonProxy proxy;
 
 	public static ItemParachute parachuteItem;
-	public static ItemHopAndPop hopnpopItem;
-	public static ItemRipCord ripcordItem;
-	public static ItemAutoActivateDevice aadItem;
+	public static ItemParachutePack packItem;
 
 	@Mod.Instance(modid)
 	public static Parachute instance;

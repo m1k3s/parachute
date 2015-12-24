@@ -15,7 +15,7 @@
 //  =====================================================================
 //
 //
-// Copyright 2011-2015 Michael Sheppard (crackedEgg)
+// Copyright © 2011-2015 Michael Sheppard (crackedEgg)
 //
 package com.parachute.client;
 
@@ -25,14 +25,15 @@ import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ParachuteClientProxy extends ParachuteCommonProxy {
 	
+	// grab the 'jump' key from the game settings. defaults to the space bar. This allows the
+	// player to change the jump key and the parachute will use the new jump key
+	public static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
+
 	// grab the 'jump' key from the game settings. defaults to the space bar. This allows the
 	// player to change the jump key and the parachute will use the new jump key
 	public static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
@@ -41,7 +42,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 	public void preInit()
 	{
 		super.preInit();
-		info(Parachute.modid + " ConbinedClient preInit is complete.");
+		info(Parachute.modid + " CombinedClient preInit is complete.");
 	}
 
 	@Override
@@ -51,25 +52,20 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
 
-		FMLCommonHandler.instance().bus().register(new KeyPressTick(ascendKey));
-		MinecraftForge.EVENT_BUS.register(new AltitudeDisplay());
+		net.minecraftforge.fml.common.FMLCommonHandler.instance().bus().register(new KeyPressTick(ascendKey));
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new AltitudeDisplay());
 
 		ItemModelMesher mm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		mm.register(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));
-		mm.register(Parachute.ripcordItem, 0, new ModelResourceLocation(Parachute.modid + ":" + ripcordName, "inventory"));
-		mm.register(Parachute.hopnpopItem, 0, new ModelResourceLocation(Parachute.modid + ":" + hopnpopName, "inventory"));
+		mm.register(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName, "inventory"));
 
-		ModelBakery.addVariantName(Parachute.aadItem, new String[] {Parachute.modid + ":" + aadName, Parachute.modid + ":" + aadName + "_off"});
-		mm.register(Parachute.aadItem, 1, new ModelResourceLocation(Parachute.modid + ":" + aadName, "inventory"));
-		mm.register(Parachute.aadItem, 0, new ModelResourceLocation(Parachute.modid + ":" + aadName + "_off", "inventory"));
-
-		info(Parachute.modid + " ConbinedClient Init is complete.");
+		info(Parachute.modid + " CombinedClient Init is complete.");
 	}
 
 	@Override
 	public void postInit()
 	{
-		info(Parachute.modid + " ConbinedClient postInit is complete.");
+		info(Parachute.modid + " CombinedClient postInit is complete.");
 	}
 
 }

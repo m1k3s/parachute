@@ -1,7 +1,7 @@
 {
     "parent": "parachutemod:builtin/generated",
     "textures": {
-        "layer0": "parachutemod:items/hop_and_pop"
+        "layer0": "parachutemod:items/pack"
     },
     "display": {
         "thirdperson": {
