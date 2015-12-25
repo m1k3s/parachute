@@ -63,7 +63,7 @@ public class ConfigHandler {
     private static final String isAADActiveComment = "whether or not the AAD is active"; // false
     private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
 	private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
-	private static final String useCustomFontComment = "true to use the parachutes custom font";
+	private static final String useCustomFontComment = "true to use the parachutes custom font, requires a restart!";
 	private static final String colorComment = "Parachute Colors Allowed:\n"
 			+ "black, blue, brown, cyan, gray, green, light_blue, lime,\n"
 			+ "magenta, orange, pink, purple, red, silver, white, yellow,\n"

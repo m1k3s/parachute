@@ -13,12 +13,12 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.8.0-1.0.4-212"
+version = "1.8.0-1.0.4-225"
 group= "com.crackedEgg.parachutemod"
 archivesBaseName = "parachutemod-ng"
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 minecraft {
     version = "1.8-11.14.4.1577"
