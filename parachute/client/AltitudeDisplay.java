@@ -27,6 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -125,8 +126,10 @@ public class AltitudeDisplay extends Gui {
 
                 fontRenderer.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
+//                drawStringBold(altitudeStr, textX - fieldWidth, textY, colorAltitude());
                 fontRenderer.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
+//                drawStringBold(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
             }
         }
     }
@@ -158,5 +161,14 @@ public class AltitudeDisplay extends Gui {
         return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
                 (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
     }
+
+//    public void drawStringBold(String str, int strX, int strY, int color)
+//    {
+//        fontRenderer.drawString(str, strX + 1, strY, 0);
+//        fontRenderer.drawString(str, strX - 1, strY, 0);
+//        fontRenderer.drawString(str, strX, strY + 1, 0);
+//        fontRenderer.drawString(str, strX, strY - 1, 0);
+//        fontRenderer.drawString(str, strX + 1, strY, color);
+//    }
 
 }
