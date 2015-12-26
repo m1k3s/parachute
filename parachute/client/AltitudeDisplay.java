@@ -23,6 +23,7 @@ import com.parachute.common.ConfigHandler;
 import com.parachute.common.Parachute;
 import com.parachute.common.ParachuteCommonProxy;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.BlockPos;
@@ -34,14 +35,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class AltitudeDisplay  extends Gui {
 
 	protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
-	public static double altitude = 0.0;
+	protected static final ResourceLocation locationFontTexture = new ResourceLocation((Parachute.modid + ":" + "textures/font/ascii.png"));
+	private static FontRenderer fontRenderer;
+	public static double altitude;
 	private final Minecraft mc = Minecraft.getMinecraft();
+	private boolean renderCustomFont = ConfigHandler.getUseCustomFont(); // config variable
 
 	private final int guiWidth;
 	private final int guiHeight;
 	private final int ledWidth;
 	private final int ledHeight;
-	private final int fieldWidth = mc.fontRendererObj.getStringWidth("000.0") / 2;
+	private final int fieldWidth;// = mc.fontRendererObj.getStringWidth("000.0") / 2;
 	private final int colorWhite;
 	private final int colorYellow;
 	private final int colorRed;
@@ -69,6 +73,13 @@ public class AltitudeDisplay  extends Gui {
 		aadWidth = 16;
 		aadHeight = 25;
 		ledY = 39;
+
+		if (renderCustomFont) {
+			fontRenderer = new ParachuteFontRenderer(mc, locationFontTexture);
+		} else {
+		    fontRenderer = mc.fontRendererObj;
+		}
+		fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
 	}
 
 	@SubscribeEvent
@@ -118,10 +129,10 @@ public class AltitudeDisplay  extends Gui {
 
 				// finally draw the altitude and compass heading text
 				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
-				mc.fontRendererObj.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
-				mc.fontRendererObj.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
-				mc.fontRendererObj.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
-				mc.fontRendererObj.drawStringWithShadow(format(heading), (textX + 91) - fieldWidth, textY, colorCompass(heading));
+				fontRenderer.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
+				fontRenderer.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
+				fontRenderer.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
+				fontRenderer.drawStringWithShadow(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
 			}
 		}
 	}
