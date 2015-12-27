@@ -26,10 +26,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-//import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-//import net.minecraftforge.fml.common.FMLCommonHandler;
 
+@SuppressWarnings("unused")
 public class ParachuteClientProxy extends ParachuteCommonProxy {
 
 	// grab the 'jump' key from the game settings. defaults to the space bar. This allows the

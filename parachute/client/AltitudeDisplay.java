@@ -46,7 +46,6 @@ public class AltitudeDisplay  extends Gui {
 	private final int ledWidth;
 	private final int ledHeight;
 	private final int fieldWidth;// = mc.fontRendererObj.getStringWidth("000.0") / 2;
-	private final int colorWhite;
 	private final int colorYellow;
 	private final int colorRed;
 	private final int colorGreen;
@@ -64,7 +63,6 @@ public class AltitudeDisplay  extends Gui {
 		guiHeight = 39;
 		ledWidth = 11;
 		ledHeight = 5;
-		colorWhite = 0xffffffff;
 		colorYellow = 0xffaaaa00;
 		colorRed = 0xffaa0000;
 		colorGreen = 0xff00aa00;
@@ -82,6 +80,7 @@ public class AltitudeDisplay  extends Gui {
 		fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
 	}
 
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onRender(RenderGameOverlayEvent event)
 	{
@@ -99,6 +98,8 @@ public class AltitudeDisplay  extends Gui {
 			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
 				mc.getTextureManager().bindTexture(hudTexPath);
 
+				BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+				altitude = getCurrentAltitude(entityPos);
 				double spawnDir = getSpawnDirection();
 				String altitudeStr = format(altitude);
 
@@ -142,11 +143,6 @@ public class AltitudeDisplay  extends Gui {
 		return String.format("%.1f", d);
 	}
 	
-	public static void setAltitudeDouble(double alt)
-	{
-		altitude = alt;
-	}
-
 	// difference angle in degrees the player is facing from the spawn point.
 	// zero degrees means the player is facing the spawn point.
 	public double getSpawnDirection()
@@ -168,6 +164,23 @@ public class AltitudeDisplay  extends Gui {
 	{
 		return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
 				(d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
+	}
+
+	// calculate altitude in meters above ground. starting at the entity
+	// count down until a non-air block is encountered.
+	// only allow altitude calculations in the surface world
+	// return a weirdly random number if in nether or end.
+	public double getCurrentAltitude(BlockPos entityPos/*, boolean referenceMSL*/)
+	{
+		if (mc.theWorld.provider.isSurfaceWorld()) {
+			BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
+			while (mc.theWorld.isAirBlock(blockPos.down())) {
+				blockPos = blockPos.down();
+			}
+			// calculate the entity's current altitude above the ground
+			return entityPos.getY() - blockPos.getY();
+		}
+		return 1000.0 * mc.theWorld.rand.nextGaussian();
 	}
 
 }

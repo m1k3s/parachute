@@ -58,6 +58,7 @@ public class Parachute {
 	@Mod.Instance(modid)
 	public static Parachute instance;
 
+	@SuppressWarnings("unused")
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -65,12 +66,14 @@ public class Parachute {
 		proxy.preInit();
 	}
 
+	@SuppressWarnings("unused")
 	@Mod.EventHandler
 	public void Init(FMLInitializationEvent event)
 	{
 		proxy.Init();
 	}
 
+	@SuppressWarnings("unused")
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
@@ -83,6 +86,7 @@ public class Parachute {
 	}
 
 	// user has changed entries in the GUI config. save the results.
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
