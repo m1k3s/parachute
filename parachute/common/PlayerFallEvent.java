@@ -31,6 +31,7 @@ public class PlayerFallEvent {
 		Parachute.proxy.info("PlayerFallEvent ctor");
 	}
 
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onFallEvent(LivingFallEvent event)
 	{

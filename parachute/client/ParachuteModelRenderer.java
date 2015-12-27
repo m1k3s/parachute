@@ -19,7 +19,7 @@
 //
 package com.parachute.client;
 
-import java.util.List;
+//import java.util.List;
 
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.GLAllocation;
@@ -31,7 +31,6 @@ import org.lwjgl.opengl.GL11;
 
 public class ParachuteModelRenderer {
 
-	private PositionTextureVertex corners[];
 	private ParachuteTexturedQuad faces[];
 	private final int left;
 	private final int top;
@@ -47,7 +46,6 @@ public class ParachuteModelRenderer {
 	public boolean showModel;
 	public float textureWidth;
 	public float textureHeight;
-	public List cubeList;
 
 	public ParachuteModelRenderer(int x, int y)
 	{
@@ -64,12 +62,12 @@ public class ParachuteModelRenderer {
 
 	public void addBox(float x, float y, float z, float w, float h, float d)
 	{
-		corners = new PositionTextureVertex[8];
+		PositionTextureVertex[] corners = new PositionTextureVertex[8];
 		faces = new ParachuteTexturedQuad[6];
 
-		float width = x + (float) w;
-		float height = y + (float) h;
-		float depth = z + (float) d;
+		float width = x + w;
+		float height = y + h;
+		float depth = z + d;
 
 		if (mirror) {
 			float tmp = width;
@@ -164,6 +162,7 @@ public class ParachuteModelRenderer {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void renderWithRotation(float f)
 	{
 		if (!showModel) {
@@ -187,6 +186,7 @@ public class ParachuteModelRenderer {
 		GlStateManager.popMatrix();
 	}
 
+	@SuppressWarnings("unused")
 	public void postRender(float f)
 	{
 		if (!showModel) {

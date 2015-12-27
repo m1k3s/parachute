@@ -36,6 +36,7 @@ public class KeyPressTick {
 		ascendKey = key;
 	}
 
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onTick(TickEvent.PlayerTickEvent event)
 	{

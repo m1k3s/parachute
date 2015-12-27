@@ -28,7 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class KeyPressMessage implements IMessage {
 
 	private boolean keyPressed;
-
+	@SuppressWarnings("unused")
 	public KeyPressMessage()
 	{
 

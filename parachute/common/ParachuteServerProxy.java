@@ -1,6 +1,6 @@
 package com.parachute.common;
 
-
+@SuppressWarnings("unused")
 public class ParachuteServerProxy extends ParachuteCommonProxy {
 
 	@Override

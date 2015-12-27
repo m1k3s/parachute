@@ -26,6 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerTickEventHandler {
 
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onTick(TickEvent.PlayerTickEvent event)
 	{
