@@ -18,15 +18,13 @@
 //
 package com.parachute.common;
 
-import com.parachute.client.AltitudeDisplay;
-//import java.text.DecimalFormat;
+//import com.parachute.client.AltitudeDisplay;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-//import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -218,11 +216,11 @@ public class EntityParachute extends Entity {
 		prevPosZ = posZ;
 
 		// Altimeter, the altitude display
-		if (riddenByEntity != null && worldObj.isRemote) { // execute only on the client
-			// use the pilot's position for the altitude reference
-			BlockPos entityPos = new BlockPos(riddenByEntity.posX, riddenByEntity.posY, riddenByEntity.posZ);
-			AltitudeDisplay.setAltitudeDouble(getCurrentAltitude(entityPos/*, altitudeMSL*/));
-		}
+//		if (riddenByEntity != null && worldObj.isRemote) { // execute only on the client
+//			// use the pilot's position for the altitude reference
+//			BlockPos entityPos = new BlockPos(riddenByEntity.posX, riddenByEntity.posY, riddenByEntity.posZ);
+//			AltitudeDisplay.setAltitudeDouble(getCurrentAltitude(entityPos));
+//		}
 
 		// drop the chute when close to ground
 		if (autoDismount && riddenByEntity != null) {
@@ -503,27 +501,35 @@ public class EntityParachute extends Entity {
 		}
 	}
 
+    // calculate altitude in meters above ground. starting at the entity
+	// count down until a non-air block is encountered.
 	// only allow altitude calculations in the surface world
 	// return a weirdly random number if in nether or end.
-	public double getCurrentAltitude(BlockPos entityPos/*, boolean referenceMSL*/)
-	{
-		if (worldObj.provider.isSurfaceWorld()) {
-			return getAltitudeAboveGround(entityPos); // altitude above ground
-		}
-		return 1000.0 * rand.nextGaussian();
-	}
+//	public double getCurrentAltitude(BlockPos entityPos)
+//	{
+//		if (worldObj.provider.isSurfaceWorld()) {
+////			return getAltitudeAboveGround(entityPos); // altitude above ground
+//            BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
+//		    while (worldObj.isAirBlock(blockPos.down())) {
+//			    blockPos = blockPos.down();
+//		    }
+//		    // calculate the entity's current altitude above the ground
+//		    return entityPos.getY() - blockPos.getY();
+//		}
+//		return 1000.0 * rand.nextGaussian();
+//	}
 	
 	// calculate altitude in meters above ground. starting at the entity
 	// count down until a non-air block is encountered.
-	public double getAltitudeAboveGround(BlockPos entityPos)
-	{
-		BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
-		while (worldObj.isAirBlock(blockPos.down())) {
-			blockPos = blockPos.down();
-		}
-		// calculate the entity's current altitude above the ground
-		return entityPos.getY() - blockPos.getY();
-	}
+//	public double getAltitudeAboveGround(BlockPos entityPos)
+//	{
+//		BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
+//		while (worldObj.isAirBlock(blockPos.down())) {
+//			blockPos = blockPos.down();
+//		}
+//		// calculate the entity's current altitude above the ground
+//		return entityPos.getY() - blockPos.getY();
+//	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt)

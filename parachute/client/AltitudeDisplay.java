@@ -26,15 +26,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
-
-import java.nio.IntBuffer;
 
 public class AltitudeDisplay extends Gui {
 
@@ -84,6 +80,7 @@ public class AltitudeDisplay extends Gui {
         fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent event) {
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.thePlayer.onGround) {
@@ -99,6 +96,9 @@ public class AltitudeDisplay extends Gui {
         if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
             if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
                 mc.getTextureManager().bindTexture(hudTexPath);
+
+                BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+                altitude = getCurrentAltitude(entityPos);
 
                 double spawnDir = getSpawnDirection();
                 String altitudeStr = format(altitude);
@@ -128,10 +128,8 @@ public class AltitudeDisplay extends Gui {
 
                 fontRenderer.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
-//                drawStringBold(altitudeStr, textX - fieldWidth, textY, colorAltitude());
                 fontRenderer.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
-//                drawStringBold(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
             }
         }
     }
@@ -149,10 +147,6 @@ public class AltitudeDisplay extends Gui {
         return String.format("%.1f", d);
     }
 
-    public static void setAltitudeDouble(double alt) {
-        altitude = alt;
-    }
-
     public int colorAltitude() {
         return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
     }
@@ -163,14 +157,18 @@ public class AltitudeDisplay extends Gui {
         return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
                 (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
     }
-
-//    public void drawStringBold(String str, int strX, int strY, int color)
-//    {
-//        fontRenderer.drawString(str, strX + 1, strY, 0);
-//        fontRenderer.drawString(str, strX - 1, strY, 0);
-//        fontRenderer.drawString(str, strX, strY + 1, 0);
-//        fontRenderer.drawString(str, strX, strY - 1, 0);
-//        fontRenderer.drawString(str, strX + 1, strY, color);
-//    }
+    
+    public double getCurrentAltitude(BlockPos entityPos)
+	{
+		if (mc.theWorld.provider.isSurfaceWorld()) {
+            BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
+		    while (mc.theWorld.isAirBlock(blockPos.down())) {
+			    blockPos = blockPos.down();
+		    }
+		    // calculate the players current altitude above the ground
+		    return entityPos.getY() - blockPos.getY();
+		}
+		return 1000.0 * mc.theWorld.rand.nextGaussian();
+	}
 
 }
