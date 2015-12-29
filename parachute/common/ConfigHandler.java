@@ -36,7 +36,7 @@ public class ConfigHandler {
 	private static boolean lavaThermals;
 	private static double minLavaDistance;
 	private static double maxLavaDistance;
-	private static boolean allowTurbulence;
+	private static boolean constantTurbulence;
 	private static boolean showContrails;
 	private static boolean dismountInWater;
 	private static boolean isAADActive;
@@ -50,12 +50,12 @@ public class ConfigHandler {
 	private static final String thermalComment = "enable thermal rise by pressing the space bar"; // true
 	private static final String lavaThermalComment = "use lava heat to get thermals to rise up, disables space bar thermals"; // false
 	private static final String minLavaDistanceComment = "minimum distance from lava to grab thermals, if you\n"
-			+ "go less than 3.0 you will most likely dismount in the lava!"; // 3.0
+			+ "go less than 3.0 you will most likely auto-dismount in the lava!"; // 3.0
 	private static final String maxLavaDistanceComment = "maximum distance to rise from lava thermals"; // 48
 	private static final String autoComment = "If true the parachute will dismount the player automatically,\n"
 			+ "if false the player has to use LSHIFT to dismount the parachute"; // true
 	private static final String weatherComment = "set to false if you don't want the drift rate to be affected by bad weather"; // true
-	private static final String turbulenceComment = "set to true to feel the turbulent world of Minecraft"; // false
+	private static final String turbulenceComment = "set to true to constantly feel the turbulent world of Minecraft"; // false
 	private static final String trailsComment = "set to true to show contrails from parachute"; // false
     private static final String dismountComment = "true to dismount in water"; // false
     private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
@@ -89,7 +89,7 @@ public class ConfigHandler {
 			autoDismount = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment).getBoolean(true);
 			chuteColor = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "random", colorComment).getString();
 			weatherAffectsDrift = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment).getBoolean(true);
-			allowTurbulence = config.get(Configuration.CATEGORY_GENERAL, "allowTurbulence", false, turbulenceComment).getBoolean(false);
+			constantTurbulence = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment).getBoolean(false);
 			showContrails = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment).getBoolean(false);
             dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
 			boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
@@ -168,7 +168,7 @@ public class ConfigHandler {
 
 	public static boolean getAllowturbulence()
 	{
-		return allowTurbulence;
+		return constantTurbulence;
 	}
 
 	public static boolean getShowContrails()

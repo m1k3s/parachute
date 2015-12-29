@@ -291,7 +291,8 @@ public class EntityParachute extends Entity {
 		// update final yaw and apply to parachute
 		rotationYaw += adjustedYaw;
 		setRotation(rotationYaw, rotationPitch);
-		// finally apply turbulence if flags allow
+
+		// apply turbulence if flags allow
 		if (((weatherAffectsDrift && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
 			applyTurbulence(worldObj.isThundering());
 		}
