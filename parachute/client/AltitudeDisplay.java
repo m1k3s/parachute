@@ -35,7 +35,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class AltitudeDisplay extends Gui {
 
     protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
-    protected static final ResourceLocation locationFontTexture = new ResourceLocation((Parachute.modid + ":" + "textures/font/ascii.png"));
     private static FontRenderer fontRenderer;
     public static double altitude;
     private final Minecraft mc = Minecraft.getMinecraft();
@@ -54,7 +53,6 @@ public class AltitudeDisplay extends Gui {
     private final int aadHeight;
     private final int ledY;
 
-    private boolean renderCustomFont = ConfigHandler.getUseCustomFont(); // config variable
 
     public AltitudeDisplay() {
         super();
@@ -72,11 +70,7 @@ public class AltitudeDisplay extends Gui {
         aadHeight = 25;
         ledY = 39;
 
-        if (renderCustomFont) {
-            fontRenderer = new ParachuteFontRenderer(mc, locationFontTexture);
-        } else {
-            fontRenderer = mc.fontRendererObj;
-        }
+        fontRenderer = mc.fontRendererObj;
         fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
     }
 
@@ -91,17 +85,17 @@ public class AltitudeDisplay extends Gui {
         int guiY = 2; // top edge of GUI
         int textX = guiX + 50; // xcoord for text
         int textY = guiY + 22; // ycoord for text
-        int ledX = 1;
+        int ledX = 1; // beginning led position
 
         if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
             if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
                 mc.getTextureManager().bindTexture(hudTexPath);
 
+
                 BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
                 altitude = getCurrentAltitude(entityPos);
 
                 double spawnDir = getSpawnDirection();
-                String altitudeStr = format(altitude);
                 // int x, int y, int textureX, int textureY, int width, int height
                 drawTexturedModalRect(guiX, guiY, 0, 0, guiWidth, guiHeight); // draw the main gui
 
@@ -127,7 +121,7 @@ public class AltitudeDisplay extends Gui {
                 double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
 
                 fontRenderer.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
-                fontRenderer.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
+                fontRenderer.drawStringWithShadow(format(altitude), textX - fieldWidth, textY, colorAltitude());
                 fontRenderer.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
             }

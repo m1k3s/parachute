@@ -60,7 +60,7 @@ public class ItemParachute extends Item {
 			double offset = ParachuteCommonProxy.getOffsetY();
 
 			EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
-			chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
+			chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player's direction
 			float volume = 1.0F;
 			chute.playSound("parachutemod:chuteopen", volume, pitch());
 			
