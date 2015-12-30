@@ -35,11 +35,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class AltitudeDisplay  extends Gui {
 
 	protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
-	protected static final ResourceLocation locationFontTexture = new ResourceLocation((Parachute.modid + ":" + "textures/font/ascii.png"));
 	private static FontRenderer fontRenderer;
 	public static double altitude;
 	private final Minecraft mc = Minecraft.getMinecraft();
-	private boolean renderCustomFont = ConfigHandler.getUseCustomFont(); // config variable
 
 	private final int guiWidth;
 	private final int guiHeight;
@@ -72,11 +70,7 @@ public class AltitudeDisplay  extends Gui {
 		aadHeight = 25;
 		ledY = 39;
 
-		if (renderCustomFont) {
-			fontRenderer = new ParachuteFontRenderer(mc, locationFontTexture);
-		} else {
-		    fontRenderer = mc.fontRendererObj;
-		}
+		fontRenderer = mc.fontRendererObj;
 		fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
 	}
 

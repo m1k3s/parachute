@@ -42,6 +42,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 		info(Parachute.modid + " CombinedClient preInit is complete.");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void Init()
 	{

@@ -36,13 +36,12 @@ public class ConfigHandler {
 	private static boolean lavaThermals;
 	private static double minLavaDistance;
 	private static double maxLavaDistance;
-	private static boolean allowTurbulence;
+	private static boolean constantTurbulence;
 	private static boolean showContrails;
 	private static boolean dismountInWater;
     private static boolean isAADActive;
 	private static double aadAltitude;
 	private static double minFallDistance;
-	private static boolean useCustomFont;
 
 	private static final String aboutComments = Parachute.name + " Config\nMichael Sheppard (crackedEgg)"
 			+ " For Minecraft Version " + Parachute.mcversion + "\n";
@@ -56,14 +55,13 @@ public class ConfigHandler {
 	private static final String autoComment = "If true the parachute will dismount the player automatically,\n"
 			+ "if false the player has to use LSHIFT to dismount the parachute"; // true
 	private static final String weatherComment = "set to false if you don't want the drift rate to be affected by bad weather"; // true
-	private static final String turbulenceComment = "set to true to feel the turbulent world of Minecraft"; // false
+	private static final String turbulenceComment = "set to true to always feel the turbulent world of Minecraft"; // false
 	private static final String trailsComment = "set to true to show contrails from parachute"; // false
 	private static final String dismountComment = "true to dismount in water"; // false
 	private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
     private static final String isAADActiveComment = "whether or not the AAD is active"; // false
     private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
     private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
-	private static final String useCustomFontComment = "true to use the parachutes custom font, requires a restart!";
 	private static final String colorComment = "Parachute Colors Allowed:\n"
 			+ "black, blue, brown, cyan, gray, green, light_blue, lime,\n"
 			+ "magenta, orange, pink, purple, red, silver, white, yellow,\n"
@@ -91,14 +89,13 @@ public class ConfigHandler {
 			autoDismount = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment).getBoolean(true);
 			chuteColor = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "random", colorComment).getString();
 			weatherAffectsDrift = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment).getBoolean(true);
-			allowTurbulence = config.get(Configuration.CATEGORY_GENERAL, "allowTurbulence", false, turbulenceComment).getBoolean(false);
+			constantTurbulence = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment).getBoolean(false);
 			showContrails = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment).getBoolean(false);
 			dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
             boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
             isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
             aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment).getDouble(10.0);
             minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment).getDouble(5.0);
-			useCustomFont = config.get(Configuration.CATEGORY_GENERAL, "useCustomFont", true, useCustomFontComment).getBoolean(true);
 
 			// if using lava thermals check allow/disallow space bar thermals, clamp the minimum lava distance.
 			if (lavaThermals) {
@@ -114,11 +111,6 @@ public class ConfigHandler {
 		}
 	}
 
-	public static boolean getUseCustomFont()
-	{
-		return useCustomFont;
-	}
-	
 	public static boolean getDismountInWater()
 	{
 		return dismountInWater;
@@ -161,7 +153,7 @@ public class ConfigHandler {
 
 	public static boolean getAllowturbulence()
 	{
-		return allowTurbulence;
+		return constantTurbulence;
 	}
 
 	public static boolean getShowContrails()

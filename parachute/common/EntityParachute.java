@@ -81,7 +81,6 @@ public class EntityParachute extends Entity {
 		setSize(1.5f, 0.0625f);
 		motionFactor = 0.07;
 		ascendMode = false;
-//		tickCount = 0;
 	}
 
 	public EntityParachute(World world, double x, double y, double z)
@@ -216,13 +215,6 @@ public class EntityParachute extends Entity {
 		prevPosY = posY;
 		prevPosZ = posZ;
 
-		// Altimeter, the altitude display
-//		if (riddenByEntity != null && worldObj.isRemote /*&& (tickCount % Damping == 0)*/) { // execute only on the client
-//			// use the pilot's position for the altitude reference
-//			BlockPos entityPos = new BlockPos(riddenByEntity.posX, riddenByEntity.posY, riddenByEntity.posZ);
-//			AltitudeDisplay.setAltitudeDouble(getCurrentAltitude(entityPos/*, altitudeMSL*/));
-//		}
-
 		// drop the chute when close to ground
 		if (autoDismount && riddenByEntity != null) {
 			double pilotFeetPos = riddenByEntity.getEntityBoundingBox().minY;
@@ -299,6 +291,7 @@ public class EntityParachute extends Entity {
 		// update final yaw and apply to parachute
 		rotationYaw += adjustedYaw;
 		setRotation(rotationYaw, rotationPitch);
+
 		// finally apply turbulence if flags allow
 		if (((weatherAffectsDrift && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
 			applyTurbulence(worldObj.isThundering());
@@ -308,8 +301,6 @@ public class EntityParachute extends Entity {
 		if (!worldObj.isRemote && riddenByEntity != null && riddenByEntity.isDead) {
 			killParachute();
 		}
-		// increment tick count for altitude display damping
-//		tickCount++;
 
         // update distance by parachute statistics
         if (riddenByEntity != null) {

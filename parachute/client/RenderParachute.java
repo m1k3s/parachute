@@ -46,6 +46,7 @@ public class RenderParachute extends Render {
 		shadowSize = 0.0F;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void renderParachute(EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float unused)
 	{
 		GlStateManager.pushMatrix();
