@@ -66,7 +66,6 @@ public class ParachuteTexturedQuad {
 		Vec3 vec3 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[0].vector3D);
 		Vec3 vec31 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[2].vector3D);
 		Vec3 vec32 = vec31.crossProduct(vec3).normalize();
-//		worldrenderer.startDrawingQuads();
 
 		float x = (float)vec32.xCoord;
         float y = (float)vec32.yCoord;
@@ -78,25 +77,13 @@ public class ParachuteTexturedQuad {
             z = -z;
         }
 
-        worldrenderer.func_181668_a(GL11.GL_QUADS, DefaultVertexFormats.field_181703_c);
-
-//		if (invertNormal) {
-//			worldrenderer.setNormal(-((float) vec32.xCoord), -((float) vec32.yCoord), -((float) vec32.zCoord));
-//		} else {
-//			worldrenderer.setNormal((float) vec32.xCoord, (float) vec32.yCoord, (float) vec32.zCoord);
-//		}
-
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);//.field_181703_c);
 		for (int i = 0; i < 4; ++i) {
 			PositionTextureVertex positiontexturevertex = this.vertexPositions[i];
-			worldrenderer.func_181662_b(positiontexturevertex.vector3D.xCoord * (double)scale, 
+			worldrenderer.pos(positiontexturevertex.vector3D.xCoord * (double)scale,
 				positiontexturevertex.vector3D.yCoord * (double)scale,
-				positiontexturevertex.vector3D.zCoord * (double)scale).func_181673_a((double)positiontexturevertex.texturePositionX,
-				(double)positiontexturevertex.texturePositionY).func_181663_c(x, y, z).func_181675_d();
-//			worldrenderer.addVertexWithUV(positiontexturevertex.vector3D.xCoord * (double) scale, 
-//					positiontexturevertex.vector3D.yCoord * (double) scale,
-//					positiontexturevertex.vector3D.zCoord * (double) scale,
-//					(double) positiontexturevertex.texturePositionX,
-//					(double) positiontexturevertex.texturePositionY);
+				positiontexturevertex.vector3D.zCoord * (double)scale).tex((double)positiontexturevertex.texturePositionX,
+				(double)positiontexturevertex.texturePositionY).normal(x, y, z).endVertex();
 		}
 
 		Tessellator.getInstance().draw();

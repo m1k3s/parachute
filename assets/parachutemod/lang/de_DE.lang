@@ -1,7 +1,9 @@
 item.parachute.name=Fallschirm
-item.hop_and_pop.name=Einmal-Fallschirm
-item.ripcord.name=RipCord
-item.ripcord.name=Reißleine
-item.auto_activation_device.name=Aktivierter Öffnungsautomat
-item.auto_activation_device_off.name=Deaktivierter Öffnungsautomat
+item.pack.name=Pack
+stat.parachuteDeployed=Parachutes deployed
+stat.parachuteDeployed.desc=Number of times you deployed a parachute
+stat.parachuteDistance=Distance by Parachute
+stat.parachuteDistance.desc=Distance traveled by parachute
+achievement.buildParachute=Parachute crafted
+achievement.buildParachute.desc=You have crafted a parachute!
 
