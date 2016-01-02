@@ -41,7 +41,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Parachute {
 
 	public static final String modid = "parachutemod";
-	public static final String modversion = "1.0.3";
+	public static final String modversion = "1.1.3";
 	public static final String mcversion = "1.8.9";
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
