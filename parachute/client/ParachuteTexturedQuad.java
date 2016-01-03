@@ -77,7 +77,7 @@ public class ParachuteTexturedQuad {
             z = -z;
         }
 
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);//.field_181703_c);
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
 		for (int i = 0; i < 4; ++i) {
 			PositionTextureVertex positiontexturevertex = this.vertexPositions[i];
 			worldrenderer.pos(positiontexturevertex.vector3D.xCoord * (double)scale,
