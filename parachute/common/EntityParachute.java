@@ -18,7 +18,7 @@
 //
 package com.parachute.common;
 
-//import com.parachute.client.AltitudeDisplay;
+//import com.parachute.client.HudGuiRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;

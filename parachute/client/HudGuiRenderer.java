@@ -32,7 +32,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class AltitudeDisplay  extends Gui {
+public class HudGuiRenderer extends Gui {
 
 	protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
 	private static FontRenderer fontRenderer;
@@ -43,7 +43,7 @@ public class AltitudeDisplay  extends Gui {
 	private final int guiHeight;
 	private final int ledWidth;
 	private final int ledHeight;
-	private final int fieldWidth;// = mc.fontRendererObj.getStringWidth("000.0") / 2;
+	private final int fieldWidth;
 	private final int colorYellow;
 	private final int colorRed;
 	private final int colorGreen;
@@ -54,7 +54,7 @@ public class AltitudeDisplay  extends Gui {
 	private final int aadHeight;
 	private final int ledY;
 
-	public AltitudeDisplay()
+	public HudGuiRenderer()
 	{
 		super();
 		guiWidth = 182;
