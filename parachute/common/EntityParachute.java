@@ -48,7 +48,7 @@ public class EntityParachute extends Entity {
 	private double lavaDistance;
 	private double maxThermalRise;
 	private double curLavaDistance;
-	private boolean weatherAffectsDrift;
+//	private boolean weatherAffectsDrift;
 	private boolean allowTurbulence;
 	private boolean showContrails;
 	private boolean autoDismount;
@@ -64,7 +64,7 @@ public class EntityParachute extends Entity {
 	public EntityParachute(World world)
 	{
 		super(world);
-		weatherAffectsDrift = ConfigHandler.getWeatherAffectsDrift();
+//		weatherAffectsDrift = ConfigHandler.getWeatherAffectsDrift();
 		allowTurbulence = ConfigHandler.getAllowturbulence();
 		showContrails = ConfigHandler.getShowContrails();
 		lavaDistance = ConfigHandler.getMinLavaDistance();
@@ -293,7 +293,7 @@ public class EntityParachute extends Entity {
 		setRotation(rotationYaw, rotationPitch);
 
 		// finally apply turbulence if flags allow
-		if (((weatherAffectsDrift && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
+		if (((/*weatherAffectsDrift*/ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
 			applyTurbulence(worldObj.isThundering());
 		}
 
@@ -330,7 +330,7 @@ public class EntityParachute extends Entity {
 	{
 		double descentRate = drift; // defaults to drift
 
-		if (weatherAffectsDrift) {
+		if (ConfigHandler.getWeatherAffectsDrift()/*weatherAffectsDrift*/) {
 			if (worldObj.isRaining()) { // rain makes you fall faster
 				descentRate += 0.002;
 			}
