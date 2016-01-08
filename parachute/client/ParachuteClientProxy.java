@@ -24,8 +24,10 @@ import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 @SuppressWarnings("unused")
@@ -47,8 +49,14 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 	public void Init()
 	{
 		super.Init();
-		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
-		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
+//		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
+//		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new IRenderFactory<EntityParachute>() {
+			@Override
+			public Render<? super EntityParachute> createRenderFor(RenderManager manager) {
+				return new RenderParachute(manager);
+			}
+		});
 
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
