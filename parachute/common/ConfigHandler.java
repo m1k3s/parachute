@@ -42,6 +42,7 @@ public class ConfigHandler {
     private static boolean isAADActive;
 	private static double aadAltitude;
 	private static double minFallDistance;
+	private static boolean aadImmediate;
 
 	private static final String aboutComments = Parachute.name + " Config\nMichael Sheppard (crackedEgg)"
 			+ " For Minecraft Version " + Parachute.mcversion + "\n";
@@ -60,7 +61,8 @@ public class ConfigHandler {
 	private static final String dismountComment = "true to dismount in water"; // false
 	private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
     private static final String isAADActiveComment = "whether or not the AAD is active"; // false
-    private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
+    private static final String aadImmedComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
+	private static final String aadAltitudeComment = "AAD deploys immediately after the fall distance is > minFallDistance"; // > minFalldistance meters
     private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
 	private static final String colorComment = "Parachute Colors Allowed:\n"
 			+ "black, blue, brown, cyan, gray, green, light_blue, lime,\n"
@@ -96,6 +98,7 @@ public class ConfigHandler {
             isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
             aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment).getDouble(10.0);
             minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment).getDouble(5.0);
+			aadImmediate = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment).getBoolean(false);
 
 			// if using lava thermals check allow/disallow space bar thermals, clamp the minimum lava distance.
 			if (lavaThermals) {
@@ -191,5 +194,10 @@ public class ConfigHandler {
 			return Parachute.parachuteItem.getMaxDamage() + 1;
 		}
 		return 1;
+	}
+
+	public static boolean getAADImmediate()
+	{
+		return aadImmediate;
 	}
 }

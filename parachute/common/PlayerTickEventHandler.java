@@ -26,6 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerTickEventHandler {
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onTick(TickEvent.PlayerTickEvent event) {
         if (event.phase.equals(TickEvent.Phase.START) && event.side.isServer()) {
@@ -62,14 +63,21 @@ public class PlayerTickEventHandler {
 
     // Handles the Automatic Activation Device, if the AAD is active
     // and the player is actually wearing the parachute, check the
-    // altitude, if autoAltitude has been reached, deploy.
+    // altitude, if autoAltitude has been reached, deploy. If the immediate
+    // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
         if (ConfigHandler.getIsAADActive() && !ParachuteCommonProxy.onParachute(player)) {
-            boolean autoAltitudeReached = ParachuteCommonProxy.getAutoActivateAltitude(player);
-            if (autoAltitudeReached && ParachuteCommonProxy.isFalling(player)) {
-                ItemStack heldItem = player.getHeldItem();
+            ItemStack heldItem = player.getHeldItem();
+            if (ConfigHandler.getAADImmediate() && ParachuteCommonProxy.canActivateAADImmediate(player)) {
                 if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
                     ((ItemParachute) heldItem.getItem()).deployParachute(player.worldObj, player);
+                }
+            } else {
+                boolean autoAltitudeReached = ParachuteCommonProxy.getAutoActivateAltitude(player);
+                if (autoAltitudeReached && ParachuteCommonProxy.isFalling(player)) {
+                    if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
+                        ((ItemParachute) heldItem.getItem()).deployParachute(player.worldObj, player);
+                    }
                 }
             }
         }

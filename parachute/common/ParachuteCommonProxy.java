@@ -110,6 +110,12 @@ public class ParachuteCommonProxy {
 		return altitudeReached;
 	}
 
+	public static boolean canActivateAADImmediate(EntityPlayer player)
+	{
+		double minFallDistance = ConfigHandler.getMinFallDistance();
+		return player.fallDistance > minFallDistance;
+	}
+
 	public static boolean isFalling(EntityPlayer entity)
 	{
 		return (entity.fallDistance > 0.0F && !entity.onGround && !entity.isOnLadder());

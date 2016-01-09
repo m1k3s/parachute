@@ -56,8 +56,6 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 	public void Init()
 	{
 		super.Init();
-//		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
-//		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
 
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
