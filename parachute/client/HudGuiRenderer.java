@@ -143,8 +143,8 @@ public class HudGuiRenderer extends Gui {
 	{
 		BlockPos blockpos = mc.theWorld.getSpawnPoint();
 		double delta = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
-		double relAngle = delta - (mc.thePlayer.rotationYaw * 0.0174532925199433); // radians
-		return MathHelper.wrapAngleTo180_double((relAngle * 57.2957795130823) - 90.0); // degrees
+		double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
+		return MathHelper.wrapAngleTo180_double(Math.toDegrees(relAngle) - 90.0); // degrees
 	}
 
 	public int colorAltitude()

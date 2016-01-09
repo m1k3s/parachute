@@ -31,23 +31,20 @@ public class ParachuteTexturedQuad {
 	final private float texSize = 16F;
 	public PositionTextureVertex vertexPositions[];
 	public int nVertices;
-	private boolean invertNormal;
 
-	public ParachuteTexturedQuad(PositionTextureVertex texCoords[])
+	public ParachuteTexturedQuad(PositionTextureVertex vertices[])
 	{
-		nVertices = 0;
-		invertNormal = false;
-		vertexPositions = texCoords;
-		nVertices = texCoords.length;
+		vertexPositions = vertices;
+		nVertices = vertices.length;
 	}
 
-	public ParachuteTexturedQuad(PositionTextureVertex texCoords[], int texU1, int texV1, int texU2, int texV2)
+	public ParachuteTexturedQuad(PositionTextureVertex vertices[], int texU1, int texV1, int texU2, int texV2)
 	{
-		this(texCoords);
-		texCoords[0] = texCoords[0].setTexturePosition((float) texU2 / texSize, (float) texV1 / texSize);
-		texCoords[1] = texCoords[1].setTexturePosition((float) texU1 / texSize, (float) texV1 / texSize);
-		texCoords[2] = texCoords[2].setTexturePosition((float) texU1 / texSize, (float) texV2 / texSize);
-		texCoords[3] = texCoords[3].setTexturePosition((float) texU2 / texSize, (float) texV2 / texSize);
+		this(vertices);
+		vertices[0] = vertices[0].setTexturePosition((float) texU2 / texSize, (float) texV1 / texSize);
+		vertices[1] = vertices[1].setTexturePosition((float) texU1 / texSize, (float) texV1 / texSize);
+		vertices[2] = vertices[2].setTexturePosition((float) texU1 / texSize, (float) texV2 / texSize);
+		vertices[3] = vertices[3].setTexturePosition((float) texU2 / texSize, (float) texV2 / texSize);
 	}
 
 	public void flipFace()
@@ -70,12 +67,6 @@ public class ParachuteTexturedQuad {
 		float x = (float)vec32.xCoord;
         float y = (float)vec32.yCoord;
         float z = (float)vec32.zCoord;
-
-        if (invertNormal) {
-            x = -x;
-            y = -y;
-            z = -z;
-        }
 
         worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
 		for (int i = 0; i < 4; ++i) {

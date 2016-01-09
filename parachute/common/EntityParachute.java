@@ -18,7 +18,6 @@
 //
 package com.parachute.common;
 
-//import com.parachute.client.HudGuiRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;
@@ -48,7 +47,6 @@ public class EntityParachute extends Entity {
 	private double lavaDistance;
 	private double maxThermalRise;
 	private double curLavaDistance;
-//	private boolean weatherAffectsDrift;
 	private boolean allowTurbulence;
 	private boolean showContrails;
 	private boolean autoDismount;
@@ -57,14 +55,11 @@ public class EntityParachute extends Entity {
 	final static double drift = 0.004; // value applied to motionY to descend or drift downward
 	final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
-	private final double d2r = 0.0174532925199433; // degrees to radians
-
 	private static boolean ascendMode;
 
 	public EntityParachute(World world)
 	{
 		super(world);
-//		weatherAffectsDrift = ConfigHandler.getWeatherAffectsDrift();
 		allowTurbulence = ConfigHandler.getAllowturbulence();
 		showContrails = ConfigHandler.getShowContrails();
 		lavaDistance = ConfigHandler.getMinLavaDistance();
@@ -231,8 +226,8 @@ public class EntityParachute extends Entity {
 		if (riddenByEntity != null && riddenByEntity instanceof EntityLivingBase) {
 			EntityLivingBase pilot = (EntityLivingBase) riddenByEntity;
 			double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
-			motionX += -Math.sin(yaw * d2r) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-			motionZ += Math.cos(yaw * d2r) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+			motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+			motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
 		}
 
 		// forward velocity after forward movement is applied
@@ -276,7 +271,7 @@ public class EntityParachute extends Entity {
 
 		// update direction (yaw)
 		if (delta_X * delta_X + delta_Z * delta_Z > 0.001D) {
-			yaw = Math.atan2(delta_Z, delta_X) * 57.2957795130823;
+			yaw = Math.toDegrees(Math.atan2(delta_Z, delta_X));
 		}
 
 		// update and clamp yaw between -180 and 180
@@ -293,7 +288,7 @@ public class EntityParachute extends Entity {
 		setRotation(rotationYaw, rotationPitch);
 
 		// finally apply turbulence if flags allow
-		if (((/*weatherAffectsDrift*/ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
+		if (((ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
 			applyTurbulence(worldObj.isThundering());
 		}
 
@@ -330,7 +325,7 @@ public class EntityParachute extends Entity {
 	{
 		double descentRate = drift; // defaults to drift
 
-		if (ConfigHandler.getWeatherAffectsDrift()/*weatherAffectsDrift*/) {
+		if (ConfigHandler.getWeatherAffectsDrift()) {
 			if (worldObj.isRaining()) { // rain makes you fall faster
 				descentRate += 0.002;
 			}
@@ -472,8 +467,8 @@ public class EntityParachute extends Entity {
 	// trails as chemtrails.
 	public void generateContrails(double velocity)
 	{
-		double cosYaw = 2.0 * Math.cos(rotationYaw * d2r);
-		double sinYaw = 2.0 * Math.sin(rotationYaw * d2r);
+		double cosYaw = 2.0 * Math.cos(Math.toRadians(rotationYaw));
+		double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
 
 		for (int k = 0; (double) k < 1.0 + velocity; k++) {
 			double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
@@ -489,38 +484,12 @@ public class EntityParachute extends Entity {
 	public void updateRiderPosition()
 	{
 		if (riddenByEntity != null) {
-			double x = posX + (Math.cos(rotationYaw * d2r) * 0.04);
+			double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
 			double y = posY + getMountedYOffset() + riddenByEntity.getYOffset();
-			double z = posZ + (Math.sin(rotationYaw * d2r) * 0.04);
+			double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
 			riddenByEntity.setPosition(x, y, z);
 		}
 	}
-
-//	// only allow altitude calculations in the surface world
-//	// return a weirdly random number if in nether or end.
-//	public double getCurrentAltitude(BlockPos entityPos/*, boolean referenceMSL*/)
-//	{
-//		if (worldObj.provider.isSurfaceWorld()) {
-////			if (referenceMSL) {
-////				return getAltitudeMSL(entityPos); // altitude MSL
-////			} else {
-//				return getAltitudeAboveGround(entityPos); // altitude above ground
-////			}
-//		}
-//		return 1000.0 * rand.nextGaussian();
-//	}
-//
-//	// calculate altitude in meters above ground. starting at the entity
-//	// count down until a non-air block is encountered.
-//	public double getAltitudeAboveGround(BlockPos entityPos)
-//	{
-//		BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
-//		while (worldObj.isAirBlock(blockPos.down())) {
-//			blockPos = blockPos.down();
-//		}
-//		// calculate the entity's current altitude above the ground
-//		return entityPos.getY() - blockPos.getY();
-//	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt)
