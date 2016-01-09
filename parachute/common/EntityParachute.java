@@ -305,6 +305,12 @@ public class EntityParachute extends Entity {
             ((EntityPlayer) riddenByEntity).addStat(Parachute.parachuteDistance, distance);
         }
 	}
+
+//	@Override
+//	protected void updateFallState(double y, boolean onGround, Block block, BlockPos pos)
+//	{
+//
+//	}
 	
 	public void killParachute()
 	{
