@@ -1,0 +1,19 @@
+[
+ {
+ "modid": "ParachuteMod",
+ "name": "Parachute Mod",
+ "description": "Adds a Parachute to the game. Jump off cliffs! Base Jumping!! Soar to new heights!",
+ "version": "20121008",
+ "mcversion": "1.3.2",
+ "url": "http://www.minecraftforum.net/topic/585469-132fmlsplanmp-crackedeggs-mods-reptiles-parachute-updated-09272012/",
+ "updateUrl": "",
+ "authors": [
+ "crackedEgg"
+ ],
+ "credits": "Authored by crackedEgg",
+ "logoFile": "/textures/chuteLogo.png",
+ "screenshots": [],
+ "parent": "",
+ "dependencies": []
+ }
+ ]
