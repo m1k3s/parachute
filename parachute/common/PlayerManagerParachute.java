@@ -1,9 +1,16 @@
+//
+// This work is licensed under the Creative Commons
+// Attribution-ShareAlike 3.0 Unported License. To view a copy of this
+// license, visit http://creativecommons.org/licenses/by-sa/3.0/
+//
+
 package parachute.common;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.src.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayer;
+
 
 public class PlayerManagerParachute
 {

@@ -1,0 +1,3 @@
+Main-Class: parachute.common.Parachute
+Class-Path: parachute-1.4.7-forge-518.jar
+

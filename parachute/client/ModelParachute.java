@@ -1,11 +1,17 @@
-package parachute.common;
+//
+// This work is licensed under the Creative Commons
+// Attribution-ShareAlike 3.0 Unported License. To view a copy of this
+// license, visit http://creativecommons.org/licenses/by-sa/3.0/
+//
 
-import net.minecraft.src.*;
+package parachute.client;
+
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.entity.Entity;
+
 import org.lwjgl.opengl.GL11;
 
-//
-// Copyright 2011 Michael Sheppard (crackedEgg)
-//
+import parachute.client.ParachuteModelRenderer;
 
 public class ModelParachute extends ModelBase {
 	

@@ -1,16 +1,27 @@
-package parachute.common;
+//
+// This work is licensed under the Creative Commons
+// Attribution-ShareAlike 3.0 Unported License. To view a copy of this
+// license, visit http://creativecommons.org/licenses/by-sa/3.0/
+//
 
-import net.minecraft.src.*;
+package parachute.client;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
+
+import parachute.common.EntityParachute;
+import parachute.common.Parachute;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import java.nio.IntBuffer;
 import java.util.Random;
-//
-// Copyright 2011 Michael Sheppard (crackedEgg)
-//
 
 public class RenderParachute extends Render {
 
@@ -101,7 +112,10 @@ public class RenderParachute extends Render {
 
 	public void renderCords(EntityPlayer rider, float center) {
 		float x = -5.0F;
-		float y = (float) (rider.prevPosY + (rider.posY - rider.prevPosY) * (double) center) * 0.0125F + 0.75F;
+		float y = 2.0F;
+		if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+			y = 1.25F; //(float) (rider.prevPosY + (rider.posY - rider.prevPosY) * (double) center) * 0.0125F + 0.75F;
+		}
 		float z = 0.0F;
 
 		float b = rider.getBrightness(center);

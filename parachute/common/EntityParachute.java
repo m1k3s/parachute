@@ -1,3 +1,9 @@
+//
+// This work is licensed under the Creative Commons
+// Attribution-ShareAlike 3.0 Unported License. To view a copy of this
+// license, visit http://creativecommons.org/licenses/by-sa/3.0/
+//
+
 package parachute.common;
 
 import java.util.List;
@@ -5,10 +11,23 @@ import java.util.Random;
 import java.lang.Thread;
 import org.lwjgl.input.Keyboard;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
-import net.minecraft.src.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 //
 //Copyright 2011 Michael Sheppard (crackedEgg)
@@ -67,6 +86,15 @@ public class EntityParachute extends Entity {
 		prevPosY = y;
 		prevPosZ = z;
 	}
+	
+	// skydiver should 'hang' when on the parachute and then
+	// 'pick up legs' when landing
+	public boolean shouldRiderSit() {
+		if (isNearGround(posX, posY, posZ, 4.0)) {
+			return true;
+		}
+		return false;
+	}
 
 	protected boolean canTriggerWalking() {
 		return false;
@@ -95,8 +123,8 @@ public class EntityParachute extends Entity {
 	}
 	
 	public void destroyParachute() {
-		setDead();
-		ItemParachute.deployed = false;
+		this.setDead();
+//		ItemParachute.deployed = false;
 	}
 
 	// parachute takes additional damage from being hit
@@ -112,7 +140,7 @@ public class EntityParachute extends Entity {
 					riddenByEntity.mountEntity(this);
 				}
 				// drop a parachute item
-				//dropItemWithOffset(Parachute.getItemID() + 256, 1, 0.0F);
+				//dropItemWithOffset(Parachute.getItemID(), 1, 0.0F);
 				dropRemains();
 				destroyParachute(); // aaaaiiiiieeeeee!!! ... thud!
 			}
@@ -123,7 +151,7 @@ public class EntityParachute extends Entity {
 	// use shears to cut the parachute coords...
 	public boolean interact(EntityPlayer entityplayer) {
 		ItemStack itemstack = entityplayer.inventory.getCurrentItem();
-		if (itemstack != null && itemstack.itemID == Item.shears.shiftedIndex && riddenByEntity != null) {
+		if (itemstack != null && itemstack.itemID == Item.shears.itemID && riddenByEntity != null) {
 			if (!worldObj.isRemote) {
 				// instead of killing the parachute, remove riding entity
 				// parachute death is handled in onUpdate()
@@ -134,7 +162,7 @@ public class EntityParachute extends Entity {
 			}
 			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public boolean canBeCollidedWith() {
@@ -183,7 +211,7 @@ public class EntityParachute extends Entity {
 	public void onUpdate() {
 		super.onUpdate();
 
-		// the player has probably been killed or mounted another entity ::snicker::
+		// the player has probably been killed or mounted another entity,
 		// perhaps a boat, minecart or pig? This also happens when the player has
 		// cut away the chute with shears.
 		if (riddenByEntity == null) {
@@ -217,7 +245,7 @@ public class EntityParachute extends Entity {
 				double y = posY + (newPosY - posY) / (double) newRotationInc;
 				double z = posZ + (newPosZ - posZ) / (double) newRotationInc;
 
-				double adjYaw = MathHelper.wrapAngleTo180_double(newRotationYaw 	- (double) rotationYaw);
+				double adjYaw = MathHelper.wrapAngleTo180_double(newRotationYaw - (double) rotationYaw);
 
 				rotationYaw += adjYaw / (double) newRotationInc;
 				rotationPitch += (newRotationPitch - (double) rotationPitch) / (double) newRotationInc;
@@ -268,10 +296,25 @@ public class EntityParachute extends Entity {
 			}
 
 			moveEntity(motionX, motionY, motionZ);
-
-			motionX *= 0.99D;
-			motionY *= 0.95D;
-			motionZ *= 0.99D;
+			
+//			if (isCollidedHorizontally && velocity > 0.2D) {
+//                if (!worldObj.isRemote) {
+//                    destroyParachute();
+//                    
+//                    int count;
+//                    for (count = 0; count < 3; ++count) {
+//                        dropItemWithOffset(Block.cloth.blockID, 1, 0.0F);
+//                    }
+//
+//                    for (count = 0; count < 2; ++count) {
+//                        dropItemWithOffset(Item.silk.itemID, 1, 0.0F);
+//                    }
+//                }
+//            } else {
+				motionX *= 0.99D;
+				motionY *= 0.95D;
+				motionZ *= 0.99D;
+//            }
 
 			rotationPitch = 0.0F;
 			double yaw = rotationYaw;
@@ -282,8 +325,7 @@ public class EntityParachute extends Entity {
 				yaw = (float) ((Math.atan2(delta_Z, delta_X) * 57.2957795F));
 			}
 
-			double adjustedYaw = MathHelper.wrapAngleTo180_double(yaw
-					- (double) rotationYaw);
+			double adjustedYaw = MathHelper.wrapAngleTo180_double(yaw - (double) rotationYaw);
 
 			if (adjustedYaw > 45.0D) {
 				adjustedYaw = 45.0D;
@@ -323,6 +365,18 @@ public class EntityParachute extends Entity {
 		if (player == null) {
 			return descentRate;
 		}
+		
+//		GameSettings gs = FMLClientHandler.instance().getClient().gameSettings;
+//		if (gs.keyBindJump.isPressed()) {
+//			System.out.println("Jumped key pressed");
+//			descentRate = ascend;
+//		} else 	if (gs.keyBindSneak.isPressed()) {
+//			System.out.println("Sneak key pressed");
+//			descentRate = descend;
+//		} else {
+//			System.out.println("No key pressed");
+//			descentRate = drift;
+//		}
 		PlayerInfo pInfo = PlayerManagerParachute.getInstance().getPlayerInfoFromPlayer(player);
 		if (pInfo == null) {
 			return descentRate;
@@ -363,6 +417,7 @@ public class EntityParachute extends Entity {
 				riddenByEntity.fallDistance = 0.0F;
 				riddenByEntity.mountEntity(this);
 				if (!worldObj.isRemote) {
+//					dropItemWithOffset(Parachute.getItemID(), 1, 0.0F);
 					destroyParachute();
 				} else {
 					riddenByEntity = null;
@@ -397,7 +452,7 @@ public class EntityParachute extends Entity {
 	// when parachute is destroyed drop the 'remains'
 	protected void dropRemains() {
 		dropItem(Block.cloth.blockID, 2);
-		dropItem(Item.silk.shiftedIndex, 1);
+		dropItem(Item.silk.itemID, 1);
 	}
 
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {

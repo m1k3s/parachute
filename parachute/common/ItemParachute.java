@@ -1,16 +1,24 @@
+//
+// This work is licensed under the Creative Commons
+// Attribution-ShareAlike 3.0 Unported License. To view a copy of this
+// license, visit http://creativecommons.org/licenses/by-sa/3.0/
+//
+
 package parachute.common;
 
+import parachute.client.RenderParachute;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
-import net.minecraft.src.*;
-
-//
-// Copyright 2011 Michael Sheppard (crackedEgg)
-//
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemParachute extends Item {
-	static public boolean deployed = false;
+//	static public boolean deployed = false;
 	
 	public ItemParachute(int i, EnumToolMaterial enumtoolmaterial) {
 		super(i);
@@ -60,11 +68,11 @@ public class ItemParachute extends Item {
 			itemstack.damageItem(2, entityplayer);
 		}
 		
-		deployed = true;
+//		deployed = true;
 
 		return itemstack;
 	}
-
+	
 	@SideOnly(Side.CLIENT)
 	public String getTextureFile() {
 		return "/textures/parachuteItem.png";
