@@ -34,6 +34,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.Chunk;
 
 public class EntityParachute extends Entity {
 
@@ -319,9 +321,18 @@ public class EntityParachute extends Entity {
 		setDead();
 	}
 
+	// check for bad weather, if the biome can rain or snow check to see
+	// if it is raining (or snowing) or thundering.
 	public boolean isBadWeather()
 	{
-		return (worldObj.isRaining() || worldObj.isThundering());
+		BlockPos bp = new BlockPos(posX, posY, posZ);
+		Chunk chunk = worldObj.getChunkFromBlockCoords(bp);
+		boolean canSnow = chunk.getBiome(bp, worldObj.getWorldChunkManager()).getEnableSnow();
+		boolean canRain = chunk.getBiome(bp, worldObj.getWorldChunkManager()).getIntRainfall() > 0;
+		if (canRain || canSnow) {
+			return (worldObj.isRaining() || worldObj.isThundering());
+		}
+		return false;
 	}
 
 	// determines the descent rate based on whether or not
