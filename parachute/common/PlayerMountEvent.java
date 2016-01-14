@@ -26,8 +26,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 // the vanilla dismount method moves the player away from the mounted object.
 // in this case the player should be able to dismount the parachute and land
 // directly at the parachute's X and Y location. This performs the same steps
-// as the auto-dismount code.
-// Cancel the dismount and call the EntityParachute dismount method.
+// as the auto-dismount code. When the player presses the LSHIFT to dismount,
+// cancel the dismount and call the EntityParachute dismount method.
 public class PlayerMountEvent {
 
     @SuppressWarnings("unused")

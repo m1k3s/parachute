@@ -39,6 +39,7 @@ public class HudGuiRenderer extends Gui {
 	public static double altitude;
 	private final Minecraft mc = Minecraft.getMinecraft();
 
+	private int blink = 0;
 	private final int guiWidth;
 	private final int guiHeight;
 	private final int ledWidth;
@@ -53,6 +54,14 @@ public class HudGuiRenderer extends Gui {
 	private final int aadWidth;
 	private final int aadHeight;
 	private final int ledY;
+	// manual dismount indicators
+	private final int lightY;
+	private final int red;
+	private final int darkRed;
+	private final int green;
+	private final int dark;
+	private int blinkX;
+	private final int blinkTime;
 
 	public HudGuiRenderer()
 	{
@@ -69,6 +78,13 @@ public class HudGuiRenderer extends Gui {
 		aadWidth = 16;
 		aadHeight = 25;
 		ledY = 39;
+		lightY = 44;
+		red = 0;
+		darkRed = 48;
+		green = 16;
+		dark = 32;
+		blinkX = red;
+		blinkTime = 5;
 
 		fontRenderer = mc.fontRendererObj;
 		fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
@@ -122,6 +138,23 @@ public class HudGuiRenderer extends Gui {
 				}
 				drawTexturedModalRect(guiX + guiWidth, guiY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
+				// manual dismount indicator
+				if (ConfigHandler.isAutoDismount()) { // auto dismount is engaged
+					drawTexturedModalRect(guiX - 18, guiY + 11, dark, lightY, 16, 16);
+				} else { // auto dismount is disabled
+					if (altitude > 10) {
+						drawTexturedModalRect(guiX - 18, guiY + 11, green, lightY, 16, 16);
+					} else if (altitude <= 10 && altitude > 3) {
+						drawTexturedModalRect(guiX - 18, guiY + 11, red, lightY, 16, 16);
+					} else if (altitude <= 3) { // make this blink
+						if ((blink % blinkTime) == 0) {
+							blinkX = blinkX == red ? darkRed : red;
+						}
+						drawTexturedModalRect(guiX - 18, guiY + 11, blinkX, lightY, 16, 16);
+						blink++;
+					}
+				}
+
 				// finally draw the altitude and compass heading text
 				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
 				fontRenderer.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
@@ -149,7 +182,7 @@ public class HudGuiRenderer extends Gui {
 
 	public int colorAltitude()
 	{
-		return (altitude <= 8.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
+		return (altitude <= 10.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
 	}
 
 	// quadrant color code
