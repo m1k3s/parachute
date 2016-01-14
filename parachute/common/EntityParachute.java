@@ -101,7 +101,7 @@ public class EntityParachute extends Entity {
 	public void dismountParachute()
 	{
 		if (riddenByEntity != null) {
-			Parachute.proxy.info("EntityParachute: dismount immediate");
+//			Parachute.proxy.info("EntityParachute: dismount immediate");
 			riddenByEntity.mountEntity(this);
 			killParachute();
 		}
