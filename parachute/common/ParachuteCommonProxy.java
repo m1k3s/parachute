@@ -69,6 +69,7 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
         MinecraftForge.EVENT_BUS.register(new ParachuteItemCraftedEvent());
+		MinecraftForge.EVENT_BUS.register(new PlayerMountEvent());
 
 		// recipe to craft the parachute
 		GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.wool, 'X', Items.string, 'L', Items.leather);

@@ -1,4 +1,3 @@
-//
 //  =====GPL=============================================================
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -15,22 +14,23 @@
 //  =====================================================================
 //
 //
-// Copyright 2011-2015 Michael Sheppard (crackedEgg)
+// Copyright © 2011-2015 Michael Sheppard (crackedEgg)
 //
+
 package com.parachute.common;
 
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.event.entity.EntityMountEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class PacketHandler {
+public class PlayerMountEvent {
 
-	public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(Parachute.modid);
-	public static final int packetID = 0;
-
-	public static void init()
-	{
-		network.registerMessage(AscendKeyPressMessage.Handler.class, AscendKeyPressMessage.class, packetID, Side.SERVER);
-//		network.registerMessage(DismountKeyPressMessage.Handler.class, DismountKeyPressMessage.class, packetID + 1, Side.SERVER);
-	}
+    @SuppressWarnings("unused")
+    @SubscribeEvent
+    public void onMount(EntityMountEvent event)
+    {
+        if (event.entityBeingMounted instanceof EntityParachute && event.isDismounting()) {
+            event.setCanceled(true);
+            ((EntityParachute)event.entityBeingMounted).dismountParachute();
+        }
+    }
 }

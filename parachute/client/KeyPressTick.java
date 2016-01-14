@@ -19,7 +19,7 @@
 //
 package com.parachute.client;
 
-import com.parachute.common.KeyPressMessage;
+import com.parachute.common.AscendKeyPressMessage;
 import com.parachute.common.PacketHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -30,18 +30,19 @@ import org.lwjgl.input.Keyboard;
 public class KeyPressTick {
 
 	private final int ascendKey;
-	
+
 	public KeyPressTick(int key)
 	{
 		ascendKey = key;
 	}
 
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onTick(TickEvent.PlayerTickEvent event)
 	{
 		if (event.phase.equals(TickEvent.Phase.START)) {
 			if (Keyboard.getEventKey() == ascendKey) { // only send if it's the ascend key
-				PacketHandler.network.sendToServer(new KeyPressMessage(Keyboard.getEventKeyState()));
+				PacketHandler.network.sendToServer(new AscendKeyPressMessage(Keyboard.getEventKeyState()));
 			}
 		}
 	}
