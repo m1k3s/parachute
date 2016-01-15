@@ -225,8 +225,6 @@ public class EntityParachute extends Entity {
 			double pilotFeetPos = riddenByEntity.getEntityBoundingBox().minY;
 			BlockPos bp = new BlockPos(riddenByEntity.posX, pilotFeetPos - 1.0, riddenByEntity.posZ);
 			if (checkForGroundProximity(bp)) {
-//				riddenByEntity.mountEntity(this);
-//				killParachute();
 				dismountParachute();
 				return;
 			}
@@ -317,12 +315,6 @@ public class EntityParachute extends Entity {
         }
 	}
 
-//	@Override
-//	protected void updateFallState(double y, boolean onGround, Block block, BlockPos pos)
-//	{
-//
-//	}
-	
 	public void killParachute()
 	{
 		riddenByEntity = null;

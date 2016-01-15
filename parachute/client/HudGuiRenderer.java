@@ -34,14 +34,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class HudGuiRenderer extends Gui {
 
-	protected static final ResourceLocation hudTexPath = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
+	// the parachute-hud.png image uses some ELD Unofficial Continuation Project textures, modified to suit the parachute HUD.
+	protected static final ResourceLocation hudTexture = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
 	private static FontRenderer fontRenderer;
 	public static double altitude;
 	private final Minecraft mc = Minecraft.getMinecraft();
 
 	private int blink = 0;
-	private final int guiWidth;
-	private final int guiHeight;
+	private final int hudWidth;
+	private final int hudHeight;
 	private final int ledWidth;
 	private final int ledHeight;
 	private final int fieldWidth;
@@ -66,8 +67,8 @@ public class HudGuiRenderer extends Gui {
 	public HudGuiRenderer()
 	{
 		super();
-		guiWidth = 182;
-		guiHeight = 39;
+		hudWidth = 182;
+		hudHeight = 39;
 		ledWidth = 11;
 		ledHeight = 5;
 		colorYellow = 0xffaaaa00;
@@ -98,23 +99,23 @@ public class HudGuiRenderer extends Gui {
 			return;
 		}
 		ScaledResolution sr = new ScaledResolution(mc);
-		int guiX = sr.getScaledWidth() / 2 - (guiWidth / 2); // left edge of GUI
-		int guiY = 2; // top edge of GUI
-		int textX = guiX + 50; // xcoord for text
-		int textY = guiY + 22; // ycoord for text
+		int hudX = sr.getScaledWidth() / 2 - (hudWidth / 2); // left edge of GUI
+		int hudY = 2; // top edge of GUI
+		int textX = hudX + 50; // xcoord for text
+		int textY = hudY + 22; // ycoord for text
 		int ledX = 1;
 
 		if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
 			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
-				mc.getTextureManager().bindTexture(hudTexPath);
+				mc.getTextureManager().bindTexture(hudTexture);
 
 				BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
 				altitude = getCurrentAltitude(entityPos);
 				double spawnDir = getSpawnDirection();
 				String altitudeStr = format(altitude);
 
-				// int x, int y, int textureX, int textureY, int width, int height
-				drawTexturedModalRect(guiX, guiY, 0, 0, guiWidth, guiHeight); // draw the main gui
+				// int screenX, int screenY, int textureX, int textureY, int width, int height
+				drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
 
 				// determine which LED to light, spawnDir is in range -180 to 180
 				// for any value under -80 or over 80 the LED is fixed to the
@@ -126,7 +127,7 @@ public class HudGuiRenderer extends Gui {
 				} else if (spawnDir > 80) {
 					ledX = 170;
 				}
-				drawTexturedModalRect(guiX + ledX, guiY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
+				drawTexturedModalRect(hudX + ledX, hudY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
 
 				// AAD status
 				int aadIconX;
@@ -136,30 +137,30 @@ public class HudGuiRenderer extends Gui {
 				} else {
 					aadIconX = 182;
 				}
-				drawTexturedModalRect(guiX + guiWidth, guiY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
+				drawTexturedModalRect(hudX + hudWidth, hudY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
 				// manual dismount indicator
 				if (ConfigHandler.isAutoDismount()) { // auto dismount is engaged
-					drawTexturedModalRect(guiX - 18, guiY + 11, dark, lightY, 16, 16);
+					drawTexturedModalRect(hudX - 18, hudY + 11, dark, lightY, 16, 16);
 				} else { // auto dismount is disabled
 					if (altitude > 10) {
-						drawTexturedModalRect(guiX - 18, guiY + 14, green, lightY, 16, 16);
+						drawTexturedModalRect(hudX - 18, hudY + 14, green, lightY, 16, 16);
 					} else if (altitude <= 10 && altitude > 3) {
-						drawTexturedModalRect(guiX - 18, guiY + 14, red, lightY, 16, 16);
+						drawTexturedModalRect(hudX - 18, hudY + 14, red, lightY, 16, 16);
 					} else if (altitude <= 3) { // make this blink
 						if ((blink % blinkTime) == 0) {
 							blinkX = blinkX == red ? darkRed : red;
 						}
-						drawTexturedModalRect(guiX - 18, guiY + 11, blinkX, lightY, 16, 16);
+						drawTexturedModalRect(hudX - 18, hudY + 11, blinkX, lightY, 16, 16);
 						blink++;
 					}
 				}
 
 				// finally draw the altitude and compass heading text
 				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
-				fontRenderer.drawStringWithShadow("Altitude", guiX + 28, guiY + 12, colorDimBlue);
+				fontRenderer.drawStringWithShadow("Altitude", hudX + 28, hudY + 12, colorDimBlue);
 				fontRenderer.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
-				fontRenderer.drawStringWithShadow("Compass", guiX + 113, guiY + 12, colorDimBlue);
+				fontRenderer.drawStringWithShadow("Compass", hudX + 113, hudY + 12, colorDimBlue);
 				fontRenderer.drawStringWithShadow(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
 			}
 		}
@@ -197,7 +198,7 @@ public class HudGuiRenderer extends Gui {
 	// count down until a non-air block is encountered.
 	// only allow altitude calculations in the surface world
 	// return a weirdly random number if in nether or end.
-	public double getCurrentAltitude(BlockPos entityPos/*, boolean referenceMSL*/)
+	public double getCurrentAltitude(BlockPos entityPos)
 	{
 		if (mc.theWorld.provider.isSurfaceWorld()) {
 			BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());

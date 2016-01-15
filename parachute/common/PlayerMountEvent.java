@@ -22,10 +22,10 @@ package com.parachute.common;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-// this class (hopefully) allows the player to 'drop' the parachute with precision.
+// this class allows the player to 'drop' the parachute with precision.
 // the vanilla dismount method moves the player away from the mounted object.
-// in this case the player should be able to dismount the parachute and land
-// directly at the parachute's X and Y location. This performs the same steps
+// in this mod the player should be able to dismount the parachute and land
+// directly at the parachute's X and Z location. This performs the same steps
 // as the auto-dismount code. When the player presses the LSHIFT to dismount,
 // cancel the dismount and call the EntityParachute dismount method.
 public class PlayerMountEvent {
