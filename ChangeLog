@@ -1,3 +1,98 @@
+commit 2a27dd306811921e9be554525fa306fe78b962c1
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 14 13:20:44 2016 -0500
+
+    added manual dismount indicator to HUD. added manual dismount code,
+    indicator
+    is green above 10 meters, red below, blinks when altitude is less
+    than 3 meters.
+    modified some comments.
+
+commit 811b2877d7e233477921dcfe60a7d63474ff2307
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 14 09:00:54 2016 -0500
+
+    bumped version number
+
+commit 16476237af90f859c6de0d92bbad18df94923970
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 14 08:54:29 2016 -0500
+
+    added some comments to PlayerMountEvent.java
+
+commit 5c16d9488dee1e44a1950f121b89b0bde58dfb36
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 13 19:26:18 2016 -0500
+
+    playing around with dismount ideas
+
+commit 81b5a262bd714ddea7ecffc91fa6abca36a1d9fa
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 12 15:44:14 2016 -0500
+
+    added a check to see if the current biome enables rain or snow. If so
+    check to see if it is raining or thundering to determine the
+    turbulence level.
+    this fixes the parachute turbulence in dry biomes when it is raining
+    elsewhere.
+
+commit 09ba2010a7267a74c0e72aaf7583f5ba237ea170
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 9 16:11:34 2016 -0500
+
+    fixed aadImedComment string bug. I inadvertently swapped
+    aadImedComment and
+    aadAltitudeComment.
+
+commit 1378ff2a83ba07ca98cb0d335f2f080febf9a0e6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 9 09:14:04 2016 -0500
+
+    Added an AAD immediate option. The parachute will auto-deploy
+    after falling
+    minFallDistance (immediately) instead of waiting for a specific
+    altitude.
+    This can be enabled in the config GUI.
+
+commit 035aee22a66e4a4de3a149bdaa71ee6410388f3c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 9 08:51:30 2016 -0500
+
+    Well shit. using the new rendering registry work just fine, it was
+    Optifine the whole time. Optifine preview 1.8.9-H1 works.
+
+commit 9020e22d66d8673c26d1987573bde245b94f00cb
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 9 06:44:12 2016 -0500
+
+    Attempts to use the new rendering registry not working. Commented
+    out the
+    earlier changes.
+
+commit f4d4497a2db8d65e4e92806f6072cd07bf525265
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 7 19:02:22 2016 -0500
+
+    removed call to deprecated forge registry function.
+
+commit 0cf3ea23145d5851bba3b10e9bd5ed3e9285e945
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 7 08:04:02 2016 -0500
+
+    moved weatherAffectsDrift into the proper locations to test the
+    variable in
+    real time, this allows the bad weather to start and affect the
+    parachute while
+    the player is riding the parachute.
+
+commit f32b137df1e463e7c9a5526e87a975c2a30fe744
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 4 17:40:45 2016 -0500
+
+    modified the HUD somewhat and shnged the name of the rendering java
+    file, from
+    AltitudeDisplay.java to HugGuiRenderer.java.
+
 commit 00c18b978b08c6b1d0351e9a9c55c1f761b6f058
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Jan 3 09:33:42 2016 -0500

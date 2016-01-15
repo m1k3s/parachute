@@ -143,9 +143,9 @@ public class HudGuiRenderer extends Gui {
 					drawTexturedModalRect(guiX - 18, guiY + 11, dark, lightY, 16, 16);
 				} else { // auto dismount is disabled
 					if (altitude > 10) {
-						drawTexturedModalRect(guiX - 18, guiY + 11, green, lightY, 16, 16);
+						drawTexturedModalRect(guiX - 18, guiY + 14, green, lightY, 16, 16);
 					} else if (altitude <= 10 && altitude > 3) {
-						drawTexturedModalRect(guiX - 18, guiY + 11, red, lightY, 16, 16);
+						drawTexturedModalRect(guiX - 18, guiY + 14, red, lightY, 16, 16);
 					} else if (altitude <= 3) { // make this blink
 						if ((blink % blinkTime) == 0) {
 							blinkX = blinkX == red ? darkRed : red;
