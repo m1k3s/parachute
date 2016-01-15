@@ -139,7 +139,7 @@ public class HudGuiRenderer extends Gui {
 				} else {
 					aadIconX = 182;
 				}
-				drawTexturedModalRect(hudX + hudWidth, hudY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
+				drawTexturedModalRect(hudX + hudWidth + 2, hudY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
 				// manual dismount indicator
 				if (ConfigHandler.isAutoDismount()) { // auto dismount is engaged
