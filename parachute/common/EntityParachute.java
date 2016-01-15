@@ -374,7 +374,7 @@ public class EntityParachute extends Entity {
 	}
 
 	// the following three methods detect lava below the player
-	// at upto 'maxThermalRise' distance.
+	// at up to 'maxThermalRise' distance.
 	public boolean isLavaAt(BlockPos bp)
 	{
 		Block block = worldObj.getBlockState(bp).getBlock();

@@ -63,6 +63,7 @@ public class HudGuiRenderer extends Gui {
 	private final int dark;
 	private int blinkX;
 	private final int blinkTime;
+	private final int yOffset;
 
 	public HudGuiRenderer()
 	{
@@ -86,6 +87,7 @@ public class HudGuiRenderer extends Gui {
 		dark = 32;
 		blinkX = red;
 		blinkTime = 5;
+		yOffset = 14;
 
 		fontRenderer = mc.fontRendererObj;
 		fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
@@ -141,17 +143,17 @@ public class HudGuiRenderer extends Gui {
 
 				// manual dismount indicator
 				if (ConfigHandler.isAutoDismount()) { // auto dismount is engaged
-					drawTexturedModalRect(hudX - 18, hudY + 11, dark, lightY, 16, 16);
+					drawTexturedModalRect(hudX - 18, hudY + yOffset, dark, lightY, 16, 16);
 				} else { // auto dismount is disabled
 					if (altitude > 10) {
-						drawTexturedModalRect(hudX - 18, hudY + 14, green, lightY, 16, 16);
+						drawTexturedModalRect(hudX - 18, hudY + yOffset, green, lightY, 16, 16);
 					} else if (altitude <= 10 && altitude > 3) {
-						drawTexturedModalRect(hudX - 18, hudY + 14, red, lightY, 16, 16);
+						drawTexturedModalRect(hudX - 18, hudY + yOffset, red, lightY, 16, 16);
 					} else if (altitude <= 3) { // make this blink
 						if ((blink % blinkTime) == 0) {
 							blinkX = blinkX == red ? darkRed : red;
 						}
-						drawTexturedModalRect(hudX - 18, hudY + 11, blinkX, lightY, 16, 16);
+						drawTexturedModalRect(hudX - 18, hudY + yOffset, blinkX, lightY, 16, 16);
 						blink++;
 					}
 				}
