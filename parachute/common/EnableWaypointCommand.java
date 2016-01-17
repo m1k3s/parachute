@@ -17,7 +17,6 @@ public class EnableWaypointCommand implements ICommand {
     public EnableWaypointCommand() {
         aliases = new ArrayList<String>();
         aliases.add("enablewaypoints");
-        aliases.add("enableway");
     }
 
     @Override

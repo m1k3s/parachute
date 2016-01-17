@@ -11,23 +11,22 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class SetWaypointCommand implements ICommand {
+public class ShowWaypointsCommand implements ICommand {
     private final List<String> aliases;
 
-    public SetWaypointCommand() {
+    public ShowWaypointsCommand() {
         aliases = new ArrayList<String>();
-        aliases.add("setwaypoint");
+        aliases.add("showwaypoints");
     }
 
     @Override
     public String getCommandName() {
-        return "setwaypoint";
+        return "showwaypoints";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "setwaypoint <X coord> <Z coord>";
+        return "showwaypoints";
     }
 
     @Override
@@ -39,12 +38,7 @@ public class SetWaypointCommand implements ICommand {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         World world = sender.getEntityWorld();
         if (!world.isRemote) {
-            if (args.length == 0) {
-                sender.addChatMessage(new ChatComponentText("Usage: setwaypoint <waypoint X coord> <waypoint Z coord>"));
-                return;
-            }
-            HudGuiRenderer.setWaypoints(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-            sender.addChatMessage(new ChatComponentText("setwaypoint to " + args[0] + " " + args[1]));
+            sender.addChatMessage(new ChatComponentText("Current waypoints: " + HudGuiRenderer.getWaypoints()));
         }
     }
 

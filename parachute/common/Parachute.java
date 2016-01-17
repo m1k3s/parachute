@@ -85,8 +85,10 @@ public class Parachute {
 	@Mod.EventHandler
 	public void ServerLoad(FMLServerStartingEvent event)
 	{
+		// register parachute commands
 		event.registerServerCommand(new SetWaypointCommand());
 		event.registerServerCommand(new EnableWaypointCommand());
+		event.registerServerCommand(new ShowWaypointsCommand());
 	}
 
 	public String getVersion()

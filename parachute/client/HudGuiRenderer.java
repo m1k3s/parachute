@@ -257,4 +257,9 @@ public class HudGuiRenderer extends Gui {
 		wayPointsEnabled = enabled;
 	}
 
+	public static String getWaypoints()
+	{
+		return String.format("%d %d", wayPointX, wayPointZ);
+	}
+
 }
