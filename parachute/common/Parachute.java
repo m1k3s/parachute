@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(
@@ -41,7 +42,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Parachute {
 
 	public static final String modid = "parachutemod";
-	public static final String modversion = "1.2.0";
+	public static final String modversion = "1.2.1";
 	public static final String mcversion = "1.8.9";
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
@@ -78,6 +79,14 @@ public class Parachute {
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		proxy.postInit();
+	}
+
+	@SuppressWarnings("unused")
+	@Mod.EventHandler
+	public void ServerLoad(FMLServerStartingEvent event)
+	{
+		event.registerServerCommand(new SetWaypointCommand());
+		event.registerServerCommand(new EnableWaypointCommand());
 	}
 
 	public String getVersion()

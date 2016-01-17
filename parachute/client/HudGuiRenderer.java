@@ -64,6 +64,10 @@ public class HudGuiRenderer extends Gui {
 	private int blinkX;
 	private final int blinkTime;
 	private final int yOffset;
+	// waypoints
+	public static int wayPointX;
+	public static int wayPointZ;
+	private static boolean wayPointsEnabled;
 
 	public HudGuiRenderer()
 	{
@@ -88,6 +92,9 @@ public class HudGuiRenderer extends Gui {
 		blinkX = red;
 		blinkTime = 5;
 		yOffset = 14;
+		wayPointX = 0;
+		wayPointZ = 0;
+		wayPointsEnabled = false;
 
 		fontRenderer = mc.fontRendererObj;
 		fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
@@ -158,6 +165,22 @@ public class HudGuiRenderer extends Gui {
 					}
 				}
 
+				if (wayPointsEnabled) {
+					double waypointDirection = getWaypointDirection(wayPointX, wayPointZ);
+					// draw the waypoint heading
+					if (waypointDirection < -80) {
+						ledX = 1;
+					} else if ((waypointDirection - 80) * (waypointDirection - -80) < 0) {
+						ledX = (int)Math.floor((waypointDirection + 80.0) + 4);
+					} else if (waypointDirection > 80) {
+						ledX = 170;
+					}
+					// draw the waypoint bar background
+					drawTexturedModalRect(hudX, hudY + hudHeight, 0, 0, hudWidth, ledHeight);
+					// draw the lit LED
+					drawTexturedModalRect(hudX + ledX, hudY + hudHeight, ledX, ledY, ledWidth, ledHeight);
+				}
+
 				// finally draw the altitude and compass heading text
 				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
 				fontRenderer.drawStringWithShadow("Altitude", hudX + 28, hudY + 12, colorDimBlue);
@@ -211,6 +234,27 @@ public class HudGuiRenderer extends Gui {
 			return entityPos.getY() - blockPos.getY();
 		}
 		return 1000.0 * mc.theWorld.rand.nextGaussian();
+	}
+
+	// difference angle in degrees the player is facing from the waypoint input point.
+	// zero degrees means the player is facing the waypoint input point.
+	public double getWaypointDirection(int waypointX, int waypointZ)
+	{
+		BlockPos blockpos = new BlockPos(waypointX, 0, waypointZ);
+		double delta = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
+		double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
+		return MathHelper.wrapAngleTo180_double(Math.toDegrees(relAngle) - 90.0); // degrees
+	}
+
+	public static void setWaypoints(int waypointXIn, int waypointZIn)
+	{
+		wayPointX = waypointXIn;
+		wayPointZ = waypointZIn;
+	}
+
+	public static void enableWaypoints(boolean enabled)
+	{
+		wayPointsEnabled = enabled;
 	}
 
 }
