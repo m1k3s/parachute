@@ -236,8 +236,8 @@ public class HudGuiRenderer extends Gui {
 		return 1000.0 * mc.theWorld.rand.nextGaussian();
 	}
 
-	// difference angle in degrees the player is facing from the waypoint input point.
-	// zero degrees means the player is facing the waypoint input point.
+	// difference angle in degrees the player is facing from the waypoint.
+	// zero degrees means the player is facing the waypoint.
 	public double getWaypointDirection(int waypointX, int waypointZ)
 	{
 		BlockPos blockpos = new BlockPos(waypointX, 0, waypointZ);
@@ -265,16 +265,6 @@ public class HudGuiRenderer extends Gui {
 	public static String getWaypointString()
 	{
 		return String.format("%d %d", wayPointX, wayPointZ);
-	}
-
-	public static int getWayPointX()
-	{
-		return wayPointX;
-	}
-
-	public static int getWayPointZ()
-	{
-		return wayPointZ;
 	}
 
 }

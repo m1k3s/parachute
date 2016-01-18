@@ -18,7 +18,6 @@
 //
 package com.parachute.common;
 
-import com.parachute.client.HudGuiRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;
@@ -506,21 +505,14 @@ public class EntityParachute extends Entity {
 		}
 	}
 
-	// save any waypoints set by the user
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt)
 	{
-		nbt.setBoolean("enablewaypoints", HudGuiRenderer.getEnableWaypoint());
-		nbt.setInteger("waypointX", HudGuiRenderer.getWayPointX());
-		nbt.setInteger("waypointZ", HudGuiRenderer.getWayPointZ());
 	}
 
-	// retrieve any waypoints set by the user
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt)
 	{
-		HudGuiRenderer.enableWaypoint(nbt.getBoolean("enablewaypoints"));
-		HudGuiRenderer.setWaypoint(nbt.getInteger("waypointX"), nbt.getInteger("waypointZ"));
 	}
 
 	@Override
