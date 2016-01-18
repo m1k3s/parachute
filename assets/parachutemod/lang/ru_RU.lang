@@ -1,8 +1,21 @@
 item.parachute.name=Парашют
 item.pack.name=Pack
+
 stat.parachuteDeployed=Parachutes deployed
 stat.parachuteDeployed.desc=Number of times you deployed a parachute
 stat.parachuteDistance=Distance by Parachute
 stat.parachuteDistance.desc=Distance traveled by parachute
+
 achievement.buildParachute=Parachute crafted
 achievement.buildParachute.desc=You have crafted a parachute!
+
+commands.setwaypoint.success=Waypoint is set to %d %d
+commands.setwaypoint.failure=waypoint values must be numeric
+commands.setwaypoint.current=Waypoint is set to current position (%d %d)
+commands.setwaypoint.usage=setwaypoint <X coord> <Z coord>
+commands.enablewaypoint.success=Waypoint is %s
+commands.enablewaypoint.usage=enablewaypoint <true|false|1|0>
+commands.enablewaypoint.enabled=enabled
+commands.enablewaypoint.disabled=disabled
+commands.showwaypoint.usage=showwaypoint
+commands.showwaypoint.success=Current waypoint is %d %d
