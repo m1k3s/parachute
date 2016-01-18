@@ -1,32 +1,32 @@
 package com.parachute.common;
 
 import com.parachute.client.HudGuiRenderer;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowWaypointsCommand implements ICommand {
+public class ShowWaypointCommand extends CommandBase {
     private final List<String> aliases;
 
-    public ShowWaypointsCommand() {
+    public ShowWaypointCommand() {
         aliases = new ArrayList<String>();
-        aliases.add("showwaypoints");
+        aliases.add("showwaypoint");
     }
 
     @Override
     public String getCommandName() {
-        return "showwaypoints";
+        return "showwaypoint";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "showwaypoints";
+        return "commands.showwaypoint.usage";
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ShowWaypointsCommand implements ICommand {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         World world = sender.getEntityWorld();
         if (!world.isRemote) {
-            sender.addChatMessage(new ChatComponentText("Current waypoints: " + HudGuiRenderer.getWaypoints()));
+            notifyOperators(sender, this, "commands.showwaypoint.success", HudGuiRenderer.getWaypointString());
         }
     }
 

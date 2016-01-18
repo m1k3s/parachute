@@ -88,7 +88,7 @@ public class Parachute {
 		// register parachute commands
 		event.registerServerCommand(new SetWaypointCommand());
 		event.registerServerCommand(new EnableWaypointCommand());
-		event.registerServerCommand(new ShowWaypointsCommand());
+		event.registerServerCommand(new ShowWaypointCommand());
 	}
 
 	public String getVersion()

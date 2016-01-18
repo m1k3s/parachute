@@ -64,10 +64,10 @@ public class HudGuiRenderer extends Gui {
 	private int blinkX;
 	private final int blinkTime;
 	private final int yOffset;
-	// waypoints
+	// waypoint
 	public static int wayPointX;
 	public static int wayPointZ;
-	private static boolean wayPointsEnabled;
+	private static boolean wayPointEnabled;
 
 	public HudGuiRenderer()
 	{
@@ -94,7 +94,7 @@ public class HudGuiRenderer extends Gui {
 		yOffset = 14;
 		wayPointX = 0;
 		wayPointZ = 0;
-		wayPointsEnabled = false;
+		wayPointEnabled = false;
 
 		fontRenderer = mc.fontRendererObj;
 		fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
@@ -123,7 +123,7 @@ public class HudGuiRenderer extends Gui {
 				double spawnDir = getSpawnDirection();
 				String altitudeStr = format(altitude);
 
-				// int screenX, int screenY, int textureX, int textureY, int width, int height
+				// Params: int screenX, int screenY, int textureX, int textureY, int width, int height
 				drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
 
 				// determine which LED to light, spawnDir is in range -180 to 180
@@ -165,7 +165,7 @@ public class HudGuiRenderer extends Gui {
 					}
 				}
 
-				if (wayPointsEnabled) {
+				if (wayPointEnabled) {
 					double waypointDirection = getWaypointDirection(wayPointX, wayPointZ);
 					// draw the waypoint heading
 					if (waypointDirection < -80) {
@@ -246,20 +246,35 @@ public class HudGuiRenderer extends Gui {
 		return MathHelper.wrapAngleTo180_double(Math.toDegrees(relAngle) - 90.0); // degrees
 	}
 
-	public static void setWaypoints(int waypointXIn, int waypointZIn)
+	public static void setWaypoint(int waypointXIn, int waypointZIn)
 	{
 		wayPointX = waypointXIn;
 		wayPointZ = waypointZIn;
 	}
 
-	public static void enableWaypoints(boolean enabled)
+	public static void enableWaypoint(boolean enabled)
 	{
-		wayPointsEnabled = enabled;
+		wayPointEnabled = enabled;
 	}
 
-	public static String getWaypoints()
+	public static boolean getEnableWaypoint()
+	{
+		return wayPointEnabled;
+	}
+
+	public static String getWaypointString()
 	{
 		return String.format("%d %d", wayPointX, wayPointZ);
+	}
+
+	public static int getWayPointX()
+	{
+		return wayPointX;
+	}
+
+	public static int getWayPointZ()
+	{
+		return wayPointZ;
 	}
 
 }
