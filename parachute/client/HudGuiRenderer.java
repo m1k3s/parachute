@@ -94,6 +94,7 @@ public class HudGuiRenderer extends Gui {
 		yOffset = 14;
 		wayPointX = 0;
 		wayPointZ = 0;
+		// disable the waypoint display
 		wayPointEnabled = false;
 
 		fontRenderer = mc.fontRendererObj;
@@ -120,7 +121,7 @@ public class HudGuiRenderer extends Gui {
 
 				BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
 				altitude = getCurrentAltitude(entityPos);
-				double spawnDir = getSpawnDirection();
+				double spawnDir = getHomeDirection();
 				String altitudeStr = format(altitude);
 
 				// Params: int screenX, int screenY, int textureX, int textureY, int width, int height
@@ -196,11 +197,18 @@ public class HudGuiRenderer extends Gui {
 		return String.format("%.1f", d);
 	}
 	
-	// difference angle in degrees the player is facing from the spawn point.
-	// zero degrees means the player is facing the spawn point.
-	public double getSpawnDirection()
+	// difference angle in degrees the player is facing from the home point.
+	// zero degrees means the player is facing the home point.
+	// the home point can be either the world spawn point or a waypoint
+	// set by the player in the config.
+	public double getHomeDirection()
 	{
-		BlockPos blockpos = mc.theWorld.getSpawnPoint();
+		BlockPos blockpos;
+		if (ConfigHandler.getUseSpawnPoint()) {
+			blockpos = mc.theWorld.getSpawnPoint();
+		} else {
+			blockpos = ConfigHandler.getWaypoint();
+		}
 		double delta = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
 		double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
 		return MathHelper.wrapAngleTo180_double(Math.toDegrees(relAngle) - 90.0); // degrees

@@ -39,6 +39,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 		acceptedMinecraftVersions = Parachute.mcversion,
 		guiFactory = Parachute.guifactory
 )
+
 public class Parachute {
 
 	public static final String modid = "parachutemod";

@@ -19,6 +19,7 @@
 //
 package com.parachute.common;
 
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -43,6 +44,8 @@ public class ConfigHandler {
 	private static double aadAltitude;
 	private static double minFallDistance;
 	private static boolean aadImmediate;
+	private static boolean useSpawnPoint;
+	private static int[] waypoint;
 
 	private static final String aboutComments = Parachute.name + " Config\nMichael Sheppard (crackedEgg)"
 			+ " For Minecraft Version " + Parachute.mcversion + "\n";
@@ -64,6 +67,7 @@ public class ConfigHandler {
     private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
 	private static final String aadImmedComment = "AAD deploys immediately after the fall distance is > minFallDistance"; // > minFalldistance meters
     private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
+	private static final String useSpawnPointComment = "use spawn point for home direction, otherwise use player input coords";
 	private static final String colorComment = "Parachute Colors Allowed:\n"
 			+ "black, blue, brown, cyan, gray, green, light_blue, lime,\n"
 			+ "magenta, orange, pink, purple, red, silver, white, yellow,\n"
@@ -99,6 +103,8 @@ public class ConfigHandler {
             aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment).getDouble(10.0);
             minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment).getDouble(5.0);
 			aadImmediate = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment).getBoolean(false);
+			useSpawnPoint = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
+			waypoint = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, "waypoint").getIntList();
 
 			// if using lava thermals check allow/disallow space bar thermals, clamp the minimum lava distance.
 			if (lavaThermals) {
@@ -199,6 +205,16 @@ public class ConfigHandler {
 	public static boolean getAADImmediate()
 	{
 		return aadImmediate;
+	}
+
+	public static boolean getUseSpawnPoint()
+	{
+		return useSpawnPoint;
+	}
+
+	public static BlockPos getWaypoint()
+	{
+		return new BlockPos(waypoint[0], 0, waypoint[1]);
 	}
 
 }
