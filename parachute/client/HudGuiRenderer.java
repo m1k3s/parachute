@@ -119,9 +119,9 @@ public class HudGuiRenderer extends Gui {
 			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
 				mc.getTextureManager().bindTexture(hudTexture);
 
-				BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+				BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY, mc.thePlayer.posZ);
 				altitude = getCurrentAltitude(entityPos);
-				double spawnDir = getHomeDirection();
+				double homeDir = getHomeDirection();
 				String altitudeStr = format(altitude);
 
 				// Params: int screenX, int screenY, int textureX, int textureY, int width, int height
@@ -130,11 +130,11 @@ public class HudGuiRenderer extends Gui {
 				// determine which LED to light, spawnDir is in range -180 to 180
 				// for any value under -80 or over 80 the LED is fixed to the
 				// left or right end of the slider respectively.
-				if (spawnDir < -80) {
+				if (homeDir < -80) {
 					ledX = 1;
-				} else if ((spawnDir - 80) * (spawnDir - -80) < 0) {
-					ledX = (int)Math.floor((spawnDir + 80.0) + 4);
-				} else if (spawnDir > 80) {
+				} else if ((homeDir - 80) * (homeDir - -80) < 0) {
+					ledX = (int)Math.floor((homeDir + 80.0) + 4);
+				} else if (homeDir > 80) {
 					ledX = 170;
 				}
 				drawTexturedModalRect(hudX + ledX, hudY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED

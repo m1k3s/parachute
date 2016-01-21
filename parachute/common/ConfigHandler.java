@@ -65,9 +65,9 @@ public class ConfigHandler {
 	private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
     private static final String isAADActiveComment = "whether or not the AAD is active"; // false
     private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
-	private static final String aadImmedComment = "AAD deploys immediately after the fall distance is > minFallDistance"; // > minFalldistance meters
+	private static final String aadImmedComment = "AAD deploys immediately after the player falls more than minFallDistance"; // > minFalldistance meters
     private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
-	private static final String useSpawnPointComment = "use spawn point for home direction, otherwise use player input coords";
+	private static final String useSpawnPointComment = "use spawn point for home direction or input your own coords";
 	private static final String colorComment = "Parachute Colors Allowed:\n"
 			+ "black, blue, brown, cyan, gray, green, light_blue, lime,\n"
 			+ "magenta, orange, pink, purple, red, silver, white, yellow,\n"
