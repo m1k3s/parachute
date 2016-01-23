@@ -28,12 +28,12 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderParachute extends Render {
+public class RenderParachute extends Render<EntityParachute>
+{
 
 	private static String curColor = ConfigHandler.getChuteColor();
 	protected static ModelBase modelParachute = new ModelParachute();
@@ -46,7 +46,8 @@ public class RenderParachute extends Render {
 		shadowSize = 0.0F;
 	}
 
-	public void renderParachute(EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float unused)
+	@SuppressWarnings("unchecked")
+	public void renderParachute(EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float partialTicks)
 	{
 		GlStateManager.pushMatrix();
 
@@ -59,27 +60,27 @@ public class RenderParachute extends Render {
 		modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		if (entityparachute.riddenByEntity != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
 			EntityPlayer rider = (EntityPlayer) entityparachute.riddenByEntity;
-			renderParachuteCords(rider, unused);
+			renderParachuteCords(rider, partialTicks);
 		}
 
 		GlStateManager.popMatrix();
-		super.doRender(entityparachute, x, y, z, rotationYaw, unused);
+		super.doRender(entityparachute, x, y, z, rotationYaw, partialTicks);
 	}
 
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float rotation, float unused)
+	public void doRender(EntityParachute parachute, double x, double y, double z, float rotation, float partialTicks)
 	{
-		renderParachute((EntityParachute) entity, x, y, z, rotation, unused);
+		renderParachute(parachute, x, y, z, rotation, partialTicks);
 	}
 
-	public void renderParachuteCords(EntityPlayer rider, float unused)
+	public void renderParachuteCords(EntityPlayer rider, float partialTicks)
 	{
 		final float x = 0.0F;
 		final float y = 1.5F;
 		final float zOffset = 3.0F;
 		
 		float zl = -zOffset;
-		float b = rider.getBrightness(unused);
+		float b = rider.getBrightness(partialTicks);
 
 		GlStateManager.pushMatrix();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -193,7 +194,7 @@ public class RenderParachute extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntityParachute entity)
 	{
 		parachuteTexture = getParachuteColor(curColor);
 		return parachuteTexture;

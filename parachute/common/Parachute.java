@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(
@@ -42,13 +43,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Parachute {
 
 	public static final String modid = "parachutemod";
-	public static final String modversion = "1.0.4";
-	public static final String mcversion = "1.8.0";
+	public static final String modversion = "1.2.2";
+	public static final String mcversion = "1.8.9";
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
 	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new ChatComponentTranslation("stat.parachuteDeployed"));
-	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new ChatComponentTranslation("stat.parachuteDistance", new Object[0]), StatBase.distanceStatType);
-	public static Achievement buildParachute;
+	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new ChatComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
+    public static Achievement buildParachute;
 
 	@SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
 	public static ParachuteCommonProxy proxy;
@@ -59,6 +60,7 @@ public class Parachute {
 	@Mod.Instance(modid)
 	public static Parachute instance;
 
+	@SuppressWarnings("unused")
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -66,16 +68,28 @@ public class Parachute {
 		proxy.preInit();
 	}
 
+	@SuppressWarnings("unused")
 	@Mod.EventHandler
 	public void Init(FMLInitializationEvent event)
 	{
 		proxy.Init();
 	}
 
+	@SuppressWarnings("unused")
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		proxy.postInit();
+	}
+
+	@SuppressWarnings("unused")
+	@Mod.EventHandler
+	public void ServerLoad(FMLServerStartingEvent event)
+	{
+		// register parachute commands
+		event.registerServerCommand(new SetWaypointCommand());
+		event.registerServerCommand(new EnableWaypointCommand());
+		event.registerServerCommand(new ShowWaypointCommand());
 	}
 
 	public String getVersion()
@@ -84,6 +98,7 @@ public class Parachute {
 	}
 
 	// user has changed entries in the GUI config. save the results.
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{

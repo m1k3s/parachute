@@ -31,7 +31,6 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -57,7 +56,7 @@ public class ParachuteCommonProxy {
 		Parachute.parachuteItem.setUnlocalizedName(parachuteName);
 		GameRegistry.registerItem(Parachute.parachuteItem, parachuteName);
 
-		final int renderIndex = 0;
+		final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
 		Parachute.packItem = new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType);
 		Parachute.packItem.setUnlocalizedName(packName);
 		GameRegistry.registerItem(Parachute.packItem, packName);
@@ -68,15 +67,16 @@ public class ParachuteCommonProxy {
 	@SuppressWarnings("unchecked") // no type specifiers in minecraft StatList
 	public void Init()
 	{
-		FMLCommonHandler.instance().bus().register(Parachute.instance);
-		FMLCommonHandler.instance().bus().register(new PlayerTickEventHandler());
+        MinecraftForge.EVENT_BUS.register(Parachute.instance);
+        MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
         MinecraftForge.EVENT_BUS.register(new ParachuteItemCraftedEvent());
+		MinecraftForge.EVENT_BUS.register(new PlayerMountEvent());
 
 		// recipe to craft the parachute
 		GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.wool, 'X', Items.string, 'L', Items.leather);
 
-        // add parachute crafting achievement
+		// add parachute crafting achievement
         Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.buildWorkBench);
         Parachute.buildParachute.registerStat();
         AchievementPage.registerAchievementPage(new AchievementPage("Parachute", Parachute.buildParachute));
@@ -84,8 +84,8 @@ public class ParachuteCommonProxy {
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
         StatList.allStats.add(Parachute.parachuteDeployed);
-        Parachute.parachuteDistance.initIndependentStat().registerStat();
-        StatList.allStats.add(Parachute.parachuteDistance);
+		Parachute.parachuteDistance.initIndependentStat().registerStat();
+		StatList.allStats.add(Parachute.parachuteDistance);
 	}
 
 	public void postInit()
@@ -99,19 +99,25 @@ public class ParachuteCommonProxy {
 		logger.info(s);
 	}
 
-    public static boolean getAutoActivateAltitude(EntityPlayer player)
-    {
-    	boolean altitudeReached = false;
+	public static boolean getAutoActivateAltitude(EntityPlayer player)
+	{
+		boolean altitudeReached = false;
         double altitude = ConfigHandler.getAADAltitude();
 		double minFallDistance = ConfigHandler.getMinFallDistance();
 
-        BlockPos blockPos = new BlockPos(player.posX, player.posY - altitude, player.posZ);
+		BlockPos blockPos = new BlockPos(player.posX, player.posY - altitude, player.posZ);
 
-        if (!player.worldObj.isAirBlock(blockPos) && player.fallDistance > minFallDistance) {
-            altitudeReached = true;
-        }
-        return altitudeReached;
-    }
+		if (!player.worldObj.isAirBlock(blockPos) && player.fallDistance > minFallDistance) {
+			altitudeReached = true;
+		}
+		return altitudeReached;
+	}
+
+	public static boolean canActivateAADImmediate(EntityPlayer player)
+	{
+		double minFallDistance = ConfigHandler.getMinFallDistance();
+		return player.fallDistance > minFallDistance;
+	}
 
 	public static boolean isFalling(EntityPlayer entity)
 	{

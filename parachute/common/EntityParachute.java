@@ -18,15 +18,12 @@
 //
 package com.parachute.common;
 
-import com.parachute.client.AltitudeDisplay;
-//import java.text.DecimalFormat;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-//import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,6 +34,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 public class EntityParachute extends Entity {
 
@@ -50,7 +48,6 @@ public class EntityParachute extends Entity {
 	private double lavaDistance;
 	private double maxThermalRise;
 	private double curLavaDistance;
-	private boolean weatherAffectsDrift;
 	private boolean allowTurbulence;
 	private boolean showContrails;
 	private boolean autoDismount;
@@ -59,14 +56,11 @@ public class EntityParachute extends Entity {
 	final static double drift = 0.004; // value applied to motionY to descend or drift downward
 	final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
-	private final double d2r = 0.0174532925199433; // degrees to radians
-
 	private static boolean ascendMode;
 
 	public EntityParachute(World world)
 	{
 		super(world);
-		weatherAffectsDrift = ConfigHandler.getWeatherAffectsDrift();
 		allowTurbulence = ConfigHandler.getAllowturbulence();
 		showContrails = ConfigHandler.getShowContrails();
 		lavaDistance = ConfigHandler.getMinLavaDistance();
@@ -74,7 +68,7 @@ public class EntityParachute extends Entity {
 		maxAltitude = ConfigHandler.getMaxAltitude();
 		lavaThermals = ConfigHandler.getAllowLavaThermals();
 		autoDismount = ConfigHandler.isAutoDismount();
-        dismountInWater = ConfigHandler.getDismountInWater();
+		dismountInWater = ConfigHandler.getDismountInWater();
 		maxThermalRise = ConfigHandler.getMaxLavaDistance();
 
 		curLavaDistance = lavaDistance;
@@ -104,6 +98,15 @@ public class EntityParachute extends Entity {
 		ascendMode = mode;
 	}
 
+	public void dismountParachute()
+	{
+		if (riddenByEntity != null) {
+//			Parachute.proxy.info("EntityParachute: dismount immediate");
+			riddenByEntity.mountEntity(this);
+			killParachute();
+		}
+	}
+
 	@Override
 	protected boolean canTriggerWalking()
 	{
@@ -125,17 +128,17 @@ public class EntityParachute extends Entity {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox()
+	public AxisAlignedBB getCollisionBoundingBox()
 	{
 		return getEntityBoundingBox();
 	}
 	
 	//
-	// FIXME: Unfortunately this stopped working around 1.6.x, movement packets
-	// are not sent to the server if the 'shouldRiderSit' method returns false.
-	// We need for the 'shouldRiderSit' method to return true in order to send
-	// packets, we need for it to return false for player to not be in the sitting
-	// position on the parachute.
+	// FIXME: Unfortunately this stopped working around 1.6.x
+	// movement packets are not sent to the server if the 'shouldRiderSit' method
+	// returns false. We need for the 'shouldRiderSit' method to return true in
+	// order to send packets, we need for it to return false for player to not
+	// be in the sitting position on the parachute.
 	//
 	// skydiver should 'hang' when on the parachute and then
 	// 'pick up legs' when landing.
@@ -153,7 +156,7 @@ public class EntityParachute extends Entity {
 	@Override
 	public boolean shouldDismountInWater(Entity pilot)
 	{
-        return dismountInWater;
+		return dismountInWater;
 	}
 
 	@Override
@@ -217,20 +220,12 @@ public class EntityParachute extends Entity {
 		prevPosY = posY;
 		prevPosZ = posZ;
 
-		// Altimeter, the altitude display
-		if (riddenByEntity != null && worldObj.isRemote) { // execute only on the client
-			// use the pilot's position for the altitude reference
-			BlockPos entityPos = new BlockPos(riddenByEntity.posX, riddenByEntity.posY, riddenByEntity.posZ);
-			AltitudeDisplay.setAltitudeDouble(getCurrentAltitude(entityPos/*, altitudeMSL*/));
-		}
-
 		// drop the chute when close to ground
 		if (autoDismount && riddenByEntity != null) {
 			double pilotFeetPos = riddenByEntity.getEntityBoundingBox().minY;
 			BlockPos bp = new BlockPos(riddenByEntity.posX, pilotFeetPos - 1.0, riddenByEntity.posZ);
 			if (checkForGroundProximity(bp)) {
-				riddenByEntity.mountEntity(this);
-				killParachute();
+				dismountParachute();
 				return;
 			}
 		}
@@ -240,8 +235,8 @@ public class EntityParachute extends Entity {
 		if (riddenByEntity != null && riddenByEntity instanceof EntityLivingBase) {
 			EntityLivingBase pilot = (EntityLivingBase) riddenByEntity;
 			double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
-			motionX += -Math.sin(yaw * d2r) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-			motionZ += Math.cos(yaw * d2r) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+			motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+			motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
 		}
 
 		// forward velocity after forward movement is applied
@@ -285,7 +280,7 @@ public class EntityParachute extends Entity {
 
 		// update direction (yaw)
 		if (delta_X * delta_X + delta_Z * delta_Z > 0.001D) {
-            yaw = Math.atan2(delta_Z, delta_X) * 57.2957795130823;
+			yaw = Math.toDegrees(Math.atan2(delta_Z, delta_X));
 		}
 
 		// update and clamp yaw between -180 and 180
@@ -300,8 +295,9 @@ public class EntityParachute extends Entity {
 		// update final yaw and apply to parachute
 		rotationYaw += adjustedYaw;
 		setRotation(rotationYaw, rotationPitch);
+
 		// finally apply turbulence if flags allow
-		if (((weatherAffectsDrift && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
+		if (((ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
 			applyTurbulence(worldObj.isThundering());
 		}
 
@@ -318,6 +314,7 @@ public class EntityParachute extends Entity {
             ((EntityPlayer) riddenByEntity).addStat(Parachute.parachuteDistance, distance);
         }
 	}
+
 	public void killParachute()
 	{
 		riddenByEntity = null;
@@ -325,9 +322,14 @@ public class EntityParachute extends Entity {
 		setDead();
 	}
 
-	public boolean isBadWeather()
-	{
-		return (worldObj.isRaining() || worldObj.isThundering());
+	// check for bad weather, if the biome can rain or snow check to see
+	// if it is raining (or snowing) or thundering.
+	public boolean isBadWeather() {
+		BlockPos bp = new BlockPos(posX, posY, posZ);
+		Chunk chunk = worldObj.getChunkFromBlockCoords(bp);
+		boolean canSnow = chunk.getBiome(bp, worldObj.getWorldChunkManager()).getEnableSnow();
+		boolean canRain = chunk.getBiome(bp, worldObj.getWorldChunkManager()).getIntRainfall() > 0;
+		return (canRain || canSnow) && (worldObj.isRaining() || worldObj.isThundering());
 	}
 
 	// determines the descent rate based on whether or not
@@ -337,7 +339,7 @@ public class EntityParachute extends Entity {
 	{
 		double descentRate = drift; // defaults to drift
 
-		if (weatherAffectsDrift) {
+		if (ConfigHandler.getWeatherAffectsDrift()) {
 			if (worldObj.isRaining()) { // rain makes you fall faster
 				descentRate += 0.002;
 			}
@@ -353,9 +355,9 @@ public class EntityParachute extends Entity {
 
 		if (lavaThermals) {
 			descentRate = doLavaThermals();
-            if (!allowThermals) {
-                return descentRate;
-            }
+			if (!allowThermals) {
+    			return descentRate;
+    		}
 		}
 
 		if (ascendMode) {
@@ -372,7 +374,7 @@ public class EntityParachute extends Entity {
 	}
 
 	// the following three methods detect lava below the player
-	// at upto 'maxThermalRise' distance.
+	// at up to 'maxThermalRise' distance.
 	public boolean isLavaAt(BlockPos bp)
 	{
 		Block block = worldObj.getBlockState(bp).getBlock();
@@ -413,7 +415,7 @@ public class EntityParachute extends Entity {
 		return thermals;
 	}
 
-	// BlockPos bp is the pilot's position. The pilot's posY - 1.0
+	// BlockPos bp is the pilot's position. The pilot's feet posY - 1.0
 	// to be exact. We check for air blocks, flowers, leaves, and grass at
 	// that position Y. The check for leaves means the parachute can get 
 	// hung up in the trees. Also means that the pilot must manually
@@ -475,11 +477,12 @@ public class EntityParachute extends Entity {
 	// of the parachute. Yes I know that most parachutes
 	// aren't fast or high enough to generate contrails,
 	// but most worlds aren't made of blocks with cubic
-	// cows either.
+	// cows either. If you like, you can think of the
+	// trails as chemtrails.
 	public void generateContrails(double velocity)
 	{
-		double cosYaw = 2.0 * Math.cos(rotationYaw * d2r);
-		double sinYaw = 2.0 * Math.sin(rotationYaw * d2r);
+		double cosYaw = 2.0 * Math.cos(Math.toRadians(rotationYaw));
+		double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
 
 		for (int k = 0; (double) k < 1.0 + velocity; k++) {
 			double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
@@ -495,33 +498,11 @@ public class EntityParachute extends Entity {
 	public void updateRiderPosition()
 	{
 		if (riddenByEntity != null) {
-			double x = posX + (Math.cos(rotationYaw * d2r) * 0.04);
+			double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
 			double y = posY + getMountedYOffset() + riddenByEntity.getYOffset();
-			double z = posZ + (Math.sin(rotationYaw * d2r) * 0.04);
+			double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
 			riddenByEntity.setPosition(x, y, z);
 		}
-	}
-
-	// only allow altitude calculations in the surface world
-	// return a weirdly random number if in nether or end.
-	public double getCurrentAltitude(BlockPos entityPos/*, boolean referenceMSL*/)
-	{
-		if (worldObj.provider.isSurfaceWorld()) {
-			return getAltitudeAboveGround(entityPos); // altitude above ground
-		}
-		return 1000.0 * rand.nextGaussian();
-	}
-	
-	// calculate altitude in meters above ground. starting at the entity
-	// count down until a non-air block is encountered.
-	public double getAltitudeAboveGround(BlockPos entityPos)
-	{
-		BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
-		while (worldObj.isAirBlock(blockPos.down())) {
-			blockPos = blockPos.down();
-		}
-		// calculate the entity's current altitude above the ground
-		return entityPos.getY() - blockPos.getY();
 	}
 
 	@Override

@@ -19,8 +19,6 @@
 //
 package com.parachute.client;
 
-import java.util.List;
-
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -29,9 +27,9 @@ import net.minecraft.client.renderer.WorldRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-public class ParachuteModelRenderer {
+public class ParachuteModelRenderer
+{
 
-	private PositionTextureVertex corners[];
 	private ParachuteTexturedQuad faces[];
 	private final int left;
 	private final int top;
@@ -47,7 +45,6 @@ public class ParachuteModelRenderer {
 	public boolean showModel;
 	public float textureWidth;
 	public float textureHeight;
-	public List cubeList;
 
 	public ParachuteModelRenderer(int x, int y)
 	{
@@ -64,12 +61,12 @@ public class ParachuteModelRenderer {
 
 	public void addBox(float x, float y, float z, float w, float h, float d)
 	{
-		corners = new PositionTextureVertex[8];
+		PositionTextureVertex[] corners = new PositionTextureVertex[8];
 		faces = new ParachuteTexturedQuad[6];
 
-		float width = x + (float) w;
-		float height = y + (float) h;
-		float depth = z + (float) d;
+		float width = x + w;
+		float height = y + h;
+		float depth = z + d;
 
 		if (mirror) {
 			float tmp = width;
@@ -129,17 +126,17 @@ public class ParachuteModelRenderer {
 		rotationPointZ = z;
 	}
 
-	public void render(float f)
+	public void render(float scale)
 	{
 		if (!showModel) {
 			return;
 		}
 		if (!compiled) {
-			compileDisplayList(f);
+			compileDisplayList(scale);
 		}
 		if (rotateAngleX != 0.0F || rotateAngleY != 0.0F || rotateAngleZ != 0.0F) {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(rotationPointX * f, rotationPointY * f, rotationPointZ * f);
+			GlStateManager.translate(rotationPointX * scale, rotationPointY * scale, rotationPointZ * scale);
 			if (rotateAngleZ != 0.0F) {
 				GlStateManager.rotate(rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
 			}
@@ -153,9 +150,9 @@ public class ParachuteModelRenderer {
 			GlStateManager.popMatrix();
 		} else if (rotationPointX != 0.0F || rotationPointY != 0.0F || rotationPointZ != 0.0F) {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(rotationPointX * f, rotationPointY * f, rotationPointZ * f);
+			GlStateManager.translate(rotationPointX * scale, rotationPointY * scale, rotationPointZ * scale);
 			GlStateManager.callList(displayList);
-			GlStateManager.translate(-rotationPointX * f, -rotationPointY * f, -rotationPointZ * f);
+			GlStateManager.translate(-rotationPointX * scale, -rotationPointY * scale, -rotationPointZ * scale);
 			GlStateManager.popMatrix();
 		} else {
 			GlStateManager.pushMatrix();
@@ -164,6 +161,7 @@ public class ParachuteModelRenderer {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void renderWithRotation(float f)
 	{
 		if (!showModel) {
@@ -187,6 +185,7 @@ public class ParachuteModelRenderer {
 		GlStateManager.popMatrix();
 	}
 
+	@SuppressWarnings("unused")
 	public void postRender(float f)
 	{
 		if (!showModel) {
@@ -215,14 +214,14 @@ public class ParachuteModelRenderer {
 		}
 	}
 
-	private void compileDisplayList(float f)
+	private void compileDisplayList(float scale)
 	{
 		displayList = GLAllocation.generateDisplayLists(1);
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
 		WorldRenderer wRenderer = Tessellator.getInstance().getWorldRenderer();
 
 		for (ParachuteTexturedQuad face : faces) {
-			face.draw(wRenderer, f);
+			face.draw(wRenderer, scale);
 		}
 
 		GL11.glEndList();

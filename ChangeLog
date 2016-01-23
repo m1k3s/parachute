@@ -1,3 +1,308 @@
+commit 2a27dd306811921e9be554525fa306fe78b962c1
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 14 13:20:44 2016 -0500
+
+    added manual dismount indicator to HUD. added manual dismount code,
+    indicator
+    is green above 10 meters, red below, blinks when altitude is less
+    than 3 meters.
+    modified some comments.
+
+commit 811b2877d7e233477921dcfe60a7d63474ff2307
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 14 09:00:54 2016 -0500
+
+    bumped version number
+
+commit 16476237af90f859c6de0d92bbad18df94923970
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 14 08:54:29 2016 -0500
+
+    added some comments to PlayerMountEvent.java
+
+commit 5c16d9488dee1e44a1950f121b89b0bde58dfb36
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 13 19:26:18 2016 -0500
+
+    playing around with dismount ideas
+
+commit 81b5a262bd714ddea7ecffc91fa6abca36a1d9fa
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 12 15:44:14 2016 -0500
+
+    added a check to see if the current biome enables rain or snow. If so
+    check to see if it is raining or thundering to determine the
+    turbulence level.
+    this fixes the parachute turbulence in dry biomes when it is raining
+    elsewhere.
+
+commit 09ba2010a7267a74c0e72aaf7583f5ba237ea170
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 9 16:11:34 2016 -0500
+
+    fixed aadImedComment string bug. I inadvertently swapped
+    aadImedComment and
+    aadAltitudeComment.
+
+commit 1378ff2a83ba07ca98cb0d335f2f080febf9a0e6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 9 09:14:04 2016 -0500
+
+    Added an AAD immediate option. The parachute will auto-deploy
+    after falling
+    minFallDistance (immediately) instead of waiting for a specific
+    altitude.
+    This can be enabled in the config GUI.
+
+commit 035aee22a66e4a4de3a149bdaa71ee6410388f3c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 9 08:51:30 2016 -0500
+
+    Well shit. using the new rendering registry work just fine, it was
+    Optifine the whole time. Optifine preview 1.8.9-H1 works.
+
+commit 9020e22d66d8673c26d1987573bde245b94f00cb
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 9 06:44:12 2016 -0500
+
+    Attempts to use the new rendering registry not working. Commented
+    out the
+    earlier changes.
+
+commit f4d4497a2db8d65e4e92806f6072cd07bf525265
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 7 19:02:22 2016 -0500
+
+    removed call to deprecated forge registry function.
+
+commit 0cf3ea23145d5851bba3b10e9bd5ed3e9285e945
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 7 08:04:02 2016 -0500
+
+    moved weatherAffectsDrift into the proper locations to test the
+    variable in
+    real time, this allows the bad weather to start and affect the
+    parachute while
+    the player is riding the parachute.
+
+commit f32b137df1e463e7c9a5526e87a975c2a30fe744
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 4 17:40:45 2016 -0500
+
+    modified the HUD somewhat and shnged the name of the rendering java
+    file, from
+    AltitudeDisplay.java to HugGuiRenderer.java.
+
+commit 00c18b978b08c6b1d0351e9a9c55c1f761b6f058
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 3 09:33:42 2016 -0500
+
+    removed some old commented out code.
+
+commit 9ddb3bd4d676deaab40a82ce407f3d572fc8f523
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 2 07:49:47 2016 -0500
+
+    removed the custom font rendering class.
+
+commit caf8754fb3cd41342ba7dfae373c48e5a9a8fa5e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Dec 31 17:27:46 2015 -0500
+
+    updated the language files to the new terms, only english is
+    available.
+    updated one source file to match the new mappings.
+
+commit 5d3053b106f2d181eaf1de16c2cae488ddf7309b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Dec 31 11:35:04 2015 -0500
+
+    modified the gui image and removed the old image
+
+commit 85a3adda60c066bd85411e10c3763c3c71af49bd
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 30 08:03:00 2015 -0500
+
+    updated to forge-1.8.9-11.15.0.1659
+
+commit bca684739b46fc19b9398dd6a4cf91cdba1bb692
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Dec 29 19:04:02 2015 -0500
+
+    removed custom font rendering.
+
+commit 0846145bcde1bba35be6c571f1ef93f9e9ddb7f9
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Dec 27 12:29:23 2015 -0500
+
+    moved all altitude code to the AltitudeDisplay class. No reason to
+    have the
+    altitude calculated in the EntityParachute class. Also suppressed the
+    "unused"
+    warnings in some files.
+
+commit 5a240261d9100301820533b7439eefcda9cd8ff1
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Dec 26 16:13:17 2015 -0500
+
+    added custom font option.
+
+commit 170322456cb2ba780ac56f5e92f33ec9c1edc034
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Dec 22 06:33:02 2015 -0500
+
+    tweaked the compass display.
+
+commit a9ad873b1efda126175f52d60f84d00fcd981f65
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 21 15:10:53 2015 -0500
+
+    code cleanup, removed unused/commented code. fixed bug with max
+    lava thermal
+    rise being a fixed value in EntityParachute instead of using the
+    config
+    variable.
+
+commit 037beb64a6506a84d6a3de12f601c17066cfde09
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 21 13:08:16 2015 -0500
+
+    added a new GUI, changed the spawnDir calculations in the render loop.
+    removed the damping in the altitude update in
+    EntityParachute::onUpdate
+
+commit 2e5fdde05550818b5cec3f6d8ccfe34c9a3f19fd
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Dec 20 08:19:38 2015 -0500
+
+    added a GUI to the parachute. altitude, compass heading and a
+    spawnpoint
+    indicator are now displayed in the GUI. An icon next to the main
+    gui is
+    highlighted to indicate the active state of the AAD, dimmed when
+    inactive.
+
+commit 95260706a798cf19f7a6520ec7363fe80b951f8a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Dec 18 15:41:10 2015 -0500
+
+    added a spawn direction indicator to the parachute altitude HUD.
+    if the direction is within +/- 5 degrees of the spawn location
+    direction the text is white, otherwise yellow.
+
+commit 77f594f97aad4ec5d1cf221dd4910c6299044465
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 16 21:35:50 2015 -0500
+
+    added right click to activate/deactivate AAD when not on the
+    parachute.
+
+commit 6ec9dd27546c735caa2a41302b34a6fdb02f6f86
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 16 06:35:41 2015 -0500
+
+    code cleanup, remove unused file
+
+commit a35300603f641fb9c5a50370da4e9a1777d40d94
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Dec 15 20:21:19 2015 -0500
+
+    added an auto activate feature. deployment altitude above ground
+    and toggling the
+    feature are config options.
+
+commit 1b661ac22754d7d1ab63c19e009558732807a143
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Dec 14 13:05:47 2015 -0500
+
+    added parachute crafted achievement
+
+commit a98a7538dc22445c7ebdd3e114ba3487a1d0cbc3
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Dec 13 17:26:47 2015 -0500
+
+    added distance stats
+
+commit 0ec62088c2df65c2979d75a07ed5c1576c37448d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Dec 13 12:02:51 2015 -0500
+
+    added parachute deploy statistic. darkened altitude display
+    colors. added
+    config option for lava thermals not disabling spacebar thermals. added
+    config
+    option to allow/disallow dismounting in water.
+
+commit df8f42bdd6e98ed63da9ef6df7a262504be58c17
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 2 15:07:37 2015 -0500
+
+    clean up some code.
+
+commit 01cd0e46742083a729ad1fe1ee20140182a069f2
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Dec 1 20:54:17 2015 -0500
+
+    added configurable dismount in water option.
+
+commit 0cca47726afe9a1e71051185f133a98eca424e49
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Nov 30 09:33:34 2015 -0500
+
+    Updated to work with 1.8.8 forge beta.
+
+commit 9bd827be6655eec046dd373e2d5065ea879bbb4b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Nov 24 09:38:04 2015 -0500
+
+    incremented build number. experiment with forge 1.8.8
+
+commit c67d70825a20c6808cd97095a25c4c0ff9bd59a6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Nov 10 07:50:38 2015 -0500
+
+    using build.gradle link instead of hrad file, changed string format
+    in altitude
+    display.
+
+commit bf65b971932a8a4f0aab8996d1d9b274979b8b29
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Nov 9 18:01:00 2015 -0500
+
+    changed altitude display formatting.
+
+commit 6591338847a804439d2ce6b009a67c9d1d65cdb7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Nov 9 10:43:58 2015 -0500
+
+    changed number format in AltitudeDisplay.
+
+commit 2277328cd1add3b29dac906ca8377d6aa268b39b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Nov 9 08:36:47 2015 -0500
+
+    I don't remeber what I changed. Couldn't be significant
+    though... right?
+
+commit b05835054b64788816019e7398c5f96e20508330
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Sep 23 15:33:25 2015 -0400
+
+    Adding ViewRenderEvent code to try to enable roll when turning in
+    the parachute.
+
+commit d065652d9d570e9ad601f8a5b3199a20ca16b2fc
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Sep 13 09:43:00 2015 -0400
+
+    added new forge mdk build file.
+
+commit 63546fb35465526c00ac7b1828dd233e1307e59e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Aug 31 10:55:28 2015 -0400
+
+    commiting to change branches. Only the changelog changed?!?
+
 commit 0d2725f5e6baddec66595dbf25efb55bb3922a09
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sat Jun 13 13:37:38 2015 -0400

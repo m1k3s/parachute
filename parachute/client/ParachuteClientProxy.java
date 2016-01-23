@@ -24,36 +24,41 @@ import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
+@SuppressWarnings("unused")
 public class ParachuteClientProxy extends ParachuteCommonProxy {
 	
 	// grab the 'jump' key from the game settings. defaults to the space bar. This allows the
 	// player to change the jump key and the parachute will use the new jump key
 	public static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
 
-	// grab the 'jump' key from the game settings. defaults to the space bar. This allows the
-	// player to change the jump key and the parachute will use the new jump key
-	public static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
-
+	@SuppressWarnings("unchecked")
 	@Override
 	public void preInit()
 	{
 		super.preInit();
+		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new IRenderFactory<EntityParachute>() {
+			@Override
+			public Render<? super EntityParachute> createRenderFor(RenderManager manager) {
+				return new RenderParachute(manager);
+			}
+		});
 		info(Parachute.modid + " CombinedClient preInit is complete.");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void Init()
 	{
 		super.Init();
-		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
-		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
 
-		net.minecraftforge.fml.common.FMLCommonHandler.instance().bus().register(new KeyPressTick(ascendKey));
-		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new AltitudeDisplay());
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
 
 		ItemModelMesher mm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		mm.register(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));

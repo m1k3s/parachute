@@ -22,30 +22,29 @@ package com.parachute.client;
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Vec3;
+import org.lwjgl.opengl.GL11;
 
 public class ParachuteTexturedQuad {
 
 	final private float texSize = 16F;
 	public PositionTextureVertex vertexPositions[];
 	public int nVertices;
-	private boolean invertNormal;
 
-	public ParachuteTexturedQuad(PositionTextureVertex texCoords[])
+	public ParachuteTexturedQuad(PositionTextureVertex vertices[])
 	{
-		nVertices = 0;
-		invertNormal = false;
-		vertexPositions = texCoords;
-		nVertices = texCoords.length;
+		vertexPositions = vertices;
+		nVertices = vertices.length;
 	}
 
-	public ParachuteTexturedQuad(PositionTextureVertex texCoords[], int texU1, int texV1, int texU2, int texV2)
+	public ParachuteTexturedQuad(PositionTextureVertex vertices[], int texU1, int texV1, int texU2, int texV2)
 	{
-		this(texCoords);
-		texCoords[0] = texCoords[0].setTexturePosition((float) texU2 / texSize, (float) texV1 / texSize);
-		texCoords[1] = texCoords[1].setTexturePosition((float) texU1 / texSize, (float) texV1 / texSize);
-		texCoords[2] = texCoords[2].setTexturePosition((float) texU1 / texSize, (float) texV2 / texSize);
-		texCoords[3] = texCoords[3].setTexturePosition((float) texU2 / texSize, (float) texV2 / texSize);
+		this(vertices);
+		vertices[0] = vertices[0].setTexturePosition((float) texU2 / texSize, (float) texV1 / texSize);
+		vertices[1] = vertices[1].setTexturePosition((float) texU1 / texSize, (float) texV1 / texSize);
+		vertices[2] = vertices[2].setTexturePosition((float) texU1 / texSize, (float) texV2 / texSize);
+		vertices[3] = vertices[3].setTexturePosition((float) texU2 / texSize, (float) texV2 / texSize);
 	}
 
 	public void flipFace()
@@ -59,26 +58,23 @@ public class ParachuteTexturedQuad {
 		vertexPositions = texCoords;
 	}
 
-	public void draw(WorldRenderer worldrenderer, float face)
+	public void draw(WorldRenderer worldrenderer, float scale)
 	{
 		Vec3 vec3 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[0].vector3D);
 		Vec3 vec31 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[2].vector3D);
 		Vec3 vec32 = vec31.crossProduct(vec3).normalize();
-		worldrenderer.startDrawingQuads();
 
-		if (invertNormal) {
-			worldrenderer.setNormal(-((float) vec32.xCoord), -((float) vec32.yCoord), -((float) vec32.zCoord));
-		} else {
-			worldrenderer.setNormal((float) vec32.xCoord, (float) vec32.yCoord, (float) vec32.zCoord);
-		}
+		float x = (float)vec32.xCoord;
+        float y = (float)vec32.yCoord;
+        float z = (float)vec32.zCoord;
 
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
 		for (int i = 0; i < 4; ++i) {
 			PositionTextureVertex positiontexturevertex = this.vertexPositions[i];
-			worldrenderer.addVertexWithUV(positiontexturevertex.vector3D.xCoord * (double) face, 
-					positiontexturevertex.vector3D.yCoord * (double) face,
-					positiontexturevertex.vector3D.zCoord * (double) face,
-					(double) positiontexturevertex.texturePositionX,
-					(double) positiontexturevertex.texturePositionY);
+			worldrenderer.pos(positiontexturevertex.vector3D.xCoord * (double)scale,
+				positiontexturevertex.vector3D.yCoord * (double)scale,
+				positiontexturevertex.vector3D.zCoord * (double)scale).tex((double)positiontexturevertex.texturePositionX,
+				(double)positiontexturevertex.texturePositionY).normal(x, y, z).endVertex();
 		}
 
 		Tessellator.getInstance().draw();

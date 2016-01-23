@@ -30,80 +30,73 @@ import net.minecraft.world.World;
 import net.minecraft.item.Item;
 
 public class ItemParachute extends Item {
-	private static boolean active;
 
-	public ItemParachute(ToolMaterial toolmaterial)
-	{
-		super();
-		setMaxDamage(toolmaterial.getMaxUses());
-		maxStackSize = 4;
-		active = ConfigHandler.getIsAADActive();
-		setCreativeTab(CreativeTabs.tabTransport); // place in the transportation tab in creative mode
-	}
+    private static boolean active;
 
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-	{
-		// only deploy if entityplayer exists and if player is falling and not already on a parachute.
-		if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
-		    deployParachute(world, entityplayer);
-		} else { // toggle the AAD state
-		    toggleAAD(itemstack, world, entityplayer);
-		}
-		return itemstack;
-	}
+    public ItemParachute(ToolMaterial toolmaterial) {
+        super();
+        setMaxDamage(toolmaterial.getMaxUses());
+        maxStackSize = 4;
+        active = ConfigHandler.getIsAADActive();
+        setCreativeTab(CreativeTabs.tabTransport); // place in the transportation tab in creative mode
+    }
 
-	public void deployParachute(World world, EntityPlayer entityplayer)
-	{
-		// only deploy if entityplayer exists and if player is falling and not already on a parachute.
-		if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
-			double offset = ParachuteCommonProxy.getOffsetY();
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        // only deploy if entityplayer exists and if player is falling and not already on a parachute.
+        if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
+            deployParachute(world, entityplayer);
+        } else { // toggle the AAD state
+            toggleAAD(itemstack, world, entityplayer);
+        }
+        return itemstack;
+    }
 
-			EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
-			chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
-			float volume = 1.0F;
-			chute.playSound("parachutemod:chuteopen", volume, pitch());
-			
-			if (world.isRemote) {
-				RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
-			} else {
-				world.spawnEntityInWorld(chute);
-			}
-			entityplayer.mountEntity(chute);
-			ParachuteCommonProxy.setDeployed(true);
-			entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
+    public void deployParachute(World world, EntityPlayer entityplayer) {
+        double offset = ParachuteCommonProxy.getOffsetY();
 
-			ItemStack itemstack = entityplayer.getHeldItem();
-			if (itemstack != null) {
-				boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, itemstack) > 0;
-				if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
-					itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(), entityplayer);
-				}
-			}
-		}
-	}
+        EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
+        chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
+        float volume = 1.0F;
+        chute.playSound("parachutemod:chuteopen", volume, pitch());
 
-	// this function toggles the AAD state but does not update the saved config.
-	// the player can still enable/disable the AAD in the config GUI.
-	public void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
-	{
-	    if (!world.isRemote) {
-	        active = !active;
-	        world.playSoundAtEntity(entityplayer, "random.click", 1.0f, 1.0f / itemRand.nextFloat() * 0.4f + 0.8f);
-	        itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
-	        ConfigHandler.setAADState(active);
-	    }
-	}
+        if (world.isRemote) {
+            RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
+        } else {
+            world.spawnEntityInWorld(chute);
+        }
+        entityplayer.mountEntity(chute);
+        ParachuteCommonProxy.setDeployed(true);
+        entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
-	private float pitch()
-	{
-		return 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F);
-	}
+        ItemStack itemstack = entityplayer.getHeldItem();
+        if (itemstack != null) {
+            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, itemstack) > 0;
+            if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
+                itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(), entityplayer);
+            }
+        }
+    }
 
-	@Override
-	public boolean getIsRepairable(ItemStack itemstack1, ItemStack itemstack2)
-	{
-		return Items.string == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
-	}
-	
+    // this function toggles the AAD state but does not update the saved config.
+    // the player can still enable/disable the AAD in the config GUI.
+    public void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
+    {
+        if (!world.isRemote) {
+            active = !active;
+            world.playSoundAtEntity(entityplayer, "random.click", 1.0f, 1.0f / itemRand.nextFloat() * 0.4f + 0.8f);
+            itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
+            ConfigHandler.setAADState(active);
+        }
+    }
+
+    private float pitch() {
+        return 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F);
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack itemstack1, ItemStack itemstack2) {
+        return Items.string == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
+    }
+
 }

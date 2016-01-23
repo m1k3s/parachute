@@ -25,16 +25,17 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class KeyPressMessage implements IMessage {
+public class AscendKeyPressMessage implements IMessage {
 
 	private boolean keyPressed;
 
-	public KeyPressMessage()
+	@SuppressWarnings("unused")
+	public AscendKeyPressMessage()
 	{
 
 	}
 
-	public KeyPressMessage(boolean keyPressed)
+	public AscendKeyPressMessage(boolean keyPressed)
 	{
 		this.keyPressed = keyPressed;
 	}
@@ -54,10 +55,10 @@ public class KeyPressMessage implements IMessage {
 		bb.writeBoolean(keyPressed);
 	}
 
-	public static class Handler implements IMessageHandler<KeyPressMessage, IMessage> {
+	public static class Handler implements IMessageHandler<AscendKeyPressMessage, IMessage> {
 
 		@Override
-		public IMessage onMessage(KeyPressMessage msg, MessageContext ctx)
+		public IMessage onMessage(AscendKeyPressMessage msg, MessageContext ctx)
 		{
 			EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
 			if (entityPlayer != null && entityPlayer.ridingEntity instanceof EntityParachute) {
