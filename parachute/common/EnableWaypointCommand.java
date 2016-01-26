@@ -42,7 +42,7 @@ public class EnableWaypointCommand extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         World world = sender.getEntityWorld();
-        if (!world.isRemote) {
+        if (!world.isRemote) { // server side
             if (args.length == 0) { // display current setting
                 notifyOperators(sender, this, "commands.enablewaypoint.success", (HudGuiRenderer.getEnableWaypoint() ? enabled : disabled));
                 return;
