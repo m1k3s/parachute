@@ -37,7 +37,7 @@ public class ShowWaypointCommand extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         World world = sender.getEntityWorld();
-        if (!world.isRemote) {
+        if (!world.isRemote) { // server side
             notifyOperators(sender, this, "commands.showwaypoint.success", HudGuiRenderer.getWaypointString());
         }
     }

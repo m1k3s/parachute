@@ -204,7 +204,7 @@ public class EntityParachute extends Entity {
 
 		// the player has pressed LSHIFT or been killed,
 		// this is necessary for LSHIFT to kill the parachute
-		if (riddenByEntity == null && !worldObj.isRemote) {
+		if (riddenByEntity == null && !worldObj.isRemote) { // server side
 			killParachute();
 			return;
 		}
@@ -302,7 +302,7 @@ public class EntityParachute extends Entity {
 		}
 
 		// something bad happened, somehow the skydiver was killed.
-		if (!worldObj.isRemote && riddenByEntity != null && riddenByEntity.isDead) {
+		if (!worldObj.isRemote && riddenByEntity != null && riddenByEntity.isDead) { // server side
 			killParachute();
 		}
 
@@ -425,7 +425,7 @@ public class EntityParachute extends Entity {
 	{
 		boolean result = false;
 
-		if (!worldObj.isRemote && !isDead) {
+		if (!worldObj.isRemote && !isDead) { // server side
 			Block block = worldObj.getBlockState(bp).getBlock();
 			boolean isAir = (block == Blocks.air);
 			boolean isVegetation = (block instanceof BlockFlower) || (block instanceof BlockGrass) || (block instanceof BlockLeaves);

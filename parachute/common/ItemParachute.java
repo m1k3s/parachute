@@ -60,9 +60,9 @@ public class ItemParachute extends Item {
         float volume = 1.0F;
         chute.playSound("parachutemod:chuteopen", volume, pitch());
 
-        if (world.isRemote) {
+        if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
-        } else {
+        } else { // server side
             world.spawnEntityInWorld(chute);
         }
         entityplayer.mountEntity(chute);
@@ -82,7 +82,7 @@ public class ItemParachute extends Item {
     // the player can still enable/disable the AAD in the config GUI.
     public void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        if (!world.isRemote) {
+        if (!world.isRemote) { // server side
             active = !active;
             world.playSoundAtEntity(entityplayer, "random.click", 1.0f, 1.0f / itemRand.nextFloat() * 0.4f + 0.8f);
             itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");

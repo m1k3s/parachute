@@ -38,7 +38,7 @@ public class SetWaypointCommand extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         World world = sender.getEntityWorld();
-        if (!world.isRemote) {
+        if (!world.isRemote) { // server side
             if (args.length == 0) { // set waypoint to current position
                 BlockPos bp = new BlockPos(sender.getPosition());
                 HudGuiRenderer.setWaypoint(bp.getX(), bp.getZ());
