@@ -51,6 +51,7 @@ public class HudGuiRenderer extends Gui {
 	private final int colorGreen;
 	private final int colorBlue;
 	private final int colorDimBlue;
+	private final int colorDimGreen;
 	// AAD icon
 	private final int aadWidth;
 	private final int aadHeight;
@@ -81,6 +82,7 @@ public class HudGuiRenderer extends Gui {
 		colorGreen = 0xff00aa00;
 		colorBlue = 0xff0000aa;
 		colorDimBlue = 0xcc000088;
+		colorDimGreen = 0xcc008800;
 		aadWidth = 16;
 		aadHeight = 25;
 		ledY = 39;
@@ -111,7 +113,7 @@ public class HudGuiRenderer extends Gui {
 		ScaledResolution sr = new ScaledResolution(mc);
 		int hudX = sr.getScaledWidth() / 2 - (hudWidth / 2); // left edge of GUI
 		int hudY = 2; // top edge of GUI
-		int textX = hudX + 50; // xcoord for text
+		int textX = hudX + 30; // xcoord for text
 		int textY = hudY + 22; // ycoord for text
 		int ledX = 1;
 
@@ -122,7 +124,8 @@ public class HudGuiRenderer extends Gui {
 				BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY, mc.thePlayer.posZ);
 				altitude = getCurrentAltitude(entityPos);
 				double homeDir = getHomeDirection();
-				String altitudeStr = format(altitude);
+				double distance = getHomeDistance();
+				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
 
 				// Params: int screenX, int screenY, int textureX, int textureY, int width, int height
 				drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
@@ -182,12 +185,14 @@ public class HudGuiRenderer extends Gui {
 					drawTexturedModalRect(hudX + ledX, hudY + hudHeight, ledX, ledY, ledWidth, ledHeight);
 				}
 
-				// finally draw the altitude and compass heading text
-				double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
-				fontRenderer.drawStringWithShadow("Altitude", hudX + 28, hudY + 12, colorDimBlue);
-				fontRenderer.drawStringWithShadow(altitudeStr, textX - fieldWidth, textY, colorAltitude());
-				fontRenderer.drawStringWithShadow("Compass", hudX + 113, hudY + 12, colorDimBlue);
-				fontRenderer.drawStringWithShadow(format(heading), (textX + 88) - fieldWidth, textY, colorCompass(heading));
+				// draw the altitude text
+				fontRenderer.drawStringWithShadow("Altitude", hudX + 18, hudY + 12, colorDimBlue);
+				fontRenderer.drawStringWithShadow(format(altitude), (textX + 5) - fieldWidth, textY, colorAltitude());
+				// draw the compass heading text
+				fontRenderer.drawStringWithShadow("Compass", hudX + 123, hudY + 12, colorDimBlue);
+				fontRenderer.drawStringWithShadow(format(heading), (textX + 118) - fieldWidth, textY, colorCompass(heading));
+				// draw the distance to the home point text
+				fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
 			}
 		}
 	}
@@ -212,6 +217,19 @@ public class HudGuiRenderer extends Gui {
 		double delta = Math.atan2(blockpos.getZ()- mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
 		double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
 		return MathHelper.wrapAngleTo180_double(Math.toDegrees(relAngle) - 90.0); // degrees
+	}
+
+	public double getHomeDistance()
+	{
+		BlockPos blockpos;
+		if (ConfigHandler.getUseSpawnPoint()) {
+			blockpos = mc.theWorld.getSpawnPoint();
+		} else {
+			blockpos = ConfigHandler.getWaypoint();
+		}
+		double a = Math.pow(blockpos.getZ()- mc.thePlayer.posZ, 2);
+		double b = Math.pow(blockpos.getX() - mc.thePlayer.posX, 2);
+		return Math.sqrt(a + b);
 	}
 
 	public int colorAltitude()
