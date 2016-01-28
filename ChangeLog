@@ -1,3 +1,105 @@
+commit c2bdacf38af88c9a142344054f19a6b69eb0a033
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 27 13:03:23 2016 -0500
+
+    removed the (really wrong) check for event phase in
+    ParachuteItemCraftedEvent.
+    What was I thinking?
+
+commit 623075db3af5249881f4b37305437d547b629d29
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 27 08:01:42 2016 -0500
+
+    modified the HUD image to include distance to the home point in
+    the middle.
+    Also added code to support the distance to the home point
+    calculations.
+
+commit adc5fc8dfae0a5bf6ae302e9a8fd062503f30328
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 26 15:45:32 2016 -0500
+
+    added server or client comments to world.isRemote test for clarity
+
+commit 4d7aa1a9de3e8a090f0fd370dbd4e85c76a33a6a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 21 16:11:54 2016 -0500
+
+    code clean up
+
+commit fec9db95f12f88a78fdec3227b7e7fac47b3dc21
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 19 20:07:49 2016 -0500
+
+    added option to have home direction be either the world spawn point
+    or a waypoint set by the user in the config.
+
+commit 1434a38bc920f806c4661fb44acd239f2e88b44d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 18 15:20:54 2016 -0500
+
+    removed crap code to make waypoint persistent. added slash to command
+    usage in
+    language file. modified HUD png auto-dismount disabled LED icon.
+
+commit 0a3f0f29066e063eb099145f707604b1f5f4524a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 18 12:55:37 2016 -0500
+
+    added all strings to language files. These need new
+    translations. bumped
+    minor version
+
+commit 97f8f6d782cf45c4a103eb46f54b5c7c9e431f3a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 18 11:35:54 2016 -0500
+
+    added translatable strings for the commands. setwaypoint without any
+    arguments uses the players current position.
+
+commit 972cf993513dbb5c5f17dcc15c4854589a7a4ffd
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 17 14:35:11 2016 -0500
+
+    added a show waypoints command
+
+commit dcead21e9264700826d6d69e2521ab7bbad21b2f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 17 14:23:30 2016 -0500
+
+    added waypoints and commands to the mod. we can now enable waypoints
+    and set
+    waypoints. the HUD will add a waypoint bar when the waypoints
+    are enabled
+    and set.
+
+commit 5ff252fb3a02edf4faad2a75058ebbcb1aee35ba
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 15 18:52:51 2016 -0500
+
+    adjusted the AAD icon to the right 2 pixels, it was crowding the main
+    HUD a little.
+
+commit a84228e6f0134c590b14f4901c587aa868b83759
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 15 16:21:01 2016 -0500
+
+    code cleanup
+
+commit 88e114b5c933605d491ba95d322d2aea75aded15
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 15 08:18:08 2016 -0500
+
+    change variable names to better describe the variable
+    application. Clean
+    up some code and comments. Add better comments to dismount event.
+
+commit bc33150c2dc2b841adf8da18259f124723a4da65
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 14 20:29:43 2016 -0500
+
+    tweaked the HUD image.
+
 commit 2a27dd306811921e9be554525fa306fe78b962c1
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Thu Jan 14 13:20:44 2016 -0500
