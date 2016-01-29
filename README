@@ -1,6 +1,2 @@
-Parachute mod for Minecraft 1.7.x (Forge version)
+Parachute mod for Minecraft (Forge version)
 Authored by crackedEgg
-The parachute has been redesigned for 1.7.x. There are now two types of parachutes and they have their own textures. You can add
-more textures to the jar file following the naming convention of the original textures. You can also,
-of course, replace the textures. If you add more just set the texture index in the config file to the
-index of your texture.
