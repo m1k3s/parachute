@@ -24,10 +24,11 @@ import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+//import net.minecraft.client.renderer.entity.Render;
+//import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
+//import net.minecraft.entity.Entity;
+//import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 @SuppressWarnings("unused")
@@ -42,12 +43,13 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 	public void preInit()
 	{
 		super.preInit();
-		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new IRenderFactory<EntityParachute>() {
-			@Override
-			public Render<? super EntityParachute> createRenderFor(RenderManager manager) {
-				return new RenderParachute(manager);
-			}
-		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
+//		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new IRenderFactory<EntityParachute>() { // java 6/7
+//			@Override
+//			public Render<? super EntityParachute> createRenderFor(RenderManager manager) {
+//				return new RenderParachute(manager);
+//			}
+//		});
 		info(Parachute.modid + " CombinedClient preInit is complete.");
 	}
 
