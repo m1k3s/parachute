@@ -1,22 +1,21 @@
 item.parachute.name=Fallschirm
-item.pack.name=Pack
+item.pack.name=Paket
 
-stat.parachuteDeployed=Parachutes deployed
-stat.parachuteDeployed.desc=Number of times you deployed a parachute
-stat.parachuteDistance=Distance by Parachute
-stat.parachuteDistance.desc=Distance traveled by parachute
+stat.parachuteDeployed=Fallschirm eingesetzt
+stat.parachuteDeployed.desc=So oft hast du einen Fallschirm eingesetzt
+stat.parachuteDistance=Distanz mit Fallschirm
+stat.parachuteDistance.desc=Distanz die mit Fallschirm gereist wurde
 
-achievement.buildParachute=Parachute crafted
-achievement.buildParachute.desc=You have crafted a parachute!
+achievement.buildParachute=Fallschirm gecraftet
+achievement.buildParachute.desc=Du hast einen Fallschirm gecraftet!
 
-commands.setwaypoint.success=Waypoint is set to %d %d
-commands.setwaypoint.failure=waypoint values must be numeric
-commands.setwaypoint.current=Waypoint is set to current position (%d %d)
-commands.setwaypoint.usage=setwaypoint <X coord> <Z coord>
-commands.enablewaypoint.success=Waypoint is %s
-commands.enablewaypoint.usage=enablewaypoint <true|false|1|0>
-commands.enablewaypoint.enabled=enabled
-commands.enablewaypoint.disabled=disabled
-commands.showwaypoint.usage=showwaypoint
-commands.showwaypoint.success=Current waypoint is %d %d
-
+commands.setwaypoint.success=Wegpunkt wurde auf %d %d festgelegt
+commands.setwaypoint.failure=Werte für Wegpunkte müssen Zahlen sein
+commands.setwaypoint.current=Wegpunkt wurde auf derzeitige Position (%d %d) festgelegt
+commands.setwaypoint.usage=setzewegpunkt <X coord> <Z coord>
+commands.enablewaypoint.success=Wegpunkt ist %s
+commands.enablewaypoint.usage=aktivierewegpunkt <true|false|1|0>
+commands.enablewaypoint.enabled=aktiviert
+commands.enablewaypoint.disabled=deaktiviert
+commands.showwaypoint.usage=zeigewepunkt
+commands.showwaypoint.success=Derzeitiger Wegpunkt ist %d %d
