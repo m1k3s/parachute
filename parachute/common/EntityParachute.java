@@ -140,18 +140,20 @@ public class EntityParachute extends Entity {
 	// order to send packets, we need for it to return false for player to not
 	// be in the sitting position on the parachute.
 	//
+	// Seems to be 'fixed' in 1.8.9 forge 1740 but still doesn't render correctly.
+	//
 	// skydiver should 'hang' when on the parachute and then
 	// 'pick up legs' when landing.
-//	@Override
-//	public boolean shouldRiderSit()
-//	{
-//		boolean sitting = false;
-//		if (riddenByEntity != null) {
-//			BlockPos bp = new BlockPos(riddenByEntity.posX, riddenByEntity.posY - 1.0, riddenByEntity.posZ);
-//			sitting = checkForGroundProximity(bp);
-//		}
-//		return sitting;
-//	}
+	@Override
+	public boolean shouldRiderSit()
+	{
+		boolean sitting = false;
+		if (riddenByEntity != null) {
+			BlockPos bp = new BlockPos(riddenByEntity.posX, riddenByEntity.posY - 1.0, riddenByEntity.posZ);
+			sitting = checkForGroundProximity(bp);
+		}
+		return sitting;
+	}
 	
 	@Override
 	public boolean shouldDismountInWater(Entity pilot)

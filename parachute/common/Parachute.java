@@ -19,7 +19,6 @@
 //
 package com.parachute.common;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
