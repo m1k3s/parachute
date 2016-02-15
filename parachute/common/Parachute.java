@@ -23,13 +23,11 @@ import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(
@@ -50,6 +48,7 @@ public class Parachute {
 	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new ChatComponentTranslation("stat.parachuteDeployed"));
 	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new ChatComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
     public static Achievement buildParachute;
+	public static int minimumForgeBuildVersion = 1740;
 
 	@SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
 	public static ParachuteCommonProxy proxy;
@@ -59,6 +58,17 @@ public class Parachute {
 
 	@Mod.Instance(modid)
 	public static Parachute instance;
+
+	@SuppressWarnings("unused")
+	@Mod.EventHandler
+	public void Construct(FMLConstructionEvent event)
+	{
+		int buildVersion = ForgeVersion.getBuildVersion();
+		if (buildVersion < minimumForgeBuildVersion) {
+			proxy.error("This mod requires Forge Mod Loader build version of " + minimumForgeBuildVersion + " or higher");
+			proxy.error("You are running Forge Mod Loader build version " + buildVersion);
+		}
+	}
 
 	@SuppressWarnings("unused")
 	@Mod.EventHandler
