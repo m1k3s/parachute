@@ -23,12 +23,13 @@ import com.parachute.common.ParachuteCommonProxy;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
+//import net.minecraft.client.renderer.ItemModelMesher;
 //import net.minecraft.client.renderer.entity.Render;
 //import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 //import net.minecraft.entity.Entity;
 //import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 @SuppressWarnings("unused")
@@ -50,6 +51,8 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 //				return new RenderParachute(manager);
 //			}
 //		});
+		ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName, "inventory"));
 		info(Parachute.modid + " CombinedClient preInit is complete.");
 	}
 
@@ -62,10 +65,9 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
 
-		ItemModelMesher mm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		mm.register(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));
-		mm.register(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName, "inventory"));
-
+//		ItemModelMesher mm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+//		mm.register(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));
+//		mm.register(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName, "inventory"));
 		info(Parachute.modid + " CombinedClient Init is complete.");
 	}
 
