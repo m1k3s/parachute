@@ -46,31 +46,8 @@ public class RenderParachute extends Render<EntityParachute>
 		shadowSize = 0.0F;
 	}
 
-//	@SuppressWarnings("unchecked")
-//	public void renderParachute(EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float partialTicks)
-//	{
-//		GlStateManager.pushMatrix();
-//
-//		GlStateManager.translate((float) x, (float) y, (float) z);
-//		GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
-//
-//		if (!bindEntityTexture(entityparachute)) {
-//			return;
-//		}
-//		modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-//		if (entityparachute.riddenByEntity != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
-//			EntityPlayer rider = (EntityPlayer) entityparachute.riddenByEntity;
-//			renderParachuteCords(rider, partialTicks);
-//		}
-//
-//		GlStateManager.popMatrix();
-//		super.doRender(entityparachute, x, y, z, rotationYaw, partialTicks);
-//	}
-
-//	@Override
 	public void doRender(EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float partialTicks)
 	{
-//		renderParachute(parachute, x, y, z, rotation, partialTicks);
 		GlStateManager.pushMatrix();
 
 		GlStateManager.translate((float) x, (float) y, (float) z);
