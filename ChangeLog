@@ -1,3 +1,111 @@
+commit 9c26c385fcfd83d36980f4d8ca22eee36a05dd27
+Merge: 344b37e 0279498
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Wed Feb 17 07:40:57 2016 -0500
+
+    Merge pull request #8 from GWYOG/master_patch-1
+
+    Create zh_CN.lang
+
+commit 02794985b751aef0dd1598dd1804a0d26743fffc
+Author: JJN <jjn1jjn2@163.com>
+Date:   Wed Feb 17 17:06:18 2016 +0800
+
+    Create zh_CN.lang
+
+    Based on parachutemod-ng-1.8.9-1.2.2-339
+
+commit 344b37ef329db98bb08e8ef67cdb99bb52468614
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Feb 15 17:39:24 2016 -0500
+
+    changed model resource registry to
+    ModelLoader.setCustomModelResourceLocation
+
+commit e424891664dd83346874983e31aac6f7c5f02d7a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Feb 15 12:59:57 2016 -0500
+
+    added a forge mod loader build version check and warning. Added an
+    error method to the proxy logger.
+
+commit 9540c2f009d8b6a792b10c2f06a670639d23b256
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 14 12:54:54 2016 -0500
+
+    updated to forge 1740+ which fixes the shouldRiderSit rendering
+    issue. made changes to the EntityParachute::shouldriderSit method and
+    the checkForGroundProximity method. Modified RenderParachute::doRender
+    as well.
+
+commit 142e1747b151ccf0dd4a97436b0499edcaaec641
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 12 18:49:09 2016 -0500
+
+    merged with master after a pull request to add German Language
+    translations.
+
+commit a483a6d764a434e43a4c38fcf30424717e16e1c2
+Merge: 080c6af e8b8419
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Fri Feb 12 18:09:34 2016 -0500
+
+    Merge pull request #7 from ThexXTURBOXx/master
+
+    Added right German translations
+
+commit e8b8419739bf1e7e6a85dd28ddf826d417da71ec
+Author: Nico <nico.mexis@kabelmail.de>
+Date:   Fri Feb 12 22:04:47 2016 +0100
+
+    Added right German translations
+
+commit 080c6af66bfdf885fdaec42e7933f085552debd4
+Merge: b9ce125 916b8be
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 29 17:57:41 2016 -0500
+
+    Merge branch '1.8.9-ng'
+
+commit 916b8becc629eaeaf8d36ac927dd7e01266f6ac8
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 29 17:56:26 2016 -0500
+
+    tweaked the HUD image. updated code to target java 8
+
+commit b9ce12580f414e0c85639b08032160995dc13b1c
+Merge: 958ebdf 710efd6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 29 09:19:34 2016 -0500
+
+    Merge branch '1.8.9-ng'
+
+commit 710efd67bd2abc5ae3f665345a2234ab2cfb48e9
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 29 09:18:56 2016 -0500
+
+    updated README
+
+commit 958ebdfa7e0e77cb9ef5f06679ed0b20e6ce54dd
+Merge: ed890e5 060f617
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 28 15:25:05 2016 -0500
+
+    Merge branch '1.8.9-ng'
+
+commit 060f6176d7846d0e957627d2e9e267f3ea3ad39b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 28 15:24:27 2016 -0500
+
+    updated ChangeLog file
+
+commit ed890e57d210d311467fc0ce112bc200c8cfb295
+Merge: 4f288c0 c2bdacf
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 27 13:04:38 2016 -0500
+
+    Merge branch '1.8.9-ng'
+
 commit c2bdacf38af88c9a142344054f19a6b69eb0a033
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Jan 27 13:03:23 2016 -0500
@@ -5,6 +113,19 @@ Date:   Wed Jan 27 13:03:23 2016 -0500
     removed the (really wrong) check for event phase in
     ParachuteItemCraftedEvent.
     What was I thinking?
+
+commit 4f288c07c22c7aeca9f51b33eef4083bfa3d9a56
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 27 08:05:59 2016 -0500
+
+    updated HUD image file from 1.8.9-ng and merging with master.
+
+commit b110af6722f1f3949bdf832be5d03921c9d5b571
+Merge: 707de8a 623075d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 27 08:03:30 2016 -0500
+
+    Merge branch '1.8.9-ng'
 
 commit 623075db3af5249881f4b37305437d547b629d29
 Author: m1k3s <pbrane0@gmail.com>
@@ -15,11 +136,25 @@ Date:   Wed Jan 27 08:01:42 2016 -0500
     Also added code to support the distance to the home point
     calculations.
 
+commit 707de8a5aded4746cb612b27b32046a3a9bd547c
+Merge: f1ae238 adc5fc8
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Jan 26 15:46:36 2016 -0500
+
+    Merge branch '1.8.9-ng'
+
 commit adc5fc8dfae0a5bf6ae302e9a8fd062503f30328
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Tue Jan 26 15:45:32 2016 -0500
 
     added server or client comments to world.isRemote test for clarity
+
+commit f1ae238d75b46c1cc2573bcc71334ef278a48557
+Merge: e692226 4d7aa1a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 23 15:21:25 2016 -0500
+
+    Merge branch '1.8.9-ng'
 
 commit 4d7aa1a9de3e8a090f0fd370dbd4e85c76a33a6a
 Author: m1k3s <pbrane0@gmail.com>
@@ -249,6 +384,65 @@ Date:   Sat Dec 26 16:13:17 2015 -0500
 
     added custom font option.
 
+commit e692226374e1b1b119e74cb3932ca750937633a9
+Merge: f2f2b8e 11332ea
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Dec 24 21:07:11 2015 -0500
+
+    Merge branch 'parachute-ng'
+
+commit 11332ea05e391e8a8f6ec422e81b81c5abd41bd7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Dec 24 21:05:30 2015 -0500
+
+    compiled for Java 8 now. playing with the font rendering code, tying
+    to make it look pretty.
+
+commit f2f2b8ec63bdb4d7fbc3ee3884b767f3be09e44c
+Merge: 19aa918 dc0040c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Dec 24 11:30:16 2015 -0500
+
+    Merge branch 'parachute-ng'
+
+commit dc0040ce9e072fd6c50ef8f53277beed91a78d0e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Dec 24 11:11:57 2015 -0500
+
+    added unicode check to ParachuteFonterRenderer super().
+
+commit 7b167cd6f6069c3fe05d6c49ab26b53cbe967034
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Dec 24 11:09:17 2015 -0500
+
+    reworked custom font rendering.
+
+commit 1112f412b75671153d7e8c20b9d44d121f94773e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 23 22:03:45 2015 -0500
+
+    added custom font rendering
+
+commit 5621e743d7c29b3e0405e8e63188327403037a7b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 23 09:36:21 2015 -0500
+
+    Adding custom font rendering to the parachute gui
+
+commit 22b0f5601dc8ab16fef79384e3c483ebc175f887
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Dec 22 11:20:09 2015 -0500
+
+    bumped the forge version, some minor code cleanup, removed the
+    fixGlideRate
+    config option, who uses that anyway?
+
+commit f927407e9743c3b535b6675a0d25f013d341f660
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Dec 22 08:02:07 2015 -0500
+
+    added a gui to the parachute, backported 1.8.8-ng features.
+
 commit 170322456cb2ba780ac56f5e92f33ec9c1edc034
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Tue Dec 22 06:33:02 2015 -0500
@@ -298,6 +492,12 @@ Date:   Wed Dec 16 21:35:50 2015 -0500
 
     added right click to activate/deactivate AAD when not on the
     parachute.
+
+commit 12e251069a0f374e2c268e4ca55b6dda6a0b642a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Dec 16 14:38:58 2015 -0500
+
+    added ADD feature and some config options.
 
 commit 6ec9dd27546c735caa2a41302b34a6fdb02f6f86
 Author: m1k3s <pbrane0@gmail.com>
@@ -359,6 +559,12 @@ Date:   Tue Nov 24 09:38:04 2015 -0500
 
     incremented build number. experiment with forge 1.8.8
 
+commit 19aa91814af602fcee4eba8fb9fc5b5047d4186e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Nov 10 07:59:17 2015 -0500
+
+    changed string format again in altitude display
+
 commit c67d70825a20c6808cd97095a25c4c0ff9bd59a6
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Tue Nov 10 07:50:38 2015 -0500
@@ -366,6 +572,12 @@ Date:   Tue Nov 10 07:50:38 2015 -0500
     using build.gradle link instead of hrad file, changed string format
     in altitude
     display.
+
+commit 8f942067fe6b8222b7271838fb3c74fb83882f68
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Nov 9 18:16:07 2015 -0500
+
+    changed altitude display format.
 
 commit bf65b971932a8a4f0aab8996d1d9b274979b8b29
 Author: m1k3s <pbrane0@gmail.com>
@@ -378,6 +590,12 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Nov 9 10:43:58 2015 -0500
 
     changed number format in AltitudeDisplay.
+
+commit ffb2f6f4b4de2c58911ae0091c7df914b6b7b1fb
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Nov 9 08:56:46 2015 -0500
+
+    changed DecimalFormat pattern in AltitudeDisplay
 
 commit 2277328cd1add3b29dac906ca8377d6aa268b39b
 Author: m1k3s <pbrane0@gmail.com>
@@ -404,6 +622,12 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Aug 31 10:55:28 2015 -0400
 
     commiting to change branches. Only the changelog changed?!?
+
+commit 4a2322705c40dd5e518deaabb60f32b001792046
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jun 13 13:40:34 2015 -0400
+
+    changed to mod level entity registration
 
 commit 0d2725f5e6baddec66595dbf25efb55bb3922a09
 Author: m1k3s <pbrane0@gmail.com>
@@ -437,6 +661,31 @@ Date:   Tue May 19 11:07:06 2015 -0400
 
     no source changes
 
+commit 9596601d154804a25d57362ce2d68df19e6895da
+Merge: 09ecf3a 08a2e5f
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Tue May 19 11:06:17 2015 -0400
+
+    Merge pull request #5 from DeRigeurEx/1.8.0
+
+    Create cs_CZ.lang
+
+commit 08a2e5fc87c9e4bf4214cd0d4bcc5d9e20697eaf
+Author: DeRigeurEx <pavmcr@tiscali.cz>
+Date:   Tue May 19 16:54:10 2015 +0200
+
+    Create cs_CZ.lang
+
+    - add cs_CZ.lang and translation into Czech language
+
+commit 09ecf3a6bcdea9766d79e88248b632ba584ef781
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Mar 19 12:52:45 2015 -0400
+
+    Changed parameter MSL in getCurrentAltitude to referenceMSL, which
+    is a little more
+    readable.
+
 commit aa1c7537e7ad8f5e62ebaa0bae877eb625740c09
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Thu Mar 19 12:50:00 2015 -0400
@@ -444,6 +693,12 @@ Date:   Thu Mar 19 12:50:00 2015 -0400
     changed variable name MSL in getCurrentAltitude() to referenceMSL,
     something
     a little more readable .
+
+commit 103c83341a773154600fb25171570d2fb52dd9e6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 17 15:22:22 2015 -0400
+
+    Removed unneccessary static declarations.
 
 commit 5439ef9051e59ef591834d1f7bcc670e3a71ae6a
 Author: m1k3s <pbrane0@gmail.com>
@@ -457,6 +712,12 @@ Date:   Tue Mar 17 15:02:01 2015 -0400
 
     Moved altitude string formatting to the AltitudeDisplay class.
 
+commit e728b94023ee2dc9711ece8140b14c493a09fc9c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 17 14:24:19 2015 -0400
+
+    Moved altitude format code from EntityParachute to AltitudeDisplay
+
 commit b21b9edeeb655e9e7cf24d3ee637d491f89781cc
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Tue Mar 17 13:56:16 2015 -0400
@@ -468,6 +729,12 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Tue Mar 17 13:15:57 2015 -0400
 
     Made DecimalFormat more locale friendly, hopefully.
+
+commit d726cff9afc696b455ca035346adb8f2e3c759e4
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 17 13:06:23 2015 -0400
+
+    Making DecimalFormat locale friendly.
 
 commit 9dfe42b8382d0160735c749814c77276c17d54c9
 Author: m1k3s <pbrane0@gmail.com>
@@ -481,17 +748,43 @@ Date:   Thu Mar 5 16:16:51 2015 -0500
 
     added the player fall event class back in. I guess it got removed.
 
+commit 64c4147b09ec725efbd0693aabeaa827f35405c0
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Mar 5 16:08:03 2015 -0500
+
+    removed java 1.7 requirement in build.gradle
+
+commit 44273bdc2dd54ecb94bb5695ad0d86545ac48765
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Mar 5 14:30:25 2015 -0500
+
+    Added MC version check in @Mod
+
 commit c1397863e57098bcafd90a1e937dd059901c47fc
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Thu Mar 5 14:22:58 2015 -0500
 
     build version increment.
 
+commit 01794669d1f9380128a8f8776e6ebeea75293d8e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Mar 2 12:06:10 2015 -0500
+
+    add offset variable to proxy with get method. fix parachute mounting
+    bug.
+
 commit 53b13640313df88c294f228c6e19b1807e57ff24
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Mar 2 08:03:43 2015 -0500
 
     version change in build file.
+
+commit ed42ef8e00662e120a4fbe99ca87c2bf8609cda2
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 22 17:10:08 2015 -0500
+
+    added (dis)mountEntity function to the dismount section in
+    EntityParachute.
 
 commit 3498f9be21f3b2ef8ac67229212a31f2a408b1da
 Author: m1k3s <pbrane0@gmail.com>
@@ -508,6 +801,24 @@ Date:   Sat Feb 14 11:14:25 2015 -0500
     playing around with constant glide rate. changed word 'rider' to
     'pilot'.
 
+commit 4d61e1771a04bcf905d16031829c4078adfcedc4
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 11 08:15:14 2015 -0500
+
+    Build number change in build.gradle
+
+commit b0353022f31c3903246c6457cec3cf629f38ceb5
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 11 08:09:37 2015 -0500
+
+    Make the auto dismount test in the ctor of EntityParachute
+
+commit 7e916686582b8a677a075b3b263387260efe3a3d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 11 08:05:17 2015 -0500
+
+    Changed the rider Y position test in checking for ground proximity.
+
 commit 268d851c82c927ac75c3dfe8d2dc35e0ebe4f84b
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Tue Feb 10 18:13:57 2015 -0500
@@ -523,6 +834,12 @@ Date:   Sun Feb 8 08:37:59 2015 -0500
     added better comments, failed attempt to make shouldRiderSit
     work. Bailed.
 
+commit 8ea0c96787a9bcf215af382a717cbeff1cf1f7ec
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 6 15:54:58 2015 -0500
+
+    build.gradle modified while testing shell script.
+
 commit 77976b03400609427fa67d02f73fe3c0e92ad206
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Fri Feb 6 15:51:08 2015 -0500
@@ -536,6 +853,18 @@ Date:   Fri Feb 6 15:22:03 2015 -0500
     removed unnecessary test in cord rendering. edited build.gradle,
     changed back.
 
+commit 5ef16824ca278ed90dd816a00928c867fd48d19f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 6 15:04:17 2015 -0500
+
+    Don't render parachute cords in first person. Not really a goo way
+    to display them.
+    The player body is not visible in first person and the cords look
+    funny.
+    Added a build number to the version string. the build number is
+    incremented in
+    my update-project.sh shell script.
+
 commit 28ec4449567feb6caca685ee2d41ffc8aab11b78
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Fri Feb 6 14:57:56 2015 -0500
@@ -546,11 +875,23 @@ Date:   Fri Feb 6 14:57:56 2015 -0500
     instance. The build
     number is incremented in my update-project shell script.
 
+commit 71f37cfb676e1c80f9d838dc9a678dfeb1fac6e7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 6 09:54:04 2015 -0500
+
+    added abuild number to the version string
+
 commit 977815f79643c69f1fa05bc2d2c121ad604e1c80
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Fri Feb 6 08:01:41 2015 -0500
 
     minor code cleanup.
+
+commit 2e028cbc3bfc994207392bb330a9bcf93168a224
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 19:52:46 2015 -0500
+
+    removed unneccessary tests from KeyPressTick KeyPressMessage.
 
 commit cbe50956afc36717d4bd7e133979d43c5379d80f
 Author: m1k3s <pbrane0@gmail.com>
@@ -565,11 +906,29 @@ Date:   Wed Feb 4 15:59:35 2015 -0500
 
     Code cleanup.
 
+commit 55fb028b7951aaa1ce5d8c1629ae1e3da78ec97d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 13:14:53 2015 -0500
+
+    moved KeyPressTick class to client directory.
+
+commit 413fa2856a4a4c4bfbb93af7c081f04fe12c90eb
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 13:14:06 2015 -0500
+
+    reworked and enabled the configurable jump key code.
+
 commit 7fe8fe48a150da7fe33ccd27085ba66f1254de0d
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Feb 4 13:08:27 2015 -0500
 
     moved KeyPressTick class to client directory.
+
+commit b1df96dde8f7ce116b07cf5c36feef5d2b3dffc3
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 13:07:12 2015 -0500
+
+    changes to jump key code.
 
 commit 1d0209e75098f98ddc3106b61bde4026e88ad991
 Author: m1k3s <pbrane0@gmail.com>
@@ -578,17 +937,43 @@ Date:   Wed Feb 4 12:59:06 2015 -0500
     reworked and enabled the configurable jump key code. Now it works on
     the server too. Removed the keycode on the server end, no need for it.
 
+commit 0674968ea60d96603d10423071a94be3845debf3
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 4 12:01:45 2015 -0500
+
+    disabled configurable jump key, crashes server.
+
 commit d47b2d5eb10ab2ca5eb9dbb19f7714da9018d672
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Feb 4 11:54:50 2015 -0500
 
     disabled jump key retrieval, causes a server crash.
 
+commit de554ac8cc68ecf3cad0781b086e4cdab776440b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Feb 2 16:22:22 2015 -0500
+
+    fixed Configurable ascend not respected in branch 1.8.0 bug. pinx
+    caught this one.
+    Thanks!
+
 commit 4be0a12aff649ae170d98789ab4f119698858e3c
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Feb 2 16:17:14 2015 -0500
 
     tried to change altitude algorithm, didn't work.
+
+commit a54bf77bd231bd87b12f29acae3a8b01cf05a34f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 31 10:43:39 2015 -0500
+
+    missed the hop-n-pop rotation.
+
+commit d5a16cffbb116ac3b5464689e8e12521e3c6de89
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 31 10:40:52 2015 -0500
+
+    changed parachute rotationYaw to match player rotationYaw.
 
 commit 486e6568219af359a98dc146ab062a75f49c4258
 Author: m1k3s <pbrane0@gmail.com>
@@ -598,6 +983,14 @@ Date:   Sat Jan 31 08:19:03 2015 -0500
     ItemParachute.onDeploy. Renamed
     getHopAndPopDamageAmount to getParachuteDamageAmount. Removed stale
     imports.
+
+commit f7f56fa415e076297c413629f48ca2ab251c5a2d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 30 19:02:38 2015 -0500
+
+    merged some parachute-ng features into this version of the parachute
+    mod.
+    removed the fall event code and class.
 
 commit b6f03a017317e1091e99dce86a1239733bd5a185
 Author: m1k3s <pbrane0@gmail.com>
@@ -627,6 +1020,12 @@ Date:   Tue Jan 27 18:04:31 2015 -0500
 
     minor change to rendering stuff
 
+commit 2fff41ad8be26faafc9d99153b6f90bd2063bdac
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 26 16:39:43 2015 -0500
+
+    removed the dropParachute method, it isn't doing anything.
+
 commit cc0fe4b50b6cf0a367aaf1ab4a21264799936de3
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Jan 26 16:37:35 2015 -0500
@@ -645,6 +1044,16 @@ Date:   Sun Jan 25 17:37:06 2015 -0500
 
     removed stale imports and commented code.
 
+commit 95619719ee0686c30fa9836ab06ce688653eee7c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 17:26:02 2015 -0500
+
+    changed the ascend key from hardwired Keyboard.KEY_SPACE to grabbing
+    the 'jump'
+    key from the gamesettings config. The user can change the jump key
+    and the
+    parachute will use that key to ascend.
+
 commit 82035b6adf68b888dcfd22f08d704dd1e85d8cac
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Jan 25 16:25:40 2015 -0500
@@ -662,11 +1071,32 @@ Date:   Sun Jan 25 15:10:42 2015 -0500
     minor changes to make the offset value a final in the common proxy
     file.
 
+commit 958c5e06f62cce5914c24f86285368f64018b369
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 12:11:25 2015 -0500
+
+    corrected the build.gradle file.
+
+commit 9443337c8c2d876c84c75df9a39aeb46a6fed107
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 12:06:15 2015 -0500
+
+    added color-coding to the altitude display. white for the altitude
+    string, red for
+    altitude between 0 & 8, green above 8, yellow below sea level.
+
 commit 9eeb14cd959d4d400c265849bb224d0d34093513
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Jan 25 12:05:28 2015 -0500
 
     removed commented code from dropParachute.
+
+commit d2d43b119212b1d88d99634d7c446a2ed5c906e6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 25 12:03:48 2015 -0500
+
+    Fixed a dismount bug, stupidly included the mounting code from
+    Entity.mountEntity.
 
 commit 693d0d77a7269aa0fbfcd440f0f6d185eb0f6741
 Author: m1k3s <pbrane0@gmail.com>
@@ -695,6 +1125,12 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Sat Jan 24 19:51:06 2015 -0500
 
     minor code changes for readability.
+
+commit 46cb31a7256ddee5ff074d1dd6de022bcf2e03ee
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 24 17:09:54 2015 -0500
+
+    Adjusted the contrails back to the rear edge of the parachute.
 
 commit 365236fae2f652e379fb3e711805554ddbc1d00a
 Author: m1k3s <pbrane0@gmail.com>
@@ -738,6 +1174,12 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Fri Jan 23 09:58:32 2015 -0500
 
     removed stale imports
+
+commit dfda71eefbffa562a335a347610c723d1125fb4c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 23 09:46:01 2015 -0500
+
+    added local build.gradle
 
 commit b0544eb38bd13681b1105544f5213cc3785ec761
 Author: m1k3s <pbrane0@gmail.com>
