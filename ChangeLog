@@ -1,3 +1,9 @@
+commit acfd08b9d3376f0e37f3297a1a54485a68aee6f8
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Feb 17 07:52:22 2016 -0500
+
+    added Chinese lang file. code clean up.
+
 commit 9c26c385fcfd83d36980f4d8ca22eee36a05dd27
 Merge: 344b37e 0279498
 Author: Michael Sheppard <pbrane0@gmail.com>

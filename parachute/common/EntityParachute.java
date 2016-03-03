@@ -96,7 +96,7 @@ public class EntityParachute extends Entity {
     }
 
     public void dismountParachute() {
-        if (riddenByEntity != null) {
+        if (!worldObj.isRemote && riddenByEntity != null) {
             riddenByEntity.mountEntity(this);
             killParachute();
         }
@@ -124,16 +124,6 @@ public class EntityParachute extends Entity {
         return getEntityBoundingBox();
     }
 
-    //
-    // FIXME: Unfortunately this stopped working around 1.6.x
-    // movement packets are not sent to the server if the 'shouldRiderSit' method
-    // returns false. We need for the 'shouldRiderSit' method to return true in
-    // order to send packets, we need for it to return false for player to not
-    // be in the sitting position on the parachute.
-    //
-    // Fixed as of 1.8.9 forge 1740 but doesn't render correctly with
-    // Optifine_1.8.9_HD_U_H3 as of 02/13/2016.
-    //
     // skydiver should 'hang' when on the parachute and then
     // 'pick up legs' when landing.
     @Override
