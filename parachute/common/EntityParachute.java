@@ -96,7 +96,7 @@ public class EntityParachute extends Entity {
     }
 
     public void dismountParachute() {
-        if (riddenByEntity != null) {
+        if (!worldObj.isRemote && riddenByEntity != null) {
             riddenByEntity.mountEntity(this);
             killParachute();
         }
