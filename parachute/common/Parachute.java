@@ -22,7 +22,7 @@ package com.parachute.common;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,14 +41,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Parachute {
 
 	public static final String modid = "parachutemod";
-	public static final String modversion = "1.2.2";
-	public static final String mcversion = "1.8.9";
+	public static final String modversion = "1.4.0";
+	public static final String mcversion = "1.9";
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
-	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new ChatComponentTranslation("stat.parachuteDeployed"));
-	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new ChatComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
+	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
+	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
     public static Achievement buildParachute;
-	public static int minimumForgeBuildVersion = 1740;
+	public static int minimumForgeBuildVersion = 1766;
 
 	@SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
 	public static ParachuteCommonProxy proxy;

@@ -57,8 +57,8 @@ public class RenderParachute extends Render<EntityParachute>
 			return;
 		}
 		modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-		if (entityparachute.riddenByEntity != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
-			EntityPlayer rider = (EntityPlayer) entityparachute.riddenByEntity;
+		if (entityparachute.getControllingPassenger() != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
+			EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
 			renderParachuteCords(rider, partialTicks);
 		}
 

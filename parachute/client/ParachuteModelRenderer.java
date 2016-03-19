@@ -23,7 +23,7 @@ import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 
 import org.lwjgl.opengl.GL11;
 
@@ -218,11 +218,12 @@ public class ParachuteModelRenderer
 	{
 		displayList = GLAllocation.generateDisplayLists(1);
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
-		WorldRenderer wRenderer = Tessellator.getInstance().getWorldRenderer();
+		VertexBuffer vertexBuffer = Tessellator.getInstance().getBuffer();
 
 		for (ParachuteTexturedQuad face : faces) {
-			face.draw(wRenderer, scale);
+			face.draw(vertexBuffer, scale);
 		}
+
 
 		GL11.glEndList();
 		compiled = true;

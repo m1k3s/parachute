@@ -26,7 +26,8 @@ import net.minecraft.client.Minecraft;
 //import net.minecraft.client.renderer.ItemModelMesher;
 //import net.minecraft.client.renderer.entity.Render;
 //import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+//import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 //import net.minecraft.entity.Entity;
 //import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.client.model.ModelLoader;
@@ -51,8 +52,8 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 //				return new RenderParachute(manager);
 //			}
 //		});
-		ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName));
+		ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName));
 		info(Parachute.modid + " CombinedClient preInit is complete.");
 	}
 

@@ -27,12 +27,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -57,6 +57,7 @@ public class EntityParachute extends Entity {
     final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
     private static boolean ascendMode;
+    Entity skyDiver;
 
     public EntityParachute(World world) {
         super(world);
@@ -76,6 +77,8 @@ public class EntityParachute extends Entity {
         setSize(1.5f, 0.0625f);
         motionFactor = 0.07;
         ascendMode = false;
+
+        skyDiver = getControllingPassenger();
     }
 
     public EntityParachute(World world, double x, double y, double z) {
@@ -96,8 +99,8 @@ public class EntityParachute extends Entity {
     }
 
     public void dismountParachute() {
-        if (!worldObj.isRemote && riddenByEntity != null) {
-            riddenByEntity.mountEntity(this);
+        if (!worldObj.isRemote && skyDiver != null) {
+            skyDiver.startRiding(this);
             killParachute();
         }
     }
@@ -113,10 +116,10 @@ public class EntityParachute extends Entity {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        if (entity != riddenByEntity && entity.ridingEntity != this) {
+//        if (entity != skyDiver && entity.ridingEntity != this) {
             return entity.getEntityBoundingBox();
-        }
-        return null;
+//        }
+//        return null;
     }
 
     @Override
@@ -129,8 +132,8 @@ public class EntityParachute extends Entity {
     @Override
     public boolean shouldRiderSit() {
         boolean sitting = false;
-        if (riddenByEntity != null) {
-            BlockPos bp = new BlockPos(riddenByEntity.posX, riddenByEntity.getEntityBoundingBox().minY - 3.0, riddenByEntity.posZ);
+        if (skyDiver != null) {
+            BlockPos bp = new BlockPos(skyDiver.posX, skyDiver.getEntityBoundingBox().minY - 3.0, skyDiver.posZ);
             sitting = (worldObj.getBlockState(bp).getBlock() != Blocks.air);
         }
         return sitting;
@@ -181,7 +184,7 @@ public class EntityParachute extends Entity {
 
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
-        if (riddenByEntity == null && !worldObj.isRemote) { // server side
+        if (skyDiver == null && !worldObj.isRemote) { // server side
             killParachute();
             return;
         }
@@ -198,9 +201,9 @@ public class EntityParachute extends Entity {
         prevPosZ = posZ;
 
         // drop the chute when close to ground if enabled
-        if (autoDismount && riddenByEntity != null) {
-            double pilotFeetPos = riddenByEntity.getEntityBoundingBox().minY;
-            BlockPos bp = new BlockPos(riddenByEntity.posX, pilotFeetPos - 1.0, riddenByEntity.posZ);
+        if (autoDismount && skyDiver != null) {
+            double pilotFeetPos = skyDiver.getEntityBoundingBox().minY;
+            BlockPos bp = new BlockPos(skyDiver.posX, pilotFeetPos - 1.0, skyDiver.posZ);
             if (checkForGroundProximity(bp)) {
                 dismountParachute();
                 return;
@@ -209,8 +212,8 @@ public class EntityParachute extends Entity {
 
         // update forward velocity for 'W' key press
         // moveForward is > 0.0 when the 'W' key is pressed. Value is either 0.0 | ~0.98
-        if (riddenByEntity != null && riddenByEntity instanceof EntityLivingBase) {
-            EntityLivingBase pilot = (EntityLivingBase) riddenByEntity;
+        if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
+            EntityLivingBase pilot = (EntityLivingBase) skyDiver;
             double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
             motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
             motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
@@ -279,21 +282,21 @@ public class EntityParachute extends Entity {
         }
 
         // something bad happened, somehow the skydiver was killed.
-        if (!worldObj.isRemote && riddenByEntity != null && riddenByEntity.isDead) { // server side
+        if (!worldObj.isRemote && skyDiver != null && skyDiver.isDead) { // server side
             killParachute();
         }
 
         // update distance by parachute statistics
-        if (riddenByEntity != null) {
+        if (skyDiver != null) {
             double dX = posX - prevPosX;
             double dZ = posZ - prevPosZ;
             int distance = Math.round(MathHelper.sqrt_double(dX * dX + dZ * dZ) * 100.0F);
-            ((EntityPlayer) riddenByEntity).addStat(Parachute.parachuteDistance, distance);
+            ((EntityPlayer) skyDiver).addStat(Parachute.parachuteDistance, distance);
         }
     }
 
     public void killParachute() {
-        riddenByEntity = null;
+        skyDiver = null;
         ParachuteCommonProxy.setDeployed(false);
         setDead();
     }
@@ -303,8 +306,8 @@ public class EntityParachute extends Entity {
     public boolean isBadWeather() {
         BlockPos bp = new BlockPos(posX, posY, posZ);
         Chunk chunk = worldObj.getChunkFromBlockCoords(bp);
-        boolean canSnow = chunk.getBiome(bp, worldObj.getWorldChunkManager()).getEnableSnow();
-        boolean canRain = chunk.getBiome(bp, worldObj.getWorldChunkManager()).getIntRainfall() > 0;
+        boolean canSnow = chunk.getBiome(bp, worldObj.provider.getBiomeProvider()).getEnableSnow();
+        boolean canRain = chunk.getBiome(bp, worldObj.provider.getBiomeProvider()).getRainfall() > 0;
         return (canRain || canSnow) && (worldObj.isRaining() || worldObj.isThundering());
     }
 
@@ -356,10 +359,10 @@ public class EntityParachute extends Entity {
     }
 
     public boolean isLavaBelowInRange(BlockPos bp) {
-        Vec3 v1 = new Vec3(posX, posY, posZ);
-        Vec3 v2 = new Vec3(bp.getX(), bp.getY(), bp.getZ());
-        MovingObjectPosition mop = worldObj.rayTraceBlocks(v1, v2, true);
-        if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+        Vec3d v1 = new Vec3d(posX, posY, posZ);
+        Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
+        RayTraceResult mop = worldObj.rayTraceBlocks(v1, v2, true);
+        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
             BlockPos blockpos = mop.getBlockPos();
             if (isLavaAt(blockpos)) {
                 return true;
@@ -458,12 +461,12 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void updateRiderPosition() {
-        if (riddenByEntity != null) {
+    public void updatePassenger(Entity skydiver) {
+        if (skydiver != null) {
             double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
-            double y = posY + getMountedYOffset() + riddenByEntity.getYOffset();
+            double y = posY + getMountedYOffset() + skydiver.getYOffset();
             double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
-            riddenByEntity.setPosition(x, y, z);
+            skydiver.setPosition(x, y, z);
         }
     }
 

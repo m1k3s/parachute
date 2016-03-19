@@ -19,6 +19,7 @@
 //
 package com.parachute.common;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
@@ -28,7 +29,7 @@ import net.minecraft.item.ItemArmor;
 // on the player when the parachute item is selected in the hot bar.
 public class ItemParachutePack extends ItemArmor {
 
-	public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, int armorType)
+	public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType)
 	{
 		super(armorMaterial, renderIndex, armorType);
 		setMaxDamage(armorMaterial.getDurability(armorType));
@@ -36,7 +37,7 @@ public class ItemParachutePack extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, String type)
+	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type)
 	{
 		if (itemstack.getItem() == Parachute.packItem) {
 			return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";

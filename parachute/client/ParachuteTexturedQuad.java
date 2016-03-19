@@ -21,9 +21,9 @@ package com.parachute.client;
 
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 public class ParachuteTexturedQuad {
@@ -58,20 +58,20 @@ public class ParachuteTexturedQuad {
 		vertexPositions = texCoords;
 	}
 
-	public void draw(WorldRenderer worldrenderer, float scale)
+	public void draw(VertexBuffer vertexBuffer, float scale)
 	{
-		Vec3 vec3 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[0].vector3D);
-		Vec3 vec31 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[2].vector3D);
-		Vec3 vec32 = vec31.crossProduct(vec3).normalize();
+		Vec3d vec3 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[0].vector3D);
+		Vec3d vec31 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[2].vector3D);
+		Vec3d vec32 = vec31.crossProduct(vec3).normalize();
 
 		float x = (float)vec32.xCoord;
         float y = (float)vec32.yCoord;
         float z = (float)vec32.zCoord;
 
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
+        vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
 		for (int i = 0; i < 4; ++i) {
 			PositionTextureVertex positiontexturevertex = this.vertexPositions[i];
-			worldrenderer.pos(positiontexturevertex.vector3D.xCoord * (double)scale,
+			vertexBuffer.pos(positiontexturevertex.vector3D.xCoord * (double)scale,
 				positiontexturevertex.vector3D.yCoord * (double)scale,
 				positiontexturevertex.vector3D.zCoord * (double)scale).tex((double)positiontexturevertex.texturePositionX,
 				(double)positiontexturevertex.texturePositionY).normal(x, y, z).endVertex();
