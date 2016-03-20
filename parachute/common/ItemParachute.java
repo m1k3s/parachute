@@ -28,6 +28,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
 
@@ -62,8 +63,8 @@ public class ItemParachute extends Item {
         chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
         float volume = 1.0F;
 //        chute.playSound(openChute, volume, pitch());
-//        BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
-//        world.playSound(entityplayer, position, SoundEvents.block_cloth_place, SoundCategory.MASTER, volume, pitch());
+        BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
+        world.playSound(entityplayer, position, SoundEvents.block_cloth_place, SoundCategory.MASTER, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
@@ -89,8 +90,8 @@ public class ItemParachute extends Item {
     {
         if (!world.isRemote) { // server side
             active = !active;
-//            BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
-            world.playSound(entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, pitch(), false);
+            BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
+            world.playSound(entityplayer, position, SoundEvents.block_comparator_click, SoundCategory.MASTER, 1.0f, pitch());
             itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
             ConfigHandler.setAADState(active);
         }

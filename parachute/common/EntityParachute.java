@@ -60,7 +60,6 @@ public class EntityParachute extends Entity {
     final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
     private static boolean ascendMode;
-//    Entity skyDiver;
 
     public EntityParachute(World world) {
         super(world);
@@ -80,8 +79,6 @@ public class EntityParachute extends Entity {
         setSize(1.5f, 0.0625f);
         motionFactor = 0.07;
         ascendMode = false;
-
-//        skyDiver = getControllingPassenger();
     }
 
     public EntityParachute(World world, double x, double y, double z) {
@@ -120,10 +117,10 @@ public class EntityParachute extends Entity {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-//        if (entity != skyDiver && entity.ridingEntity != this) {
+        if (entity != getControllingPassenger() && entity.getRidingEntity() != this) {
             return entity.getEntityBoundingBox();
-//        }
-//        return null;
+        }
+        return null;
     }
 
     @Override
