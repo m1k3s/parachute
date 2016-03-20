@@ -27,6 +27,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
@@ -35,6 +36,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
+import java.util.List;
 
 public class EntityParachute extends Entity {
 
@@ -57,7 +60,7 @@ public class EntityParachute extends Entity {
     final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
     private static boolean ascendMode;
-    Entity skyDiver;
+//    Entity skyDiver;
 
     public EntityParachute(World world) {
         super(world);
@@ -78,7 +81,7 @@ public class EntityParachute extends Entity {
         motionFactor = 0.07;
         ascendMode = false;
 
-        skyDiver = getControllingPassenger();
+//        skyDiver = getControllingPassenger();
     }
 
     public EntityParachute(World world, double x, double y, double z) {
@@ -99,6 +102,7 @@ public class EntityParachute extends Entity {
     }
 
     public void dismountParachute() {
+        Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
             skyDiver.startRiding(this);
             killParachute();
@@ -131,12 +135,32 @@ public class EntityParachute extends Entity {
     // 'pick up legs' when landing.
     @Override
     public boolean shouldRiderSit() {
+        Entity skyDiver = getControllingPassenger();
         boolean sitting = false;
         if (skyDiver != null) {
             BlockPos bp = new BlockPos(skyDiver.posX, skyDiver.getEntityBoundingBox().minY - 3.0, skyDiver.posZ);
             sitting = (worldObj.getBlockState(bp).getBlock() != Blocks.air);
         }
         return sitting;
+    }
+
+    @Override
+    public EnumFacing getAdjustedHorizontalFacing()
+    {
+        return getHorizontalFacing().rotateY();
+    }
+
+    @Override
+    public boolean canPassengerSteer()
+    {
+        return true;
+    }
+
+    @Override
+    public Entity getControllingPassenger()
+    {
+        List<Entity> list = getPassengers();
+        return list.isEmpty() ? null : list.get(0);
     }
 
     @Override
@@ -180,6 +204,7 @@ public class EntityParachute extends Entity {
 
     @Override
     public void onUpdate() {
+        Entity skyDiver = getControllingPassenger();
         super.onUpdate();
 
         // the player has pressed LSHIFT or been killed,
@@ -247,7 +272,7 @@ public class EntityParachute extends Entity {
         // move the parachute with the motion equations applied
         moveEntity(motionX, motionY, motionZ);
 
-        // apply drag
+        // apply momentum
         motionX *= 0.99D;
         motionY *= 0.95D;
         motionZ *= 0.99D;
@@ -291,12 +316,16 @@ public class EntityParachute extends Entity {
             double dX = posX - prevPosX;
             double dZ = posZ - prevPosZ;
             int distance = Math.round(MathHelper.sqrt_double(dX * dX + dZ * dZ) * 100.0F);
-            ((EntityPlayer) skyDiver).addStat(Parachute.parachuteDistance, distance);
+            if (skyDiver instanceof EntityPlayer) {
+                ((EntityPlayer) skyDiver).addStat(Parachute.parachuteDistance, distance);
+            }
         }
     }
 
     public void killParachute() {
-        skyDiver = null;
+//        Entity skyDiver = getControllingPassenger();
+//        removePassenger(skyDiver);
+//        skyDiver = null;
         ParachuteCommonProxy.setDeployed(false);
         setDead();
     }

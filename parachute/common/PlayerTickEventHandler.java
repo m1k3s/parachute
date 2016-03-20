@@ -19,6 +19,7 @@
 //
 package com.parachute.common;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,20 +44,23 @@ public class PlayerTickEventHandler {
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
-            ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorSlot);
-            ItemStack heldItem = player.getActiveItemStack();
+            ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
+            ItemStack heldItem = player.getHeldItemMainhand();
             boolean deployed = ParachuteCommonProxy.onParachute(player);
             if (armor != null && heldItem == null) { // parachute item has been removed from slot in the hot bar
                 if (!deployed && armor.getItem() instanceof ItemParachutePack) {
-                    player.inventory.armorInventory[2] = null;
+//                    Parachute.proxy.info("togglePlayerParachutePack: item has been removed from slot");
+                    player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
             } else if (armor != null) { // player has selected another slot in the hot bar
                 if (!deployed && armor.getItem() instanceof ItemParachutePack && !(heldItem.getItem() instanceof ItemParachute)) {
-                    player.inventory.armorInventory[2] = null;
+//                    Parachute.proxy.info("togglePlayerParachutePack: another item selected");
+                    player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
             } else { // player has selected the parachute in the hot bar
                 if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
-                    player.inventory.armorInventory[2] = new ItemStack(Parachute.packItem);
+//                    Parachute.proxy.info("togglePlayerParachutePack: parachute item is selected");
+                    player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
                 }
             }
         }

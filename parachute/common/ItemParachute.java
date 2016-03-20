@@ -21,21 +21,20 @@ package com.parachute.common;
 
 import com.parachute.client.RenderParachute;
 import net.minecraft.creativetab.CreativeTabs;
-//import net.minecraft.enchantment.Enchantment;
-//import net.minecraft.enchantment.EnchantmentHelper;
-//import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
 
 public class ItemParachute extends Item {
 
     private static boolean active;
+//    private static SoundEvent openChute = new SoundEvent(new ResourceLocation(Parachute.modid.toLowerCase() + ":chuteopen"));
 
     public ItemParachute(ToolMaterial toolmaterial) {
         super();
@@ -56,24 +55,15 @@ public class ItemParachute extends Item {
         return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
     }
 
-//    @Override
-//    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-//        // only deploy if entityplayer exists and if player is falling and not already on a parachute.
-//        if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
-//            deployParachute(world, entityplayer);
-//        } else { // toggle the AAD state
-//            toggleAAD(itemstack, world, entityplayer);
-//        }
-//        return itemstack;
-//    }
-
     public void deployParachute(World world, EntityPlayer entityplayer) {
         double offset = ParachuteCommonProxy.getOffsetY();
 
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
         float volume = 1.0F;
-        chute.playSound(getOpenSound(), volume, pitch());
+//        chute.playSound(openChute, volume, pitch());
+//        BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
+//        world.playSound(entityplayer, position, SoundEvents.block_cloth_place, SoundCategory.MASTER, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
@@ -84,10 +74,10 @@ public class ItemParachute extends Item {
         ParachuteCommonProxy.setDeployed(true);
         entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
-        ItemStack itemstack = entityplayer.getHeldItem(EnumHand.MAIN_HAND);
+        ItemStack itemstack = entityplayer.getHeldItemMainhand();
         if (itemstack != null) {
-//            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByID(EnumEnchantmentType.BREAKABLE), itemstack) > 0;
-            if (!entityplayer.capabilities.isCreativeMode/* || !enchanted*/) {
+            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
+            if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(), entityplayer);
             }
         }
@@ -99,8 +89,8 @@ public class ItemParachute extends Item {
     {
         if (!world.isRemote) { // server side
             active = !active;
-            BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
-            world.playSound(entityplayer, position, SoundEvents.ui_button_click, SoundCategory.PLAYERS, 1.0f, 1.0f / itemRand.nextFloat() * 0.4f + 0.8f);
+//            BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
+            world.playSound(entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, pitch(), false);
             itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
             ConfigHandler.setAADState(active);
         }
@@ -113,11 +103,6 @@ public class ItemParachute extends Item {
     @Override
     public boolean getIsRepairable(ItemStack itemstack1, ItemStack itemstack2) {
         return Items.string == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
-    }
-
-    protected SoundEvent getOpenSound()
-    {
-        return new SoundEvent(new ResourceLocation("parachutemod:chuteopen"));
     }
 
 }

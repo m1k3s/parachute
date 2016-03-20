@@ -40,13 +40,11 @@ import org.apache.logging.log4j.Logger;
 public class ParachuteCommonProxy {
 
 	private static final Logger logger = LogManager.getLogger(Parachute.modid);
-    private static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST; // armor type: 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
-	public static final EntityEquipmentSlot armorSlot = EntityEquipmentSlot.CHEST;  // armor slot: 3 = helmet, 2 = chestplate, 1 = leggings, 0 = boots
+    public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST; // type: ARMOR, index: 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
 	public static final String parachuteName = "parachute";
 	public static final String packName = "pack";
 	private static boolean deployed = false;
 	private static final double offsetY = 2.5;
-//	private static int entityID = 1;
 
 	public void preInit()
 	{
