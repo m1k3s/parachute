@@ -75,12 +75,8 @@ public class ItemParachute extends Item {
         ParachuteCommonProxy.setDeployed(true);
         entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
-//        ItemStack itemstack = entityplayer.getHeldItemMainhand();
-//        if (itemstack == null) {
-//            itemstack = entityplayer.getHeldItemOffhand();
-//        }
         ItemStack itemstack = null;
-        Iterable<ItemStack>heldEquipment = entityplayer.getHeldEquipment();
+        Iterable<ItemStack> heldEquipment = entityplayer.getHeldEquipment();
         for (ItemStack itemStack : heldEquipment) {
             if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
                 itemstack = itemStack;

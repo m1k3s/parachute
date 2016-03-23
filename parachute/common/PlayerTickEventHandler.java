@@ -42,35 +42,32 @@ public class PlayerTickEventHandler {
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
-            ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
-            ItemStack heldItem = null;
-            Iterable<ItemStack>heldEquipment = player.getHeldEquipment();
-            for (ItemStack itemStack : heldEquipment) {
-                if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
-                    heldItem = itemStack;
-                }
+            ItemStack heldItemOffhand = player.getHeldItemOffhand(); // offhand needs to be handled separately 
+            if (heldItemOffhand != null && heldItemOffhand.getItem() instanceof ItemParachute) {
+//                Parachute.proxy.info("togglePlayerParachutePack: parachute item is selected on offhand");
+                player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
+                return;
             }
-//            ItemStack heldItem = player.getHeldItemMainhand();
-//            if (heldItem == null || !(heldItem.getItem() instanceof ItemParachute)) {
-//                heldItem = player.getHeldItemOffhand();
-//            }
+            ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
+            ItemStack heldItemMainhand = player.getHeldItemMainhand();
             boolean deployed = ParachuteCommonProxy.onParachute(player);
-            if (armor != null && (heldItem == null || !(heldItem.getItem() instanceof ItemParachute))) { // parachute item has been removed from slot in the hot bar
+            if (armor != null && heldItemMainhand == null) { // parachute item has been removed from slot in the hot bar
                 if (!deployed && armor.getItem() instanceof ItemParachutePack) {
 //                    Parachute.proxy.info("togglePlayerParachutePack: item has been removed from slot");
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
             } else if (armor != null) { // player has selected another slot in the hot bar
-                if (!deployed && armor.getItem() instanceof ItemParachutePack && !(heldItem.getItem() instanceof ItemParachute)) {
+                if (!deployed && armor.getItem() instanceof ItemParachutePack && !(heldItemMainhand.getItem() instanceof ItemParachute)) {
 //                    Parachute.proxy.info("togglePlayerParachutePack: another item selected");
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
-            } else { // player has selected the parachute in the hot bar
-                if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
-//                    Parachute.proxy.info("togglePlayerParachutePack: parachute item is selected");
+            } else {
+                if (heldItemMainhand != null && heldItemMainhand.getItem() instanceof ItemParachute) {
+//                    Parachute.proxy.info("togglePlayerParachutePack: parachute item is selected on mainhand");
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
                 }
             }
+
         }
     }
 
@@ -81,16 +78,12 @@ public class PlayerTickEventHandler {
     private void autoActivateDevice(EntityPlayer player) {
         if (ConfigHandler.getIsAADActive() && !ParachuteCommonProxy.onParachute(player)) {
             ItemStack heldItem = null;
-            Iterable<ItemStack>heldEquipment = player.getHeldEquipment();
+            Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {
                 if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
                     heldItem = itemStack;
                 }
             }
-//            ItemStack heldItem = player.getHeldItemMainhand();
-//            if (heldItem == null || !(heldItem.getItem() instanceof ItemParachute)) {
-//                heldItem = player.getHeldItemOffhand();
-//            }
             if (ConfigHandler.getAADImmediate() && ParachuteCommonProxy.canActivateAADImmediate(player)) {
                 if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
                     ((ItemParachute) heldItem.getItem()).deployParachute(player.worldObj, player);
