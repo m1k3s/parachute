@@ -142,5 +142,5 @@ public class ParachuteCommonProxy {
 	{
 		return offsetY;
 	}
-	
+
 }

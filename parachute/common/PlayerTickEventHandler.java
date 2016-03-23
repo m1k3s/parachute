@@ -19,7 +19,6 @@
 //
 package com.parachute.common;
 
-import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -44,9 +43,19 @@ public class PlayerTickEventHandler {
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
             ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
-            ItemStack heldItem = player.getHeldItemMainhand();
+            ItemStack heldItem = null;
+            Iterable<ItemStack>heldEquipment = player.getHeldEquipment();
+            for (ItemStack itemStack : heldEquipment) {
+                if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
+                    heldItem = itemStack;
+                }
+            }
+//            ItemStack heldItem = player.getHeldItemMainhand();
+//            if (heldItem == null || !(heldItem.getItem() instanceof ItemParachute)) {
+//                heldItem = player.getHeldItemOffhand();
+//            }
             boolean deployed = ParachuteCommonProxy.onParachute(player);
-            if (armor != null && heldItem == null) { // parachute item has been removed from slot in the hot bar
+            if (armor != null && (heldItem == null || !(heldItem.getItem() instanceof ItemParachute))) { // parachute item has been removed from slot in the hot bar
                 if (!deployed && armor.getItem() instanceof ItemParachutePack) {
 //                    Parachute.proxy.info("togglePlayerParachutePack: item has been removed from slot");
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
@@ -71,7 +80,17 @@ public class PlayerTickEventHandler {
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
         if (ConfigHandler.getIsAADActive() && !ParachuteCommonProxy.onParachute(player)) {
-            ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
+            ItemStack heldItem = null;
+            Iterable<ItemStack>heldEquipment = player.getHeldEquipment();
+            for (ItemStack itemStack : heldEquipment) {
+                if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
+                    heldItem = itemStack;
+                }
+            }
+//            ItemStack heldItem = player.getHeldItemMainhand();
+//            if (heldItem == null || !(heldItem.getItem() instanceof ItemParachute)) {
+//                heldItem = player.getHeldItemOffhand();
+//            }
             if (ConfigHandler.getAADImmediate() && ParachuteCommonProxy.canActivateAADImmediate(player)) {
                 if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
                     ((ItemParachute) heldItem.getItem()).deployParachute(player.worldObj, player);

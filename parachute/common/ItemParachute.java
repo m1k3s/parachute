@@ -75,7 +75,17 @@ public class ItemParachute extends Item {
         ParachuteCommonProxy.setDeployed(true);
         entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
-        ItemStack itemstack = entityplayer.getHeldItemMainhand();
+//        ItemStack itemstack = entityplayer.getHeldItemMainhand();
+//        if (itemstack == null) {
+//            itemstack = entityplayer.getHeldItemOffhand();
+//        }
+        ItemStack itemstack = null;
+        Iterable<ItemStack>heldEquipment = entityplayer.getHeldEquipment();
+        for (ItemStack itemStack : heldEquipment) {
+            if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
+                itemstack = itemStack;
+            }
+        }
         if (itemstack != null) {
             boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
             if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
