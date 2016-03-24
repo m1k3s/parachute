@@ -42,7 +42,7 @@ public class PlayerTickEventHandler {
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
-            ItemStack heldItemOffhand = player.getHeldItemOffhand(); // offhand needs to be handled separately 
+            ItemStack heldItemOffhand = player.getHeldItemOffhand(); // offhand needs to be handled separately
             if (heldItemOffhand != null && heldItemOffhand.getItem() instanceof ItemParachute) {
 //                Parachute.proxy.info("togglePlayerParachutePack: parachute item is selected on offhand");
                 player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
