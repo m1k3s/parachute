@@ -42,13 +42,13 @@ public class PlayerTickEventHandler {
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
+            ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
             ItemStack heldItemOffhand = player.getHeldItemOffhand(); // offhand needs to be handled separately
-            if (heldItemOffhand != null && heldItemOffhand.getItem() instanceof ItemParachute) {
+            if (armor == null && heldItemOffhand != null && heldItemOffhand.getItem() instanceof ItemParachute) {
 //                Parachute.proxy.info("togglePlayerParachutePack: parachute item is selected on offhand");
                 player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
                 return;
             }
-            ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
             boolean deployed = ParachuteCommonProxy.onParachute(player);
             if (armor != null && heldItemMainhand == null) { // parachute item has been removed from slot in the hot bar
@@ -56,7 +56,7 @@ public class PlayerTickEventHandler {
 //                    Parachute.proxy.info("togglePlayerParachutePack: item has been removed from slot");
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
-            } else if (armor != null) { // player has selected another slot in the hot bar
+            } else if (armor != null) { // player has selected another slot in the hot bar || regular armor is present
                 if (!deployed && armor.getItem() instanceof ItemParachutePack && !(heldItemMainhand.getItem() instanceof ItemParachute)) {
 //                    Parachute.proxy.info("togglePlayerParachutePack: another item selected");
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;

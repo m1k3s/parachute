@@ -96,10 +96,12 @@ public class ItemParachute extends Item {
     {
         if (!world.isRemote) { // server side
             active = !active;
-            BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
-            world.playSound(entityplayer, position, SoundEvents.block_comparator_click, SoundCategory.MASTER, 1.0f, pitch());
-            itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
-            ConfigHandler.setAADState(active);
+            if (entityplayer != null) {
+                BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
+                world.playSound(entityplayer, position, SoundEvents.block_comparator_click, SoundCategory.MASTER, 1.0f, pitch());
+                itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
+                ConfigHandler.setAADState(active);
+            }
         }
     }
 
