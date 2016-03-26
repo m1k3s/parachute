@@ -1,6 +1,9 @@
 item.parachute.name=Fallschirm
 item.pack.name=Paket
 
+aad.active=Fallschirm|AAD
+aad.inactive=Fallschirm
+
 stat.parachuteDeployed=Fallschirm eingesetzt
 stat.parachuteDeployed.desc=So oft hast du einen Fallschirm eingesetzt
 stat.parachuteDistance=Distanz mit Fallschirm

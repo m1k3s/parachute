@@ -29,6 +29,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
 
@@ -99,7 +100,7 @@ public class ItemParachute extends Item {
             if (entityplayer != null) {
                 BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
                 world.playSound(entityplayer, position, SoundEvents.block_comparator_click, SoundCategory.MASTER, 1.0f, pitch());
-                itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
+                itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
                 ConfigHandler.setAADState(active);
             }
         }
