@@ -40,8 +40,7 @@ public class AscendKeyPressMessage implements IMessage {
 		this.keyPressed = keyPressed;
 	}
 
-	// the server does not respond with any messages so this isn't
-	// being used; I included the method body for future possibilities.
+	// the server does not respond with any messages so this isn't being used;
 	@Override
 	public void fromBytes(ByteBuf bb)
 	{

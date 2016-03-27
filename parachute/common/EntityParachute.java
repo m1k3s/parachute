@@ -493,6 +493,8 @@ public class EntityParachute extends Entity {
             double y = posY + getMountedYOffset() + skydiver.getYOffset();
             double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
             skydiver.setPosition(x, y, z);
+            skydiver.setRenderYawOffset(rotationYaw + 90.0f);
+            skydiver.setRotationYawHead(rotationYaw + 90);
         }
     }
 

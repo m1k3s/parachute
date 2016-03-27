@@ -23,13 +23,8 @@ import com.parachute.common.ParachuteCommonProxy;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
-//import net.minecraft.client.renderer.ItemModelMesher;
-//import net.minecraft.client.renderer.entity.Render;
-//import net.minecraft.client.renderer.entity.RenderManager;
-//import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-//import net.minecraft.entity.Entity;
-//import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
@@ -54,7 +49,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 //		});
 		ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName));
 		ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName));
-		info(Parachute.modid + " CombinedClient preInit is complete.");
+		info(Parachute.modid + I18n.format("info.client.preinit"));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -66,16 +61,13 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
 
-//		ItemModelMesher mm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-//		mm.register(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName, "inventory"));
-//		mm.register(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName, "inventory"));
-		info(Parachute.modid + " CombinedClient Init is complete.");
+		info(Parachute.modid + I18n.format("info.client.init"));
 	}
 
 	@Override
 	public void postInit()
 	{
-		info(Parachute.modid + " CombinedClient postInit is complete.");
+		info(Parachute.modid + I18n.format("info.client.postinit"));
 	}
 
 }

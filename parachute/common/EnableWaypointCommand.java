@@ -6,7 +6,6 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-//import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
@@ -54,32 +53,6 @@ public class EnableWaypointCommand extends CommandBase {
             notifyOperators(sender, this, "commands.enablewaypoint.success", (isEnabled ? enabled : disabled));
         }
     }
-
-
-//    @Override
-//    public void execute(ICommandSender sender, String[] args) throws CommandException {
-//        World world = sender.getEntityWorld();
-//        if (!world.isRemote) { // server side
-//            if (args.length == 0) { // display current setting
-//                notifyOperators(sender, this, "commands.enablewaypoint.success", (HudGuiRenderer.getEnableWaypoint() ? enabled : disabled));
-//                return;
-//            }
-//            // otherwise set the state
-//            HudGuiRenderer.enableWaypoint(Boolean.parseBoolean(args[0]));
-//            boolean isEnabled = args[0].equals("true") || args[0].equals("1");
-//            notifyOperators(sender, this, "commands.enablewaypoint.success", (isEnabled ? enabled : disabled));
-//        }
-//    }
-
-//    @Override
-//    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-//        return true;
-//    }
-//
-//    @Override
-//    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-//        return null;
-//    }
 
     @Override
     public boolean isUsernameIndex(String[] args, int index) {

@@ -31,6 +31,12 @@ error.message.running=You are running Forge Mod Loader build version %d
 
 info.message.changes=Configuration changes have been updated for the %s
 info.message.configfail=failed to load or read the config file
+info.client.preinit=:CombinedClient preInit is complete
+info.client.init=:CombinedClient Init is complete
+info.client.postinit=:CombinedClient postInit is complete
+info.server.preinit=:DedicatedServer preInit is complete
+info.server.init=:DedicatedServer Init is complete
+info.server.postinit=:DedicatedServer postInit is complete
 
 config.about.desc=%s Config - Michael Sheppard (crackedEgg) For Minecraft Version %s"
 config.usage.desc=set to true for parachute single use

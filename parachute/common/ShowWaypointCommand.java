@@ -43,24 +43,6 @@ public class ShowWaypointCommand extends CommandBase {
         }
     }
 
-//    @Override
-//    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-//        World world = sender.getEntityWorld();
-//        if (!world.isRemote) { // server side
-//            notifyOperators(sender, this, "commands.showwaypoint.success", HudGuiRenderer.getWaypointString());
-//        }
-//    }
-
-//    @Override
-//    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-//        return true;
-//    }
-//
-//    @Override
-//    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-//        return null;
-//    }
-
     @Override
     public boolean isUsernameIndex(String[] args, int index) {
         return false;
