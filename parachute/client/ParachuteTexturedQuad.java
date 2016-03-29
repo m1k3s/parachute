@@ -28,19 +28,19 @@ import org.lwjgl.opengl.GL11;
 
 public class ParachuteTexturedQuad {
 
-	final private float texSize = 16F;
 	public PositionTextureVertex vertexPositions[];
-	public int nVertices;
+//	public int nVertices;
 
 	public ParachuteTexturedQuad(PositionTextureVertex vertices[])
 	{
 		vertexPositions = vertices;
-		nVertices = vertices.length;
+//		nVertices = vertices.length;
 	}
 
 	public ParachuteTexturedQuad(PositionTextureVertex vertices[], int texU1, int texV1, int texU2, int texV2)
 	{
 		this(vertices);
+		float texSize = 16F;
 		vertices[0] = vertices[0].setTexturePosition((float) texU2 / texSize, (float) texV1 / texSize);
 		vertices[1] = vertices[1].setTexturePosition((float) texU1 / texSize, (float) texV1 / texSize);
 		vertices[2] = vertices[2].setTexturePosition((float) texU1 / texSize, (float) texV2 / texSize);
