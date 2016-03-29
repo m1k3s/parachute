@@ -113,7 +113,7 @@ public class Parachute {
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
-		if (event.modID.equals(Parachute.modid)) {
+		if (event.getModID().equals(Parachute.modid)) {
 			proxy.info(I18n.format("info.message.changes", Parachute.name));
 			ConfigHandler.updateConfigInfo();
 		}

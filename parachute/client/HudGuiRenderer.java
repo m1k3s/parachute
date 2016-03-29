@@ -118,7 +118,7 @@ public class HudGuiRenderer extends Gui {
 		int textY = hudY + 22; // ycoord for text
 		int ledX = 1;
 
-		if (mc.inGameHasFocus && event.type == RenderGameOverlayEvent.ElementType.ALL) {
+		if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
 			if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
 				mc.getTextureManager().bindTexture(hudTexture);
 

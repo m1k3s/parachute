@@ -1,13 +1,13 @@
 package com.parachute.common;
 
 import com.parachute.client.HudGuiRenderer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,8 @@ public class EnableWaypointCommand extends CommandBase {
     public EnableWaypointCommand() {
         aliases = new ArrayList<>();
         aliases.add("enablewaypoint");
-        enabled = LanguageRegistry.instance().getStringLocalization("commands.enablewaypoint.enabled");
-        disabled = LanguageRegistry.instance().getStringLocalization("commands.enablewaypoint.disabled");
+        enabled = I18n.format("commands.enablewaypoint.enabled");
+        disabled = I18n.format("commands.enablewaypoint.disabled");
     }
 
     @Override

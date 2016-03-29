@@ -1,3 +1,8 @@
+
+language.name=English
+language.region=US
+language.code=en_US
+
 item.parachute.name=Parachute
 item.pack.name=Pack
 
