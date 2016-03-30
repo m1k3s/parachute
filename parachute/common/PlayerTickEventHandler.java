@@ -49,6 +49,11 @@ public class PlayerTickEventHandler {
                 player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
                 return;
             }
+            // need this additional test, armor bar flickers when offhand has parachute and
+            // the parachute is not deployed.
+            if (heldItemOffhand != null && heldItemOffhand.getItem() instanceof ItemParachute) {
+                return;
+            }
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
             boolean deployed = ParachuteCommonProxy.onParachute(player);
             if (armor != null && heldItemMainhand == null) { // parachute item has been removed from slot in the hot bar
