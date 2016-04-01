@@ -19,30 +19,52 @@
 //
 package com.parachute.common;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.world.World;
 
 
 // this item is eye candy only. The parachute pack is placed as armor
 // on the player when the parachute item is selected in the hot bar.
 public class ItemParachutePack extends ItemArmor {
 
-	public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType)
-	{
-		super(armorMaterial, renderIndex, armorType);
-		setMaxDamage(armorMaterial.getDurability(armorType));
-		maxStackSize = 1;
-	}
+    public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType) {
+        super(armorMaterial, renderIndex, armorType);
+        setMaxDamage(armorMaterial.getDurability(armorType));
+        maxStackSize = 1;
+    }
 
-	@Override
-	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type)
-	{
-		if (itemstack.getItem() == Parachute.packItem) {
-			return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
-		}
-		return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
-	}
+    // check if the player has tried to remove the parachute pack item from the armor slot
+    // the item is only for display, delete the stack unless the slot is the armor slot
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (stack.getItem() instanceof ItemParachutePack) {
+            if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
+                if (ParachuteCommonProxy.armorType.getIndex() != itemSlot) {
+                    ((EntityPlayer) entityIn).inventory.deleteStack(stack);
+                }
+            }
+        }
+    }
 
+    @Override
+    public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
+        if (itemstack.getItem() == Parachute.packItem) {
+            return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
+        }
+        return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public int getEntityLifespan(ItemStack itemStack, World world) {
+        return 1;
+    }
 }

@@ -72,8 +72,8 @@ public class RenderParachute extends Render<EntityParachute>
 		final float y = 1.5F;
 		final float zOffset = 3.0F;
 		
-		float zl = -zOffset;
-		float b = rider.getBrightness(partialTicks);
+		final float zl = -zOffset;
+		final float b = rider.getBrightness(partialTicks);
 
 		GlStateManager.pushMatrix();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
