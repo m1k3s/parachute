@@ -106,7 +106,7 @@ public class HudGuiRenderer extends Gui {
 
 	@SuppressWarnings("unused")
 	@SubscribeEvent
-	public void onRender(RenderGameOverlayEvent event)
+	public void onRender(RenderGameOverlayEvent.Post event)
 	{
 		if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.thePlayer.onGround) {
 			return;
