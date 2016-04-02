@@ -19,6 +19,7 @@
 //
 package com.parachute.common;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -34,6 +35,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,12 +56,14 @@ public class ParachuteCommonProxy {
 
 		Parachute.parachuteItem = new ItemParachute(ToolMaterial.IRON);
 		Parachute.parachuteItem.setUnlocalizedName(parachuteName);
-		GameRegistry.registerItem(Parachute.parachuteItem, parachuteName);
+		Parachute.parachuteItem.setRegistryName(parachuteName);
+		GameRegistry.register(Parachute.parachuteItem, new ModelResourceLocation(Parachute.modid + ":" + parachuteName));
 
 		final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
 		Parachute.packItem = new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType);
 		Parachute.packItem.setUnlocalizedName(packName);
-		GameRegistry.registerItem(Parachute.packItem, packName);
+		Parachute.packItem.setRegistryName(packName);
+		GameRegistry.register(Parachute.packItem, new ModelResourceLocation(Parachute.modid + ":" + packName));
 
 		PacketHandler.init();
 	}

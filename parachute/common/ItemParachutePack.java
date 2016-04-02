@@ -37,8 +37,10 @@ public class ItemParachutePack extends ItemArmor {
         maxStackSize = 1;
     }
 
-    // check if the player has tried to remove the parachute pack item from the armor slot
-    // the item is only for display, delete the stack unless the slot is the armor slot
+    // if the player has tried to move the parachute pack item to another inventory slot
+    // delete the stack unless the slot is the armor plate slot, the item is only for display
+    // if the pack item is dropped getEntityLifespan takes care of that.
+    // Todo: ideally it would be better if the pack item was not selectable at all.
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (stack.getItem() instanceof ItemParachutePack) {
@@ -63,8 +65,10 @@ public class ItemParachutePack extends ItemArmor {
         return false;
     }
 
+    // kill the dropped item quickly, remember it's only eye candy
     @Override
     public int getEntityLifespan(ItemStack itemStack, World world) {
         return 1;
     }
+
 }

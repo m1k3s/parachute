@@ -20,6 +20,8 @@
 package com.parachute.common;
 
 import com.parachute.client.RenderParachute;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -36,7 +38,7 @@ import net.minecraft.item.Item;
 public class ItemParachute extends Item {
 
     private static boolean active;
-//    private static SoundEvent openChute = new SoundEvent(new ResourceLocation(Parachute.modid.toLowerCase() + ":chuteopen"));
+    private static SoundEvent openChute = new SoundEvent(new ResourceLocation(Parachute.modid.toLowerCase() + ":chuteopen"));
 
     public ItemParachute(ToolMaterial toolmaterial) {
         super();
@@ -65,7 +67,7 @@ public class ItemParachute extends Item {
         float volume = 1.0F;
 //        chute.playSound(openChute, volume, pitch());
         BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
-        world.playSound(entityplayer, position, SoundEvents.block_cloth_place, SoundCategory.MASTER, volume, pitch());
+        world.playSound(entityplayer, position, openChute, SoundCategory.MASTER, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
@@ -98,8 +100,9 @@ public class ItemParachute extends Item {
         if (!world.isRemote) { // server side
             active = !active;
             if (entityplayer != null) {
-                BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
-                world.playSound(entityplayer, position, SoundEvents.block_comparator_click, SoundCategory.MASTER, 1.0f, pitch());
+//                BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
+                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0f));
+//                world.playSound(entityplayer, position, SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, pitch());
                 itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
                 ConfigHandler.setAADState(active);
             }
