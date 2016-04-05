@@ -79,6 +79,7 @@ public class EntityParachute extends Entity {
         setSize(1.5f, 0.0625f);
         motionFactor = 0.07;
         ascendMode = false;
+        setSilent(false);
     }
 
     public EntityParachute(World world, double x, double y, double z) {

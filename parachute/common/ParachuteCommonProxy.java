@@ -35,7 +35,6 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,26 +43,25 @@ public class ParachuteCommonProxy {
 
 	private static final Logger logger = LogManager.getLogger(Parachute.modid);
     public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST; // type: ARMOR, index: 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
-	public static final String parachuteName = "parachute";
-	public static final String packName = "pack";
+	private static final String parachuteName = "parachute";
+	private static final String packName = "pack";
 	private static boolean deployed = false;
 	private static final double offsetY = 2.5;
+
+	protected static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.modid + ":" + parachuteName);
+	protected static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.modid + ":" + packName);
 
 	public void preInit()
 	{
         int entityID = 1;
         EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 20, true);
 
-		Parachute.parachuteItem = new ItemParachute(ToolMaterial.IRON);
-		Parachute.parachuteItem.setUnlocalizedName(parachuteName);
-		Parachute.parachuteItem.setRegistryName(parachuteName);
-		GameRegistry.register(Parachute.parachuteItem, new ModelResourceLocation(Parachute.modid + ":" + parachuteName));
+		Parachute.parachuteItem = new ItemParachute(ToolMaterial.IRON).setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
+		GameRegistry.register(Parachute.parachuteItem);
 
 		final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
-		Parachute.packItem = new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType);
-		Parachute.packItem.setUnlocalizedName(packName);
-		Parachute.packItem.setRegistryName(packName);
-		GameRegistry.register(Parachute.packItem, new ModelResourceLocation(Parachute.modid + ":" + packName));
+		Parachute.packItem = new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType).setUnlocalizedName(packName).setRegistryName(packResource);
+		GameRegistry.register(Parachute.packItem);
 
 		PacketHandler.init();
 	}

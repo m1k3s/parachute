@@ -30,15 +30,14 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
 
+
 public class ItemParachute extends Item {
 
     private static boolean active;
-    private static SoundEvent openChute = new SoundEvent(new ResourceLocation(Parachute.modid.toLowerCase() + ":chuteopen"));
 
     public ItemParachute(ToolMaterial toolmaterial) {
         super();
@@ -65,9 +64,7 @@ public class ItemParachute extends Item {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
         float volume = 1.0F;
-//        chute.playSound(openChute, volume, pitch());
-        BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
-        world.playSound(entityplayer, position, openChute, SoundCategory.MASTER, volume, pitch());
+        chute.playSound(SoundEvents.block_cloth_place, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
@@ -100,9 +97,7 @@ public class ItemParachute extends Item {
         if (!world.isRemote) { // server side
             active = !active;
             if (entityplayer != null) {
-//                BlockPos position = new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ);
                 Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0f));
-//                world.playSound(entityplayer, position, SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, pitch());
                 itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
                 ConfigHandler.setAADState(active);
             }

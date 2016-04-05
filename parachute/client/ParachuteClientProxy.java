@@ -23,17 +23,17 @@ import com.parachute.common.ParachuteCommonProxy;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+
 
 @SuppressWarnings("unused")
 public class ParachuteClientProxy extends ParachuteCommonProxy {
 	
 	// grab the 'jump' key from the game settings. defaults to the space bar. This allows the
 	// player to change the jump key and the parachute will use the new jump key
-	public static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
+	private static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -41,14 +41,9 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 	{
 		super.preInit();
 		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
-//		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new IRenderFactory<EntityParachute>() { // java 6/7
-//			@Override
-//			public Render<? super EntityParachute> createRenderFor(RenderManager manager) {
-//				return new RenderParachute(manager);
-//			}
-//		});
-		ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, new ModelResourceLocation(Parachute.modid + ":" + parachuteName));
-		ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, new ModelResourceLocation(Parachute.modid + ":" + packName));
+		ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, ParachuteCommonProxy.parachuteResource);
+		ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, ParachuteCommonProxy.packResource);
+
 		info(Parachute.modid + I18n.format("info.client.preinit"));
 	}
 

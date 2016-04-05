@@ -20,6 +20,7 @@
 package com.parachute.common;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
@@ -49,13 +50,13 @@ public class Parachute {
 	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
 	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
     public static Achievement buildParachute;
-	public static int minimumForgeBuildVersion = 1766;
+	public static int minimumForgeBuildVersion = 1822;
 
 	@SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
 	public static ParachuteCommonProxy proxy;
 
-	public static ItemParachute parachuteItem;
-	public static ItemParachutePack packItem;
+	public static Item parachuteItem;
+	public static Item packItem;
 
 	@Mod.Instance(modid)
 	public static Parachute instance;
