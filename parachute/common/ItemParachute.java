@@ -64,7 +64,7 @@ public class ItemParachute extends Item {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
         float volume = 1.0F;
-        chute.playSound(SoundEvents.block_cloth_place, volume, pitch());
+        chute.playSound(ParachuteCommonProxy.openChute, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
