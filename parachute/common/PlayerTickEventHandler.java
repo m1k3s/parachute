@@ -45,7 +45,6 @@ public class PlayerTickEventHandler {
             ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
             ItemStack heldItemOffhand = player.getHeldItemOffhand(); // offhand needs to be handled separately
             if (armor == null && heldItemOffhand != null && heldItemOffhand.getItem() instanceof ItemParachute) {
-//                Parachute.proxy.info("togglePlayerParachutePack: parachute item is selected on offhand");
                 player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
                 return;
             }
@@ -58,19 +57,14 @@ public class PlayerTickEventHandler {
             boolean deployed = ParachuteCommonProxy.onParachute(player);
             if (armor != null && heldItemMainhand == null) { // parachute item has been removed from slot in the hot bar
                 if (!deployed && armor.getItem() instanceof ItemParachutePack) {
-//                    Parachute.proxy.info("togglePlayerParachutePack: item has been removed from slot");
-//                    armor.getItem().setDamage(armor, 10);
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
             } else if (armor != null) { // player has selected another slot in the hot bar || regular armor is present
                 if (!deployed && armor.getItem() instanceof ItemParachutePack && !(heldItemMainhand.getItem() instanceof ItemParachute)) {
-//                    Parachute.proxy.info("togglePlayerParachutePack: another item selected");
-//                    armor.getItem().setDamage(armor, 10);
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
             } else {
                 if (heldItemMainhand != null && heldItemMainhand.getItem() instanceof ItemParachute) {
-//                    Parachute.proxy.info("togglePlayerParachutePack: parachute item is selected on mainhand");
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
                 }
             }

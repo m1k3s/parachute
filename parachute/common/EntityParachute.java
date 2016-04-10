@@ -321,9 +321,6 @@ public class EntityParachute extends Entity {
     }
 
     public void killParachute() {
-//        Entity skyDiver = getControllingPassenger();
-//        removePassenger(skyDiver);
-//        skyDiver = null;
         ParachuteCommonProxy.setDeployed(false);
         setDead();
     }
