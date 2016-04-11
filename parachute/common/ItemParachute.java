@@ -21,7 +21,6 @@ package com.parachute.common;
 
 import com.parachute.client.RenderParachute;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -30,6 +29,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
@@ -94,10 +94,10 @@ public class ItemParachute extends Item {
     // the player can still enable/disable the AAD in the config GUI.
     public void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        if (!world.isRemote) { // server side
+        if (world.isRemote) { // client side
             active = !active;
             if (entityplayer != null) {
-                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0f));
+                world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, 1.0f);
                 itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
                 ConfigHandler.setAADState(active);
             }
