@@ -19,7 +19,7 @@
 //
 package com.parachute.common;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -47,25 +47,25 @@ public class ConfigHandler {
 	private static boolean useSpawnPoint;
 	private static int[] waypoint;
 
-	private static final String aboutComments = I18n.format("config.about.desc", Parachute.name, Parachute.mcversion);
-	private static final String usageComment = I18n.format("config.usage.desc"); // false
-	private static final String heightComment = I18n.format("config.height.desc"); // 256
-	private static final String thermalComment = I18n.format("config.thermal.desc"); // true
-	private static final String lavaThermalComment = I18n.format("config.lavathermal.desc"); // false
-	private static final String minLavaDistanceComment = I18n.format("config.minlavadistance.desc"); // 3.0
-	private static final String maxLavaDistanceComment = I18n.format("config.maxlavadistance.desc"); // 48
-	private static final String autoComment = I18n.format("config.autodismount.desc"); // true
-	private static final String weatherComment = I18n.format("config.weather.desc"); // true
-	private static final String turbulenceComment = I18n.format("config.turbulence.desc"); // false
-	private static final String trailsComment = I18n.format("config.trails.desc"); // false
-	private static final String dismountComment = I18n.format("config.waterdismount.desc"); // false
-	private static final String lavaDisablesComment = I18n.format("config.lavadisables.desc"); // true
-    private static final String isAADActiveComment = I18n.format("config.aadactive.desc"); // false
-    private static final String aadAltitudeComment = I18n.format("config.aadaltitude.desc"); // 10 meters
-	private static final String aadImmedComment = I18n.format("config.aadimmediate.desc"); // > minFalldistance meters
-    private static final String minFallDistanceComment = I18n.format("config.minfalldistance.desc"); // 5 meters
-	private static final String useSpawnPointComment = I18n.format("config.usespawnpoint.desc");
-	private static final String colorComment = I18n.format("config.colors.desc");
+	private static final String aboutComments = I18n.translateToLocalFormatted("config.about.desc", Parachute.name, Parachute.mcversion);
+	private static final String usageComment = I18n.translateToLocal("config.usage.desc"); // false
+	private static final String heightComment = I18n.translateToLocal("config.height.desc"); // 256
+	private static final String thermalComment = I18n.translateToLocal("config.thermal.desc"); // true
+	private static final String lavaThermalComment = I18n.translateToLocal("config.lavathermal.desc"); // false
+	private static final String minLavaDistanceComment = I18n.translateToLocal("config.minlavadistance.desc"); // 3.0
+	private static final String maxLavaDistanceComment = I18n.translateToLocal("config.maxlavadistance.desc"); // 48
+	private static final String autoComment = I18n.translateToLocal("config.autodismount.desc"); // true
+	private static final String weatherComment = I18n.translateToLocal("config.weather.desc"); // true
+	private static final String turbulenceComment = I18n.translateToLocal("config.turbulence.desc"); // false
+	private static final String trailsComment = I18n.translateToLocal("config.trails.desc"); // false
+	private static final String dismountComment = I18n.translateToLocal("config.waterdismount.desc"); // false
+	private static final String lavaDisablesComment = I18n.translateToLocal("config.lavadisables.desc"); // true
+    private static final String isAADActiveComment = I18n.translateToLocal("config.aadactive.desc"); // false
+    private static final String aadAltitudeComment = I18n.translateToLocal("config.aadaltitude.desc"); // 10 meters
+	private static final String aadImmedComment = I18n.translateToLocal("config.aadimmediate.desc"); // > minFalldistance meters
+    private static final String minFallDistanceComment = I18n.translateToLocal("config.minfalldistance.desc"); // 5 meters
+	private static final String useSpawnPointComment = I18n.translateToLocal("config.usespawnpoint.desc");
+	private static final String colorComment = I18n.translateToLocal("config.colors.desc");
 	private static final String[] colorValues = {
 			"random",
 			"black",
@@ -132,7 +132,7 @@ public class ConfigHandler {
 			thermals = !(lavaThermals && lavaDisablesThermals);
 
 		} catch (Exception e) {
-			Parachute.proxy.info(I18n.format("info.message.configfail"));
+			Parachute.proxy.info(I18n.translateToLocal("info.message.configfail"));
 		} finally {
 			if (config.hasChanged()) {
 				config.save();

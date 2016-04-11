@@ -18,6 +18,7 @@
 //
 package com.parachute.common;
 
+import com.parachute.client.HudGuiRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;
@@ -143,20 +144,17 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public EnumFacing getAdjustedHorizontalFacing()
-    {
+    public EnumFacing getAdjustedHorizontalFacing() {
         return getHorizontalFacing().rotateY();
     }
 
     @Override
-    public boolean canPassengerSteer()
-    {
+    public boolean canPassengerSteer() {
         return true;
     }
 
     @Override
-    public Entity getControllingPassenger()
-    {
+    public Entity getControllingPassenger() {
         List<Entity> list = getPassengers();
         return list.isEmpty() ? null : list.get(0);
     }
@@ -497,11 +495,13 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound nbt) {
+    public void writeEntityToNBT(NBTTagCompound nbt) {
+//        nbt.setIntArray("waypoint", HudGuiRenderer.getWaypoint());
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound nbt) {
+    public void readEntityFromNBT(NBTTagCompound nbt) {
+//        HudGuiRenderer.setWaypoint(nbt.getIntArray("waypoint"));
     }
 
     @Override

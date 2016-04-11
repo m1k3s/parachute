@@ -19,7 +19,7 @@
 //
 package com.parachute.common;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
@@ -67,8 +67,8 @@ public class Parachute {
 	{
 		int buildVersion = ForgeVersion.getBuildVersion();
 		if (buildVersion < minimumForgeBuildVersion) {
-			proxy.error(I18n.format("error.message.requires", minimumForgeBuildVersion));
-			proxy.error(I18n.format("erro.message.running", buildVersion));
+			proxy.error(I18n.translateToLocalFormatted("error.message.requires", minimumForgeBuildVersion));
+			proxy.error(I18n.translateToLocalFormatted("erro.message.running", buildVersion));
 		}
 	}
 
@@ -115,7 +115,7 @@ public class Parachute {
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
 		if (event.getModID().equals(Parachute.modid)) {
-			proxy.info(I18n.format("info.message.changes", Parachute.name));
+			proxy.info(I18n.translateToLocalFormatted("info.message.changes", Parachute.name));
 			ConfigHandler.updateConfigInfo();
 		}
 	}
