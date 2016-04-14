@@ -99,8 +99,7 @@ public class ItemParachute extends Item {
                 itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
                 ConfigHandler.setAADState(active);
             }
-        }
-        if (world.isRemote) { // client side
+        } else { // client side
 			if (entityplayer != null) {
 				world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, 1.0f);
 			}
