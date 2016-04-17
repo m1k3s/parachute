@@ -29,12 +29,10 @@ import org.lwjgl.opengl.GL11;
 public class ParachuteTexturedQuad {
 
 	public PositionTextureVertex vertexPositions[];
-//	public int nVertices;
 
 	public ParachuteTexturedQuad(PositionTextureVertex vertices[])
 	{
 		vertexPositions = vertices;
-//		nVertices = vertices.length;
 	}
 
 	public ParachuteTexturedQuad(PositionTextureVertex vertices[], int texU1, int texV1, int texU2, int texV2)
