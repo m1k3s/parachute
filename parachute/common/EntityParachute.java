@@ -103,7 +103,8 @@ public class EntityParachute extends Entity {
     public void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
-            skyDiver.startRiding(this);
+            //skyDiver.startRiding(this);
+            dismountRidingEntity();
             killParachute();
         }
     }
@@ -432,6 +433,7 @@ public class EntityParachute extends Entity {
 
         if (deltaPos >= 0.20) {
             double rmax = roughWeather ? 0.8 : 0.5;
+            rmax = (rand.nextInt(5) == 0) ? 1.0 : rmax; // gusting
             double deltaX = rmin + (rmax - rmin) * rand.nextDouble();
             double deltaY = rmin + 0.2 * rand.nextDouble();
             double deltaZ = rmin + (rmax - rmin) * rand.nextDouble();
@@ -495,14 +497,10 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbt) {
-//        nbt.setIntArray("waypoint", HudGuiRenderer.getWaypoint());
-    }
+    public void writeEntityToNBT(NBTTagCompound nbt) {}
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbt) {
-//        HudGuiRenderer.setWaypoint(nbt.getIntArray("waypoint"));
-    }
+    public void readEntityFromNBT(NBTTagCompound nbt) {}
 
     @Override
     public String toString() {

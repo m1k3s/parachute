@@ -57,7 +57,7 @@ public class ParachuteCommonProxy {
 
     public void preInit() {
         int entityID = 1;
-        EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 20, true);
+        EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
 
         Parachute.parachuteItem = new ItemParachute(ToolMaterial.IRON).setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
         GameRegistry.register(Parachute.parachuteItem);
