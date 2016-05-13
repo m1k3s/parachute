@@ -22,6 +22,7 @@ package com.parachute.common;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigHandler {
@@ -235,6 +236,13 @@ public class ConfigHandler {
 	public static BlockPos getWaypoint()
 	{
 		return new BlockPos(waypoint[0], 0, waypoint[1]);
+	}
+	
+	public static void setWaypoint(int x, int z)
+	{
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, "waypoint");
+		prop.set(new int[] {x, z});
+		config.save();
 	}
 
 }

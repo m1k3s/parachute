@@ -18,7 +18,6 @@
 //
 package com.parachute.common;
 
-import com.parachute.client.HudGuiRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;
@@ -103,7 +102,6 @@ public class EntityParachute extends Entity {
     public void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
-            //skyDiver.startRiding(this);
             dismountRidingEntity();
             killParachute();
         }
@@ -497,10 +495,12 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbt) {}
+    public void writeEntityToNBT(NBTTagCompound nbt) {
+    }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbt) {}
+    public void readEntityFromNBT(NBTTagCompound nbt) {
+    }
 
     @Override
     public String toString() {

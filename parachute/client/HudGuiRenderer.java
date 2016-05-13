@@ -24,6 +24,8 @@ import com.parachute.common.Parachute;
 import com.parachute.common.ParachuteCommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
@@ -122,6 +124,11 @@ public class HudGuiRenderer extends Gui {
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
                 mc.getTextureManager().bindTexture(hudTexture);
+                
+                GlStateManager.enableRescaleNormal();
+				GlStateManager.enableBlend();
+				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+				RenderHelper.enableGUIStandardItemLighting();
 
                 BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY, mc.thePlayer.posZ);
                 altitude = getCurrentAltitude(entityPos);
@@ -196,6 +203,9 @@ public class HudGuiRenderer extends Gui {
                 // draw the distance to the home point text
                 fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
             }
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.disableBlend();
         }
     }
 
@@ -266,11 +276,6 @@ public class HudGuiRenderer extends Gui {
         double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
         return MathHelper.wrapAngleTo180_double(Math.toDegrees(relAngle) - 90.0); // degrees
     }
-
-//    public static void setWaypoint(int waypointXIn, int waypointZIn) {
-//        wayPointX = waypointXIn;
-//        wayPointZ = waypointZIn;
-//    }
 
     public static int[] getWaypoint() {
         return new int[]{wayPointX, wayPointZ};

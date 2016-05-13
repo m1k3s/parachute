@@ -43,6 +43,7 @@ public class SetWaypointCommand extends CommandBase {
             if (args.length == 0) { // set waypoint to current position
                 BlockPos bp = new BlockPos(sender.getPosition());
                 HudGuiRenderer.setWaypoint(new int[] {bp.getX(), bp.getZ()});
+                ConfigHandler.setWaypoint(bp.getX(), bp.getZ());
                 notifyOperators(sender, this, "commands.setwaypoint.current", bp.getX(), bp.getZ());
             } else if (isNumeric(args[0]) && isNumeric(args[1])) {
                 HudGuiRenderer.setWaypoint(new int[] {Integer.parseInt(args[0]), Integer.parseInt(args[1])});

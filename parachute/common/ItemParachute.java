@@ -49,15 +49,16 @@ public class ItemParachute extends Item {
     @SuppressWarnings("unchecked")
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer, EnumHand hand)
     {
+		boolean result = false;
         if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
-            deployParachute(world, entityplayer);
+            result = deployParachute(world, entityplayer);
         } else { // toggle the AAD state
-            toggleAAD(itemstack, world, entityplayer);
+            result = toggleAAD(itemstack, world, entityplayer);
         }
-        return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
+        return new ActionResult(result ? EnumActionResult.SUCCESS : EnumActionResult.PASS, itemstack); // unchecked
     }
 
-    public void deployParachute(World world, EntityPlayer entityplayer) {
+    public boolean deployParachute(World world, EntityPlayer entityplayer) {
         double offset = ParachuteCommonProxy.getOffsetY();
 
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
@@ -87,11 +88,12 @@ public class ItemParachute extends Item {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(), entityplayer);
             }
         }
+        return true;
     }
 
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
-    public void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
+    public boolean toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
         if (!world.isRemote) { // server side
             active = !active;
@@ -99,11 +101,12 @@ public class ItemParachute extends Item {
                 itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
                 ConfigHandler.setAADState(active);
             }
-        } else { // client side
-			if (entityplayer != null) {
-				world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, 1.0f);
-			}
+        } else if (entityplayer != null && ParachuteCommonProxy.onParachute(entityplayer)) { // client side
+			world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, 1.0f);
+		} else {
+			return false;
 		}
+		return true;
     }
 
     private float pitch() {
