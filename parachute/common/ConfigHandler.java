@@ -47,6 +47,7 @@ public class ConfigHandler {
 	private static boolean aadImmediate;
 	private static boolean useSpawnPoint;
 	private static int[] waypoint;
+	private static int[] homepoint;
 
 	private static final String aboutComments = I18n.translateToLocalFormatted("config.about.desc", Parachute.name, Parachute.mcversion);
 	private static final String usageComment = I18n.translateToLocal("config.usage.desc"); // false
@@ -67,6 +68,7 @@ public class ConfigHandler {
     private static final String minFallDistanceComment = I18n.translateToLocal("config.minfalldistance.desc"); // 5 meters
 	private static final String useSpawnPointComment = I18n.translateToLocal("config.usespawnpoint.desc");
 	private static final String colorComment = I18n.translateToLocal("config.colors.desc");
+	private static final String waypointComment = I18n.translateToLocal("config.waypoint.desc");
 	private static final String[] colorValues = {
 			"random",
 			"black",
@@ -127,7 +129,8 @@ public class ConfigHandler {
             minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0).getDouble(5.0);
 			aadImmediate = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment).getBoolean(false);
 			useSpawnPoint = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
-			waypoint = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, "waypoint").getIntList();
+			waypoint = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, waypointComment).getIntList();
+			homepoint = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, "HomePoint").getIntList();
 
 			// if lava thermals are allowed check allow/disallow space bar thermals
 			thermals = !(lavaThermals && lavaDisablesThermals);
@@ -203,6 +206,9 @@ public class ConfigHandler {
 
 	public static void setAADState(boolean state)
 	{
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment);
+		prop.set(state);
+		config.save();
 		isAADActive = state;
 	}
 
@@ -240,9 +246,33 @@ public class ConfigHandler {
 	
 	public static void setWaypoint(int x, int z)
 	{
-		Property prop = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, "waypoint");
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, waypointComment);
 		prop.set(new int[] {x, z});
 		config.save();
+		waypoint[0] = x;
+		waypoint[1] = z;
+	}
+	
+	public static BlockPos getHomepoint()
+	{
+		return new BlockPos(homepoint[0], 0, homepoint[1]);
+	}
+	
+	public static void setHomepoint(int x, int z)
+	{
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, "homepoint");
+		prop.set(new int[] {x, z});
+		config.save();
+		homepoint[0] = x;
+		homepoint[1] = z;
+	}
+	
+	public static String getWaypointString() {
+        return String.format("%d %d", waypoint[0], waypoint[1]);
+    }
+    
+    public static String getHomepointString() {
+		return String.format("%d %d", homepoint[0], homepoint[1]);
 	}
 
 }

@@ -75,6 +75,9 @@ public class HudGuiRenderer extends Gui {
     public static int wayPointX;
     public static int wayPointZ;
     private static boolean wayPointEnabled;
+    // home direction
+    public static int homePointX;
+    public static int homePointZ;
 
     public HudGuiRenderer() {
         super();
@@ -101,6 +104,8 @@ public class HudGuiRenderer extends Gui {
         yOffset = 14;
         wayPointX = 0;
         wayPointZ = 0;
+        homePointX = 0;
+        homePointZ = 0;
         // disable the waypoint display
         wayPointEnabled = false;
 
@@ -222,7 +227,7 @@ public class HudGuiRenderer extends Gui {
         if (ConfigHandler.getUseSpawnPoint()) {
             blockpos = mc.theWorld.getSpawnPoint();
         } else {
-            blockpos = ConfigHandler.getWaypoint();
+            blockpos = ConfigHandler.getHomepoint();
         }
         double delta = Math.atan2(blockpos.getZ() - mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
         double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
@@ -234,7 +239,7 @@ public class HudGuiRenderer extends Gui {
         if (ConfigHandler.getUseSpawnPoint()) {
             blockpos = mc.theWorld.getSpawnPoint();
         } else {
-            blockpos = ConfigHandler.getWaypoint();
+            blockpos = ConfigHandler.getHomepoint();
         }
         double a = Math.pow(blockpos.getZ() - mc.thePlayer.posZ, 2);
         double b = Math.pow(blockpos.getX() - mc.thePlayer.posX, 2);
@@ -285,6 +290,11 @@ public class HudGuiRenderer extends Gui {
         wayPointX = waypoint[0];
         wayPointZ = waypoint[1];
     }
+    
+    public static void setHomepoint(int[] homepoint) {
+		homePointX = homepoint[0];
+		homePointZ = homepoint[1];
+	}
 
     public static void enableWaypoint(boolean enabled) {
         wayPointEnabled = enabled;
@@ -294,8 +304,12 @@ public class HudGuiRenderer extends Gui {
         return wayPointEnabled;
     }
 
-    public static String getWaypointString() {
-        return String.format("%d %d", wayPointX, wayPointZ);
-    }
+    // public static String getWaypointString() {
+        // return String.format("%d %d", wayPointX, wayPointZ);
+    // }
+    
+    // public static String getHomepointString() {
+		// return String.format("%d %d", homePointX, homePointZ);
+	// }
 
 }

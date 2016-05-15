@@ -27,6 +27,12 @@ commands.enablewaypoint.enabled=enabled
 commands.enablewaypoint.disabled=disabled
 commands.showwaypoint.usage=/showwaypoint
 commands.showwaypoint.success=Current waypoint is %d %d
+commands.sethomepoint.success=Home point is set to %d %d
+commands.sethomepoint.failure=homepoint values must be numeric
+commands.sethomepoint.current=Home point is set to current position (%d %d)
+commands.sethomepoint.usage=/sethomepoint <X coord> <Z coord>
+commands.showhomepoint.usage=/showhomepoint
+commands.showhomepoint.success=Current homepoint is %d %d
 
 gui.hud.compass=Compass
 gui.hud.altitude=Altitude
@@ -43,7 +49,7 @@ info.server.preinit=:DedicatedServer preInit is complete
 info.server.init=:DedicatedServer Init is complete
 info.server.postinit=:DedicatedServer postInit is complete
 
-config.about.desc=%s Config - Michael Sheppard (crackedEgg) For Minecraft Version %s"
+config.about.desc=%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]"
 config.usage.desc=set to true for parachute single use
 config.height.desc=0 (zero) disables altitude limiting
 config.thermal.desc=enable thermal rise by pressing the space bar
@@ -62,3 +68,5 @@ config.aadimmediate.desc=AAD deploys immediately after the player falls more tha
 config.aadminfalldistance.desc=minimum distance to fall before the AAD deploys
 config.usespawnpoint.desc=use spawn point for home direction if true or input your own coords if false
 config.colors.desc=Select a parachute color, random, or custom[0-9]
+config.waypoint.desc=waypoint coordinates [X, Z]
+config.homepoint.desc=homepoint coordinates [X, Z]
