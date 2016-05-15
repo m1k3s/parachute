@@ -69,6 +69,7 @@ public class ConfigHandler {
 	private static final String useSpawnPointComment = I18n.translateToLocal("config.usespawnpoint.desc");
 	private static final String colorComment = I18n.translateToLocal("config.colors.desc");
 	private static final String waypointComment = I18n.translateToLocal("config.waypoint.desc");
+	private static final String homepointComment = I18n.translateToLocal("config.homepoint.desc");
 	private static final String[] colorValues = {
 			"random",
 			"black",
@@ -130,7 +131,7 @@ public class ConfigHandler {
 			aadImmediate = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment).getBoolean(false);
 			useSpawnPoint = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
 			waypoint = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, waypointComment).getIntList();
-			homepoint = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, "HomePoint").getIntList();
+			homepoint = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, homepointComment).getIntList();
 
 			// if lava thermals are allowed check allow/disallow space bar thermals
 			thermals = !(lavaThermals && lavaDisablesThermals);
@@ -260,7 +261,7 @@ public class ConfigHandler {
 	
 	public static void setHomepoint(int x, int z)
 	{
-		Property prop = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, "homepoint");
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, homepointComment);
 		prop.set(new int[] {x, z});
 		config.save();
 		homepoint[0] = x;

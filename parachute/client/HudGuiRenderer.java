@@ -119,14 +119,16 @@ public class HudGuiRenderer extends Gui {
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.thePlayer.onGround) {
             return;
         }
-        ScaledResolution sr = new ScaledResolution(mc);
-        int hudX = sr.getScaledWidth() / 2 - (hudWidth / 2); // left edge of GUI
-        int hudY = 2; // top edge of GUI
-        int textX = hudX + 30; // xcoord for text
-        int textY = hudY + 22; // ycoord for text
-        int ledX = 1;
-
+        
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+			ScaledResolution sr = new ScaledResolution(mc);
+			int hudX = sr.getScaledWidth() / 2 - (hudWidth / 2); // left edge of GUI
+			int hudY = 2; // top edge of GUI
+			int textX = hudX + 30; // xcoord for text
+			int textY = hudY + 22; // ycoord for text
+			int ledX = 1;
+
+        
             if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
                 mc.getTextureManager().bindTexture(hudTexture);
                 
@@ -303,13 +305,5 @@ public class HudGuiRenderer extends Gui {
     public static boolean getEnableWaypoint() {
         return wayPointEnabled;
     }
-
-    // public static String getWaypointString() {
-        // return String.format("%d %d", wayPointX, wayPointZ);
-    // }
-    
-    // public static String getHomepointString() {
-		// return String.format("%d %d", homePointX, homePointZ);
-	// }
 
 }
