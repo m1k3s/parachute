@@ -18,10 +18,7 @@
 //
 package com.parachute.common;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockGrass;
-import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,8 +29,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -353,7 +348,7 @@ public class EntityParachute extends Entity {
         }
 
         if (lavaThermals) {
-            descentRate = doLavaThermals();
+            descentRate = doHeatSourceThermals();
             if (!allowThermals) {
                 return descentRate;
             }
@@ -374,31 +369,34 @@ public class EntityParachute extends Entity {
 
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
-    public boolean isLavaAt(BlockPos bp) {
+    public boolean isHeatSource(BlockPos bp) {
         Block block = worldObj.getBlockState(bp).getBlock();
-        return (block == Blocks.lava || block == Blocks.flowing_lava);
+        return (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.fire);
     }
 
-    public boolean isLavaBelowInRange(BlockPos bp) {
-        Vec3d v1 = new Vec3d(posX, posY, posZ);
-        Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
-        RayTraceResult mop = worldObj.rayTraceBlocks(v1, v2, true);
-        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
-            BlockPos blockpos = mop.getBlockPos();
-            if (isLavaAt(blockpos)) {
+    public boolean isHeatSourceInRange(BlockPos bp) {
+//        Vec3d v1 = new Vec3d(posX, posY, posZ);
+//        Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
+//        RayTraceResult mop = worldObj.rayTraceBlocks(v1, v2, true);
+//        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
+//            BlockPos blockpos = mop.getBlockPos();
+        while (worldObj.isAirBlock(bp.down())) {
+            if (isHeatSource(bp)) {
                 return true;
+            } else {
+                bp = bp.down();
             }
         }
         return false;
     }
 
-    public double doLavaThermals() {
+    public double doHeatSourceThermals() {
         double thermals = drift;
         final double inc = 0.5;
 
         BlockPos blockPos = new BlockPos(posX, posY - ParachuteCommonProxy.getOffsetY() - maxThermalRise, posZ);
 
-        if (isLavaBelowInRange(blockPos)) {
+        if (isHeatSourceInRange(blockPos)) {
             curLavaDistance += inc;
             thermals = ascend;
             if (curLavaDistance >= maxThermalRise) {
