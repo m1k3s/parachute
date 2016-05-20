@@ -23,7 +23,7 @@ import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 
 import org.lwjgl.opengl.GL11;
 
@@ -33,18 +33,18 @@ public class ParachuteModelRenderer
 	private ParachuteTexturedQuad faces[];
 	private final int left;
 	private final int top;
-	public float rotationPointX;
-	public float rotationPointY;
-	public float rotationPointZ;
+	private float rotationPointX;
+	private float rotationPointY;
+	private float rotationPointZ;
 	public float rotateAngleX;
 	public float rotateAngleY;
 	public float rotateAngleZ;
 	private boolean compiled;
 	private int displayList;
-	public boolean mirror;
-	public boolean showModel;
-	public float textureWidth;
-	public float textureHeight;
+	private boolean mirror;
+	private boolean showModel;
+	private float textureWidth;
+	private float textureHeight;
 
 	public ParachuteModelRenderer(int x, int y)
 	{
@@ -218,10 +218,10 @@ public class ParachuteModelRenderer
 	{
 		displayList = GLAllocation.generateDisplayLists(1);
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
-		WorldRenderer wRenderer = Tessellator.getInstance().getWorldRenderer();
+		VertexBuffer vertexBuffer = Tessellator.getInstance().getBuffer();
 
 		for (ParachuteTexturedQuad face : faces) {
-			face.draw(wRenderer, scale);
+			face.draw(vertexBuffer, scale);
 		}
 
 		GL11.glEndList();

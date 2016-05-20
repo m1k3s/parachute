@@ -25,9 +25,14 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
+
 
 public class ItemParachute extends Item {
 
@@ -41,53 +46,65 @@ public class ItemParachute extends Item {
         setCreativeTab(CreativeTabs.tabTransport); // place in the transportation tab in creative mode
     }
 
-    @Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        // only deploy if entityplayer exists and if player is falling and not already on a parachute.
-        if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.ridingEntity == null) {
-            deployParachute(world, entityplayer);
+    @SuppressWarnings("unchecked")
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer, EnumHand hand)
+    {
+		boolean result;
+        if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
+            result = deployParachute(world, entityplayer);
         } else { // toggle the AAD state
-            toggleAAD(itemstack, world, entityplayer);
+            result = toggleAAD(itemstack, world, entityplayer);
         }
-        return itemstack;
+        return new ActionResult(result ? EnumActionResult.SUCCESS : EnumActionResult.PASS, itemstack); // unchecked
     }
 
-    public void deployParachute(World world, EntityPlayer entityplayer) {
+    public boolean deployParachute(World world, EntityPlayer entityplayer) {
         double offset = ParachuteCommonProxy.getOffsetY();
 
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
         float volume = 1.0F;
-        chute.playSound("parachutemod:chuteopen", volume, pitch());
+        chute.playSound(ParachuteCommonProxy.openChute, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
         } else { // server side
             world.spawnEntityInWorld(chute);
         }
-        entityplayer.mountEntity(chute);
+        entityplayer.startRiding(chute);
         ParachuteCommonProxy.setDeployed(true);
         entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
-        ItemStack itemstack = entityplayer.getHeldItem();
+        ItemStack itemstack = null;
+        Iterable<ItemStack> heldEquipment = entityplayer.getHeldEquipment();
+        for (ItemStack itemStack : heldEquipment) {
+            if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
+                itemstack = itemStack;
+            }
+        }
         if (itemstack != null) {
-            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, itemstack) > 0;
+            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
             if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(), entityplayer);
             }
         }
+        return true;
     }
 
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
-    public void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
+    public boolean toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-        if (!world.isRemote) { // server side
+        if (!world.isRemote && entityplayer != null) { // server side
             active = !active;
-            world.playSoundAtEntity(entityplayer, "random.click", 1.0f, 1.0f / itemRand.nextFloat() * 0.4f + 0.8f);
-            itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
-            ConfigHandler.setAADState(active);
-        }
+			itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
+			ConfigHandler.setAADState(active);
+        } else if (world.isRemote && entityplayer != null) { // client side
+			world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, 1.0f);
+		} else {
+			return false;
+		}
+		return true;
     }
 
     private float pitch() {

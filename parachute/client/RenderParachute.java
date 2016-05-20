@@ -26,8 +26,10 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -57,8 +59,8 @@ public class RenderParachute extends Render<EntityParachute>
 			return;
 		}
 		modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-		if (entityparachute.riddenByEntity != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
-			EntityPlayer rider = (EntityPlayer) entityparachute.riddenByEntity;
+		if (entityparachute.getControllingPassenger() != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
+			EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
 			renderParachuteCords(rider, partialTicks);
 		}
 
@@ -68,55 +70,32 @@ public class RenderParachute extends Render<EntityParachute>
 
 	public void renderParachuteCords(EntityPlayer rider, float partialTicks)
 	{
-		final float x = 0.0F;
-		final float y = 1.5F;
-		final float zOffset = 3.0F;
-		
-		float zl = -zOffset;
-		float b = rider.getBrightness(partialTicks);
+		final float b = rider.getBrightness(partialTicks);
+
+		final float lx[] = {-8f, 0f, -8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f};
+		final float ly[] = {0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f, 0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f};
+		final float lz[] = {-23.5f, -3f, -23.5f, -3f, -8f, -3f, -8f, -3f, 23.5f, 3f, 23.5f, 3f, 8f, 3f, 8f, 3f};
 
 		GlStateManager.pushMatrix();
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_LIGHTING);
+
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableLighting();
 
 		GlStateManager.scale(0.0625F, -1.0F, 0.0625F);
 
-		GL11.glBegin(GL11.GL_LINES);
-		// left side
+		GlStateManager.glBegin(GL11.GL_LINES);
 		GlStateManager.color(b * 0.5F, b * 0.5F, b * 0.65F); // slightly blue
+		for (int k = 0; k < 16; k++) {
+			if (k > 7) {
+				GlStateManager.color(b * 0.65F, b * 0.5F, b * 0.5F); // slightly red
+			}
+			GlStateManager.glVertex3f(lx[k], ly[k], lz[k]);
+		}
+		GlStateManager.glEnd();
 
-		GL11.glVertex3f(-8F, 0.25F, -23.5F);
-		GL11.glVertex3f(x, y, zl);
+		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
 
-		GL11.glVertex3f(8F, 0.25F, -23.5F);
-		GL11.glVertex3f(x, y, zl);
-
-		// front
-		GL11.glVertex3f(-8F, 0F, -8F);
-		GL11.glVertex3f(x, y, zl);
-
-		GL11.glVertex3f(8F, 0F, -8F);
-		GL11.glVertex3f(x, y, zl);
-
-		// right side
-		GlStateManager.color(b * 0.65F, b * 0.5F, b * 0.5F); // slightly red
-
-		GL11.glVertex3f(-8F, 0.25F, 23.5F);
-		GL11.glVertex3f(x, y, zOffset);
-
-		GL11.glVertex3f(8F, 0.25F, 23.5F);
-		GL11.glVertex3f(x, y, zOffset);
-
-		// back
-		GL11.glVertex3f(-8F, 0F, 8F);
-		GL11.glVertex3f(x, y, zOffset);
-
-		GL11.glVertex3f(8F, 0F, 8F);
-		GL11.glVertex3f(x, y, zOffset);
-		GL11.glEnd();
-
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GlStateManager.popMatrix();
 	}
 

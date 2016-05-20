@@ -40,8 +40,7 @@ public class AscendKeyPressMessage implements IMessage {
 		this.keyPressed = keyPressed;
 	}
 
-	// the server does not respond with any messages so this isn't
-	// being used; I included the method body for future possibilities.
+	// the server does not respond with any messages so this isn't being used;
 	@Override
 	public void fromBytes(ByteBuf bb)
 	{
@@ -61,7 +60,7 @@ public class AscendKeyPressMessage implements IMessage {
 		public IMessage onMessage(AscendKeyPressMessage msg, MessageContext ctx)
 		{
 			EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
-			if (entityPlayer != null && entityPlayer.ridingEntity instanceof EntityParachute) {
+			if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
 				EntityParachute.setAscendMode(msg.keyPressed);
 			}
 			return null;

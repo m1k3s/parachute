@@ -13,22 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SetWaypointCommand extends CommandBase {
+public class SetHomePointCommand extends CommandBase {
     private final List<String> aliases;
 
-    public SetWaypointCommand() {
+    public SetHomePointCommand() {
         aliases = new ArrayList<>();
-        aliases.add("setwaypoint");
+        aliases.add("sethomepoint");
     }
 
     @Override
     public String getCommandName() {
-        return "setwaypoint";
+        return "sethomepoint";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "commands.setwaypoint.usage";
+        return "commands.sethomepoint.usage";
     }
 
     @Override
@@ -42,14 +42,14 @@ public class SetWaypointCommand extends CommandBase {
         if (!world.isRemote) { // server side
             if (args.length == 0) { // set waypoint to current position
                 BlockPos bp = new BlockPos(sender.getPosition());
-                HudGuiRenderer.setWaypoint(new int[] {bp.getX(), bp.getZ()});
-                ConfigHandler.setWaypoint(bp.getX(), bp.getZ());
-                notifyOperators(sender, this, "commands.setwaypoint.current", bp.getX(), bp.getZ());
+                HudGuiRenderer.setHomepoint(new int[] {bp.getX(), bp.getZ()});
+                ConfigHandler.setHomepoint(bp.getX(), bp.getZ());
+                notifyOperators(sender, this, "commands.sethomepoint.current", bp.getX(), bp.getZ());
             } else if (isNumeric(args[0]) && isNumeric(args[1])) {
                 HudGuiRenderer.setWaypoint(new int[] {Integer.parseInt(args[0]), Integer.parseInt(args[1])});
-                notifyOperators(sender, this, "commands.setwaypoint.success", args[0], args[1]);
+                notifyOperators(sender, this, "commands.sethomepoint.success", args[0], args[1]);
             } else {
-                notifyOperators(sender, this, "commands.setwaypoint.failure");
+                notifyOperators(sender, this, "commands.sethomepoint.failure");
             }
         }
     }

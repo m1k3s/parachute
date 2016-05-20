@@ -31,6 +31,5 @@ public class PacketHandler {
 	public static void init()
 	{
 		network.registerMessage(AscendKeyPressMessage.Handler.class, AscendKeyPressMessage.class, packetID, Side.SERVER);
-//		network.registerMessage(DismountKeyPressMessage.Handler.class, DismountKeyPressMessage.class, packetID + 1, Side.SERVER);
 	}
 }

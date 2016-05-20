@@ -5,7 +5,8 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+//import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class ShowWaypointCommand extends CommandBase {
     private final List<String> aliases;
 
     public ShowWaypointCommand() {
-        aliases = new ArrayList<String>();
+        aliases = new ArrayList<>();
         aliases.add("showwaypoint");
     }
 
@@ -35,21 +36,11 @@ public class ShowWaypointCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         World world = sender.getEntityWorld();
         if (!world.isRemote) { // server side
-            notifyOperators(sender, this, "commands.showwaypoint.success", HudGuiRenderer.getWaypointString());
+            notifyOperators(sender, this, "commands.showwaypoint.success", ConfigHandler.getWaypointString());
         }
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
-    }
-
-    @Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return null;
     }
 
     @Override

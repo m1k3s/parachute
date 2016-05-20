@@ -19,10 +19,12 @@
 //
 package com.parachute.common;
 
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,20 +43,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Parachute {
 
 	public static final String modid = "parachutemod";
-	public static final String modversion = "1.2.2";
-	public static final String mcversion = "1.8.9";
+	public static final String modversion = "1.4.1";
+	public static final String mcversion = "1.9";
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
-	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new ChatComponentTranslation("stat.parachuteDeployed"));
-	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new ChatComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
+	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
+	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
     public static Achievement buildParachute;
-	public static int minimumForgeBuildVersion = 1740;
+	public static int minimumForgeBuildVersion = 1822;
 
 	@SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
 	public static ParachuteCommonProxy proxy;
 
-	public static ItemParachute parachuteItem;
-	public static ItemParachutePack packItem;
+	public static Item parachuteItem;
+	public static Item packItem;
 
 	@Mod.Instance(modid)
 	public static Parachute instance;
@@ -65,8 +67,8 @@ public class Parachute {
 	{
 		int buildVersion = ForgeVersion.getBuildVersion();
 		if (buildVersion < minimumForgeBuildVersion) {
-			proxy.error("This mod requires Forge Mod Loader build version of " + minimumForgeBuildVersion + " or higher");
-			proxy.error("You are running Forge Mod Loader build version " + buildVersion);
+			proxy.error(I18n.translateToLocalFormatted("error.message.requires", minimumForgeBuildVersion));
+			proxy.error(I18n.translateToLocalFormatted("erro.message.running", buildVersion));
 		}
 	}
 
@@ -100,6 +102,8 @@ public class Parachute {
 		event.registerServerCommand(new SetWaypointCommand());
 		event.registerServerCommand(new EnableWaypointCommand());
 		event.registerServerCommand(new ShowWaypointCommand());
+		event.registerServerCommand(new SetHomePointCommand());
+		event.registerServerCommand(new ShowHomepointCommand());
 	}
 
 	public String getVersion()
@@ -112,8 +116,8 @@ public class Parachute {
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
-		if (event.modID.equals(Parachute.modid)) {
-			Parachute.proxy.info("Configuration changes have been updated for the " + Parachute.name);
+		if (event.getModID().equals(Parachute.modid)) {
+			proxy.info(I18n.translateToLocalFormatted("info.message.changes", Parachute.name));
 			ConfigHandler.updateConfigInfo();
 		}
 	}

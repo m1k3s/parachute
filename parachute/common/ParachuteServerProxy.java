@@ -1,6 +1,8 @@
 package com.parachute.common;
 
 
+import net.minecraft.util.text.translation.I18n;
+
 @SuppressWarnings("unused")
 public class ParachuteServerProxy extends ParachuteCommonProxy {
 
@@ -8,19 +10,19 @@ public class ParachuteServerProxy extends ParachuteCommonProxy {
 	public void preInit()
 	{
 		super.preInit();
-		info(Parachute.modid + " DedicatedServer preInit is complete");
+		info(Parachute.modid + I18n.translateToLocal("info.server.preinit"));
 	}
 
 	@Override
 	public void Init()
 	{
 		super.Init();
-		info(Parachute.modid + " DedicatedServer Init is complete");
+		info(Parachute.modid + I18n.translateToLocal("info.server.init"));
 	}
 
 	@Override
 	public void postInit()
 	{
-		info(Parachute.modid + " DedicatedServer postInit is complete.");
+		info(Parachute.modid + I18n.translateToLocal("info.server.postinit"));
 	}
 }

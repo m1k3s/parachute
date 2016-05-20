@@ -34,9 +34,9 @@ public class PlayerMountEvent {
     @SubscribeEvent
     public void onMount(EntityMountEvent event)
     {
-        if (event.entityBeingMounted instanceof EntityParachute && event.isDismounting()) {
+        if (event.getEntityBeingMounted() instanceof EntityParachute && event.isDismounting()) {
             event.setCanceled(true);
-            ((EntityParachute)event.entityBeingMounted).dismountParachute();
+            ((EntityParachute)event.getEntityBeingMounted()).dismountParachute();
         }
     }
 }

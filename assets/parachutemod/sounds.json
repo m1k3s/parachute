@@ -2,10 +2,10 @@
 	"chuteopen": {
 		"category": "neutral",
 		"sounds": [
-			"chuteopen1",
-			"chuteopen2",
-			"chuteopen3",
-			"chuteopen4"
+			"parachutemod:chuteopen1",
+			"parachutemod:chuteopen2",
+			"parachutemod:chuteopen3",
+			"parachutemod:chuteopen4"
 		]
 	}
 }

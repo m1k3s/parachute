@@ -19,29 +19,57 @@
 //
 package com.parachute.common;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.world.World;
 
 
 // this item is eye candy only. The parachute pack is placed as armor
 // on the player when the parachute item is selected in the hot bar.
 public class ItemParachutePack extends ItemArmor {
 
-	public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, int armorType)
-	{
-		super(armorMaterial, renderIndex, armorType);
-		setMaxDamage(armorMaterial.getDurability(armorType));
-		maxStackSize = 1;
-	}
+    public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType) {
+        super(armorMaterial, renderIndex, armorType);
+        setMaxDamage(armorMaterial.getDurability(armorType));
+        maxStackSize = 1;
+    }
 
-	@Override
-	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, String type)
-	{
-		if (itemstack.getItem() == Parachute.packItem) {
-			return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
-		}
-		return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
-	}
+    // if the player has tried to move the parachute pack item to another inventory slot
+    // delete the stack unless the slot is the armor plate slot, the item is only for display
+    // if the pack item is dropped getEntityLifespan takes care of that.
+    // Todo: ideally it would be better if the pack item was not selectable at all.
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (stack.getItem() instanceof ItemParachutePack) {
+            if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
+                if (ParachuteCommonProxy.armorType.getIndex() != itemSlot) {
+                    ((EntityPlayer) entityIn).inventory.deleteStack(stack);
+                }
+            }
+        }
+    }
+
+    @Override
+    public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
+        if (itemstack.getItem() == Parachute.packItem) {
+            return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
+        }
+        return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return false;
+    }
+
+    // kill the dropped item quickly, remember it's only eye candy
+    @Override
+    public int getEntityLifespan(ItemStack itemStack, World world) {
+        return 1;
+    }
 
 }
