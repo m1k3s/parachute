@@ -31,6 +31,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -132,7 +134,7 @@ public class EntityParachute extends Entity {
         boolean sitting = false;
         if (skyDiver != null) {
             BlockPos bp = new BlockPos(skyDiver.posX, skyDiver.getEntityBoundingBox().minY - 3.0, skyDiver.posZ);
-            sitting = (worldObj.getBlockState(bp).getBlock() != Blocks.air);
+            sitting = (worldObj.getBlockState(bp).getBlock() != Blocks.AIR);
         }
         return sitting;
     }
@@ -168,8 +170,9 @@ public class EntityParachute extends Entity {
         return !isDead;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int inc, boolean unused) {
+    public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int inc, boolean teleport) {
         double deltaX = x - posX;
         double deltaY = y - posY;
         double deltaZ = z - posZ;
@@ -279,7 +282,7 @@ public class EntityParachute extends Entity {
         }
 
         // update and clamp yaw between -180 and 180
-        double adjustedYaw = MathHelper.wrapAngleTo180_double(yaw - rotationYaw);
+        double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
         // further clamp yaw between -20 and 20 per update, slower turn radius
         if (adjustedYaw > 20.0D) {
             adjustedYaw = 20.0D;
@@ -371,7 +374,7 @@ public class EntityParachute extends Entity {
     // at up to 'maxThermalRise' distance.
     public boolean isHeatSource(BlockPos bp) {
         Block block = worldObj.getBlockState(bp).getBlock();
-        return (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.fire);
+        return (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA || block == Blocks.FIRE);
     }
 
     public boolean isHeatSourceInRange(BlockPos bp) {
@@ -417,7 +420,7 @@ public class EntityParachute extends Entity {
     // shouldDismountInWater method and config option.
     public boolean checkForGroundProximity(BlockPos bp) {
         Block block = worldObj.getBlockState(bp).getBlock();
-        boolean isAir = (block == Blocks.air);
+        boolean isAir = (block == Blocks.AIR);
         boolean isVegetation = (block instanceof BlockFlower) || (block instanceof BlockGrass) || (block instanceof BlockLeaves);
         return (!isAir && !isVegetation);
     }

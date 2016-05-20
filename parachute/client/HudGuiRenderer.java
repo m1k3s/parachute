@@ -233,7 +233,7 @@ public class HudGuiRenderer extends Gui {
         }
         double delta = Math.atan2(blockpos.getZ() - mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
         double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
-        return MathHelper.wrapAngleTo180_double(Math.toDegrees(relAngle) - 90.0); // degrees
+        return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 
     public double getHomeDistance() {
@@ -281,7 +281,7 @@ public class HudGuiRenderer extends Gui {
         BlockPos blockpos = new BlockPos(waypointX, 0, waypointZ);
         double delta = Math.atan2(blockpos.getZ() - mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
         double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
-        return MathHelper.wrapAngleTo180_double(Math.toDegrees(relAngle) - 90.0); // degrees
+        return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 
     public static int[] getWaypoint() {

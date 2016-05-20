@@ -43,7 +43,7 @@ public class ItemParachute extends Item {
         setMaxDamage(toolmaterial.getMaxUses());
         maxStackSize = 4;
         active = ConfigHandler.getIsAADActive();
-        setCreativeTab(CreativeTabs.tabTransport); // place in the transportation tab in creative mode
+        setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode
     }
 
     @SuppressWarnings("unchecked")
@@ -100,7 +100,7 @@ public class ItemParachute extends Item {
 			itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
 			ConfigHandler.setAADState(active);
         } else if (world.isRemote && entityplayer != null) { // client side
-			world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.ui_button_click, SoundCategory.MASTER, 1.0f, 1.0f);
+			world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
 		} else {
 			return false;
 		}
@@ -113,7 +113,7 @@ public class ItemParachute extends Item {
 
     @Override
     public boolean getIsRepairable(ItemStack itemstack1, ItemStack itemstack2) {
-        return Items.string == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
+        return Items.STRING == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
     }
 
 }

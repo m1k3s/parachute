@@ -81,18 +81,18 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerMountEvent());
 
         // recipe to craft the parachute
-        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.wool, 'X', Items.string, 'L', Items.leather);
+        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.WOOL, 'X', Items.STRING, 'L', Items.LEATHER);
 
         // add parachute crafting achievement
-        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.buildWorkBench);
+        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.BUILD_WORK_BENCH);
         Parachute.buildParachute.registerStat();
         AchievementPage.registerAchievementPage(new AchievementPage(I18n.translateToLocal("item.parachute.name"), Parachute.buildParachute));
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
-        StatList.allStats.add(Parachute.parachuteDeployed);
+        StatList.ALL_STATS.add(Parachute.parachuteDeployed);
         Parachute.parachuteDistance.initIndependentStat().registerStat();
-        StatList.allStats.add(Parachute.parachuteDistance);
+        StatList.ALL_STATS.add(Parachute.parachuteDistance);
     }
 
     public void postInit() {
@@ -143,7 +143,7 @@ public class ParachuteCommonProxy {
     }
 
     private static SoundEvent getRegisteredSoundEvent(String id) {
-        SoundEvent soundevent = SoundEvent.soundEventRegistry.getObject(new ResourceLocation(id));
+        SoundEvent soundevent = SoundEvent.REGISTRY.getObject(new ResourceLocation(id));
         if (soundevent == null) {
             throw new IllegalStateException("Invalid Sound requested: " + id);
         } else {

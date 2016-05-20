@@ -44,13 +44,13 @@ public class EnableWaypointCommand extends CommandBase {
         World world = sender.getEntityWorld();
         if (!world.isRemote) { // server side
             if (args.length == 0) { // display current setting
-                notifyOperators(sender, this, "commands.enablewaypoint.success", (HudGuiRenderer.getEnableWaypoint() ? enabled : disabled));
+                notifyCommandListener(sender, this, "commands.enablewaypoint.success", (HudGuiRenderer.getEnableWaypoint() ? enabled : disabled));
                 return;
             }
             // otherwise set the state
             HudGuiRenderer.enableWaypoint(Boolean.parseBoolean(args[0]));
             boolean isEnabled = args[0].equals("true") || args[0].equals("1");
-            notifyOperators(sender, this, "commands.enablewaypoint.success", (isEnabled ? enabled : disabled));
+            notifyCommandListener(sender, this, "commands.enablewaypoint.success", (isEnabled ? enabled : disabled));
         }
     }
 
