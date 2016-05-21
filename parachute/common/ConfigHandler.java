@@ -36,6 +36,7 @@ public class ConfigHandler {
 	private static boolean autoDismount;
 	private static boolean weatherAffectsDrift;
 	private static boolean lavaThermals;
+	// private static boolean randomThermals;
 	private static double minLavaDistance;
 	private static double maxLavaDistance;
 	private static boolean constantTurbulence;
@@ -70,6 +71,7 @@ public class ConfigHandler {
 	private static final String colorComment = I18n.translateToLocal("config.colors.desc");
 	private static final String waypointComment = I18n.translateToLocal("config.waypoint.desc");
 	private static final String homepointComment = I18n.translateToLocal("config.homepoint.desc");
+	// private static final String randomThermalComment = I18n.translateToLocal("config.randomthermal.desc");
 	private static final String[] colorValues = {
 			"random",
 			"black",
@@ -116,6 +118,7 @@ public class ConfigHandler {
 			heightLimit = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256).getInt();
 			thermals = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment).getBoolean(true);
 			lavaThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", false, lavaThermalComment).getBoolean(false);
+			// randomThermals = config.get(Configuration.CATEGORY_GENERAL, "randomThermals", false, randomThermalComment).getBoolean(false);
 			minLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0).getDouble(3.0);
 			maxLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0).getDouble(48.0);
 			autoDismount = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment).getBoolean(true);
@@ -144,6 +147,11 @@ public class ConfigHandler {
 			}
 		}
 	}
+	
+	// public static boolean getRandomThermals()
+	// {
+		// return randomThermals;
+	// }
 
 	public static boolean getDismountInWater()
 	{

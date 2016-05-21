@@ -70,3 +70,4 @@ config.usespawnpoint.desc=use spawn point for home direction if true or input yo
 config.colors.desc=Select a parachute color, random, or custom[0-9]
 config.waypoint.desc=waypoint coordinates [X, Z]
 config.homepoint.desc=homepoint coordinates [X, Z]
+config.randomthermal.desc=applies random thermals to the parachute
