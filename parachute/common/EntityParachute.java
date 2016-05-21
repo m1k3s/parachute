@@ -19,16 +19,15 @@
 package com.parachute.common;
 
 import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
@@ -333,7 +332,7 @@ public class EntityParachute extends Entity {
     // determines the descent rate based on whether or not
     // the space bar has been pressed. weather and lava affect
     // the final result.
-    public double currentDescentRate() {
+    private double currentDescentRate() {
         double descentRate = drift; // defaults to drift
 
         if (ConfigHandler.getWeatherAffectsDrift()) {
@@ -372,28 +371,26 @@ public class EntityParachute extends Entity {
 
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
-    public boolean isHeatSource(BlockPos bp) {
+    private boolean isHeatSource(BlockPos bp) {
         Block block = worldObj.getBlockState(bp).getBlock();
-        return (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA || block == Blocks.FIRE);
+        // AxisAlignedBB bb = new AxisAlignedBB(bp).expand(0,1,0);
+        return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
     }
 
-    public boolean isHeatSourceInRange(BlockPos bp) {
-//        Vec3d v1 = new Vec3d(posX, posY, posZ);
-//        Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
-//        RayTraceResult mop = worldObj.rayTraceBlocks(v1, v2, true);
-//        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
-//            BlockPos blockpos = mop.getBlockPos();
-        while (worldObj.isAirBlock(bp.down())) {
-            if (isHeatSource(bp)) {
-                return true;
-            } else {
-                bp = bp.down();
-            }
-        }
+    private boolean isHeatSourceInRange(BlockPos bp) {
+       Vec3d v1 = new Vec3d(posX, posY, posZ);
+       Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
+       RayTraceResult mop = worldObj.rayTraceBlocks(v1, v2, true);
+       if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
+           BlockPos blockpos = mop.getBlockPos();
+			if (isHeatSource(blockpos)) {
+				return true;
+			}
+		}
         return false;
     }
 
-    public double doHeatSourceThermals() {
+    private double doHeatSourceThermals() {
         double thermals = drift;
         final double inc = 0.5;
 

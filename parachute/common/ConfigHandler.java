@@ -21,6 +21,7 @@ package com.parachute.common;
 
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
