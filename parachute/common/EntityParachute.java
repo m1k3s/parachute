@@ -373,7 +373,6 @@ public class EntityParachute extends Entity {
     // at up to 'maxThermalRise' distance.
     private boolean isHeatSource(BlockPos bp) {
         Block block = worldObj.getBlockState(bp).getBlock();
-        // AxisAlignedBB bb = new AxisAlignedBB(bp).expand(0,1,0);
         return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
     }
 

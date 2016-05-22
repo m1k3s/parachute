@@ -77,21 +77,21 @@ public class Parachute {
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		ConfigHandler.startConfig(event);
-		proxy.preInit();
+		proxy.preInit(event);
 	}
 
 	@SuppressWarnings("unused")
 	@Mod.EventHandler
 	public void Init(FMLInitializationEvent event)
 	{
-		proxy.Init();
+		proxy.Init(event);
 	}
 
 	@SuppressWarnings("unused")
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		proxy.postInit();
+		proxy.postInit(event);
 	}
 
 	@SuppressWarnings("unused")

@@ -36,6 +36,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -55,7 +56,7 @@ public class ParachuteCommonProxy {
     protected static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.modid + ":" + parachuteName);
     protected static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.modid + ":" + packName);
 
-    public void preInit() {
+    public void preInit(FMLPreInitializationEvent event) {
         int entityID = 1;
         EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
 
@@ -73,7 +74,7 @@ public class ParachuteCommonProxy {
     }
 
     @SuppressWarnings("unchecked") // no type specifiers in minecraft StatList
-    public void Init() {
+    public void Init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(Parachute.instance);
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
@@ -95,7 +96,7 @@ public class ParachuteCommonProxy {
         StatList.ALL_STATS.add(Parachute.parachuteDistance);
     }
 
-    public void postInit() {
+    public void postInit(FMLPostInitializationEvent event) {
         // move along, nothing to see here...
     }
 

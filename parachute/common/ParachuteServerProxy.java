@@ -1,28 +1,29 @@
 package com.parachute.common;
 
 
-import net.minecraft.util.text.translation.I18n;
+// import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.common.event.*;
 
 @SuppressWarnings("unused")
 public class ParachuteServerProxy extends ParachuteCommonProxy {
 
 	@Override
-	public void preInit()
+	public void preInit(FMLPreInitializationEvent event)
 	{
-		super.preInit();
-		info(Parachute.modid + I18n.translateToLocal("info.server.preinit"));
+		super.preInit(event);
+		// info(Parachute.modid + I18n.translateToLocal("info.server.preinit"));
 	}
 
 	@Override
-	public void Init()
+	public void Init(FMLInitializationEvent event)
 	{
-		super.Init();
-		info(Parachute.modid + I18n.translateToLocal("info.server.init"));
+		super.Init(event);
+		// info(Parachute.modid + I18n.translateToLocal("info.server.init"));
 	}
 
 	@Override
-	public void postInit()
+	public void postInit(FMLPostInitializationEvent event)
 	{
-		info(Parachute.modid + I18n.translateToLocal("info.server.postinit"));
+		// info(Parachute.modid + I18n.translateToLocal("info.server.postinit"));
 	}
 }
