@@ -33,7 +33,6 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.*;
@@ -60,7 +59,7 @@ public class ParachuteCommonProxy {
         int entityID = 1;
         EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
 
-        Parachute.parachuteItem = new ItemParachute(ToolMaterial.IRON).setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
+        Parachute.parachuteItem = new ItemParachute().setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
         GameRegistry.register(Parachute.parachuteItem);
 
         final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
@@ -87,7 +86,7 @@ public class ParachuteCommonProxy {
         // add parachute crafting achievement
         Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.BUILD_WORK_BENCH);
         Parachute.buildParachute.registerStat();
-        AchievementPage.registerAchievementPage(new AchievementPage(I18n.translateToLocal("item.parachute.name"), Parachute.buildParachute));
+        AchievementPage.registerAchievementPage(new AchievementPage("Parachute", Parachute.buildParachute));
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();

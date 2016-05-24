@@ -19,9 +19,7 @@
 //
 package com.parachute.common;
 
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -50,27 +48,27 @@ public class ConfigHandler {
 	private static int[] waypoint;
 	private static int[] homepoint;
 
-	private static final String aboutComments = I18n.translateToLocalFormatted("config.about.desc", Parachute.name, Parachute.mcversion);
-	private static final String usageComment = I18n.translateToLocal("config.usage.desc"); // false
-	private static final String heightComment = I18n.translateToLocal("config.height.desc"); // 256
-	private static final String thermalComment = I18n.translateToLocal("config.thermal.desc"); // true
-	private static final String lavaThermalComment = I18n.translateToLocal("config.lavathermal.desc"); // false
-	private static final String minLavaDistanceComment = I18n.translateToLocal("config.minlavadistance.desc"); // 3.0
-	private static final String maxLavaDistanceComment = I18n.translateToLocal("config.maxlavadistance.desc"); // 48
-	private static final String autoComment = I18n.translateToLocal("config.autodismount.desc"); // true
-	private static final String weatherComment = I18n.translateToLocal("config.weather.desc"); // true
-	private static final String turbulenceComment = I18n.translateToLocal("config.turbulence.desc"); // false
-	private static final String trailsComment = I18n.translateToLocal("config.trails.desc"); // false
-	private static final String dismountComment = I18n.translateToLocal("config.waterdismount.desc"); // false
-	private static final String lavaDisablesComment = I18n.translateToLocal("config.lavadisables.desc"); // true
-    private static final String isAADActiveComment = I18n.translateToLocal("config.aadactive.desc"); // false
-    private static final String aadAltitudeComment = I18n.translateToLocal("config.aadaltitude.desc"); // 10 meters
-	private static final String aadImmedComment = I18n.translateToLocal("config.aadimmediate.desc"); // > minFalldistance meters
-    private static final String minFallDistanceComment = I18n.translateToLocal("config.minfalldistance.desc"); // 5 meters
-	private static final String useSpawnPointComment = I18n.translateToLocal("config.usespawnpoint.desc");
-	private static final String colorComment = I18n.translateToLocal("config.colors.desc");
-	private static final String waypointComment = I18n.translateToLocal("config.waypoint.desc");
-	private static final String homepointComment = I18n.translateToLocal("config.homepoint.desc");
+	private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.name, Parachute.mcversion);
+	private static final String usageComment = "set to true for parachute single use"; // false
+	private static final String heightComment = "0 (zero) disables altitude limiting"; // 256
+	private static final String thermalComment = "enable thermal rise by pressing the space bar"; // true
+	private static final String lavaThermalComment = "use lava heat to get thermals to rise up, optionally disables space bar thermals"; // false
+	private static final String minLavaDistanceComment = "minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava!"; // 3.0
+	private static final String maxLavaDistanceComment = "maximum distance to rise from lava thermals"; // 48
+	private static final String autoComment = "If true the parachute will dismount the player automatically, if false the player has to use LSHIFT to dismount the parachute"; // true
+	private static final String weatherComment = "set to false if you don't want the drift rate to be affected by bad weather"; // true
+	private static final String turbulenceComment = "set to true to always feel the turbulent world of Minecraft"; // false
+	private static final String trailsComment = "set to true to show contrails from parachute"; // false
+	private static final String dismountComment = "true to dismount in water"; // false
+	private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
+    private static final String isAADActiveComment = "whether or not the AAD starts active"; // false
+    private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
+	private static final String aadImmedComment = "AAD deploys immediately after the player falls more than minFallDistance"; // > minFalldistance meters
+    private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
+	private static final String useSpawnPointComment = "use spawn point for home direction if true or input your own coords if false";
+	private static final String colorComment = "Select a parachute color, random, or custom[0-9]";
+	private static final String waypointComment = "waypoint coordinates [X, Z]";
+	private static final String homepointComment = "homepoint coordinates [X, Z]";
 	private static final String[] colorValues = {
 			"random",
 			"black",
@@ -138,7 +136,7 @@ public class ConfigHandler {
 			thermals = !(lavaThermals && lavaDisablesThermals);
 
 		} catch (Exception e) {
-			Parachute.proxy.info(I18n.translateToLocal("info.message.configfail"));
+			Parachute.proxy.info("failed to load or read the config file");
 		} finally {
 			if (config.hasChanged()) {
 				config.save();

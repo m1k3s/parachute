@@ -20,6 +20,7 @@
 package com.parachute.common;
 
 import com.parachute.client.RenderParachute;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -29,7 +30,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
 
@@ -38,9 +38,9 @@ public class ItemParachute extends Item {
 
     private static boolean active;
 
-    public ItemParachute(ToolMaterial toolmaterial) {
+    public ItemParachute() {
         super();
-        setMaxDamage(toolmaterial.getMaxUses());
+        setMaxDamage(ToolMaterial.IRON.getMaxUses());
         maxStackSize = 4;
         active = ConfigHandler.getIsAADActive();
         setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode
@@ -97,7 +97,7 @@ public class ItemParachute extends Item {
     {
         if (!world.isRemote && entityplayer != null) { // server side
             active = !active;
-			itemstack.setStackDisplayName(active ? I18n.translateToLocal("aad.active") : I18n.translateToLocal("aad.inactive"));
+			itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
 			ConfigHandler.setAADState(active);
         } else if (world.isRemote && entityplayer != null) { // client side
 			world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
