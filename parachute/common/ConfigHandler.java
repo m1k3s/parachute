@@ -165,6 +165,14 @@ public class ConfigHandler {
 	{
 		return chuteColor;
 	}
+	
+	public static void setChuteColor(String color)
+	{
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "random", colorComment);
+		prop.set(color);
+		config.save();
+		chuteColor = color;
+	}
 
 	public static boolean getAllowLavaThermals()
 	{

@@ -21,15 +21,15 @@ package com.parachute.client;
 
 import com.parachute.common.ConfigHandler;
 import com.parachute.common.EntityParachute;
-import com.parachute.common.Parachute;
-import java.util.Random;
+//import com.parachute.common.Parachute;
+//import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.VertexBuffer;
+//import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+//import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -40,7 +40,7 @@ public class RenderParachute extends Render<EntityParachute>
 	private static String curColor = ConfigHandler.getChuteColor();
 	protected static ModelBase modelParachute = new ModelParachute();
 	private static ResourceLocation parachuteTexture = null;
-	private static final Random rand = new Random(System.currentTimeMillis());
+//	private static final Random rand = new Random(System.currentTimeMillis());
 
 	public RenderParachute(RenderManager rm)
 	{
@@ -101,69 +101,69 @@ public class RenderParachute extends Render<EntityParachute>
 
 	public static void setParachuteColor(String color)
 	{
-		if (color.equalsIgnoreCase("random")) {
-			if (rand.nextBoolean()) {
-				parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + getRandomColor() + ".png");
-			} else {
-				parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + getRandomCustomColor() + ".png");
-			}
-		} else if (color.toLowerCase().startsWith("custom")) {
-			parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + color + ".png");
-		} else {
+//		if (color.equalsIgnoreCase("random")) {
+//			if (rand.nextBoolean()) {
+//				parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + getRandomColor() + ".png");
+//			} else {
+//				parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + getRandomCustomColor() + ".png");
+//			}
+//		} else if (color.toLowerCase().startsWith("custom")) {
+//			parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + color + ".png");
+//		} else {
 			parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + color + ".png");
-		}
+//		}
 		curColor = color;
 	}
 
 	protected static ResourceLocation getParachuteColor(String color)
 	{
 		if (parachuteTexture == null) {
-			if (color.equalsIgnoreCase("random")) {
-				if (rand.nextBoolean()) {
-					parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + getRandomColor() + ".png");
-				} else {
-					parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + getRandomCustomColor() + ".png");
-				}
-			} else if (color.toLowerCase().startsWith("custom")) {
-				parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + color + ".png");
-			} else {
+//			if (color.equalsIgnoreCase("random")) {
+//				if (rand.nextBoolean()) {
+//					parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + getRandomColor() + ".png");
+//				} else {
+//					parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + getRandomCustomColor() + ".png");
+//				}
+//			} else if (color.toLowerCase().startsWith("custom")) {
+//				parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + color + ".png");
+//			} else {
 				parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + color + ".png");
-			}
+//			}
 			curColor = color;
 		}
 		return parachuteTexture;
 	}
 
-	protected static String getRandomColor()
-	{
-		String[] colors = {
-			"black",
-			"blue",
-			"brown",
-			"cyan",
-			"gray",
-			"green",
-			"light_blue",
-			"lime",
-			"magenta",
-			"orange",
-			"pink",
-			"purple",
-			"red",
-			"silver",
-			"white",
-			"yellow"
-		};
-
-		return colors[rand.nextInt(16)];
-	}
+//	protected static String getRandomColor()
+//	{
+//		String[] colors = {
+//			"black",
+//			"blue",
+//			"brown",
+//			"cyan",
+//			"gray",
+//			"green",
+//			"light_blue",
+//			"lime",
+//			"magenta",
+//			"orange",
+//			"pink",
+//			"purple",
+//			"red",
+//			"silver",
+//			"white",
+//			"yellow"
+//		};
+//
+//		return colors[rand.nextInt(16)];
+//	}
 
 	// return the string 'custom' and append a random digit 
 	// between zero and nine
-	protected static String getRandomCustomColor()
-	{
-		return "custom" + rand.nextInt(10);
-	}
+//	protected static String getRandomCustomColor()
+//	{
+//		return "custom" + rand.nextInt(10);
+//	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityParachute entity)

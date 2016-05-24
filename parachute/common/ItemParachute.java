@@ -20,6 +20,7 @@
 package com.parachute.common;
 
 import com.parachute.client.RenderParachute;
+import com.typesafe.config.Config;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -38,9 +39,9 @@ public class ItemParachute extends Item {
 
     private static boolean active;
 
-    public ItemParachute(ToolMaterial toolmaterial) {
+    public ItemParachute() {
         super();
-        setMaxDamage(toolmaterial.getMaxUses());
+        setMaxDamage(ToolMaterial.IRON.getMaxUses());
         maxStackSize = 4;
         active = ConfigHandler.getIsAADActive();
         setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode

@@ -19,6 +19,7 @@
 //
 package com.parachute.common;
 
+import net.minecraft.block.BlockColored;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -60,7 +61,7 @@ public class ParachuteCommonProxy {
         int entityID = 1;
         EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
 
-        Parachute.parachuteItem = new ItemParachute(ToolMaterial.IRON).setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
+        Parachute.parachuteItem = new ItemParachute().setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
         GameRegistry.register(Parachute.parachuteItem);
 
         final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold

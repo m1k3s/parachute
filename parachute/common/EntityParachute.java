@@ -25,6 +25,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.util.EnumParticleTypes;
@@ -36,7 +39,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class EntityParachute extends Entity {
-
+	
+	private static final DataParameter<Integer> CHUTE_COLOR = EntityDataManager.<Integer>createKey(EntityParachute.class, DataSerializers.VARINT);
     private double velocityX;
     private double velocityY;
     private double velocityZ;
@@ -110,6 +114,7 @@ public class EntityParachute extends Entity {
 
     @Override
     protected void entityInit() {
+		dataManager.register(CHUTE_COLOR, EntityParachute.Color.RANDOM.ordinal());
     }
 
     @Override
@@ -490,14 +495,75 @@ public class EntityParachute extends Entity {
             skydiver.setRotationYawHead(rotationYaw + 90);
         }
     }
+    
+    public EntityParachute.Color getChuteColor() {
+		return EntityParachute.Color.byId(dataManager.get(CHUTE_COLOR));
+	}
+	
+	public void setChuteColor(EntityParachute.Color chuteColor)
+    {
+        dataManager.set(CHUTE_COLOR, chuteColor.ordinal());
+    }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound nbt) {
+		nbt.setString("Color", getChuteColor().getColor());
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
+		if (nbt.hasKey("Color", 10)) {
+            setChuteColor(EntityParachute.Color.getTypeFromString(nbt.getString("Color")));
+        }
     }
+    
+    public enum Color {
+        RANDOM("random"),
+		BLACK("black"),
+		BLUE("blue"),
+		BROWN("brown"),
+		CYAN("cyan"),
+		GRAY("gray"),
+		GREEN("green"),
+		LIGHT_BLUE("light_blue"),
+		LIME("lime"),
+		MAGENTA("magenta"),
+		ORANGE("orange"),
+		PINK("pink"),
+		PURPLE("purple"),
+		RED("red"),
+		SILVER("silver"),
+		WHITE("white"),
+		YELLOW("yellow");
+		
+		private final String color;
+		
+		private Color(String colorParam) {
+			color = colorParam;
+		}
+		
+		public String getColor() {
+			return color;
+		}
+		
+		public static EntityParachute.Color byId(int id) {
+            if (id < 0 || id >= values().length) {
+                id = 0;
+            }
+
+            return values()[id];
+        }
+        
+        public static EntityParachute.Color getTypeFromString(String colorParam) {
+            for (int k = 0; k < values().length; k++) {
+                if (values()[k].getColor().equals(colorParam)) {
+                    return values()[k];
+                }
+            }
+
+            return values()[0];
+        }
+	}
 
     @Override
     public String toString() {
