@@ -25,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -34,7 +33,6 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.*;
@@ -82,13 +80,16 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new ParachuteItemCraftedEvent());
         MinecraftForge.EVENT_BUS.register(new PlayerMountEvent());
 
-        // recipe to craft the parachute
-        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.WOOL, 'X', Items.STRING, 'L', Items.LEATHER);
+        // recipe to craft the parachutes with colored wool
+        for (int k = 0; k < 16; k++) {
+            GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1, 15 - k), "###", "X X", " L ", '#', new ItemStack(Blocks.WOOL, 1, k), 'X', Items.STRING, 'L', Items.LEATHER);
+        }
+//        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.WOOL, 'X', Items.STRING, 'L', Items.LEATHER);
 
         // add parachute crafting achievement
         Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.BUILD_WORK_BENCH);
         Parachute.buildParachute.registerStat();
-        AchievementPage.registerAchievementPage(new AchievementPage(I18n.translateToLocal("item.parachute.name"), Parachute.buildParachute));
+        AchievementPage.registerAchievementPage(new AchievementPage("Parachute", Parachute.buildParachute));
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
