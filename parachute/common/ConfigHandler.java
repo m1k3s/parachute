@@ -118,7 +118,7 @@ public class ConfigHandler {
 			minLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0).getDouble(3.0);
 			maxLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0).getDouble(48.0);
 			autoDismount = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment).getBoolean(true);
-			chuteColor = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "random", colorComment, colorValues).getString();
+			chuteColor = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white", colorComment, colorValues).getString();
 			weatherAffectsDrift = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment).getBoolean(true);
 			constantTurbulence = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment).getBoolean(false);
 			showContrails = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment).getBoolean(false);
@@ -166,7 +166,7 @@ public class ConfigHandler {
 
 	public static void setChuteColor(String color)
 	{
-		Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "random", colorComment);
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white", colorComment);
 		prop.set(color);
 		config.save();
 		chuteColor = color;

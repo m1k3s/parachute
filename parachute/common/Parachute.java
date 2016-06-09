@@ -19,7 +19,6 @@
 //
 package com.parachute.common;
 
-// import net.minecraft.util.text.translation.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
@@ -37,20 +36,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 		name = Parachute.name,
 		version = Parachute.modversion,
 		acceptedMinecraftVersions = Parachute.mcversion,
-		guiFactory = Parachute.guifactory
+		guiFactory = Parachute.guifactory,
+		dependencies = "required-after:FML"
 )
 
 public class Parachute {
 
 	public static final String modid = "parachutemod";
-	public static final String modversion = "1.4.2";
+	public static final String modversion = "1.4.3";
 	public static final String mcversion = "1.9.4";
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
 	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
 	public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
     public static Achievement buildParachute;
-	public static int minimumForgeBuildVersion = 1909;
 
 	@SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
 	public static ParachuteCommonProxy proxy;
@@ -66,6 +65,7 @@ public class Parachute {
 	public void Construct(FMLConstructionEvent event)
 	{
 		int buildVersion = ForgeVersion.getBuildVersion();
+		int minimumForgeBuildVersion = 1909;
 		if (buildVersion < minimumForgeBuildVersion) {
 			proxy.error(String.format("This mod requires Forge Mod Loader build version of %d or higher", minimumForgeBuildVersion));
 			proxy.error(String.format("You are running Forge Mod Loader build version %d", buildVersion));

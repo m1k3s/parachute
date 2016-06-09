@@ -24,8 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -39,6 +37,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.common.ForgeVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,9 +90,15 @@ public class ParachuteCommonProxy {
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
-        StatList.ALL_STATS.add(Parachute.parachuteDeployed);
         Parachute.parachuteDistance.initIndependentStat().registerStat();
-        StatList.ALL_STATS.add(Parachute.parachuteDistance);
+        int fv = ForgeVersion.getBuildVersion();
+        if (fv < 1928) {
+			StatList.ALL_STATS.add(Parachute.parachuteDeployed); // not needed in forge 1928 and higher
+			StatList.ALL_STATS.add(Parachute.parachuteDistance);
+			info("Forge Version is " + fv + ", manually registered parachute stats.");
+		} else {
+			info("Forge Version is " + fv + ", Forge auto registered parachute stats.");
+		}
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -127,8 +132,8 @@ public class ParachuteCommonProxy {
         return player.fallDistance > minFallDistance;
     }
 
-    public static boolean isFalling(EntityPlayer entity) {
-        return (entity.fallDistance > 0.0F && !entity.onGround && !entity.isOnLadder());
+    public static boolean isFalling(EntityPlayer player) {
+        return (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder());
     }
 
     public static boolean onParachute(EntityPlayer entity) {
