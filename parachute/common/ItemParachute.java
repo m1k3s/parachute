@@ -20,7 +20,6 @@
 package com.parachute.common;
 
 import com.parachute.client.RenderParachute;
-import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -55,7 +54,7 @@ public class ItemParachute extends Item {
         } else { // toggle the AAD state
             result = toggleAAD(itemstack, world, entityplayer);
         }
-        return new ActionResult(result ? EnumActionResult.SUCCESS : EnumActionResult.PASS, itemstack); // unchecked
+        return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
     }
 
     public boolean deployParachute(World world, EntityPlayer entityplayer) {
