@@ -44,7 +44,7 @@ public class Parachute {
 
 	public static final String modid = "parachutemod";
 	public static final String modversion = "1.5.0";
-	public static final String mcversion = "1.1o";
+	public static final String mcversion = "1.10";
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
 	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
