@@ -43,8 +43,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Parachute {
 
 	public static final String modid = "parachutemod";
-	public static final String modversion = "1.5.0";
-	public static final String mcversion = "1.10";
+	public static final String modversion = "1.5.2";
+	public static final String mcversion = "1.10.2";
 	public static final String name = "Parachute Mod NG";
 	public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
 	public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
@@ -65,7 +65,7 @@ public class Parachute {
 	public void Construct(FMLConstructionEvent event)
 	{
 		int buildVersion = ForgeVersion.getBuildVersion();
-		int minimumForgeBuildVersion = 1950;
+		int minimumForgeBuildVersion = 2002;
 		if (buildVersion < minimumForgeBuildVersion) {
 			proxy.error(String.format("This mod requires Forge Mod Loader build version of %d or higher", minimumForgeBuildVersion));
 			proxy.error(String.format("You are running Forge Mod Loader build version %d", buildVersion));
