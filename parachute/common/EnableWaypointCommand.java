@@ -1,7 +1,6 @@
 package com.parachute.common;
 
 import com.parachute.client.HudGuiRenderer;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -14,14 +13,10 @@ import java.util.List;
 
 public class EnableWaypointCommand extends CommandBase {
     private final List<String> aliases;
-    private String enabled;
-    private String disabled;
 
     public EnableWaypointCommand() {
         aliases = new ArrayList<>();
         aliases.add("enablewaypoint");
-        enabled = I18n.translateToLocal("commands.enablewaypoint.enabled");
-        disabled = I18n.translateToLocal("commands.enablewaypoint.disabled");
     }
 
     @Override
@@ -31,7 +26,7 @@ public class EnableWaypointCommand extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "commands.enablewaypoint.usage";
+        return "/setwaypoint <X coord> <Z coord>";
     }
 
     @Override
@@ -44,13 +39,13 @@ public class EnableWaypointCommand extends CommandBase {
         World world = sender.getEntityWorld();
         if (!world.isRemote) { // server side
             if (args.length == 0) { // display current setting
-                notifyOperators(sender, this, "commands.enablewaypoint.success", (HudGuiRenderer.getEnableWaypoint() ? enabled : disabled));
+                notifyCommandListener(sender, this, "commands.enablewaypoint.success", (HudGuiRenderer.getEnableWaypoint() ? "enabled" : "disabled"));
                 return;
             }
             // otherwise set the state
             HudGuiRenderer.enableWaypoint(Boolean.parseBoolean(args[0]));
             boolean isEnabled = args[0].equals("true") || args[0].equals("1");
-            notifyOperators(sender, this, "commands.enablewaypoint.success", (isEnabled ? enabled : disabled));
+            notifyCommandListener(sender, this, "commands.enablewaypoint.success", (isEnabled ? "enabled" : "disabled"));
         }
     }
 

@@ -25,12 +25,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -90,11 +90,11 @@ public class EntityParachute extends Entity {
         prevPosZ = z;
     }
 
-    static public void setAscendMode(boolean mode) {
+    static void setAscendMode(boolean mode) {
         ascendMode = mode;
     }
 
-    public void dismountParachute() {
+    void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
             dismountRidingEntity();
@@ -132,7 +132,7 @@ public class EntityParachute extends Entity {
         boolean sitting = false;
         if (skyDiver != null) {
             BlockPos bp = new BlockPos(skyDiver.posX, skyDiver.getEntityBoundingBox().minY - 3.0, skyDiver.posZ);
-            sitting = (worldObj.getBlockState(bp).getBlock() != Blocks.air);
+            sitting = (worldObj.getBlockState(bp).getBlock() != Blocks.AIR);
         }
         return sitting;
     }
@@ -160,7 +160,7 @@ public class EntityParachute extends Entity {
 
     @Override
     public double getMountedYOffset() {
-        return -(ParachuteCommonProxy.getOffsetY());
+        return - (ParachuteCommonProxy.getOffsetY());
     }
 
     @Override
@@ -168,8 +168,9 @@ public class EntityParachute extends Entity {
         return !isDead;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int inc, boolean unused) {
+    public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int inc, boolean teleport) {
         double deltaX = x - posX;
         double deltaY = y - posY;
         double deltaZ = z - posZ;
@@ -279,7 +280,7 @@ public class EntityParachute extends Entity {
         }
 
         // update and clamp yaw between -180 and 180
-        double adjustedYaw = MathHelper.wrapAngleTo180_double(yaw - rotationYaw);
+        double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
         // further clamp yaw between -20 and 20 per update, slower turn radius
         if (adjustedYaw > 20.0D) {
             adjustedYaw = 20.0D;
@@ -312,14 +313,14 @@ public class EntityParachute extends Entity {
         }
     }
 
-    public void killParachute() {
+    private void killParachute() {
         ParachuteCommonProxy.setDeployed(false);
         setDead();
     }
 
     // check for bad weather, if the biome can rain or snow check to see
     // if it is raining (or snowing) or thundering.
-    public boolean isBadWeather() {
+    private boolean isBadWeather() {
         BlockPos bp = new BlockPos(posX, posY, posZ);
         Chunk chunk = worldObj.getChunkFromBlockCoords(bp);
         boolean canSnow = chunk.getBiome(bp, worldObj.provider.getBiomeProvider()).getEnableSnow();
@@ -330,15 +331,15 @@ public class EntityParachute extends Entity {
     // determines the descent rate based on whether or not
     // the space bar has been pressed. weather and lava affect
     // the final result.
-    public double currentDescentRate() {
+    private double currentDescentRate() {
         double descentRate = drift; // defaults to drift
 
         if (ConfigHandler.getWeatherAffectsDrift()) {
-            if (worldObj.isRaining()) { // rain makes you fall faster
+            if (worldObj.isRaining()) {  // rain makes you fall faster
                 descentRate += 0.002;
             }
 
-            if (worldObj.isThundering()) { // more rain really makes you fall faster
+            if (worldObj.isThundering()) {  // more rain really makes you fall faster
                 descentRate += 0.004;
             }
         }
@@ -369,28 +370,25 @@ public class EntityParachute extends Entity {
 
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
-    public boolean isHeatSource(BlockPos bp) {
-        Block block = worldObj.getBlockState(bp).getBlock();
-        return (block == Blocks.lava || block == Blocks.flowing_lava || block == Blocks.fire);
+    private boolean isHeatSource(BlockPos bp) {
+//        Block block = worldObj.getBlockState (bp).getBlock();
+        return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
     }
 
-    public boolean isHeatSourceInRange(BlockPos bp) {
-//        Vec3d v1 = new Vec3d(posX, posY, posZ);
-//        Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
-//        RayTraceResult mop = worldObj.rayTraceBlocks(v1, v2, true);
-//        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
-//            BlockPos blockpos = mop.getBlockPos();
-        while (worldObj.isAirBlock(bp.down())) {
-            if (isHeatSource(bp)) {
+    private boolean isHeatSourceInRange(BlockPos bp) {
+        Vec3d v1 = new Vec3d(posX, posY, posZ);
+        Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
+        RayTraceResult mop = worldObj.rayTraceBlocks(v1, v2, true);
+        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
+            BlockPos blockpos = mop.getBlockPos();
+            if (isHeatSource(blockpos)) {
                 return true;
-            } else {
-                bp = bp.down();
             }
         }
         return false;
     }
 
-    public double doHeatSourceThermals() {
+    private double doHeatSourceThermals() {
         double thermals = drift;
         final double inc = 0.5;
 
@@ -415,21 +413,21 @@ public class EntityParachute extends Entity {
     // hung up in the trees. Also means that the pilot must manually
     // dismount to land on trees. Dismounting over water is handled by the
     // shouldDismountInWater method and config option.
-    public boolean checkForGroundProximity(BlockPos bp) {
+    private boolean checkForGroundProximity(BlockPos bp) {
         Block block = worldObj.getBlockState(bp).getBlock();
-        boolean isAir = (block == Blocks.air);
+        boolean isAir = (block == Blocks.AIR);
         boolean isVegetation = (block instanceof BlockFlower) || (block instanceof BlockGrass) || (block instanceof BlockLeaves);
         return (!isAir && !isVegetation);
     }
 
     // apply 'turbulence' in the form of a collision force
-    public void applyTurbulence(boolean roughWeather) {
+    private void applyTurbulence(boolean roughWeather) {
         double rmin = 0.1;
         double deltaPos = rmin + 0.9 * rand.nextDouble();
 
         if (deltaPos >= 0.20) {
             double rmax = roughWeather ? 0.8 : 0.5;
-            rmax = (rand.nextInt(5) == 0) ? 1.0 : rmax; // gusting
+            rmax = (rand.nextInt(5) == 0) ? 1.0 : rmax;  // gusting
             double deltaX = rmin + (rmax - rmin) * rand.nextDouble();
             double deltaY = rmin + 0.2 * rand.nextDouble();
             double deltaZ = rmin + (rmax - rmin) * rand.nextDouble();
@@ -466,12 +464,12 @@ public class EntityParachute extends Entity {
     // don't generate contrails (no engines), but most worlds
     // aren't made of blocks with cubic cows either. If you
     // like, you can think of the trails as chemtrails.
-    public void generateContrails(double velocity) {
+    private void generateContrails(double velocity) {
         double cosYaw = 2.0 * Math.cos(Math.toRadians(rotationYaw));
         double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
 
         for (int k = 0; (double) k < 1.0 + velocity; k++) {
-            double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
+            double sign = (double)(rand.nextInt(2) * 2 - 1) * 0.7;
             double x = prevPosX - cosYaw * -0.35 + sinYaw * sign;
             double y = posY - 0.25;
             double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;

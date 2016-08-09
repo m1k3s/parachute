@@ -1,14 +1,14 @@
-//  
+//
 //  =====GPL=============================================================
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation; version 2 dated June, 1991.
-// 
-//  This program is distributed in the hope that it will be useful, 
+//
+//  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program;  if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave., Cambridge, MA 02139, USA.
@@ -24,7 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -33,11 +32,12 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.common.ForgeVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,11 +55,11 @@ public class ParachuteCommonProxy {
     protected static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.modid + ":" + parachuteName);
     protected static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.modid + ":" + packName);
 
-    public void preInit() {
+    public void preInit(FMLPreInitializationEvent event) {
         int entityID = 1;
         EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
 
-        Parachute.parachuteItem = new ItemParachute(ToolMaterial.IRON).setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
+        Parachute.parachuteItem = new ItemParachute().setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
         GameRegistry.register(Parachute.parachuteItem);
 
         final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
@@ -73,7 +73,7 @@ public class ParachuteCommonProxy {
     }
 
     @SuppressWarnings("unchecked") // no type specifiers in minecraft StatList
-    public void Init() {
+    public void Init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(Parachute.instance);
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
@@ -81,21 +81,27 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerMountEvent());
 
         // recipe to craft the parachute
-        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.wool, 'X', Items.string, 'L', Items.leather);
+        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.WOOL, 'X', Items.STRING, 'L', Items.LEATHER);
 
         // add parachute crafting achievement
-        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.buildWorkBench);
+        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.BUILD_WORK_BENCH);
         Parachute.buildParachute.registerStat();
-        AchievementPage.registerAchievementPage(new AchievementPage(I18n.translateToLocal("item.parachute.name"), Parachute.buildParachute));
+        AchievementPage.registerAchievementPage(new AchievementPage("Parachute", Parachute.buildParachute));
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
-        StatList.allStats.add(Parachute.parachuteDeployed);
         Parachute.parachuteDistance.initIndependentStat().registerStat();
-        StatList.allStats.add(Parachute.parachuteDistance);
+        int fv = ForgeVersion.getBuildVersion();
+        if (fv < 1928) {
+            StatList.ALL_STATS.add(Parachute.parachuteDeployed); // not needed in forge 1928 and higher
+            StatList.ALL_STATS.add(Parachute.parachuteDistance);
+            info("Forge Version is " + fv + ", manually registered parachute stats.");
+        } else {
+            info("Forge Version is " + fv + ", Forge auto registered parachute stats.");
+        }
     }
 
-    public void postInit() {
+    public void postInit(FMLPostInitializationEvent event) {
         // move along, nothing to see here...
     }
 
@@ -126,8 +132,8 @@ public class ParachuteCommonProxy {
         return player.fallDistance > minFallDistance;
     }
 
-    public static boolean isFalling(EntityPlayer entity) {
-        return (entity.fallDistance > 0.0F && !entity.onGround && !entity.isOnLadder());
+    public static boolean isFalling(EntityPlayer player) {
+        return (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder());
     }
 
     public static boolean onParachute(EntityPlayer entity) {
@@ -143,7 +149,7 @@ public class ParachuteCommonProxy {
     }
 
     private static SoundEvent getRegisteredSoundEvent(String id) {
-        SoundEvent soundevent = SoundEvent.soundEventRegistry.getObject(new ResourceLocation(id));
+        SoundEvent soundevent = SoundEvent.REGISTRY.getObject(new ResourceLocation(id));
         if (soundevent == null) {
             throw new IllegalStateException("Invalid Sound requested: " + id);
         } else {
