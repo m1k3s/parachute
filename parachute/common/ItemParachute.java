@@ -1,14 +1,14 @@
-//  
+//
 //  =====GPL=============================================================
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation; version 2 dated June, 1991.
-// 
-//  This program is distributed in the hope that it will be useful, 
+//
+//  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program;  if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave., Cambridge, MA 02139, USA.
@@ -46,9 +46,8 @@ public class ItemParachute extends Item {
     }
 
     @SuppressWarnings("unchecked")
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer, EnumHand hand)
-    {
-		boolean result;
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer, EnumHand hand) {
+        boolean result;
         if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
             result = deployParachute(world, entityplayer);
         } else { // toggle the AAD state
@@ -92,18 +91,17 @@ public class ItemParachute extends Item {
 
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
-    public boolean toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer)
-    {
+    public boolean toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (!world.isRemote && entityplayer != null) { // server side
             active = !active;
-			itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
-			ConfigHandler.setAADState(active);
+            itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
+            ConfigHandler.setAADState(active);
         } else if (world.isRemote && entityplayer != null) { // client side
-			world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-		} else {
-			return false;
-		}
-		return true;
+            world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+        } else {
+            return false;
+        }
+        return true;
     }
 
     private float pitch() {

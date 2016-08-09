@@ -27,44 +27,39 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class AscendKeyPressMessage implements IMessage {
 
-	private boolean keyPressed;
+    private boolean keyPressed;
 
-	@SuppressWarnings("unused")
-	public AscendKeyPressMessage()
-	{
+    @SuppressWarnings("unused")
+    public AscendKeyPressMessage() {
 
-	}
+    }
 
-	public AscendKeyPressMessage(boolean keyPressed)
-	{
-		this.keyPressed = keyPressed;
-	}
+    public AscendKeyPressMessage(boolean keyPressed) {
+        this.keyPressed = keyPressed;
+    }
 
-	// the server does not respond with any messages so this isn't being used;
-	@Override
-	public void fromBytes(ByteBuf bb)
-	{
-		keyPressed = bb.readBoolean();
-	}
+    // the server does not respond with any messages so this isn't being used;
+    @Override
+    public void fromBytes(ByteBuf bb) {
+        keyPressed = bb.readBoolean();
+    }
 
-	// write the data to the stream
-	@Override
-	public void toBytes(ByteBuf bb)
-	{
-		bb.writeBoolean(keyPressed);
-	}
+    // write the data to the stream
+    @Override
+    public void toBytes(ByteBuf bb) {
+        bb.writeBoolean(keyPressed);
+    }
 
-	public static class Handler implements IMessageHandler<AscendKeyPressMessage, IMessage> {
+    public static class Handler implements IMessageHandler<AscendKeyPressMessage, IMessage> {
 
-		@Override
-		public IMessage onMessage(AscendKeyPressMessage msg, MessageContext ctx)
-		{
-			EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
-			if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-				EntityParachute.setAscendMode(msg.keyPressed);
-			}
-			return null;
-		}
-	}
+        @Override
+        public IMessage onMessage(AscendKeyPressMessage msg, MessageContext ctx) {
+            EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
+            if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
+                EntityParachute.setAscendMode(msg.keyPressed);
+            }
+            return null;
+        }
+    }
 
 }

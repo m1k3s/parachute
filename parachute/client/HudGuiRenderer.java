@@ -1,14 +1,14 @@
-//  
+//
 //  =====GPL=============================================================
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation; version 2 dated June, 1991.
-// 
-//  This program is distributed in the hope that it will be useful, 
+//
+//  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with this program;  if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave., Cambridge, MA 02139, USA.
@@ -116,26 +116,27 @@ public class HudGuiRenderer extends Gui {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
+        // todo: add end biome to the excluded list
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.thePlayer.onGround) {
             return;
         }
-        
-        if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-			ScaledResolution sr = new ScaledResolution(mc);
-			int hudX = sr.getScaledWidth() / 2 - (hudWidth / 2); // left edge of GUI
-			int hudY = 2; // top edge of GUI
-			int textX = hudX + 30; // xcoord for text
-			int textY = hudY + 22; // ycoord for text
-			int ledX = 1;
 
-        
+        if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            ScaledResolution sr = new ScaledResolution(mc);
+            int hudX = sr.getScaledWidth() / 2 - (hudWidth / 2); // left edge of GUI
+            int hudY = 2; // top edge of GUI
+            int textX = hudX + 30; // xcoord for text
+            int textY = hudY + 22; // ycoord for text
+            int ledX = 1;
+
             if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
                 mc.getTextureManager().bindTexture(hudTexture);
-                
+
                 GlStateManager.enableRescaleNormal();
-				GlStateManager.enableBlend();
-				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-				RenderHelper.enableGUIStandardItemLighting();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                                                     GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+                RenderHelper.enableGUIStandardItemLighting();
 
                 BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY, mc.thePlayer.posZ);
                 altitude = getCurrentAltitude(entityPos);
@@ -146,7 +147,7 @@ public class HudGuiRenderer extends Gui {
                 // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
                 drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
 
-                // determine which LED to light, spawnDir is in range -180 to 180
+                // determine which LED to light, homeDir is in range -180 to 180
                 // for any value under -80 or over 80 the LED is fixed to the
                 // left or right end of the slider respectively.
                 if (homeDir < -80) {
@@ -253,10 +254,13 @@ public class HudGuiRenderer extends Gui {
     }
 
     // quadrant color code
-    // 315 to 45 green, 45 to 135 yellow, 135 to 225 red, 335 to 315 blue
+    // 315 to 44 green, mostly north
+    // 45 to 134 yellow, mostly east
+    // 135 to 224 red, mostly south
+    // 225 to 314 blue, mostly west
     public int colorCompass(double d) {
         return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
-                (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
+               (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
     }
 
     // calculate altitude in meters above ground. starting at the entity
@@ -285,18 +289,18 @@ public class HudGuiRenderer extends Gui {
     }
 
     public static int[] getWaypoint() {
-        return new int[]{wayPointX, wayPointZ};
+        return new int[] {wayPointX, wayPointZ};
     }
 
     public static void setWaypoint(int[] waypoint) {
         wayPointX = waypoint[0];
         wayPointZ = waypoint[1];
     }
-    
+
     public static void setHomepoint(int[] homepoint) {
-		homePointX = homepoint[0];
-		homePointZ = homepoint[1];
-	}
+        homePointX = homepoint[0];
+        homePointZ = homepoint[1];
+    }
 
     public static void enableWaypoint(boolean enabled) {
         wayPointEnabled = enabled;
