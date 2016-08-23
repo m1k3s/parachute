@@ -7,5 +7,12 @@
 			"parachutemod:chuteopen3",
 			"parachutemod:chuteopen4"
 		]
+	},
+	
+	"burn": {
+		"category": "neutral",
+		"sounds": [
+			"parachutemod:burn1"
+		]
 	}
 }
