@@ -45,6 +45,7 @@ public class ConfigHandler {
     private static double minFallDistance;
     private static boolean aadImmediate;
     private static boolean useSpawnPoint;
+    private static double burnVolume;
     private static int[] waypoint;
     private static int[] homepoint;
 
@@ -66,6 +67,7 @@ public class ConfigHandler {
     private static final String aadImmedComment = "AAD deploys immediately after the player falls more than minFallDistance"; // > minFalldistance meters
     private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
     private static final String useSpawnPointComment = "use spawn point for home direction if true or input your own coords if false";
+    private static final String burnVolumeComment = "set the burn sound volume (0.0 to 1.0)";
     private static final String colorComment = "Select a parachute color, random, or custom[0-9]";
     private static final String waypointComment = "waypoint coordinates [X, Z]";
     private static final String homepointComment = "homepoint coordinates [X, Z]";
@@ -127,6 +129,7 @@ public class ConfigHandler {
             minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0).getDouble(5.0);
             aadImmediate = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment).getBoolean(false);
             useSpawnPoint = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
+            burnVolume = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0).getDouble(1.0);
             waypoint = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, waypointComment).getIntList();
             homepoint = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, homepointComment).getIntList();
 
@@ -211,6 +214,10 @@ public class ConfigHandler {
     public static double getMinFallDistance() {
         return minFallDistance;
     }
+    
+    public static float getBurnVolume() {
+		return (float)burnVolume;
+	}
 
     public static int getParachuteDamageAmount() {
         if (singleUse) {

@@ -97,7 +97,7 @@ public class EntityParachute extends Entity {
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
-            dismountRidingEntity();
+            // dismountRidingEntity();
             killParachute();
         }
     }
@@ -356,7 +356,7 @@ public class EntityParachute extends Entity {
         }
 
         if (ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
-			playSound(ParachuteCommonProxy.burnChute, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+			playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
             descentRate = ascend;
         }
 

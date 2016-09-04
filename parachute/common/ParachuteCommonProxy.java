@@ -72,7 +72,7 @@ public class ParachuteCommonProxy {
         
         GameRegistry.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":burn")).setRegistryName("burn"));
         burnChute = getRegisteredSoundEvent(Parachute.modid + ":burn");
-
+        
         PacketHandler.init();
     }
 
@@ -147,6 +147,10 @@ public class ParachuteCommonProxy {
     public static void setDeployed(boolean isDeployed) {
         deployed = isDeployed;
     }
+    
+    public static boolean isDeployed() {
+		return deployed;
+	}
 
     public static double getOffsetY() {
         return offsetY;
