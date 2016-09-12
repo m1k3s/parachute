@@ -33,7 +33,7 @@ public class PlayerMountEvent {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMount(EntityMountEvent event) {
-        if (event.getEntityBeingMounted() instanceof EntityParachute && ParachuteCommonProxy.isDeployed() && event.isDismounting()) {
+        if (event.getEntityBeingMounted() instanceof EntityParachute && ParachuteCommonProxy.isDeployed() && !event.isMounting()) {
 			event.setCanceled(true);
             ((EntityParachute)event.getEntityBeingMounted()).dismountParachute();
         }

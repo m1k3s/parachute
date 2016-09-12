@@ -93,11 +93,12 @@ public class EntityParachute extends Entity {
     static void setAscendMode(boolean mode) {
         ascendMode = mode;
     }
-
+    
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
             // dismountRidingEntity();
+            ConfigHandler.setIsDismounting(true);
             killParachute();
         }
     }
@@ -160,7 +161,7 @@ public class EntityParachute extends Entity {
 
     @Override
     public double getMountedYOffset() {
-        return - (ParachuteCommonProxy.getOffsetY());
+        return -(ParachuteCommonProxy.getOffsetY());
     }
 
     @Override
@@ -197,7 +198,7 @@ public class EntityParachute extends Entity {
     public void onUpdate() {
         Entity skyDiver = getControllingPassenger();
         super.onUpdate();
-
+        
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && !worldObj.isRemote) { // server side

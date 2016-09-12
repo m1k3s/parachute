@@ -48,6 +48,7 @@ public class ConfigHandler {
     private static double burnVolume;
     private static int[] waypoint;
     private static int[] homepoint;
+    private static boolean dismounting;
 
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.name, Parachute.mcversion);
     private static final String usageComment = "set to true for parachute single use"; // false
@@ -135,6 +136,8 @@ public class ConfigHandler {
 
             // if lava thermals are allowed check allow/disallow space bar thermals
             thermals = !(lavaThermals && lavaDisablesThermals);
+            // used to signal that a player has dismounted
+            dismounting = false;
 
         } catch (Exception e) {
             Parachute.proxy.info("failed to load or read the config file");
@@ -265,5 +268,13 @@ public class ConfigHandler {
     public static String getHomepointString() {
         return String.format("%d %d", homepoint[0], homepoint[1]);
     }
+    
+    public static boolean isDismounting() {
+		return dismounting;
+	}
+	
+	public static void setIsDismounting(boolean value) {
+		dismounting = value;
+	}
 
 }
