@@ -93,11 +93,11 @@ public class EntityParachute extends Entity {
     static void setAscendMode(boolean mode) {
         ascendMode = mode;
     }
-
+    
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
-            dismountRidingEntity();
+            ConfigHandler.setIsDismounting(true);
             killParachute();
         }
     }
@@ -160,7 +160,7 @@ public class EntityParachute extends Entity {
 
     @Override
     public double getMountedYOffset() {
-        return - (ParachuteCommonProxy.getOffsetY());
+        return -(ParachuteCommonProxy.getOffsetY());
     }
 
     @Override
@@ -197,7 +197,7 @@ public class EntityParachute extends Entity {
     public void onUpdate() {
         Entity skyDiver = getControllingPassenger();
         super.onUpdate();
-
+        
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && !worldObj.isRemote) { // server side
@@ -302,7 +302,7 @@ public class EntityParachute extends Entity {
             killParachute();
         }
 
-        // update distance by parachute statistics
+        // update distance for parachute statistics
         if (skyDiver != null) {
             double dX = posX - prevPosX;
             double dZ = posZ - prevPosZ;
@@ -355,7 +355,8 @@ public class EntityParachute extends Entity {
             }
         }
 
-        if (ascendMode) {
+        if (ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
+			playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
             descentRate = ascend;
         }
 
@@ -371,7 +372,6 @@ public class EntityParachute extends Entity {
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
     private boolean isHeatSource(BlockPos bp) {
-//        Block block = worldObj.getBlockState (bp).getBlock();
         return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
     }
 

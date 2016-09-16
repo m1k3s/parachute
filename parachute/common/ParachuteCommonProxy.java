@@ -51,6 +51,7 @@ public class ParachuteCommonProxy {
     private static final double offsetY = 2.5;
 
     public static SoundEvent openChute;
+    public static SoundEvent burnChute;
 
     protected static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.modid + ":" + parachuteName);
     protected static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.modid + ":" + packName);
@@ -68,7 +69,10 @@ public class ParachuteCommonProxy {
 
         GameRegistry.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":chuteopen")).setRegistryName("chuteopen"));
         openChute = getRegisteredSoundEvent(Parachute.modid + ":chuteopen");
-
+        
+        GameRegistry.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":burn")).setRegistryName("burn"));
+        burnChute = getRegisteredSoundEvent(Parachute.modid + ":burn");
+        
         PacketHandler.init();
     }
 
@@ -143,6 +147,10 @@ public class ParachuteCommonProxy {
     public static void setDeployed(boolean isDeployed) {
         deployed = isDeployed;
     }
+    
+    public static boolean isDeployed() {
+		return deployed;
+	}
 
     public static double getOffsetY() {
         return offsetY;

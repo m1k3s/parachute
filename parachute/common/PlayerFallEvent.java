@@ -34,11 +34,11 @@ public class PlayerFallEvent {
     @SubscribeEvent
     public void onFallEvent(LivingFallEvent event) {
         EntityLivingBase pilot = event.getEntityLiving();
-        if (event.getEntityLiving() instanceof EntityPlayer && pilot.getRidingEntity() instanceof EntityParachute) {
-//			Parachute.proxy.info("Caught onFallEvent ***");
-            pilot.fallDistance = 1.0f;
+        if (event.getEntityLiving() instanceof EntityPlayer && ConfigHandler.isDismounting()) {
+			event.setCanceled(true);
+            pilot.fallDistance = 0.0f;
             pilot.isCollided = false;
-            event.setCanceled(true);
+            ConfigHandler.setIsDismounting(false);
         }
     }
 }
