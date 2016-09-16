@@ -97,7 +97,6 @@ public class EntityParachute extends Entity {
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
-            // dismountRidingEntity();
             ConfigHandler.setIsDismounting(true);
             killParachute();
         }
@@ -303,7 +302,7 @@ public class EntityParachute extends Entity {
             killParachute();
         }
 
-        // update distance by parachute statistics
+        // update distance for parachute statistics
         if (skyDiver != null) {
             double dX = posX - prevPosX;
             double dZ = posZ - prevPosZ;
@@ -373,7 +372,6 @@ public class EntityParachute extends Entity {
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
     private boolean isHeatSource(BlockPos bp) {
-//        Block block = worldObj.getBlockState (bp).getBlock();
         return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
     }
 
