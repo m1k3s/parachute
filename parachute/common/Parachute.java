@@ -64,7 +64,7 @@ public class Parachute {
     @Mod.EventHandler
     public void Construct(FMLConstructionEvent event) {
         int buildVersion = ForgeVersion.getBuildVersion();
-        int minimumForgeBuildVersion = 2075;
+        int minimumForgeBuildVersion = 2135;
         if (buildVersion < minimumForgeBuildVersion) {
             proxy.error(String.format("This mod requires Forge Mod Loader build version of %d or higher", minimumForgeBuildVersion));
             proxy.error(String.format("You are running Forge Mod Loader build version %d", buildVersion));
