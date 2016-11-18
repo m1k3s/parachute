@@ -19,11 +19,13 @@
 //
 package com.parachute.common;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class AscendKeyPressMessage implements IMessage {
 
@@ -53,11 +55,23 @@ public class AscendKeyPressMessage implements IMessage {
     public static class Handler implements IMessageHandler<AscendKeyPressMessage, IMessage> {
 
         @Override
-        public IMessage onMessage(AscendKeyPressMessage msg, MessageContext ctx) {
-            EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
-            if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-                EntityParachute.setAscendMode(msg.keyPressed);
-            }
+        public IMessage onMessage(final AscendKeyPressMessage msg, final MessageContext ctx) {
+            IThreadListener mainThread = (WorldServer)ctx.getServerHandler().playerEntity.worldObj;
+            mainThread.addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    EntityPlayerMP entityPlayer = ctx.getServerHandler().playerEntity;
+                    if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
+//                        PacketHandler.network.sendTo(new AscendKeyPressMessage(), entityPlayer);
+                        EntityParachute.setAscendMode(msg.keyPressed);
+                    }
+                }
+            });
+//            EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
+//            if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
+//                EntityParachute.setAscendMode(msg.keyPressed);
+//            }
+
             return null;
         }
     }

@@ -21,6 +21,7 @@ package com.parachute.common;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -261,7 +262,7 @@ public class EntityParachute extends Entity {
         motionY -= currentDescentRate();
 
         // move the parachute with the motion equations applied
-        moveEntity(motionX, motionY, motionZ);
+        moveEntity(MoverType.SELF, motionX, motionY, motionZ);
 
         // apply momentum
         motionX *= 0.99D;
@@ -281,7 +282,7 @@ public class EntityParachute extends Entity {
 
         // update and clamp yaw between -180 and 180
         double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
-        // further clamp yaw between -20 and 20 per update, slower turn radius
+        // further clamp yaw between -45 and 45 per update, slower turn radius
         if (adjustedYaw > 45.0D) {
             adjustedYaw = 45.0D;
         }
