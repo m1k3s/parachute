@@ -53,7 +53,7 @@ public class ItemParachute extends Item {
         } else { // toggle the AAD state
             result = toggleAAD(itemstack, world, entityplayer);
         }
-        return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
+        return new ActionResult(result ? EnumActionResult.SUCCESS : EnumActionResult.PASS, itemstack); // unchecked
     }
 
     public boolean deployParachute(World world, EntityPlayer entityplayer) {

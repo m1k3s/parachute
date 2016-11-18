@@ -19,6 +19,9 @@
 //
 package com.parachute.common;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -42,6 +45,7 @@ public class AscendKeyPressMessage implements IMessage {
     @Override
     public void fromBytes(ByteBuf bb) {
         keyPressed = bb.readBoolean();
+//        EntityParachute.setAscendMode(keyPressed);
     }
 
     // write the data to the stream
@@ -54,10 +58,21 @@ public class AscendKeyPressMessage implements IMessage {
 
         @Override
         public IMessage onMessage(AscendKeyPressMessage msg, MessageContext ctx) {
-            EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
-            if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-                EntityParachute.setAscendMode(msg.keyPressed);
-            }
+            IThreadListener mainThread = (WorldServer)ctx.getServerHandler().playerEntity.worldObj;
+            mainThread.addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    EntityPlayerMP entityPlayer = ctx.getServerHandler().playerEntity;
+                    if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
+//                        PacketHandler.network.sendTo(new AscendKeyPressMessage(), entityPlayer);
+                        EntityParachute.setAscendMode(msg.keyPressed);
+                    }
+                }
+            });
+//            EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
+//            if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
+//                EntityParachute.setAscendMode(msg.keyPressed);
+//            }
             return null;
         }
     }

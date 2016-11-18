@@ -26,9 +26,11 @@ import net.minecraftforge.fml.relauncher.Side;
 public class PacketHandler {
 
     public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(Parachute.modid);
-    public static final int packetID = 0;
+    private static final int serverPacketID = 0;
+    private static final int clientPacketID = 1;
 
     public static void init() {
-        network.registerMessage(AscendKeyPressMessage.Handler.class, AscendKeyPressMessage.class, packetID, Side.SERVER);
+        network.registerMessage(AscendKeyPressMessage.Handler.class, AscendKeyPressMessage.class, serverPacketID, Side.SERVER);
+        network.registerMessage(AscendKeyPressMessage.Handler.class, AscendKeyPressMessage.class, clientPacketID, Side.CLIENT);
     }
 }
