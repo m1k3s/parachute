@@ -19,12 +19,15 @@
 package com.parachute.common;
 
 import net.minecraft.block.*;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -90,17 +93,21 @@ public class EntityParachute extends Entity {
         prevPosZ = z;
     }
 
-    public void setAscendMode(boolean mode) {
-        ascendMode = mode;
-    }
-    
-    void dismountParachute() {
-        Entity skyDiver = getControllingPassenger();
-        if (!worldObj.isRemote && skyDiver != null) {
-            ConfigHandler.setIsDismounting(true);
-            dismountRidingEntity();
-            killParachute();
-        }
+//    private void setAscendMode(boolean mode) {
+//        ascendMode = mode;
+//    }
+
+//    void dismountParachute() {
+//        Entity skyDiver = getControllingPassenger();
+//        if (!worldObj.isRemote && skyDiver != null) {
+//            ConfigHandler.setIsDismounting(true);
+//            dismountRidingEntity();
+//        }
+//    }
+
+    private void killParachute() {
+        ParachuteCommonProxy.setDeployed(false);
+        setDead();
     }
 
     @Override
@@ -198,7 +205,7 @@ public class EntityParachute extends Entity {
     public void onUpdate() {
         Entity skyDiver = getControllingPassenger();
         super.onUpdate();
-        
+
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && !worldObj.isRemote) { // server side
@@ -218,11 +225,15 @@ public class EntityParachute extends Entity {
         prevPosZ = posZ;
 
         // drop the chute when close to ground if enabled
-        if (autoDismount && skyDiver != null) {
+        // FIXME: autoDismount will not work on multiplayer
+        // FIXME: I have disabled it server side for now.
+        if (!worldObj.isRemote && autoDismount && skyDiver != null) {
             double pilotFeetPos = skyDiver.getEntityBoundingBox().minY;
-            BlockPos bp = new BlockPos(skyDiver.posX, pilotFeetPos - 1.0, skyDiver.posZ);
+            BlockPos bp = new BlockPos(skyDiver.posX, pilotFeetPos, skyDiver.posZ);
             if (checkForGroundProximity(bp)) {
-                dismountParachute();
+//                dismountParachute();
+                removePassengers();
+                setDead();
                 return;
             }
         }
@@ -314,11 +325,6 @@ public class EntityParachute extends Entity {
         }
     }
 
-    private void killParachute() {
-        ParachuteCommonProxy.setDeployed(false);
-        setDead();
-    }
-
     // check for bad weather, if the biome can rain or snow check to see
     // if it is raining (or snowing) or thundering.
     private boolean isBadWeather() {
@@ -334,11 +340,12 @@ public class EntityParachute extends Entity {
     // the final result.
     private double currentDescentRate() {
         double descentRate = drift; // defaults to drift
-        EntityPlayer entityPlayer = (EntityPlayer)getControllingPassenger();
+        EntityPlayer entityPlayer = (EntityPlayer) getControllingPassenger();
         if (entityPlayer != null) {
             PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
             if (pi != null) {
-                setAscendMode(pi.getAscendMode());
+//                setAscendMode(pi.getAscendMode());
+                ascendMode = pi.getAscendMode();
             }
         }
 
@@ -364,7 +371,8 @@ public class EntityParachute extends Entity {
         }
 
         if (ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
-			playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+//            worldObj.playSound((EntityPlayer)getControllingPassenger(), new BlockPos(posX, posY, posZ), ParachuteCommonProxy.burnChute, SoundCategory.MASTER, ConfigHandler.getBurnVolume(), 1.0f);
+            playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
             descentRate = ascend;
         }
 
@@ -380,7 +388,7 @@ public class EntityParachute extends Entity {
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
     private boolean isHeatSource(BlockPos bp) {
-        return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
+        return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
     }
 
     private boolean isHeatSourceInRange(BlockPos bp) {
@@ -477,7 +485,7 @@ public class EntityParachute extends Entity {
         double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
 
         for (int k = 0; (double) k < 1.0 + velocity; k++) {
-            double sign = (double)(rand.nextInt(2) * 2 - 1) * 0.7;
+            double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
             double x = prevPosX - cosYaw * -0.35 + sinYaw * sign;
             double y = posY - 0.25;
             double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;

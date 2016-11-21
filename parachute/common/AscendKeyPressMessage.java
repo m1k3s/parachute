@@ -64,8 +64,6 @@ public class AscendKeyPressMessage implements IMessage {
             mainThread.addScheduledTask(() -> {
                 EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
                 if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-//                    System.out.println(String.format("msg.name: %s, server name: %s", msg.name, entityPlayer.getDisplayNameString()));
-//                    EntityParachute.setAscendMode(msg.keyPressed);
                     PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
                     if (pi != null) {
                         pi.setAscendMode(msg.keyPressed);
