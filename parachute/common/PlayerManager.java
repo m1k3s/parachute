@@ -3,18 +3,18 @@ package com.parachute.common;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerManager {
 
-    public List<PlayerInfo> Players;
+    public ArrayList<PlayerInfo> Players;
 
     private static final PlayerManager instance = new PlayerManager();
 
-    public static final PlayerManager getInstance() {
+    public static PlayerManager getInstance() {
         return instance;
     }
 
+    @SuppressWarnings("unchecked")
     private PlayerManager() {
         Players = new ArrayList();
     }
@@ -22,7 +22,7 @@ public class PlayerManager {
     // must test for null EntityPlayer before calling this method
     public PlayerInfo getPlayerInfoFromPlayer(EntityPlayer player) {
         for(PlayerInfo pi : Players) {
-            if(pi.Name.equals(player.getDisplayNameString()))
+            if(pi.getName().equals(player.getDisplayNameString()))
                 return pi;
         }
         return null;

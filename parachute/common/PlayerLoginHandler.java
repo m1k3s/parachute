@@ -16,7 +16,7 @@ public class PlayerLoginHandler {
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         PlayerInfo PI = new PlayerInfo("");
         for(int i = 0; i < PlayerManager.getInstance().Players.size() && PI != null; i++) {
-            if(PlayerManager.getInstance().Players.get(i).Name.equals(event.player.getDisplayNameString())) {
+            if(PlayerManager.getInstance().Players.get(i).getName().equals(event.player.getDisplayNameString())) {
                 PlayerManager.getInstance().Players.remove(i);
             }
         }

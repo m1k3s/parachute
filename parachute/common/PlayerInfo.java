@@ -1,13 +1,11 @@
 package com.parachute.common;
 
 public class PlayerInfo {
-    public String Name;
-    public boolean mode; // true = ascend, false = drift
-//        public INetworkManager networkManager;
+    private String name;
+    private boolean mode; // true = ascend, false = drift
 
-    public PlayerInfo(String name/*, INetworkManager nm*/) {
-        Name = name;
-//            networkManager = nm;
+    public PlayerInfo(String name) {
+        this.name = name;
     }
 
     public void setAscendMode(boolean m) {
@@ -16,5 +14,9 @@ public class PlayerInfo {
 
     public boolean getAscendMode() {
         return mode;
+    }
+
+    public String getName() {
+        return name;
     }
 }
