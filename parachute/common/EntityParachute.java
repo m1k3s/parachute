@@ -19,6 +19,7 @@
 package com.parachute.common;
 
 import net.minecraft.block.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,8 +52,8 @@ public class EntityParachute extends Entity {
     private boolean autoDismount;
     private boolean dismountInWater;
 
-    final static double drift = 0.004; // value applied to motionY to descend or drift downward
-    final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
+    private final static double drift = 0.004; // value applied to motionY to descend or drift downward
+    private final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
     private static boolean ascendMode;
 
@@ -90,7 +91,7 @@ public class EntityParachute extends Entity {
         prevPosZ = z;
     }
 
-    static void setAscendMode(boolean mode) {
+    public void setAscendMode(boolean mode) {
         ascendMode = mode;
     }
     
@@ -98,6 +99,7 @@ public class EntityParachute extends Entity {
         Entity skyDiver = getControllingPassenger();
         if (!worldObj.isRemote && skyDiver != null) {
             ConfigHandler.setIsDismounting(true);
+            dismountRidingEntity();
             killParachute();
         }
     }
@@ -333,6 +335,13 @@ public class EntityParachute extends Entity {
     // the final result.
     private double currentDescentRate() {
         double descentRate = drift; // defaults to drift
+        EntityPlayer entityPlayer = (EntityPlayer)getControllingPassenger();
+        if (entityPlayer != null) {
+            PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
+            if (pi != null) {
+                setAscendMode(pi.getAscendMode());
+            }
+        }
 
         if (ConfigHandler.getWeatherAffectsDrift()) {
             if (worldObj.isRaining()) {  // rain makes you fall faster

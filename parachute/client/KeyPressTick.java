@@ -21,6 +21,7 @@ package com.parachute.client;
 
 import com.parachute.common.AscendKeyPressMessage;
 import com.parachute.common.PacketHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
@@ -40,7 +41,8 @@ public class KeyPressTick {
     public void onTick(TickEvent.PlayerTickEvent event) {
         if (event.phase.equals(TickEvent.Phase.START)) {
             if (Keyboard.getEventKey() == ascendKey) { // only send if it's the ascend key
-                PacketHandler.network.sendToServer(new AscendKeyPressMessage(Keyboard.getEventKeyState()));
+                String name = Minecraft.getMinecraft().thePlayer.getDisplayNameString();
+                PacketHandler.network.sendToServer(new AscendKeyPressMessage(Keyboard.getEventKeyState(), name));
             }
         }
     }

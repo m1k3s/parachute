@@ -19,10 +19,13 @@
 //
 package com.parachute.common;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ConfigHandler {
 
@@ -112,28 +115,33 @@ public class ConfigHandler {
         try {
             config.setCategoryComment(Configuration.CATEGORY_GENERAL, aboutComments);
 
+            // server and client side
             singleUse = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment).getBoolean(false);
             heightLimit = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256).getInt();
             thermals = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment).getBoolean(true);
             lavaThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", false, lavaThermalComment).getBoolean(false);
             minLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0).getDouble(3.0);
             maxLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0).getDouble(48.0);
-            autoDismount = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment).getBoolean(true);
-            chuteColor = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white", colorComment, colorValues).getString();
             weatherAffectsDrift = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment).getBoolean(true);
             constantTurbulence = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment).getBoolean(false);
-            showContrails = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment).getBoolean(false);
             dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
             boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
-            isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
             aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment, 5.0, 100.0).getDouble(10.0);
             minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0).getDouble(5.0);
-            aadImmediate = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment).getBoolean(false);
-            useSpawnPoint = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
-            burnVolume = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0).getDouble(1.0);
-            waypoint = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, waypointComment).getIntList();
-            homepoint = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, homepointComment).getIntList();
 
+            // these variables are only in the client config file. Since the server and client config files don't
+            // sync we have mitigate the conflicts in settings.
+            if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                autoDismount = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment).getBoolean(true);
+                chuteColor = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white", colorComment, colorValues).getString();
+                isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
+                aadImmediate = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment).getBoolean(false);
+                useSpawnPoint = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
+                burnVolume = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0).getDouble(1.0);
+                waypoint = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment).getIntList();
+                homepoint = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment).getIntList();
+                showContrails = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment).getBoolean(false);
+            }
             // if lava thermals are allowed check allow/disallow space bar thermals
             thermals = !(lavaThermals && lavaDisablesThermals);
             // used to signal that a player has dismounted
@@ -222,9 +230,9 @@ public class ConfigHandler {
 		return (float)burnVolume;
 	}
 
-    public static int getParachuteDamageAmount() {
+    public static int getParachuteDamageAmount(ItemStack itemStack) {
         if (singleUse) {
-            return Parachute.parachuteItem.getMaxDamage() + 1;
+            return Parachute.parachuteItem.getMaxDamage(itemStack) + 1;
         }
         return 1;
     }
