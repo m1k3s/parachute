@@ -78,7 +78,6 @@ public class PlayerTickEventHandler {
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
         if (ConfigHandler.getIsAADActive() && !ParachuteCommonProxy.onParachute(player)) {
-            System.out.println("ConfigHandler.getIsAADActive() && !ParachuteCommonProxy.onParachute(player)");
             ItemStack heldItem = null;
             Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {
@@ -87,12 +86,10 @@ public class PlayerTickEventHandler {
                 }
             }
             if (ConfigHandler.getAADImmediate() && ParachuteCommonProxy.canActivateAADImmediate(player)) {
-                System.out.println("ConfigHandler.getAADImmediate() && ParachuteCommonProxy.canActivateAADImmediate(player)");
                 if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
                     ((ItemParachute) heldItem.getItem()).deployParachute(player.worldObj, player);
                 }
             } else {
-                System.out.println("else autoAltitudeReached");
                 boolean autoAltitudeReached = ParachuteCommonProxy.getAutoActivateAltitude(player);
                 if (autoAltitudeReached && ParachuteCommonProxy.isFalling(player)) {
                     if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {

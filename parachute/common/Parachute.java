@@ -74,7 +74,7 @@ public class Parachute {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ConfigHandler.startConfig(event);
+        ConfigHandler.initConfig(event);
         proxy.preInit(event);
     }
 

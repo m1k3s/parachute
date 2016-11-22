@@ -23,9 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class ConfigHandler {
 
@@ -54,7 +52,6 @@ public class ConfigHandler {
     private static boolean dismounting;
 
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.name, Parachute.mcversion);
-    private static final String serverComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]\nThere are no server only config variables", Parachute.name, Parachute.mcversion);
     private static final String usageComment = "set to true for parachute single use"; // false
     private static final String heightComment = "0 (zero) disables altitude limiting"; // 256
     private static final String thermalComment = "enable thermal rise by pressing the space bar"; // true
@@ -106,7 +103,7 @@ public class ConfigHandler {
         "custom9",
     };
 
-    public static void startConfig(FMLPreInitializationEvent event) {
+    public static void initConfig(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load(); // only need to load config once during preinit
         updateConfigInfo();

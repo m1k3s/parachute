@@ -19,15 +19,12 @@
 package com.parachute.common;
 
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -208,7 +205,7 @@ public class EntityParachute extends Entity {
 
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
-        if (skyDiver == null && !worldObj.isRemote) { // server side
+        if ((skyDiver == null || !isBeingRidden()) && !worldObj.isRemote) { // server side
             killParachute();
             return;
         }
@@ -340,7 +337,7 @@ public class EntityParachute extends Entity {
     // the final result.
     private double currentDescentRate() {
         double descentRate = drift; // defaults to drift
-        EntityPlayer entityPlayer = (EntityPlayer) getControllingPassenger();
+        EntityPlayer entityPlayer = (EntityPlayer)getControllingPassenger();
         if (entityPlayer != null) {
             PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
             if (pi != null) {
@@ -371,7 +368,6 @@ public class EntityParachute extends Entity {
         }
 
         if (ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
-//            worldObj.playSound((EntityPlayer)getControllingPassenger(), new BlockPos(posX, posY, posZ), ParachuteCommonProxy.burnChute, SoundCategory.MASTER, ConfigHandler.getBurnVolume(), 1.0f);
             playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
             descentRate = ascend;
         }
@@ -496,14 +492,14 @@ public class EntityParachute extends Entity {
 
     @Override
     public void updatePassenger(Entity skydiver) {
-        if (skydiver != null) {
+//        if (skydiver != null) {
             double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
             double y = posY + getMountedYOffset() + skydiver.getYOffset();
             double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
             skydiver.setPosition(x, y, z);
             skydiver.setRenderYawOffset(rotationYaw + 90.0f);
             skydiver.setRotationYawHead(rotationYaw + 90);
-        }
+//        }
     }
 
     @Override
