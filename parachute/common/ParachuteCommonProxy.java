@@ -82,7 +82,7 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
         MinecraftForge.EVENT_BUS.register(new ParachuteItemCraftedEvent());
-//        MinecraftForge.EVENT_BUS.register(new PlayerMountEvent());
+        MinecraftForge.EVENT_BUS.register(new PlayerMountEvent());
         MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
 
         // recipe to craft the parachute

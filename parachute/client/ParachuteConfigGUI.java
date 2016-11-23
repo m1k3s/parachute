@@ -30,7 +30,7 @@ public class ParachuteConfigGUI extends GuiConfig {
 
     public ParachuteConfigGUI(GuiScreen parentScreen) {
         super(parentScreen,
-              new ConfigElement(ConfigHandler.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
+              new ConfigElement(ConfigHandler.config.getCategory(Configuration.CATEGORY_CLIENT)).getChildElements(),
               Parachute.modid, false, false, GuiConfig.getAbridgedConfigPath(ConfigHandler.config.toString()));
     }
 

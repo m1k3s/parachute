@@ -111,7 +111,9 @@ public class ConfigHandler {
 
     public static void updateConfigInfo() {
         try {
-            config.setCategoryComment(Configuration.CATEGORY_GENERAL, aboutComments);
+//            config.setCategoryComment(Configuration., aboutComments);
+            config.addCustomCategoryComment("ABOUT", aboutComments);
+
             singleUse = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment).getBoolean(false);
             heightLimit = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256).getInt();
             thermals = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment).getBoolean(true);
@@ -124,15 +126,16 @@ public class ConfigHandler {
             boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
             aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment, 5.0, 100.0).getDouble(10.0);
             minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0).getDouble(5.0);
-            autoDismount = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment).getBoolean(true);
-            chuteColor = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white", colorComment, colorValues).getString();
-            isAADActive = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment).getBoolean(false);
-            aadImmediate = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment).getBoolean(false);
-            useSpawnPoint = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
-            burnVolume = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0).getDouble(1.0);
-            waypoint = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment).getIntList();
-            homepoint = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment).getIntList();
-            showContrails = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment).getBoolean(false);
+
+            autoDismount = config.get(Configuration.CATEGORY_CLIENT, "autoDismount", false, autoComment).getBoolean(false);
+            chuteColor = config.get(Configuration.CATEGORY_CLIENT, "chuteColor", "white", colorComment, colorValues).getString();
+            isAADActive = config.get(Configuration.CATEGORY_CLIENT, "isAADActive", false, isAADActiveComment).getBoolean(false);
+            aadImmediate = config.get(Configuration.CATEGORY_CLIENT, "aadImmediate", false, aadImmedComment).getBoolean(false);
+            useSpawnPoint = config.get(Configuration.CATEGORY_CLIENT, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
+            burnVolume = config.get(Configuration.CATEGORY_CLIENT, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0).getDouble(1.0);
+            waypoint = config.get(Configuration.CATEGORY_CLIENT, "waypoint", new int[]{0, 0}, waypointComment).getIntList();
+            homepoint = config.get(Configuration.CATEGORY_CLIENT, "homepoint", new int[]{0, 0}, homepointComment).getIntList();
+            showContrails = config.get(Configuration.CATEGORY_CLIENT, "showContrails", false, trailsComment).getBoolean(false);
 
             // if lava thermals are allowed check allow/disallow space bar thermals
             thermals = !(lavaThermals && lavaDisablesThermals);
@@ -165,7 +168,7 @@ public class ConfigHandler {
     }
 
     public static void setChuteColor(String color) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white", colorComment);
+        Property prop = config.get(Configuration.CATEGORY_CLIENT, "chuteColor", "white", colorComment);
         prop.set(color);
         config.save();
         chuteColor = color;
@@ -204,7 +207,7 @@ public class ConfigHandler {
     }
 
     public static void setAADState(boolean state) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment);
+        Property prop = config.get(Configuration.CATEGORY_CLIENT, "isAADActive", false, isAADActiveComment);
         prop.set(state);
         config.save();
         isAADActive = state;
@@ -242,7 +245,7 @@ public class ConfigHandler {
     }
 
     public static void setWaypoint(int x, int z) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[] {0,0}, waypointComment);
+        Property prop = config.get(Configuration.CATEGORY_CLIENT, "waypoint", new int[] {0,0}, waypointComment);
         prop.set(new int[] {x, z});
         config.save();
         waypoint[0] = x;
@@ -254,7 +257,7 @@ public class ConfigHandler {
     }
 
     public static void setHomepoint(int x, int z) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[] {0,0}, homepointComment);
+        Property prop = config.get(Configuration.CATEGORY_CLIENT, "homepoint", new int[] {0,0}, homepointComment);
         prop.set(new int[] {x, z});
         config.save();
         homepoint[0] = x;

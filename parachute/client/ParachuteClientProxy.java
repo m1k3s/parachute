@@ -57,6 +57,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
+        super.postInit(event);
         // info(Parachute.modid + I18n.format("info.client.postinit"));
     }
 

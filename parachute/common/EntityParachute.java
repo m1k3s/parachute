@@ -51,6 +51,12 @@ public class EntityParachute extends Entity {
     private boolean autoDismount;
     private boolean dismountInWater;
 
+    private boolean leftInputDown;
+    private boolean rightInputDown;
+    private boolean forwardInputDown;
+    private boolean backInputDown;
+    private double deltaRotation;
+
     private final static double drift = 0.004; // value applied to motionY to descend or drift downward
     private final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
@@ -75,6 +81,7 @@ public class EntityParachute extends Entity {
         motionFactor = 0.07;
         ascendMode = false;
         setSilent(false);
+        ConfigHandler.setIsDismounting(false);
     }
 
     public EntityParachute(World world, double x, double y, double z) {
@@ -102,9 +109,12 @@ public class EntityParachute extends Entity {
 //        }
 //    }
 
-    private void killParachute() {
+    public void killParachute() {
         ParachuteCommonProxy.setDeployed(false);
-        setDead();
+        ConfigHandler.setIsDismounting(true);
+        if (!worldObj.isRemote && !isDead) {
+            super.setDead();
+        }
     }
 
     @Override
@@ -228,9 +238,7 @@ public class EntityParachute extends Entity {
             double pilotFeetPos = skyDiver.getEntityBoundingBox().minY;
             BlockPos bp = new BlockPos(skyDiver.posX, pilotFeetPos, skyDiver.posZ);
             if (checkForGroundProximity(bp)) {
-//                dismountParachute();
-                removePassengers();
-                setDead();
+                killParachute();
                 return;
             }
         }
@@ -289,16 +297,16 @@ public class EntityParachute extends Entity {
         }
 
         // update and clamp yaw between -180 and 180
-        double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
+        deltaRotation = MathHelper.wrapDegrees(yaw - rotationYaw);
         // further clamp yaw between -20 and 20 per update, slower turn radius
-        if (adjustedYaw > 45.0D) {
-            adjustedYaw = 45.0D;
+        if (deltaRotation > 45.0D) {
+            deltaRotation = 45.0D;
         }
-        if (adjustedYaw < -45.0D) {
-            adjustedYaw = -45.0D;
+        if (deltaRotation < -45.0D) {
+            deltaRotation = -45.0D;
         }
         // update final yaw and apply to parachute
-        rotationYaw += adjustedYaw;
+        rotationYaw += deltaRotation;
         setRotation(rotationYaw, rotationPitch);
 
         // finally apply turbulence if flags allow
@@ -321,7 +329,39 @@ public class EntityParachute extends Entity {
             }
         }
     }
+/*
+    private void controlParachute() {
+        if (isBeingRidden()) {
+            if (leftInputDown) {
+                deltaRotation += -1.0;
+            }
+            if (rightInputDown) {
+                ++deltaRotation;
+            }
+            double forward = 0.0;
+            if (rightInputDown != leftInputDown && !forwardInputDown && !backInputDown) {
+                forward += 0.005;
+            }
+            rotationYaw += deltaRotation;
+            if (forwardInputDown) {
+                forward += 0.04;
+            }
+            if (backInputDown) {
+                forward -= 0.005;
+            }
+            motionX += Math.sin(Math.toRadians(-rotationYaw) * forward);
+            motionZ += Math.cos(Math.toRadians(rotationYaw) * forward);
+        }
+    }
 
+    @SideOnly(Side.CLIENT)
+    public void updateInputs(boolean left, boolean right, boolean forward, boolean back) {
+        leftInputDown = left;
+        rightInputDown = right;
+        forwardInputDown = forward;
+        backInputDown = back;
+    }
+*/
     // check for bad weather, if the biome can rain or snow check to see
     // if it is raining (or snowing) or thundering.
     private boolean isBadWeather() {
@@ -492,14 +532,14 @@ public class EntityParachute extends Entity {
 
     @Override
     public void updatePassenger(Entity skydiver) {
-//        if (skydiver != null) {
+        if (isPassenger(skydiver)) {
             double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
             double y = posY + getMountedYOffset() + skydiver.getYOffset();
             double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
             skydiver.setPosition(x, y, z);
             skydiver.setRenderYawOffset(rotationYaw + 90.0f);
             skydiver.setRotationYawHead(rotationYaw + 90);
-//        }
+        }
     }
 
     @Override
