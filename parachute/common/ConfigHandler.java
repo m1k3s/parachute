@@ -111,19 +111,18 @@ public class ConfigHandler {
 
     public static void updateConfigInfo() {
         try {
-//            config.setCategoryComment(Configuration., aboutComments);
             config.addCustomCategoryComment("ABOUT", aboutComments);
 
             singleUse = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment).getBoolean(false);
             heightLimit = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256).getInt();
             thermals = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment).getBoolean(true);
-            lavaThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", false, lavaThermalComment).getBoolean(false);
+            lavaThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, lavaThermalComment).getBoolean(true);
             minLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0).getDouble(3.0);
             maxLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0).getDouble(48.0);
             weatherAffectsDrift = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment).getBoolean(true);
             constantTurbulence = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment).getBoolean(false);
             dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
-            boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment).getBoolean(true);
+            boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", false, lavaDisablesComment).getBoolean(false);
             aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment, 5.0, 100.0).getDouble(10.0);
             minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0).getDouble(5.0);
 

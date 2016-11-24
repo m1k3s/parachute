@@ -130,6 +130,7 @@ public class HudGuiRenderer extends Gui {
             int ledX = 1;
 
             if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
+//            if (mc.thePlayer.isRiding() && mc.thePlayer.getRidingEntity() instanceof EntityParachute) {
                 mc.getTextureManager().bindTexture(hudTexture);
 
                 GlStateManager.enableRescaleNormal();

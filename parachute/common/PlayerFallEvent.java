@@ -20,7 +20,7 @@
 package com.parachute.common;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.entity.EntityLivingBase;
+//import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 

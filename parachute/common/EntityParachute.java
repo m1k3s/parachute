@@ -112,9 +112,7 @@ public class EntityParachute extends Entity {
     public void killParachute() {
         ParachuteCommonProxy.setDeployed(false);
         ConfigHandler.setIsDismounting(true);
-        if (!worldObj.isRemote && !isDead) {
-            super.setDead();
-        }
+        setDead();
     }
 
     @Override

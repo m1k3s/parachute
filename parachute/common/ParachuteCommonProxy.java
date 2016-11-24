@@ -142,7 +142,7 @@ public class ParachuteCommonProxy {
     }
 
     public static boolean onParachute(EntityPlayer entity) {
-        return entity.isRiding() && deployed;
+        return entity.isRiding() && entity.getRidingEntity() instanceof EntityParachute;
     }
 
     public static void setDeployed(boolean isDeployed) {

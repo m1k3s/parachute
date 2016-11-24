@@ -30,6 +30,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 // cancel the dismount and call the EntityParachute dismount method.
 public class PlayerMountEvent {
 
+    public PlayerMountEvent() { Parachute.proxy.info("PlayerMountEvent ctor"); }
+
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMount(EntityMountEvent event) {
