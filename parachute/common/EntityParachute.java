@@ -51,10 +51,10 @@ public class EntityParachute extends Entity {
     private boolean autoDismount;
     private boolean dismountInWater;
 
-    private boolean leftInputDown;
-    private boolean rightInputDown;
-    private boolean forwardInputDown;
-    private boolean backInputDown;
+//    private boolean leftInputDown;
+//    private boolean rightInputDown;
+//    private boolean forwardInputDown;
+//    private boolean backInputDown;
     private double deltaRotation;
 
     private final static double drift = 0.004; // value applied to motionY to descend or drift downward
