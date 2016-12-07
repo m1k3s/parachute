@@ -58,7 +58,8 @@ public class ParachuteCommonProxy {
 
     public void preInit(FMLPreInitializationEvent event) {
         int entityID = 1;
-        EntityRegistry.registerModEntity(EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
+        //ResourceLocation registryName, Class<? extends Entity> entityClass, String entityName, int id, Object mod, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates
+        EntityRegistry.registerModEntity(parachuteResource, EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
 
         Parachute.parachuteItem = new ItemParachute().setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
         GameRegistry.register(Parachute.parachuteItem);
