@@ -68,7 +68,6 @@ public class PlayerTickEventHandler {
                     player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = new ItemStack(Parachute.packItem);
                 }
             }
-
         }
     }
 
