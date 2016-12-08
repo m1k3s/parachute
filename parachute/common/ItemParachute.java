@@ -83,7 +83,7 @@ public class ItemParachute extends Item {
         if (itemstack != null) {
             boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
             if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
-                itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(), entityplayer);
+                itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
             }
         }
         return true;

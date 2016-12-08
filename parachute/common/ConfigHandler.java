@@ -19,6 +19,7 @@
 //
 package com.parachute.common;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -222,9 +223,9 @@ public class ConfigHandler {
 		return (float)burnVolume;
 	}
 
-    public static int getParachuteDamageAmount() {
+    public static int getParachuteDamageAmount(ItemStack itemStack) {
         if (singleUse) {
-            return Parachute.parachuteItem.getMaxDamage() + 1;
+            return Parachute.parachuteItem.getMaxDamage(itemStack); //.getMaxDamage() + 1;
         }
         return 1;
     }

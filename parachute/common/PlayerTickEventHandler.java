@@ -58,12 +58,12 @@ public class PlayerTickEventHandler {
             boolean deployed = ParachuteCommonProxy.onParachute(player);
             if (armor != null && heldItemMainhand == null) { // parachute item has been removed from slot in the hot bar
                 if (!deployed && armor.getItem() instanceof ItemParachutePack) {
-                    player.inventory.armorInventory.add(ParachuteCommonProxy.armorType.getIndex(), null);
+                    player.inventory.armorInventory.remove(ParachuteCommonProxy.armorType.getIndex());
 //                    player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
             } else if (armor != null) { // player has selected another slot in the hot bar || regular armor is present
                 if (!deployed && armor.getItem() instanceof ItemParachutePack && !(heldItemMainhand.getItem() instanceof ItemParachute)) {
-                    player.inventory.armorInventory.add(ParachuteCommonProxy.armorType.getIndex(), null);
+                    player.inventory.armorInventory.remove(ParachuteCommonProxy.armorType.getIndex());
 //                    player.inventory.armorInventory[ParachuteCommonProxy.armorType.getIndex()] = null;
                 }
             } else {
