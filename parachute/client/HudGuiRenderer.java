@@ -37,6 +37,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+
 @SideOnly(Side.CLIENT)
 public class HudGuiRenderer extends Gui {
 
@@ -203,10 +204,10 @@ public class HudGuiRenderer extends Gui {
                 }
 
                 // draw the altitude text
-                fontRenderer.drawStringWithShadow(I18n.format("gui.hud.altitude"), hudX + 18, hudY + 12, colorDimBlue);
+                fontRenderer.drawStringWithShadow(I18n.format(/*"gui.hud.altitude"*/"Altitude"), hudX + 18, hudY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(format(altitude), (textX + 5) - fieldWidth, textY, colorAltitude());
                 // draw the compass heading text
-                fontRenderer.drawStringWithShadow(I18n.format("gui.hud.compass"), hudX + 123, hudY + 12, colorDimBlue);
+                fontRenderer.drawStringWithShadow(I18n.format(/*"gui.hud.compass"*/"Compass"), hudX + 123, hudY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(format(heading), (textX + 118) - fieldWidth, textY, colorCompass(heading));
                 // draw the distance to the home point text
                 fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
