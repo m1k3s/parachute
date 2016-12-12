@@ -57,21 +57,12 @@ public class AscendKeyPressMessage implements IMessage {
         @Override
         public IMessage onMessage(final AscendKeyPressMessage msg, final MessageContext ctx) {
             IThreadListener mainThread = (WorldServer)ctx.getServerHandler().playerEntity.worldObj;
-            mainThread.addScheduledTask(new Runnable() {
-                @Override
-                public void run() {
-                    EntityPlayerMP entityPlayer = ctx.getServerHandler().playerEntity;
-                    if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-//                        PacketHandler.network.sendTo(new AscendKeyPressMessage(), entityPlayer);
-                        EntityParachute.setAscendMode(msg.keyPressed);
-                    }
+            mainThread.addScheduledTask(() -> {
+                EntityPlayerMP entityPlayer = ctx.getServerHandler().playerEntity;
+                if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
+                    EntityParachute.setAscendMode(msg.keyPressed);
                 }
             });
-//            EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
-//            if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-//                EntityParachute.setAscendMode(msg.keyPressed);
-//            }
-
             return null;
         }
     }

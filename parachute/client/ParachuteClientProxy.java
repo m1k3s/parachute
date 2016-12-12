@@ -26,6 +26,7 @@ import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -38,6 +39,10 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
     // grab the 'jump' key from the game settings. defaults to the space bar. This allows the
     // player to change the jump key and the parachute will use the new jump key
     private static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
+    private static final int leftKey = Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode();
+    private static final int rightKey = Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode();
+    private static final int forwardKey = Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode();
+    private static final int backKey = Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode();
 
     @SuppressWarnings("unchecked")
     @Override
@@ -56,8 +61,9 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
     public void Init(FMLInitializationEvent event) {
         super.Init(event);
 
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
+        MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
+        MinecraftForge.EVENT_BUS.register(new ControlKeyPressTick(leftKey, rightKey, forwardKey, backKey));
+        MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
 
         // info(Parachute.modid + I18n.format("info.client.init"));
     }

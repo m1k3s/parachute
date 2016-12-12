@@ -51,11 +51,22 @@ public class EntityParachute extends Entity {
     private boolean showContrails;
     private boolean autoDismount;
     private boolean dismountInWater;
+    private float deltaRotation;
+    private int lerpSteps;
+    private double lerpY;
+    private double lerpZ;
+    private double lerpXRot;
+    private double chuteYaw;
+    private double chutePitch;
 
     final static double drift = 0.004; // value applied to motionY to descend or drift downward
     final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
     private static boolean ascendMode;
+    private static boolean leftInputDown;
+    private static boolean rightInputDown;
+    private static boolean forwardInputDown;
+    private static boolean backInputDown;
 
     public EntityParachute(World world) {
         super(world);
@@ -181,6 +192,9 @@ public class EntityParachute extends Entity {
             return;
         }
 
+        chutePitch = x;
+        chuteYaw = yaw;
+
         // forward & vertical motion
         motionX = velocityX;
         motionY = velocityY;
@@ -194,10 +208,60 @@ public class EntityParachute extends Entity {
         velocityZ = motionZ = z;
     }
 
+    @SideOnly(Side.CLIENT)
+    public static void updateInputs(boolean leftInputDown, boolean rightInputDown, boolean forwardInputDown, boolean backInputDown) {
+        EntityParachute.leftInputDown = leftInputDown;
+        EntityParachute.rightInputDown = rightInputDown;
+        EntityParachute.forwardInputDown = forwardInputDown;
+        EntityParachute.backInputDown = backInputDown;
+    }
+
+    private void controlParachute() {
+        if (isBeingRidden()) {
+            float acceleration = 0.0f;
+
+            if (leftInputDown) {
+                deltaRotation += -1.0f;
+            }
+            if (rightInputDown) {
+                ++deltaRotation;
+            }
+            if (rightInputDown != leftInputDown && !forwardInputDown && !backInputDown) {
+                acceleration += 0.005F;
+            }
+            rotationYaw += deltaRotation;
+
+            if (forwardInputDown) {
+                acceleration += 0.04f;
+            }
+            if (backInputDown) {
+                acceleration -= 0.005f;
+            }
+            motionX += (double)(MathHelper.sin((float)Math.toRadians(-rotationYaw)) * acceleration);
+            motionZ += (double)(MathHelper.cos((float)Math.toRadians(rotationYaw)) * acceleration);
+        }
+    }
+
+    private void tickLerp()
+    {
+        if (this.lerpSteps > 0 && !this.canPassengerSteer())
+        {
+            double d0 = posX + (chutePitch - posX) / (double)lerpSteps;
+            double d1 = posY + (lerpY - posY) / (double)lerpSteps;
+            double d2 = posZ + (lerpZ - posZ) / (double)lerpSteps;
+            double d3 = MathHelper.wrapDegrees(chuteYaw - (double)rotationYaw);
+            rotationYaw = (float)((double)rotationYaw + d3 / (double)lerpSteps);
+            rotationPitch = (float)((double)rotationPitch + (lerpXRot - (double)rotationPitch) / (double)lerpSteps);
+            --lerpSteps;
+            setPosition(d0, d1, d2);
+            setRotation(rotationYaw, rotationPitch);
+        }
+    }
+
     @Override
     public void onUpdate() {
         Entity skyDiver = getControllingPassenger();
-        super.onUpdate();
+//        super.onUpdate();
         
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
@@ -216,6 +280,8 @@ public class EntityParachute extends Entity {
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;
+        super.onUpdate();
+        tickLerp();
 
         // drop the chute when close to ground if enabled
         if (autoDismount && skyDiver != null) {
@@ -229,37 +295,41 @@ public class EntityParachute extends Entity {
 
         // update forward velocity for 'W' key press
         // moveForward is > 0.0 when the 'W' key is pressed. Value is either 0.0 | ~0.98
-        if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
-            EntityLivingBase pilot = (EntityLivingBase) skyDiver;
-            double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
-            motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-            motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-        }
+//        if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
+//            EntityLivingBase pilot = (EntityLivingBase) skyDiver;
+//            double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
+//            motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+//            motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+//        }
 
         // forward velocity after forward movement is applied
-        double adjustedVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
+//        double adjustedVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
         // clamp the adjustedVelocity and modify motionX/Z
-        if (adjustedVelocity > 0.35D) {
-            double motionAdj = 0.35D / adjustedVelocity;
-            motionX *= motionAdj;
-            motionZ *= motionAdj;
-            adjustedVelocity = 0.35D;
-        }
+//        if (adjustedVelocity > 0.35D) {
+//            double motionAdj = 0.35D / adjustedVelocity;
+//            motionX *= motionAdj;
+//            motionZ *= motionAdj;
+//            adjustedVelocity = 0.35D;
+//        }
         // clamp the motionFactor between 0.07 and 0.35
-        if (adjustedVelocity > initialVelocity && motionFactor < 0.35D) {
-            motionFactor += (0.35D - motionFactor) / 35.0D;
-            if (motionFactor > 0.35D) {
-                motionFactor = 0.35D;
-            }
-        } else {
-            motionFactor -= (motionFactor - 0.07D) / 35.0D;
-            if (motionFactor < 0.07D) {
-                motionFactor = 0.07D;
-            }
-        }
+//        if (adjustedVelocity > initialVelocity && motionFactor < 0.35D) {
+//            motionFactor += (0.35D - motionFactor) / 35.0D;
+//            if (motionFactor > 0.35D) {
+//                motionFactor = 0.35D;
+//            }
+//        } else {
+//            motionFactor -= (motionFactor - 0.07D) / 35.0D;
+//            if (motionFactor < 0.07D) {
+//                motionFactor = 0.07D;
+//            }
+//        }
 
         // calculate the descent rate
         motionY -= currentDescentRate();
+
+        if (worldObj.isRemote) {
+            controlParachute();
+        }
 
         // move the parachute with the motion equations applied
         moveEntity(MoverType.SELF, motionX, motionY, motionZ);
@@ -268,20 +338,21 @@ public class EntityParachute extends Entity {
         motionX *= 0.99D;
         motionY *= 0.95D;
         motionZ *= 0.99D;
+        deltaRotation += 0.9;
 
         // update pitch and yaw. Pitch is always 0.0
-        rotationPitch = 0.0f;
-        double yaw = rotationYaw;
-        double delta_X = prevPosX - posX;
-        double delta_Z = prevPosZ - posZ;
+//        rotationPitch = 0.0f;
+//        double yaw = rotationYaw;
+//        double delta_X = prevPosX - posX;
+//        double delta_Z = prevPosZ - posZ;
 
         // update direction (yaw)
-        if (delta_X * delta_X + delta_Z * delta_Z > 0.001D) {
-            yaw = Math.toDegrees(Math.atan2(delta_Z, delta_X));
-        }
+//        if (delta_X * delta_X + delta_Z * delta_Z > 0.001D) {
+//            yaw = Math.toDegrees(Math.atan2(delta_Z, delta_X));
+//        }
 
         // update and clamp yaw between -180 and 180
-        double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
+//        double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
         // further clamp yaw between -45 and 45 per update, slower turn radius
 //        if (adjustedYaw > 45.0D) {
 //            adjustedYaw = 45.0D;
@@ -290,7 +361,7 @@ public class EntityParachute extends Entity {
 //            adjustedYaw = -45.0D;
 //        }
         // update final yaw and apply to parachute
-        rotationYaw += adjustedYaw;
+//        rotationYaw += adjustedYaw;
         setRotation(rotationYaw, rotationPitch);
 
         // finally apply turbulence if flags allow
