@@ -12,10 +12,10 @@ public class ControlKeyPressTick {
     private final int forwardKey;
     private final int backKey;
 
-    private boolean leftPressed;
-    private boolean rightPressed;
-    private boolean forwardPressed;
-    private boolean backPressed;
+    private boolean leftPressed = false;
+    private boolean rightPressed = false;
+    private boolean forwardPressed = false;
+    private boolean backPressed = false;
 
     public ControlKeyPressTick(int leftKey, int rightKey, int forwardKey, int backKey) {
         this.leftKey = leftKey;
@@ -30,17 +30,21 @@ public class ControlKeyPressTick {
         if (event.phase.equals(TickEvent.Phase.START)) {
             if (Keyboard.getEventKey() == leftKey) {
                 leftPressed = Keyboard.getEventKeyState();
+                PacketHandler.network.sendToServer(new ControlKeyPressMessage(leftPressed, rightPressed, forwardPressed, backPressed));
             }
             if (Keyboard.getEventKey() == rightKey) {
                 rightPressed = Keyboard.getEventKeyState();
+                PacketHandler.network.sendToServer(new ControlKeyPressMessage(leftPressed, rightPressed, forwardPressed, backPressed));
             }
             if (Keyboard.getEventKey() == forwardKey) {
                 forwardPressed = Keyboard.getEventKeyState();
+                PacketHandler.network.sendToServer(new ControlKeyPressMessage(leftPressed, rightPressed, forwardPressed, backPressed));
             }
             if (Keyboard.getEventKey() == backKey) {
                 backPressed = Keyboard.getEventKeyState();
+                PacketHandler.network.sendToServer(new ControlKeyPressMessage(leftPressed, rightPressed, forwardPressed, backPressed));
             }
-            PacketHandler.network.sendToServer(new ControlKeyPressMessage(leftPressed, rightPressed, forwardPressed, backPressed));
+//            PacketHandler.network.sendToServer(new ControlKeyPressMessage(leftPressed, rightPressed, forwardPressed, backPressed));
         }
     }
 

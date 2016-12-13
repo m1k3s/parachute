@@ -14,6 +14,7 @@ public class ControlKeyPressMessage implements IMessage {
     private boolean keyCodeForward;
     private boolean keyCodeBack;
 
+    @SuppressWarnings("unused")
     public ControlKeyPressMessage() {}
 
     public ControlKeyPressMessage(boolean keyCodeLeft, boolean keyCodeRight, boolean keyCodeForward, boolean keyCodeBack) {
@@ -47,7 +48,8 @@ public class ControlKeyPressMessage implements IMessage {
             mainThread.addScheduledTask(() -> {
                 EntityPlayerMP entityPlayer = ctx.getServerHandler().playerEntity;
                 if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-                    EntityParachute.updateInputs(msg.keyCodeLeft, msg.keyCodeRight, msg.keyCodeForward, msg.keyCodeBack);
+//                    EntityParachute.updateInputs(msg.keyCodeLeft, msg.keyCodeRight, msg.keyCodeForward, msg.keyCodeBack);
+//                    System.out.println("Inputs: " + msg.keyCodeLeft + ":" + msg.keyCodeRight + ":" + msg.keyCodeForward + ":" + msg.keyCodeBack);
                 }
             });
             return null;

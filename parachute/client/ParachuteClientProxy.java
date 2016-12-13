@@ -62,7 +62,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
         super.Init(event);
 
         MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
-        MinecraftForge.EVENT_BUS.register(new ControlKeyPressTick(leftKey, rightKey, forwardKey, backKey));
+//        MinecraftForge.EVENT_BUS.register(new ControlKeyPressTick(leftKey, rightKey, forwardKey, backKey));
         MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
 
         // info(Parachute.modid + I18n.format("info.client.init"));
