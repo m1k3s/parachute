@@ -52,8 +52,8 @@ public class EntityParachute extends Entity {
     private boolean autoDismount;
     private boolean dismountInWater;
 
-    final static double drift = 0.004; // value applied to motionY to descend or drift downward
-    final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
+    private final static double drift = 0.004; // value applied to motionY to descend or drift downward
+    private final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
 
     private static boolean ascendMode;
 
@@ -481,14 +481,14 @@ public class EntityParachute extends Entity {
 
     @Override
     public void updatePassenger(Entity skydiver) {
-        if (skydiver != null) {
+//        if (skydiver != null) {
             double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
             double y = posY + getMountedYOffset() + skydiver.getYOffset();
             double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
             skydiver.setPosition(x, y, z);
             skydiver.setRenderYawOffset(rotationYaw + 90.0f);
             skydiver.setRotationYawHead(rotationYaw + 90);
-        }
+//        }
     }
 
     @Override

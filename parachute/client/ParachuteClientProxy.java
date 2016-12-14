@@ -22,13 +22,9 @@ package com.parachute.client;
 import com.parachute.common.ParachuteCommonProxy;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
-// import com.parachute.common.ConfigHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.event.*;
 
 
@@ -43,12 +39,9 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        // ConfigHandler.startConfig(event);
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
         ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, ParachuteCommonProxy.parachuteResource);
         ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, ParachuteCommonProxy.packResource);
-
-        // info(Parachute.modid + I18n.format("info.client.preinit"));
     }
 
     @SuppressWarnings("unchecked")
@@ -58,24 +51,11 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
-
-        // info(Parachute.modid + I18n.format("info.client.init"));
     }
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
-        // info(Parachute.modid + I18n.format("info.client.postinit"));
+         info(Parachute.modid + "Received postInit(FMLPostInitializationEvent event)");
     }
-
-    // user has changed entries in the GUI config. save the results.
-    // @SuppressWarnings("unused")
-    // @SubscribeEvent
-    // public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
-    // {
-    // if (event.getModID().equals(Parachute.modid)) {
-    // info(I18n.format("info.message.changes", Parachute.name));
-    // ConfigHandler.updateConfigInfo();
-    // }
-    // }
 
 }
