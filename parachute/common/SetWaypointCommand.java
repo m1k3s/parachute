@@ -27,6 +27,11 @@ public class SetWaypointCommand extends CommandBase {
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
+
+    @Override
     public String getCommandUsage(ICommandSender sender) {
         return "commands.setwaypoint.usage";
     }
@@ -56,12 +61,7 @@ public class SetWaypointCommand extends CommandBase {
 
     @Override
     public boolean isUsernameIndex(String[] args, int index) {
-        return false;
-    }
-
-    @Override
-    public int compareTo(@SuppressWarnings("NullableProblems") ICommand iCommand) {
-        return 0;
+        return index == 0;
     }
 
     public boolean isNumeric(String s) {

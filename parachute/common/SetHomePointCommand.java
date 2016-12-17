@@ -5,6 +5,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,6 +25,11 @@ public class SetHomePointCommand extends CommandBase {
     @Override
     public String getCommandName() {
         return "sethomepoint";
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
     }
 
     @Override
@@ -56,12 +62,7 @@ public class SetHomePointCommand extends CommandBase {
 
     @Override
     public boolean isUsernameIndex(String[] args, int index) {
-        return false;
-    }
-
-    @Override
-    public int compareTo(@SuppressWarnings("NullableProblems") ICommand iCommand) {
-        return 0;
+        return index == 0;
     }
 
     public boolean isNumeric(String s) {

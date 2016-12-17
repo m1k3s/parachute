@@ -79,7 +79,8 @@ public class ParachuteCommonProxy {
 
     @SuppressWarnings("unchecked") // no type specifiers in minecraft StatList
     public void Init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(Parachute.instance);
+//        MinecraftForge.EVENT_BUS.register(Parachute.instance);
+        MinecraftForge.EVENT_BUS.register(new ConfigHandler.ConfigEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
         MinecraftForge.EVENT_BUS.register(new ParachuteItemCraftedEvent());

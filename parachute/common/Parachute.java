@@ -74,7 +74,7 @@ public class Parachute {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ConfigHandler.startConfig(event);
+        ConfigHandler.preInit(event);
         proxy.preInit(event);
     }
 
@@ -106,14 +106,14 @@ public class Parachute {
     }
 
     // user has changed entries in the GUI config. save the results.
-    @SuppressWarnings("unused")
-    @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(Parachute.modid)) {
-            proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.name));
-            ConfigHandler.updateConfigInfo();
-        }
-    }
+//    @SuppressWarnings("unused")
+//    @SubscribeEvent
+//    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+//        if (event.getModID().equals(Parachute.modid)) {
+//            proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.name));
+//            ConfigHandler.updateConfigFromGUI();
+//        }
+//    }
 
 }
 
