@@ -21,6 +21,7 @@ package com.parachute.common;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -50,12 +51,6 @@ public class EntityParachute extends Entity {
     private boolean showContrails;
     private boolean autoDismount;
     private boolean dismountInWater;
-
-    private boolean leftInputDown;
-    private boolean rightInputDown;
-    private boolean forwardInputDown;
-    private boolean backInputDown;
-    private double deltaRotation;
 
     private final static double drift = 0.004; // value applied to motionY to descend or drift downward
     private final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
@@ -97,17 +92,17 @@ public class EntityParachute extends Entity {
         prevPosZ = z;
     }
 
-//    private void setAscendMode(boolean mode) {
-//        ascendMode = mode;
-//    }
+	static void setAscendMode(boolean mode) {
+        ascendMode = mode;
+    }
 
-//    void dismountParachute() {
-//        Entity skyDiver = getControllingPassenger();
-//        if (!worldObj.isRemote && skyDiver != null) {
-//            ConfigHandler.setIsDismounting(true);
-//            dismountRidingEntity();
-//        }
-//    }
+   void dismountParachute() {
+       Entity skyDiver = getControllingPassenger();
+       if (!worldObj.isRemote && skyDiver != null) {
+           ConfigHandler.setIsDismounting(true);
+           dismountRidingEntity();
+       }
+   }
 
     public void killParachute() {
         ParachuteCommonProxy.setDeployed(false);
@@ -276,7 +271,7 @@ public class EntityParachute extends Entity {
         motionY -= currentDescentRate();
 
         // move the parachute with the motion equations applied
-        moveEntity(motionX, motionY, motionZ);
+        moveEntity(MoverType.SELF, motionX, motionY, motionZ);
 
         // apply momentum
         motionX *= 0.99D;
@@ -295,16 +290,16 @@ public class EntityParachute extends Entity {
         }
 
         // update and clamp yaw between -180 and 180
-        deltaRotation = MathHelper.wrapDegrees(yaw - rotationYaw);
-        // further clamp yaw between -20 and 20 per update, slower turn radius
-        if (deltaRotation > 45.0D) {
-            deltaRotation = 45.0D;
-        }
-        if (deltaRotation < -45.0D) {
-            deltaRotation = -45.0D;
-        }
+        double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
+        // further clamp yaw between -45 and 45 per update, slower turn radius
+//        if (adjustedYaw > 45.0D) {
+//            adjustedYaw = 45.0D;
+//        }
+//        if (adjustedYaw < -45.0D) {
+//            adjustedYaw = -45.0D;
+//        }
         // update final yaw and apply to parachute
-        rotationYaw += deltaRotation;
+        rotationYaw += adjustedYaw;
         setRotation(rotationYaw, rotationPitch);
 
         // finally apply turbulence if flags allow
@@ -530,14 +525,14 @@ public class EntityParachute extends Entity {
 
     @Override
     public void updatePassenger(Entity skydiver) {
-        if (isPassenger(skydiver)) {
+//        if (skydiver != null) {
             double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
             double y = posY + getMountedYOffset() + skydiver.getYOffset();
             double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
             skydiver.setPosition(x, y, z);
             skydiver.setRenderYawOffset(rotationYaw + 90.0f);
             skydiver.setRotationYawHead(rotationYaw + 90);
-        }
+//        }
     }
 
     @Override

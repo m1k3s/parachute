@@ -42,7 +42,6 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
         ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, ParachuteCommonProxy.parachuteResource);
         ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, ParachuteCommonProxy.packResource);
-        // info(Parachute.modid + I18n.format("info.client.preinit"));
     }
 
     @SuppressWarnings("unchecked")
@@ -52,13 +51,12 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
-        // info(Parachute.modid + I18n.format("info.client.init"));
     }
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
-        // info(Parachute.modid + I18n.format("info.client.postinit"));
+         info(Parachute.modid + "Received postInit(FMLPostInitializationEvent event)");
     }
 
 }

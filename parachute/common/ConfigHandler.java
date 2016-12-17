@@ -23,11 +23,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ConfigHandler {
 
-    public static Configuration config;
+    private static Configuration config = null;
 
     private static boolean singleUse;
     private static int heightLimit;
@@ -74,80 +76,150 @@ public class ConfigHandler {
     private static final String waypointComment = "waypoint coordinates [X, Z]";
     private static final String homepointComment = "homepoint coordinates [X, Z]";
     private static final String[] colorValues = {
-        "random",
-        "black",
-        "blue",
-        "brown",
-        "cyan",
-        "gray",
-        "green",
-        "light_blue",
-        "lime",
-        "magenta",
-        "orange",
-        "pink",
-        "purple",
-        "red",
-        "silver",
-        "white",
-        "yellow",
-        "custom0",
-        "custom1",
-        "custom2",
-        "custom3",
-        "custom4",
-        "custom5",
-        "custom6",
-        "custom7",
-        "custom8",
-        "custom9",
+            "random",
+            "black",
+            "blue",
+            "brown",
+            "cyan",
+            "gray",
+            "green",
+            "light_blue",
+            "lime",
+            "magenta",
+            "orange",
+            "pink",
+            "purple",
+            "red",
+            "silver",
+            "white",
+            "yellow",
+            "custom0",
+            "custom1",
+            "custom2",
+            "custom3",
+            "custom4",
+            "custom5",
+            "custom6",
+            "custom7",
+            "custom8",
+            "custom9",
     };
 
-    public static void initConfig(FMLPreInitializationEvent event) {
+    public static void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
-        config.load(); // only need to load config once during preinit
-        updateConfigInfo();
+        updateConfigFromFile();
     }
 
-    public static void updateConfigInfo() {
-        try {
-            config.addCustomCategoryComment("ABOUT", aboutComments);
+    public static void updateConfigFromFile() {
+        updateConfigInfo(true, true);
+    }
 
-            singleUse = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment).getBoolean(false);
-            heightLimit = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256).getInt();
-            thermals = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment).getBoolean(true);
-            lavaThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, lavaThermalComment).getBoolean(true);
-            minLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0).getDouble(3.0);
-            maxLavaDistance = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0).getDouble(48.0);
-            weatherAffectsDrift = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment).getBoolean(true);
-            constantTurbulence = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment).getBoolean(false);
-            dismountInWater = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment).getBoolean(false);
-            boolean lavaDisablesThermals = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", false, lavaDisablesComment).getBoolean(false);
-            aadAltitude = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment, 5.0, 100.0).getDouble(10.0);
-            minFallDistance = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0).getDouble(5.0);
+    public static void updateConfigFromGUI() {
+        updateConfigInfo(false, true);
+    }
 
-            autoDismount = config.get(Configuration.CATEGORY_CLIENT, "autoDismount", false, autoComment).getBoolean(false);
-            chuteColor = config.get(Configuration.CATEGORY_CLIENT, "chuteColor", "white", colorComment, colorValues).getString();
-            isAADActive = config.get(Configuration.CATEGORY_CLIENT, "isAADActive", false, isAADActiveComment).getBoolean(false);
-            aadImmediate = config.get(Configuration.CATEGORY_CLIENT, "aadImmediate", false, aadImmedComment).getBoolean(false);
-            useSpawnPoint = config.get(Configuration.CATEGORY_CLIENT, "usespawnpoint", true, useSpawnPointComment).getBoolean(false);
-            burnVolume = config.get(Configuration.CATEGORY_CLIENT, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0).getDouble(1.0);
-            waypoint = config.get(Configuration.CATEGORY_CLIENT, "waypoint", new int[]{0, 0}, waypointComment).getIntList();
-            homepoint = config.get(Configuration.CATEGORY_CLIENT, "homepoint", new int[]{0, 0}, homepointComment).getIntList();
-            showContrails = config.get(Configuration.CATEGORY_CLIENT, "showContrails", false, trailsComment).getBoolean(false);
+    public static void updateConfigFromFields() {
+        updateConfigInfo(false, false);
+    }
 
-            // if lava thermals are allowed check allow/disallow space bar thermals
-            thermals = !(lavaThermals && lavaDisablesThermals);
-            // used to signal that a player has dismounted
-            dismounting = false;
+    private static void updateConfigInfo(boolean fromFile, boolean fromFields) {
+        if (fromFile) {
+            config.load();
+        }
 
-        } catch (Exception e) {
-            Parachute.proxy.info("failed to load or read the config file");
-        } finally {
-            if (config.hasChanged()) {
-                config.save();
+        config.setCategoryComment(Configuration.CATEGORY_GENERAL, aboutComments);
+
+        Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment);
+        Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256);
+        Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
+        Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", false, lavaThermalComment);
+        Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0);
+        Property maxLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0);
+        Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment);
+        Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white", colorComment, colorValues);
+        Property weatherAffectsDriftProp = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment);
+        Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment);
+        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment);
+        Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
+        Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment);
+        Property aadAltitudeProp = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment, 5.0, 100.0);
+        Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0);
+        Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment);
+        Property useSpawnPointProp = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment);
+        Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
+        Property waypointProp = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment);
+        Property homepointProp = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment);
+        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment);
+
+
+        if (fromFields) {
+            singleUse = singleUseProp.getBoolean(false);
+            heightLimit = heightLimitProp.getInt(256);
+            thermals = thermalsProp.getBoolean(true);
+            lavaThermals = lavaThermalsProp.getBoolean(false);
+            minLavaDistance = minLavaDistanceProp.getDouble(3.0);
+            maxLavaDistance = maxLavaDistanceProp.getDouble(48.0);
+            autoDismount = autoDismountProp.getBoolean(true);
+            chuteColor = chuteColorProp.getString();
+            weatherAffectsDrift = weatherAffectsDriftProp.getBoolean(true);
+            constantTurbulence = constantTurbulenceProp.getBoolean(false);
+            showContrails = showContrailsProp.getBoolean(false);
+            dismountInWater = dismountInWaterProp.getBoolean(false);
+            isAADActive = isAADActiveProp.getBoolean(false);
+            aadAltitude = aadAltitudeProp.getDouble(10.0);
+            minFallDistance = minFallDistanceProp.getDouble(5.0);
+            aadImmediate = aadImmediateProp.getBoolean(false);
+            useSpawnPoint = useSpawnPointProp.getBoolean(true);
+            burnVolume = burnVolumeProp.getDouble(1.0);
+            waypoint = waypointProp.getIntList();
+            homepoint = homepointProp.getIntList();
+        }
+
+//        boolean lavaDisablesThermals = lavaDisablesThermalProp.getBoolean(true);
+        // if lava thermals are allowed check allow/disallow space bar thermals
+        thermals = !(lavaThermals && lavaDisablesThermalProp.getBoolean()/*lavaDisablesThermals*/);
+        // used to signal that a player has dismounted
+        dismounting = false;
+
+        singleUseProp.set(singleUse);
+        heightLimitProp.set(heightLimit);
+        thermalsProp.set(thermals);
+        lavaThermalsProp.set(lavaThermals);
+        minLavaDistanceProp.set(minLavaDistance);
+        maxLavaDistanceProp.set(maxLavaDistance);
+        autoDismountProp.set(autoDismount);
+        chuteColorProp.set(chuteColor);
+        weatherAffectsDriftProp.set(weatherAffectsDrift);
+        constantTurbulenceProp.set(constantTurbulence);
+        showContrailsProp.set(showContrails);
+        dismountInWaterProp.set(dismountInWater);
+        isAADActiveProp.set(isAADActive);
+        aadAltitudeProp.set(aadAltitude);
+        minFallDistanceProp.set(minFallDistance);
+        aadImmediateProp.set(aadImmediate);
+        useSpawnPointProp.set(useSpawnPoint);
+        burnVolumeProp.set(burnVolume);
+        waypointProp.set(waypoint);
+        homepointProp.set(homepoint);
+
+        if (config.hasChanged()) {
+            config.save();
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class ConfigEventHandler {
+        @SubscribeEvent
+        public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+            if (event.getModID().equals(Parachute.modid)) {
+                Parachute.proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.name));
+                ConfigHandler.updateConfigFromGUI();
             }
         }
+    }
+
+    public static Configuration getConfig() {
+        return config;
     }
 
     public static boolean getDismountInWater() {
@@ -219,14 +291,14 @@ public class ConfigHandler {
     public static double getMinFallDistance() {
         return minFallDistance;
     }
-    
+
     public static float getBurnVolume() {
-		return (float)burnVolume;
-	}
+        return (float) burnVolume;
+    }
 
     public static int getParachuteDamageAmount(ItemStack itemStack) {
         if (singleUse) {
-            return Parachute.parachuteItem.getMaxDamage(itemStack) + 1;
+            return Parachute.parachuteItem.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
         }
         return 1;
     }
@@ -244,8 +316,8 @@ public class ConfigHandler {
     }
 
     public static void setWaypoint(int x, int z) {
-        Property prop = config.get(Configuration.CATEGORY_CLIENT, "waypoint", new int[] {0,0}, waypointComment);
-        prop.set(new int[] {x, z});
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment);
+        prop.set(new int[]{x, z});
         config.save();
         waypoint[0] = x;
         waypoint[1] = z;
@@ -256,8 +328,8 @@ public class ConfigHandler {
     }
 
     public static void setHomepoint(int x, int z) {
-        Property prop = config.get(Configuration.CATEGORY_CLIENT, "homepoint", new int[] {0,0}, homepointComment);
-        prop.set(new int[] {x, z});
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment);
+        prop.set(new int[]{x, z});
         config.save();
         homepoint[0] = x;
         homepoint[1] = z;
@@ -270,13 +342,13 @@ public class ConfigHandler {
     public static String getHomepointString() {
         return String.format("%d %d", homepoint[0], homepoint[1]);
     }
-    
+
     public static boolean isDismounting() {
-		return dismounting;
-	}
-	
-	public static void setIsDismounting(boolean value) {
-		dismounting = value;
-	}
+        return dismounting;
+    }
+
+    public static void setIsDismounting(boolean value) {
+        dismounting = value;
+    }
 
 }

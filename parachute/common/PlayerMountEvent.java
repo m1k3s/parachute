@@ -28,6 +28,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 // directly at the parachute's X and Z location. This performs the same steps
 // as the auto-dismount code. When the player presses the LSHIFT to dismount,
 // cancel the dismount and call the EntityParachute dismount method.
+// FIXME: this is problematic since forge moved the hook.
+
 public class PlayerMountEvent {
 
     public PlayerMountEvent() { Parachute.proxy.info("PlayerMountEvent ctor"); }
@@ -35,9 +37,9 @@ public class PlayerMountEvent {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMount(EntityMountEvent event) {
-        if (event.getEntityBeingMounted() instanceof EntityParachute && ParachuteCommonProxy.isDeployed() && event.isDismounting()) {
-			event.setCanceled(true);
-            ((EntityParachute)event.getEntityBeingMounted()).killParachute();
+        if (event.getEntityBeingMounted() instanceof EntityParachute && ParachuteCommonProxy.isDeployed() && !event.isMounting()) {
+//			event.setCanceled(true);
+            ((EntityParachute)event.getEntityBeingMounted()).dismountParachute();
         }
     }
 }

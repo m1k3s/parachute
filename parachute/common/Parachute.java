@@ -43,8 +43,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Parachute {
 
     public static final String modid = "parachutemod";
-    public static final String modversion = "1.5.2";
-    public static final String mcversion = "1.10.2";
+    public static final String modversion = "1.6.0";
+    public static final String mcversion = "1.11";
     public static final String name = "Parachute Mod NG";
     public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
     public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
@@ -64,7 +64,7 @@ public class Parachute {
     @Mod.EventHandler
     public void Construct(FMLConstructionEvent event) {
         int buildVersion = ForgeVersion.getBuildVersion();
-        int minimumForgeBuildVersion = 2075;
+        int minimumForgeBuildVersion = 2135;
         if (buildVersion < minimumForgeBuildVersion) {
             proxy.error(String.format("This mod requires Forge Mod Loader build version of %d or higher", minimumForgeBuildVersion));
             proxy.error(String.format("You are running Forge Mod Loader build version %d", buildVersion));
@@ -74,7 +74,7 @@ public class Parachute {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ConfigHandler.initConfig(event);
+        ConfigHandler.preInit(event);
         proxy.preInit(event);
     }
 
@@ -106,14 +106,14 @@ public class Parachute {
     }
 
     // user has changed entries in the GUI config. save the results.
-    @SuppressWarnings("unused")
-    @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(Parachute.modid)) {
-            proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.name));
-            ConfigHandler.updateConfigInfo();
-        }
-    }
+//    @SuppressWarnings("unused")
+//    @SubscribeEvent
+//    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+//        if (event.getModID().equals(Parachute.modid)) {
+//            proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.name));
+//            ConfigHandler.updateConfigFromGUI();
+//        }
+//    }
 
 }
 

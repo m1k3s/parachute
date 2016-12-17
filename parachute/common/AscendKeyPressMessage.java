@@ -19,57 +19,51 @@
 //
 package com.parachute.common;
 
+
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class AscendKeyPressMessage implements IMessage {
 
     private boolean keyPressed;
-    String name;
 
     @SuppressWarnings("unused")
     public AscendKeyPressMessage() {
 
     }
 
-    public AscendKeyPressMessage(boolean keyPressed, String name) {
+    public AscendKeyPressMessage(boolean keyPressed) {
         this.keyPressed = keyPressed;
-        this.name = name;
     }
 
     // the server does not respond with any messages so this isn't being used;
     @Override
     public void fromBytes(ByteBuf bb) {
         keyPressed = bb.readBoolean();
-        name = ByteBufUtils.readUTF8String(bb);
     }
 
     // write the data to the stream
     @Override
     public void toBytes(ByteBuf bb) {
         bb.writeBoolean(keyPressed);
-        ByteBufUtils.writeUTF8String(bb, name);
     }
 
     public static class Handler implements IMessageHandler<AscendKeyPressMessage, IMessage> {
         @Override
-        public IMessage onMessage(AscendKeyPressMessage msg, MessageContext ctx) {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
+        public IMessage onMessage(final AscendKeyPressMessage msg, final MessageContext ctx) {
+            IThreadListener mainThread = (WorldServer)ctx.getServerHandler().playerEntity.worldObj;
             mainThread.addScheduledTask(() -> {
-                EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
+                EntityPlayerMP entityPlayer = ctx.getServerHandler().playerEntity;
                 if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-                    PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
-                    if (pi != null) {
-                        pi.setAscendMode(msg.keyPressed);
-                    }
+                    EntityParachute.setAscendMode(msg.keyPressed);
                 }
             });
+
             return null;
         }
     }
