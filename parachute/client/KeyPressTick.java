@@ -41,8 +41,7 @@ public class KeyPressTick {
     public void onTick(TickEvent.PlayerTickEvent event) {
         if (event.phase.equals(TickEvent.Phase.START)) {
             if (Keyboard.getEventKey() == ascendKey) { // only send if it's the ascend key
-                String name = Minecraft.getMinecraft().thePlayer.getDisplayNameString();
-                PacketHandler.network.sendToServer(new AscendKeyPressMessage(Keyboard.getEventKeyState(), name));
+                PacketHandler.network.sendToServer(new AscendKeyPressMessage(Keyboard.getEventKeyState()));
             }
         }
     }
