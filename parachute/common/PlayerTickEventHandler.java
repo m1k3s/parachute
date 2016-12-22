@@ -87,13 +87,13 @@ public class PlayerTickEventHandler {
             }
             if (ConfigHandler.getAADImmediate() && ParachuteCommonProxy.canActivateAADImmediate(player)) {
                 if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
-                    ((ItemParachute) heldItem.getItem()).deployParachute(player.worldObj, player);
+                    ((ItemParachute) heldItem.getItem()).deployParachute(player.world, player);
                 }
             } else {
                 boolean autoAltitudeReached = ParachuteCommonProxy.getAutoActivateAltitude(player);
                 if (autoAltitudeReached && ParachuteCommonProxy.isFalling(player)) {
                     if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
-                        ((ItemParachute) heldItem.getItem()).deployParachute(player.worldObj, player);
+                        ((ItemParachute) heldItem.getItem()).deployParachute(player.world, player);
                     }
                 }
             }

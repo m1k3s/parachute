@@ -127,7 +127,7 @@ public class ParachuteCommonProxy {
 
         BlockPos blockPos = new BlockPos(player.posX, player.posY - altitude, player.posZ);
 
-        if (!player.worldObj.isAirBlock(blockPos) && player.fallDistance > minFallDistance) {
+        if (!player.world.isAirBlock(blockPos) && player.fallDistance > minFallDistance) {
             altitudeReached = true;
         }
         return altitudeReached;

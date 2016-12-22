@@ -2,7 +2,6 @@ package com.parachute.common;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -19,7 +18,7 @@ public class ShowWaypointCommand extends CommandBase {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "showwaypoint";
     }
 
@@ -29,12 +28,12 @@ public class ShowWaypointCommand extends CommandBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "commands.showwaypoint.usage";
     }
 
     @Override
-    public List<String> getCommandAliases() {
+    public List<String> getAliases() {
         return aliases;
     }
 

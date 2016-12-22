@@ -20,7 +20,7 @@ public class EnableWaypointCommand extends CommandBase {
     }
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "enablewaypoint";
     }
 
@@ -30,12 +30,12 @@ public class EnableWaypointCommand extends CommandBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "/setwaypoint <X coord> <Z coord>";
     }
 
     @Override
-    public List<String> getCommandAliases() {
+    public List<String> getAliases() {
         return aliases;
     }
 
