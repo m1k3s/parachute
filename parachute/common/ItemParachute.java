@@ -68,7 +68,7 @@ public class ItemParachute extends Item {
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
         } else { // server side
-            world.spawnEntityInWorld(chute);
+            world.spawnEntity(chute);
         }
         entityplayer.startRiding(chute);
         ParachuteCommonProxy.setDeployed(true);

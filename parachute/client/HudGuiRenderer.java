@@ -118,7 +118,7 @@ public class HudGuiRenderer extends Gui {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
         // todo: add end biome to the excluded list
-        if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.thePlayer.onGround) {
+        if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
             return;
         }
 
@@ -130,8 +130,7 @@ public class HudGuiRenderer extends Gui {
             int textY = hudY + 22; // ycoord for text
             int ledX = 1;
 
-            if (ParachuteCommonProxy.onParachute(mc.thePlayer)) {
-//            if (mc.thePlayer.isRiding() && mc.thePlayer.getRidingEntity() instanceof EntityParachute) {
+            if (ParachuteCommonProxy.onParachute(mc.player)) {
                 mc.getTextureManager().bindTexture(hudTexture);
 
                 GlStateManager.enableRescaleNormal();
@@ -140,11 +139,11 @@ public class HudGuiRenderer extends Gui {
                                                      GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 RenderHelper.enableGUIStandardItemLighting();
 
-                BlockPos entityPos = new BlockPos(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY, mc.thePlayer.posZ);
+                BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection();
                 double distance = getHomeDistance();
-                double heading = (((mc.thePlayer.rotationYaw + 180.0) % 360) + 360) % 360;
+                double heading = (((mc.player.rotationYaw + 180.0) % 360) + 360) % 360;
 
                 // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
                 drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
@@ -230,24 +229,24 @@ public class HudGuiRenderer extends Gui {
     public double getHomeDirection() {
         BlockPos blockpos;
         if (ConfigHandler.getUseSpawnPoint()) {
-            blockpos = mc.theWorld.getSpawnPoint();
+            blockpos = mc.world.getSpawnPoint();
         } else {
             blockpos = ConfigHandler.getHomepoint();
         }
-        double delta = Math.atan2(blockpos.getZ() - mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
-        double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
+        double delta = Math.atan2(blockpos.getZ() - mc.player.posZ, blockpos.getX() - mc.player.posX);
+        double relAngle = delta - Math.toRadians(mc.player.rotationYaw);
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 
     public double getHomeDistance() {
         BlockPos blockpos;
         if (ConfigHandler.getUseSpawnPoint()) {
-            blockpos = mc.theWorld.getSpawnPoint();
+            blockpos = mc.world.getSpawnPoint();
         } else {
             blockpos = ConfigHandler.getHomepoint();
         }
-        double a = Math.pow(blockpos.getZ() - mc.thePlayer.posZ, 2);
-        double b = Math.pow(blockpos.getX() - mc.thePlayer.posX, 2);
+        double a = Math.pow(blockpos.getZ() - mc.player.posZ, 2);
+        double b = Math.pow(blockpos.getX() - mc.player.posX, 2);
         return Math.sqrt(a + b);
     }
 
@@ -270,23 +269,23 @@ public class HudGuiRenderer extends Gui {
     // only allow altitude calculations in the surface world
     // return a weirdly random number if in nether or end.
     public double getCurrentAltitude(BlockPos entityPos) {
-        if (mc.theWorld.provider.isSurfaceWorld()) {
+        if (mc.world.provider.isSurfaceWorld()) {
             BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
-            while (mc.theWorld.isAirBlock(blockPos.down())) {
+            while (mc.world.isAirBlock(blockPos.down())) {
                 blockPos = blockPos.down();
             }
             // calculate the entity's current altitude above the ground
             return entityPos.getY() - blockPos.getY();
         }
-        return 1000.0 * mc.theWorld.rand.nextGaussian();
+        return 1000.0 * mc.world.rand.nextGaussian();
     }
 
     // difference angle in degrees the player is facing from the waypoint.
     // zero degrees means the player is facing the waypoint.
     public double getWaypointDirection(int waypointX, int waypointZ) {
         BlockPos blockpos = new BlockPos(waypointX, 0, waypointZ);
-        double delta = Math.atan2(blockpos.getZ() - mc.thePlayer.posZ, blockpos.getX() - mc.thePlayer.posX);
-        double relAngle = delta - Math.toRadians(mc.thePlayer.rotationYaw);
+        double delta = Math.atan2(blockpos.getZ() - mc.player.posZ, blockpos.getX() - mc.player.posX);
+        double relAngle = delta - Math.toRadians(mc.player.rotationYaw);
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 

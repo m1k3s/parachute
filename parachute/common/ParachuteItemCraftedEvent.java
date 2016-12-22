@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
-// if a parachute is crafted, add the acheivement
+// if a parachute is crafted, add the achievement
 // if the wool blocks are the same color change the parachute
 // color to match, otherwise set the parachute color to white.
 public class ParachuteItemCraftedEvent {
@@ -19,19 +19,19 @@ public class ParachuteItemCraftedEvent {
             EnumDyeColor[] canopy = new EnumDyeColor[3];
             for (int k = 0; k < 3; k++) { // scan the top three slots for same colored wool blocks
                 ItemStack stack = craftedEvent.craftMatrix.getStackInSlot(k);
-                if (stack != null) {
+//                if (stack != null) {
                     Item item = stack.getItem();
                     if (item instanceof ItemCloth) {
                         canopy[k] = EnumDyeColor.byMetadata(item.getMetadata(stack));
-                        if (craftedEvent.player.worldObj.isRemote) {
-                            if (canopy[0].equals(canopy[1]) && canopy[0].equals(canopy[2])) {
+                        if (craftedEvent.player.world.isRemote) {
+                            if (canopy[0].equals(canopy[1]) && canopy[1].equals(canopy[2])) {
                                 ConfigHandler.setChuteColor(canopy[0].toString());
                             } else {
                                 ConfigHandler.setChuteColor("white");
                             }
                         }
                     }
-                }
+//                }
             }
         }
     }

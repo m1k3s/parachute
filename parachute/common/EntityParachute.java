@@ -70,7 +70,7 @@ public class EntityParachute extends Entity {
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
 
         curLavaDistance = lavaDistance;
-        worldObj = world;
+        this.world = world;
         preventEntitySpawning = true;
         setSize(1.5f, 0.0625f);
         motionFactor = 0.07;
@@ -95,19 +95,29 @@ public class EntityParachute extends Entity {
 	static void setAscendMode(boolean mode) {
         ascendMode = mode;
     }
+// <<<<<<< HEAD
 
-   void dismountParachute() {
-       Entity skyDiver = getControllingPassenger();
-       if (!worldObj.isRemote && skyDiver != null) {
-           ConfigHandler.setIsDismounting(true);
-           dismountRidingEntity();
-       }
-   }
+   // void dismountParachute() {
+       // Entity skyDiver = getControllingPassenger();
+       // if (!worldObj.isRemote && skyDiver != null) {
+           // ConfigHandler.setIsDismounting(true);
+           // dismountRidingEntity();
+       // }
+   // }
 
-    public void killParachute() {
-        ParachuteCommonProxy.setDeployed(false);
-        ConfigHandler.setIsDismounting(true);
-        setDead();
+    // public void killParachute() {
+        // ParachuteCommonProxy.setDeployed(false);
+        // ConfigHandler.setIsDismounting(true);
+        // setDead();
+// =======
+    
+    void dismountParachute() {
+        Entity skyDiver = getControllingPassenger();
+        if (!world.isRemote && skyDiver != null) {
+            ConfigHandler.setIsDismounting(true);
+            killParachute();
+        }
+// >>>>>>> 4f95f671e0c009bd4dfac7fdc409a60e71c900ba
     }
 
     @Override
@@ -140,7 +150,7 @@ public class EntityParachute extends Entity {
         boolean sitting = false;
         if (skyDiver != null) {
             BlockPos bp = new BlockPos(skyDiver.posX, skyDiver.getEntityBoundingBox().minY - 3.0, skyDiver.posZ);
-            sitting = (worldObj.getBlockState(bp).getBlock() != Blocks.AIR);
+            sitting = (world.getBlockState(bp).getBlock() != Blocks.AIR);
         }
         return sitting;
     }
@@ -208,7 +218,11 @@ public class EntityParachute extends Entity {
 
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
-        if ((skyDiver == null || !isBeingRidden()) && !worldObj.isRemote) { // server side
+// <<<<<<< HEAD
+        // if ((skyDiver == null || !isBeingRidden()) && !worldObj.isRemote) { // server side
+// =======
+        if (skyDiver == null && !world.isRemote) { // server side
+// >>>>>>> 4f95f671e0c009bd4dfac7fdc409a60e71c900ba
             killParachute();
             return;
         }
@@ -271,7 +285,7 @@ public class EntityParachute extends Entity {
         motionY -= currentDescentRate();
 
         // move the parachute with the motion equations applied
-        moveEntity(MoverType.SELF, motionX, motionY, motionZ);
+        move(MoverType.SELF, motionX, motionY, motionZ);
 
         // apply momentum
         motionX *= 0.99D;
@@ -304,11 +318,11 @@ public class EntityParachute extends Entity {
 
         // finally apply turbulence if flags allow
         if (((ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
-            applyTurbulence(worldObj.isThundering());
+            applyTurbulence(world.isThundering());
         }
 
         // something bad happened, somehow the skydiver was killed.
-        if (!worldObj.isRemote && skyDiver != null && skyDiver.isDead) { // server side
+        if (!world.isRemote && skyDiver != null && skyDiver.isDead) { // server side
             killParachute();
         }
 
@@ -316,7 +330,7 @@ public class EntityParachute extends Entity {
         if (skyDiver != null) {
             double dX = posX - prevPosX;
             double dZ = posZ - prevPosZ;
-            int distance = Math.round(MathHelper.sqrt_double(dX * dX + dZ * dZ) * 100.0F);
+            int distance = Math.round(MathHelper.sqrt(dX * dX + dZ * dZ) * 100.0F);
             if (skyDiver instanceof EntityPlayer) {
                 ((EntityPlayer) skyDiver).addStat(Parachute.parachuteDistance, distance);
             }
@@ -359,10 +373,10 @@ public class EntityParachute extends Entity {
     // if it is raining (or snowing) or thundering.
     private boolean isBadWeather() {
         BlockPos bp = new BlockPos(posX, posY, posZ);
-        Chunk chunk = worldObj.getChunkFromBlockCoords(bp);
-        boolean canSnow = chunk.getBiome(bp, worldObj.provider.getBiomeProvider()).getEnableSnow();
-        boolean canRain = chunk.getBiome(bp, worldObj.provider.getBiomeProvider()).getRainfall() > 0;
-        return (canRain || canSnow) && (worldObj.isRaining() || worldObj.isThundering());
+        Chunk chunk = world.getChunkFromBlockCoords(bp);
+        boolean canSnow = chunk.getBiome(bp, world.provider.getBiomeProvider()).getEnableSnow();
+        boolean canRain = chunk.getBiome(bp, world.provider.getBiomeProvider()).getRainfall() > 0;
+        return (canRain || canSnow) && (world.isRaining() || world.isThundering());
     }
 
     // determines the descent rate based on whether or not
@@ -380,11 +394,11 @@ public class EntityParachute extends Entity {
         }
 
         if (ConfigHandler.getWeatherAffectsDrift()) {
-            if (worldObj.isRaining()) {  // rain makes you fall faster
+            if (world.isRaining()) {  // rain makes you fall faster
                 descentRate += 0.002;
             }
 
-            if (worldObj.isThundering()) {  // more rain really makes you fall faster
+            if (world.isThundering()) {  // more rain really makes you fall faster
                 descentRate += 0.004;
             }
         }
@@ -417,13 +431,17 @@ public class EntityParachute extends Entity {
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
     private boolean isHeatSource(BlockPos bp) {
-        return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
+// <<<<<<< HEAD
+        // return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
+// =======
+        return world.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
+// >>>>>>> 4f95f671e0c009bd4dfac7fdc409a60e71c900ba
     }
 
     private boolean isHeatSourceInRange(BlockPos bp) {
         Vec3d v1 = new Vec3d(posX, posY, posZ);
         Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
-        RayTraceResult mop = worldObj.rayTraceBlocks(v1, v2, true);
+        RayTraceResult mop = world.rayTraceBlocks(v1, v2, true);
         if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
             BlockPos blockpos = mop.getBlockPos();
             if (isHeatSource(blockpos)) {
@@ -459,7 +477,7 @@ public class EntityParachute extends Entity {
     // dismount to land on trees. Dismounting over water is handled by the
     // shouldDismountInWater method and config option.
     private boolean checkForGroundProximity(BlockPos bp) {
-        Block block = worldObj.getBlockState(bp).getBlock();
+        Block block = world.getBlockState(bp).getBlock();
         boolean isAir = (block == Blocks.AIR);
         boolean isVegetation = (block instanceof BlockFlower) || (block instanceof BlockGrass) || (block instanceof BlockLeaves);
         return (!isAir && !isVegetation);
@@ -477,7 +495,7 @@ public class EntityParachute extends Entity {
             double deltaY = rmin + 0.2 * rand.nextDouble();
             double deltaZ = rmin + (rmax - rmin) * rand.nextDouble();
 
-            deltaPos = MathHelper.sqrt_double(deltaPos);
+            deltaPos = MathHelper.sqrt(deltaPos);
             double deltaInv = 1.0 / deltaPos;
 
             deltaX /= deltaPos;
@@ -519,7 +537,7 @@ public class EntityParachute extends Entity {
             double y = posY - 0.25;
             double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;
 
-            worldObj.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
+            world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
         }
     }
 
