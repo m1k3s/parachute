@@ -119,6 +119,11 @@ public class EntityParachute extends Entity {
         }
 // >>>>>>> 4f95f671e0c009bd4dfac7fdc409a60e71c900ba
     }
+    
+    private void killParachute() {
+        ParachuteCommonProxy.setDeployed(false);
+        setDead();
+    }
 
     @Override
     protected boolean canTriggerWalking() {
