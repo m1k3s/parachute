@@ -209,9 +209,9 @@ public class EntityParachute extends Entity {
         // initial forward velocity for this update
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
-        if (showContrails && initialVelocity > 0.2) {
-            generateContrails(initialVelocity);
-        }
+//        if (ascendMode && showContrails && initialVelocity > 0.2) {
+//            generateContrails(initialVelocity);
+//        }
 
         prevPosX = posX;
         prevPosY = posY;
@@ -283,12 +283,12 @@ public class EntityParachute extends Entity {
         // update and clamp yaw between -180 and 180
         double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
         // further clamp yaw between -45 and 45 per update, slower turn radius
-//        if (adjustedYaw > 45.0D) {
-//            adjustedYaw = 45.0D;
-//        }
-//        if (adjustedYaw < -45.0D) {
-//            adjustedYaw = -45.0D;
-//        }
+        if (adjustedYaw > 45.0D) {
+            adjustedYaw = 45.0D;
+        }
+        if (adjustedYaw < -45.0D) {
+            adjustedYaw = -45.0D;
+        }
         // update final yaw and apply to parachute
         rotationYaw += adjustedYaw;
         setRotation(rotationYaw, rotationPitch);
@@ -358,6 +358,7 @@ public class EntityParachute extends Entity {
 
         if (ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
 			playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+			generateContrails();
             descentRate = ascend;
         }
 
@@ -465,11 +466,12 @@ public class EntityParachute extends Entity {
     // don't generate contrails (no engines), but most worlds
     // aren't made of blocks with cubic cows either. If you
     // like, you can think of the trails as chemtrails.
-    private void generateContrails(double velocity) {
+    private void generateContrails(/*double velocity*/) {
+        double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
         double cosYaw = 2.0 * Math.cos(Math.toRadians(rotationYaw));
         double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
 
-        for (int k = 0; (double) k < 1.0 + velocity; k++) {
+        for (int k = 0; (double) k < 2.0 + velocity; k++) {
             double sign = (double)(rand.nextInt(2) * 2 - 1) * 0.7;
             double x = prevPosX - cosYaw * -0.35 + sinYaw * sign;
             double y = posY - 0.25;
