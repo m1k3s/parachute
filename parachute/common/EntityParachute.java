@@ -209,9 +209,9 @@ public class EntityParachute extends Entity {
         // initial forward velocity for this update
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
-//        if (ascendMode && showContrails && initialVelocity > 0.2) {
-//            generateContrails(initialVelocity);
-//        }
+        if (showContrails && initialVelocity > 0.2) {
+            generateContrails(false);
+        }
 
         prevPosX = posX;
         prevPosY = posY;
@@ -358,7 +358,7 @@ public class EntityParachute extends Entity {
 
         if (ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
 			playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
-			generateContrails();
+			generateContrails(true);
             descentRate = ascend;
         }
 
@@ -466,7 +466,7 @@ public class EntityParachute extends Entity {
     // don't generate contrails (no engines), but most worlds
     // aren't made of blocks with cubic cows either. If you
     // like, you can think of the trails as chemtrails.
-    private void generateContrails(/*double velocity*/) {
+    private void generateContrails(boolean ascending) {
         double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
         double cosYaw = 2.0 * Math.cos(Math.toRadians(rotationYaw));
         double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
@@ -477,7 +477,11 @@ public class EntityParachute extends Entity {
             double y = posY - 0.25;
             double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;
 
-            world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
+            if (ascending) {
+                world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, motionX, motionY, motionZ);
+            } else {
+                world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
+            }
         }
     }
 
