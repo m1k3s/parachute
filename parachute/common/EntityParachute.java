@@ -210,7 +210,7 @@ public class EntityParachute extends Entity {
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
         if (showContrails && initialVelocity > 0.2) {
-            generateContrails(false);
+            generateContrails(ascendMode);
         }
 
         prevPosX = posX;
@@ -358,7 +358,7 @@ public class EntityParachute extends Entity {
 
         if (ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
 			playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
-			generateContrails(true);
+//			generateContrails(true);
             descentRate = ascend;
         }
 
@@ -479,9 +479,8 @@ public class EntityParachute extends Entity {
 
             if (ascending) {
                 world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, motionX, motionY, motionZ);
-            } else {
-                world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
             }
+            world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
         }
     }
 
