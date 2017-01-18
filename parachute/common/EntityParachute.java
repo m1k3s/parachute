@@ -335,6 +335,14 @@ public class EntityParachute extends Entity {
     private double currentDescentRate() {
         double descentRate = drift; // defaults to drift
 
+        EntityPlayer entityPlayer = (EntityPlayer)getControllingPassenger();
+        if (entityPlayer != null) {
+            PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
+            if (pi != null) {
+                ascendMode = pi.getAscendMode();
+            }
+        }
+
         if (ConfigHandler.getWeatherAffectsDrift()) {
             if (world.isRaining()) {  // rain makes you fall faster
                 descentRate += 0.002;
