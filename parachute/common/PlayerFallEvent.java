@@ -36,6 +36,8 @@ public class PlayerFallEvent {
         EntityLivingBase pilot = event.getEntityLiving();
         if (event.getEntityLiving() instanceof EntityPlayer && ConfigHandler.isDismounting()) {
 			event.setCanceled(true);
+			event.setDistance(0.0f);
+			event.setDamageMultiplier(0.0f);
             pilot.fallDistance = 0.0f;
             pilot.isCollided = false;
             ConfigHandler.setIsDismounting(false);

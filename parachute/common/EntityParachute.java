@@ -94,7 +94,7 @@ public class EntityParachute extends Entity {
     static void setAscendMode(boolean mode) {
         ascendMode = mode;
     }
-    
+
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!world.isRemote && skyDiver != null) {
@@ -198,7 +198,7 @@ public class EntityParachute extends Entity {
     public void onUpdate() {
         Entity skyDiver = getControllingPassenger();
         super.onUpdate();
-        
+
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && !world.isRemote) { // server side
@@ -357,8 +357,7 @@ public class EntityParachute extends Entity {
         }
 
         if (ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
-			playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
-//			generateContrails(true);
+            playSound(ParachuteCommonProxy.burnChute, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
             descentRate = ascend;
         }
 
@@ -374,7 +373,7 @@ public class EntityParachute extends Entity {
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
     private boolean isHeatSource(BlockPos bp) {
-        return world.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
+        return world.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
     }
 
     private boolean isHeatSourceInRange(BlockPos bp) {
@@ -472,7 +471,7 @@ public class EntityParachute extends Entity {
         double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
 
         for (int k = 0; (double) k < 2.0 + velocity; k++) {
-            double sign = (double)(rand.nextInt(2) * 2 - 1) * 0.7;
+            double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
             double x = prevPosX - cosYaw * -0.35 + sinYaw * sign;
             double y = posY - 0.25;
             double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;
@@ -486,14 +485,12 @@ public class EntityParachute extends Entity {
 
     @Override
     public void updatePassenger(Entity skydiver) {
-//        if (skydiver != null) {
-            double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
-            double y = posY + getMountedYOffset() + skydiver.getYOffset();
-            double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
-            skydiver.setPosition(x, y, z);
-            skydiver.setRenderYawOffset(rotationYaw + 90.0f);
-            skydiver.setRotationYawHead(rotationYaw + 90);
-//        }
+        double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
+        double y = posY + getMountedYOffset() + skydiver.getYOffset();
+        double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
+        skydiver.setPosition(x, y, z);
+        skydiver.setRenderYawOffset(rotationYaw + 90.0f);
+        skydiver.setRotationYawHead(rotationYaw + 90);
     }
 
     @Override
