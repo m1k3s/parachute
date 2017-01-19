@@ -91,9 +91,9 @@ public class EntityParachute extends Entity {
         prevPosZ = z;
     }
 
-    static void setAscendMode(boolean mode) {
-        ascendMode = mode;
-    }
+//    static void setAscendMode(boolean mode) {
+//        ascendMode = mode;
+//    }
 
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
@@ -209,7 +209,7 @@ public class EntityParachute extends Entity {
         // initial forward velocity for this update
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
-        if (showContrails && initialVelocity > 0.2) {
+        if (showContrails) {
             generateContrails(ascendMode);
         }
 
@@ -487,7 +487,9 @@ public class EntityParachute extends Entity {
             if (ascending) {
                 world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, motionX, motionY, motionZ);
             }
-            world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
+            if (velocity > 0.01) {
+                world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
+            }
         }
     }
 

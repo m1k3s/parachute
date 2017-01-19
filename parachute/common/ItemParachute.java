@@ -48,16 +48,16 @@ public class ItemParachute extends Item {
     @SuppressWarnings("unchecked")
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        boolean result;
-        if (entityplayer != null && ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
-            result = deployParachute(world, entityplayer);
+//        boolean result;
+        if (/*entityplayer != null && */ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
+            /*result = */deployParachute(world, entityplayer);
         } else { // toggle the AAD state
-            result = toggleAAD(itemstack, world, entityplayer);
+            /*result = */toggleAAD(itemstack, world, entityplayer);
         }
         return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
     }
 
-    public boolean deployParachute(World world, EntityPlayer entityplayer) {
+    public void/*boolean*/ deployParachute(World world, EntityPlayer entityplayer) {
         double offset = ParachuteCommonProxy.getOffsetY();
 
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
@@ -87,22 +87,22 @@ public class ItemParachute extends Item {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
             }
         }
-        return true;
+//        return true;
     }
 
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
-    public boolean toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    private void/*boolean*/ toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (!world.isRemote && entityplayer != null) { // server side
             active = !active;
             itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
             ConfigHandler.setAADState(active);
         } else if (world.isRemote && entityplayer != null) { // client side
             world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-        } else {
-            return false;
-        }
-        return true;
+        } //else {
+//            return false;
+//        }
+//        return true;
     }
 
     private float pitch() {
