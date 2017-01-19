@@ -117,7 +117,6 @@ public class HudGuiRenderer extends Gui {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        // todo: add end biome to the excluded list
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
             return;
         }

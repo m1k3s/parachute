@@ -92,32 +92,16 @@ public class EntityParachute extends Entity {
         prevPosZ = z;
     }
 
-	static void setAscendMode(boolean mode) {
-        ascendMode = mode;
-    }
-// <<<<<<< HEAD
+//    static void setAscendMode(boolean mode) {
+//        ascendMode = mode;
+//    }
 
-   // void dismountParachute() {
-       // Entity skyDiver = getControllingPassenger();
-       // if (!worldObj.isRemote && skyDiver != null) {
-           // ConfigHandler.setIsDismounting(true);
-           // dismountRidingEntity();
-       // }
-   // }
-
-    // public void killParachute() {
-        // ParachuteCommonProxy.setDeployed(false);
-        // ConfigHandler.setIsDismounting(true);
-        // setDead();
-// =======
-    
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!world.isRemote && skyDiver != null) {
             ConfigHandler.setIsDismounting(true);
             killParachute();
         }
-// >>>>>>> 4f95f671e0c009bd4dfac7fdc409a60e71c900ba
     }
     
     private void killParachute() {
@@ -223,11 +207,7 @@ public class EntityParachute extends Entity {
 
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
-// <<<<<<< HEAD
-        // if ((skyDiver == null || !isBeingRidden()) && !worldObj.isRemote) { // server side
-// =======
         if (skyDiver == null && !world.isRemote) { // server side
-// >>>>>>> 4f95f671e0c009bd4dfac7fdc409a60e71c900ba
             killParachute();
             return;
         }
@@ -235,8 +215,8 @@ public class EntityParachute extends Entity {
         // initial forward velocity for this update
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
-        if (showContrails && initialVelocity > 0.2) {
-            generateContrails(initialVelocity);
+        if (showContrails) {
+            generateContrails(ascendMode);
         }
 
         prevPosX = posX;
@@ -311,12 +291,12 @@ public class EntityParachute extends Entity {
         // update and clamp yaw between -180 and 180
         double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
         // further clamp yaw between -45 and 45 per update, slower turn radius
-//        if (adjustedYaw > 45.0D) {
-//            adjustedYaw = 45.0D;
-//        }
-//        if (adjustedYaw < -45.0D) {
-//            adjustedYaw = -45.0D;
-//        }
+        if (adjustedYaw > 45.0D) {
+            adjustedYaw = 45.0D;
+        }
+        if (adjustedYaw < -45.0D) {
+            adjustedYaw = -45.0D;
+        }
         // update final yaw and apply to parachute
         rotationYaw += adjustedYaw;
         setRotation(rotationYaw, rotationPitch);
@@ -398,6 +378,14 @@ public class EntityParachute extends Entity {
             }
         }
 
+        EntityPlayer entityPlayer = (EntityPlayer)getControllingPassenger();
+        if (entityPlayer != null) {
+            PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
+            if (pi != null) {
+                ascendMode = pi.getAscendMode();
+            }
+        }
+
         if (ConfigHandler.getWeatherAffectsDrift()) {
             if (world.isRaining()) {  // rain makes you fall faster
                 descentRate += 0.002;
@@ -436,11 +424,7 @@ public class EntityParachute extends Entity {
     // the following three methods detect lava below the player
     // at up to 'maxThermalRise' distance.
     private boolean isHeatSource(BlockPos bp) {
-// <<<<<<< HEAD
-        // return worldObj.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
-// =======
-        return world.isFlammableWithin(new AxisAlignedBB(bp).expand(0,1,0));
-// >>>>>>> 4f95f671e0c009bd4dfac7fdc409a60e71c900ba
+        return world.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
     }
 
     private boolean isHeatSourceInRange(BlockPos bp) {
@@ -532,30 +516,34 @@ public class EntityParachute extends Entity {
     // don't generate contrails (no engines), but most worlds
     // aren't made of blocks with cubic cows either. If you
     // like, you can think of the trails as chemtrails.
-    private void generateContrails(double velocity) {
+    private void generateContrails(boolean ascending) {
+        double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
         double cosYaw = 2.0 * Math.cos(Math.toRadians(rotationYaw));
         double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
 
-        for (int k = 0; (double) k < 1.0 + velocity; k++) {
+        for (int k = 0; (double) k < 2.0 + velocity; k++) {
             double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
             double x = prevPosX - cosYaw * -0.35 + sinYaw * sign;
             double y = posY - 0.25;
             double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;
 
-            world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
+            if (ascending) {
+                world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, motionX, motionY, motionZ);
+            }
+            if (velocity > 0.01) {
+                world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
+            }
         }
     }
 
     @Override
     public void updatePassenger(Entity skydiver) {
-//        if (skydiver != null) {
-            double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
-            double y = posY + getMountedYOffset() + skydiver.getYOffset();
-            double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
-            skydiver.setPosition(x, y, z);
-            skydiver.setRenderYawOffset(rotationYaw + 90.0f);
-            skydiver.setRotationYawHead(rotationYaw + 90);
-//        }
+        double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
+        double y = posY + getMountedYOffset() + skydiver.getYOffset();
+        double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
+        skydiver.setPosition(x, y, z);
+        skydiver.setRenderYawOffset(rotationYaw + 90.0f);
+        skydiver.setRotationYawHead(rotationYaw + 90);
     }
 
     @Override
