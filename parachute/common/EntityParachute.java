@@ -291,12 +291,12 @@ public class EntityParachute extends Entity {
         // update and clamp yaw between -180 and 180
         double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
         // further clamp yaw between -45 and 45 per update, slower turn radius
-        if (adjustedYaw > 45.0D) {
-            adjustedYaw = 45.0D;
-        }
-        if (adjustedYaw < -45.0D) {
-            adjustedYaw = -45.0D;
-        }
+//        if (adjustedYaw > 45.0D) {
+//            adjustedYaw = 45.0D;
+//        }
+//        if (adjustedYaw < -45.0D) {
+//            adjustedYaw = -45.0D;
+//        }
         // update final yaw and apply to parachute
         rotationYaw += adjustedYaw;
         setRotation(rotationYaw, rotationPitch);

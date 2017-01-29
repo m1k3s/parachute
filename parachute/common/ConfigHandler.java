@@ -27,6 +27,9 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConfigHandler {
 
     private static Configuration config = null;
@@ -132,25 +135,56 @@ public class ConfigHandler {
         Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment);
         Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256);
         Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
+        Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment);
+        Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
+
+        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment);
+        Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
+
         Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", false, lavaThermalComment);
         Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0);
         Property maxLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0);
-        Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment);
-        Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white", colorComment, colorValues);
+        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment);
+
         Property weatherAffectsDriftProp = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment);
         Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment);
-        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment);
-        Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
+
         Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment);
         Property aadAltitudeProp = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment, 5.0, 100.0);
         Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0);
         Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment);
+
         Property useSpawnPointProp = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment);
-        Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
         Property waypointProp = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment);
         Property homepointProp = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment);
-        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment);
 
+        Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white");
+        chuteColorProp.setComment(colorComment);
+        chuteColorProp.setValidValues(colorValues);
+
+        List<String> propertyOrder = new ArrayList<>();
+        propertyOrder.add(singleUseProp.getName());
+        propertyOrder.add(heightLimitProp.getName());
+        propertyOrder.add(thermalsProp.getName());
+        propertyOrder.add(autoDismountProp.getName());
+        propertyOrder.add(dismountInWaterProp.getName());
+        propertyOrder.add(showContrailsProp.getName());
+        propertyOrder.add(burnVolumeProp.getName());
+        propertyOrder.add(lavaThermalsProp.getName());
+        propertyOrder.add(minLavaDistanceProp.getName());
+        propertyOrder.add(maxLavaDistanceProp.getName());
+        propertyOrder.add(lavaDisablesThermalProp.getName());
+        propertyOrder.add(isAADActiveProp.getName());
+        propertyOrder.add(aadImmediateProp.getName());
+        propertyOrder.add(minFallDistanceProp.getName());
+        propertyOrder.add(aadAltitudeProp.getName());
+        propertyOrder.add(weatherAffectsDriftProp.getName());
+        propertyOrder.add(constantTurbulenceProp.getName());
+        propertyOrder.add(useSpawnPointProp.getName());
+        propertyOrder.add(waypointProp.getName());
+        propertyOrder.add(homepointProp.getName());
+        propertyOrder.add(chuteColorProp.getName());
+        config.setCategoryPropertyOrder(Configuration.CATEGORY_GENERAL, propertyOrder);
 
         if (fromFields) {
             singleUse = singleUseProp.getBoolean(false);
