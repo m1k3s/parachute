@@ -48,16 +48,15 @@ public class ItemParachute extends Item {
     @SuppressWarnings("unchecked")
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-//        boolean result;
-        if (/*entityplayer != null && */ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
-            /*result = */deployParachute(world, entityplayer);
+        if (ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
+            deployParachute(world, entityplayer);
         } else { // toggle the AAD state
-            /*result = */toggleAAD(itemstack, world, entityplayer);
+            toggleAAD(itemstack, world, entityplayer);
         }
         return new ActionResult(result ? EnumActionResult.SUCCESS : EnumActionResult.PASS, itemstack); // unchecked
     }
 
-    public void/*boolean*/ deployParachute(World world, EntityPlayer entityplayer) {
+    public void deployParachute(World world, EntityPlayer entityplayer) {
         double offset = ParachuteCommonProxy.getOffsetY();
 
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
@@ -87,22 +86,18 @@ public class ItemParachute extends Item {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
             }
         }
-//        return true;
     }
 
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
-    private void/*boolean*/ toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (!world.isRemote && entityplayer != null) { // server side
             active = !active;
             itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
             ConfigHandler.setAADState(active);
         } else if (world.isRemote && entityplayer != null) { // client side
             world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-        } //else {
-//            return false;
-//        }
-//        return true;
+        }
     }
 
     private float pitch() {
@@ -110,8 +105,8 @@ public class ItemParachute extends Item {
     }
 
     @Override
-    public boolean getIsRepairable(ItemStack itemstack1, ItemStack itemstack2) {
-        return Items.STRING == itemstack2.getItem() || super.getIsRepairable(itemstack1, itemstack2);
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return Items.STRING == repair.getItem();
     }
 
 }

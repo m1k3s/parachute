@@ -269,34 +269,26 @@ public class EntityParachute extends Entity {
         // calculate the descent rate
         motionY -= currentDescentRate();
 
+        // apply momentum
+        motionX *= 0.99;
+        motionY *= (motionY < 0.0 ? 0.95 : 0.98); // rises faster than falls
+        motionZ *= 0.99;
         // move the parachute with the motion equations applied
         move(MoverType.SELF, motionX, motionY, motionZ);
 
-        // apply momentum
-        motionX *= 0.99D;
-        motionY *= 0.95D;
-        motionZ *= 0.99D;
-
         // update pitch and yaw. Pitch is always 0.0
         rotationPitch = 0.0f;
-        double yaw = rotationYaw;
+        double deltaYaw = rotationYaw;
         double delta_X = prevPosX - posX;
         double delta_Z = prevPosZ - posZ;
 
         // update direction (yaw)
-        if (delta_X * delta_X + delta_Z * delta_Z > 0.001D) {
-            yaw = Math.toDegrees(Math.atan2(delta_Z, delta_X));
+        if ((delta_X * delta_X + delta_Z * delta_Z) > 0.001) {
+            deltaYaw = Math.toDegrees(Math.atan2(delta_Z, delta_X));
         }
 
         // update and clamp yaw between -180 and 180
-        double adjustedYaw = MathHelper.wrapDegrees(yaw - rotationYaw);
-        // further clamp yaw between -45 and 45 per update, slower turn radius
-//        if (adjustedYaw > 45.0D) {
-//            adjustedYaw = 45.0D;
-//        }
-//        if (adjustedYaw < -45.0D) {
-//            adjustedYaw = -45.0D;
-//        }
+        double adjustedYaw = MathHelper.wrapDegrees(deltaYaw - rotationYaw);
         // update final yaw and apply to parachute
         rotationYaw += adjustedYaw;
         setRotation(rotationYaw, rotationPitch);
@@ -378,7 +370,7 @@ public class EntityParachute extends Entity {
             }
         }
 
-        EntityPlayer entityPlayer = (EntityPlayer)getControllingPassenger();
+        EntityPlayer entityPlayer = (EntityPlayer) getControllingPassenger();
         if (entityPlayer != null) {
             PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
             if (pi != null) {

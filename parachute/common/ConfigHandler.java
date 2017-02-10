@@ -209,9 +209,8 @@ public class ConfigHandler {
             homepoint = homepointProp.getIntList();
         }
 
-//        boolean lavaDisablesThermals = lavaDisablesThermalProp.getBoolean(true);
         // if lava thermals are allowed check allow/disallow space bar thermals
-        thermals = !(lavaThermals && lavaDisablesThermalProp.getBoolean()/*lavaDisablesThermals*/);
+        thermals = !(lavaThermals && lavaDisablesThermalProp.getBoolean());
         // used to signal that a player has dismounted
         dismounting = false;
 
