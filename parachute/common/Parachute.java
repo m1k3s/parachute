@@ -105,16 +105,6 @@ public class Parachute {
         return Parachute.modversion;
     }
 
-    // user has changed entries in the GUI config. save the results.
-//    @SuppressWarnings("unused")
-//    @SubscribeEvent
-//    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-//        if (event.getModID().equals(Parachute.modid)) {
-//            proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.name));
-//            ConfigHandler.updateConfigFromGUI();
-//        }
-//    }
-
 }
 
 
