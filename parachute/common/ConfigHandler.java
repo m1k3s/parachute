@@ -210,8 +210,9 @@ public class ConfigHandler {
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
-        boolean thermalsDisabled = !(lavaThermals && lavaDisablesThermalProp.getBoolean());
-        thermals = thermals ? thermalsDisabled : thermals;
+        thermals = thermals ? !(lavaThermals && lavaDisablesThermalProp.getBoolean()) : thermals;
+//        boolean thermalsDisabled = !(lavaThermals && lavaDisablesThermalProp.getBoolean());
+//        thermals = thermals ? thermalsDisabled : thermals;
         // used to signal that a player has dismounted
         dismounting = false;
 
