@@ -48,8 +48,8 @@ public class PlayerTickEventHandler {
             ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
             ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(EnumHand.OFF_HAND);
-
             boolean deployed = ParachuteCommonProxy.onParachute(player);
+
             if (!deployed && armor.getItem() instanceof ItemParachutePack && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemParachute))) {
                 player.inventory.armorInventory.set(armorSlot.getIndex(), ItemStack.EMPTY);
             } else {
