@@ -226,10 +226,9 @@ public class ParachuteModelRenderer {
         compiled = true;
     }
 
-    public final ParachuteModelRenderer setTextureSize(float width, float height) {
+    public final void setTextureSize(float width, float height) {
         textureWidth = width;
         textureHeight = height;
-        return this;
     }
 
 }

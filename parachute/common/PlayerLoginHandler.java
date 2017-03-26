@@ -7,11 +7,13 @@ public class PlayerLoginHandler {
 
     public PlayerLoginHandler() {}
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerManager.getInstance().Players.add(new PlayerInfo(event.player.getDisplayNameString()));
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         PlayerInfo PI = new PlayerInfo("");

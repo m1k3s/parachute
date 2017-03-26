@@ -288,6 +288,7 @@ public class HudGuiRenderer extends Gui {
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 
+    @SuppressWarnings("unused")
     public static int[] getWaypoint() {
         return new int[] {wayPointX, wayPointZ};
     }

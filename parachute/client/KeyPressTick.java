@@ -21,7 +21,6 @@ package com.parachute.client;
 
 import com.parachute.common.AscendKeyPressMessage;
 import com.parachute.common.PacketHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;

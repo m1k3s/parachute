@@ -24,15 +24,15 @@ import net.minecraft.entity.Entity;
 
 public class ModelParachute extends ModelBase {
 
-    private final float width = 16.0f;
-    private final float height = 0.35f;
-    private final float depth = 16.0f;
     private final int nSections = 3;
 
     public ParachuteModelRenderer[] sections = new ParachuteModelRenderer[nSections];
 
     public ModelParachute() {
         sections[0] = new ParachuteModelRenderer(0, 0);
+        float width = 16.0f;
+        float height = 0.35f;
+        float depth = 16.0f;
         sections[0].addBox(-8F, 0F, -8F, width, height, depth);
 
         sections[1] = new ParachuteModelRenderer(0, 0);

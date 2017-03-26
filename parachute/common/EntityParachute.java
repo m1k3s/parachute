@@ -33,6 +33,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EntityParachute extends Entity {
@@ -144,6 +145,7 @@ public class EntityParachute extends Entity {
         return sitting;
     }
 
+    @Nonnull
     @Override
     public EnumFacing getAdjustedHorizontalFacing() {
         return getHorizontalFacing().rotateY();
@@ -226,7 +228,7 @@ public class EntityParachute extends Entity {
         // drop the chute when close to ground if enabled
         // FIXME: autoDismount will not work on multiplayer
         // FIXME: I have disabled it server side for now.
-        if (!worldObj.isRemote && autoDismount && skyDiver != null) {
+        if (!world.isRemote && autoDismount && skyDiver != null) {
             double pilotFeetPos = skyDiver.getEntityBoundingBox().minY;
             BlockPos bp = new BlockPos(skyDiver.posX, pilotFeetPos, skyDiver.posZ);
             if (checkForGroundProximity(bp)) {
@@ -361,14 +363,6 @@ public class EntityParachute extends Entity {
     // the final result.
     private double currentDescentRate() {
         double descentRate = drift; // defaults to drift
-        EntityPlayer entityPlayer = (EntityPlayer)getControllingPassenger();
-        if (entityPlayer != null) {
-            PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
-            if (pi != null) {
-//                setAscendMode(pi.getAscendMode());
-                ascendMode = pi.getAscendMode();
-            }
-        }
 
         EntityPlayer entityPlayer = (EntityPlayer) getControllingPassenger();
         if (entityPlayer != null) {
@@ -529,7 +523,7 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void updatePassenger(Entity skydiver) {
+    public void updatePassenger(@Nonnull Entity skydiver) {
         double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
         double y = posY + getMountedYOffset() + skydiver.getYOffset();
         double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
@@ -539,13 +533,14 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbt) {
+    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbt) {
+    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {
     }
 
+    @Nonnull
     @Override
     public String toString() {
         return String.format("%s: {x=%.1f, y=%.1f, z=%.1f}, {yaw=%.1f, pitch=%.1f}", getClass().getSimpleName(), posX, posY, posZ, rotationYaw, rotationPitch);

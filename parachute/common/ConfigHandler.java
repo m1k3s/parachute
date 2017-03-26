@@ -121,6 +121,7 @@ public class ConfigHandler {
         updateConfigInfo(false, true);
     }
 
+    @SuppressWarnings("unused")
     public static void updateConfigFromFields() {
         updateConfigInfo(false, false);
     }
@@ -210,7 +211,7 @@ public class ConfigHandler {
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
-        thermals = thermals ? !(lavaThermals && lavaDisablesThermalProp.getBoolean()) : thermals;
+        thermals = thermals && !(lavaThermals && lavaDisablesThermalProp.getBoolean());
 //        boolean thermalsDisabled = !(lavaThermals && lavaDisablesThermalProp.getBoolean());
 //        thermals = thermals ? thermalsDisabled : thermals;
         // used to signal that a player has dismounted
@@ -346,6 +347,7 @@ public class ConfigHandler {
         return useSpawnPoint;
     }
 
+    @SuppressWarnings("unused")
     public static BlockPos getWaypoint() {
         return new BlockPos(waypoint[0], 0, waypoint[1]);
     }

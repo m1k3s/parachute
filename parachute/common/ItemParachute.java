@@ -32,6 +32,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
 
+import javax.annotation.Nonnull;
+
 
 public class ItemParachute extends Item {
 
@@ -45,15 +47,16 @@ public class ItemParachute extends Item {
         setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode
     }
 
+    @Nonnull
     @SuppressWarnings("unchecked")
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
             deployParachute(world, entityplayer);
         } else { // toggle the AAD state
             toggleAAD(itemstack, world, entityplayer);
         }
-        return new ActionResult(result ? EnumActionResult.SUCCESS : EnumActionResult.PASS, itemstack); // unchecked
+        return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
     }
 
     public void deployParachute(World world, EntityPlayer entityplayer) {

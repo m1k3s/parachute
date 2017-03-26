@@ -38,8 +38,8 @@ public class PlayerFallEvent {
 			event.setCanceled(true);
 			event.setDistance(0.0f);
 			event.setDamageMultiplier(0.0f);
-            pilot.fallDistance = 0.0f;
-            pilot.isCollided = false;
+//            pilot.fallDistance = 0.0f;
+//            pilot.isCollided = false;
             ConfigHandler.setIsDismounting(false);
         }
     }

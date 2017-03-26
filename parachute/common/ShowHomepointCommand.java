@@ -6,6 +6,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class ShowHomepointCommand extends CommandBase {
         aliases.add("showhomepoint");
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "showhomepoint";
@@ -27,18 +29,20 @@ public class ShowHomepointCommand extends CommandBase {
         return 2;
     }
 
+    @Nonnull
     @Override
-    public String getUsage(ICommandSender sender) {
+    public String getUsage(@Nonnull ICommandSender sender) {
         return "commands.showhomepoint.usage";
     }
 
+    @Nonnull
     @Override
     public List<String> getAliases() {
         return aliases;
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         World world = sender.getEntityWorld();
         if (!world.isRemote) { // server side
             notifyCommandListener(sender, this, "commands.showhomepoint.success", ConfigHandler.getHomepointString());

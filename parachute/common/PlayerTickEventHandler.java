@@ -19,6 +19,8 @@
 //
 package com.parachute.common;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -42,33 +44,19 @@ public class PlayerTickEventHandler {
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
+            EntityEquipmentSlot armorSlot = ParachuteCommonProxy.armorType;
             ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
-            ItemStack heldItemOffhand = player.getHeldItemOffhand(); // offhand needs to be handled separately
-            if (armor == null && heldItemOffhand != null && heldItemOffhand.getItem() instanceof ItemParachute) {
-                player.inventory.armorInventory.add(ParachuteCommonProxy.armorType.getIndex(), new ItemStack(Parachute.packItem));
-                return;
-            }
-            // need this additional test, armor bar flickers when offhand has parachute and
-            // the parachute is not deployed.
-            if (heldItemOffhand != null && heldItemOffhand.getItem() instanceof ItemParachute) {
-                return;
-            }
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
+            ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(EnumHand.OFF_HAND);
+
             boolean deployed = ParachuteCommonProxy.onParachute(player);
-            if (armor != null && heldItemMainhand == null) { // parachute item has been removed from slot in the hot bar
-                if (!deployed && armor.getItem() instanceof ItemParachutePack) {
-                    player.inventory.armorInventory.remove(ParachuteCommonProxy.armorType.getIndex());
-                }
-            } else if (armor != null) { // player has selected another slot in the hot bar || regular armor is present
-                if (!deployed && armor.getItem() instanceof ItemParachutePack && !(heldItemMainhand.getItem() instanceof ItemParachute)) {
-                    player.inventory.armorInventory.remove(ParachuteCommonProxy.armorType.getIndex());
-                }
+            if (!deployed && armor.getItem() instanceof ItemParachutePack && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemParachute))) {
+                player.inventory.armorInventory.set(armorSlot.getIndex(), ItemStack.EMPTY);
             } else {
-                if (heldItemMainhand != null && heldItemMainhand.getItem() instanceof ItemParachute) {
-                    player.inventory.armorInventory.add(ParachuteCommonProxy.armorType.getIndex(), new ItemStack(Parachute.packItem));
+                if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
+                    player.inventory.armorInventory.set(armorSlot.getIndex(), new ItemStack(Parachute.packItem));
                 }
             }
-
         }
     }
 

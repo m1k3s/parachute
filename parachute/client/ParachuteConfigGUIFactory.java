@@ -24,6 +24,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
 
+import javax.annotation.Nullable;
+
 @SuppressWarnings("unused")
 public class ParachuteConfigGUIFactory implements IModGuiFactory {
 
@@ -42,9 +44,9 @@ public class ParachuteConfigGUIFactory implements IModGuiFactory {
         return null;
     }
 
-
+    @Nullable
     @Override
-    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement roce) {
+    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement runtimeOptionCategoryElement) {
         return null;
     }
 

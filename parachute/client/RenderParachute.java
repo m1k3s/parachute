@@ -32,6 +32,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
+
 public class RenderParachute extends Render<EntityParachute> {
 
     private static String curColor = ConfigHandler.getChuteColor();
@@ -44,7 +46,7 @@ public class RenderParachute extends Render<EntityParachute> {
         shadowSize = 0.0F;
     }
 
-    public void doRender(EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float partialTicks) {
+    public void doRender(@Nonnull EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float partialTicks) {
         GlStateManager.pushMatrix();
 
         GlStateManager.translate((float) x, (float) y, (float) z);
@@ -156,7 +158,7 @@ public class RenderParachute extends Render<EntityParachute> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityParachute entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityParachute entity) {
         parachuteTexture = getParachuteColor(curColor);
         return parachuteTexture;
     }
