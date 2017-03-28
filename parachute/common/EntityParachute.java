@@ -1,21 +1,25 @@
-//  =====GPL=============================================================
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation; version 2 dated June, 1991.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program;  if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave., Cambridge, MA 02139, USA.
-//  =====================================================================
-//
-//
-// Copyright © 2011-2015 Michael Sheppard (crackedEgg)
-//
+/*
+ * EntityParachute.java
+ *
+ * Copyright (c) 2017 Michael Sheppard
+ *
+ *  =====GPL=============================================================
+ * $program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://www.gnu.org/licenses.
+ * =====================================================================
+ *
+ */
+
 package com.parachute.common;
 
 import net.minecraft.block.*;
@@ -25,6 +29,9 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+//import net.minecraft.network.datasync.DataParameter;
+//import net.minecraft.network.datasync.DataSerializers;
+//import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.util.EnumParticleTypes;
@@ -53,8 +60,11 @@ public class EntityParachute extends Entity {
     private boolean autoDismount;
     private boolean dismountInWater;
 
+//    private final static DataParameter<BlockPos> HOME_COORDS = EntityDataManager.createKey(EntityParachute.class, DataSerializers.BLOCK_POS);
+
     private final static double drift = 0.004; // value applied to motionY to descend or drift downward
     private final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
+//    private static BlockPos home_coords;
 
     private static boolean ascendMode;
 
@@ -69,6 +79,7 @@ public class EntityParachute extends Entity {
         autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
+//        home_coords = ConfigHandler.getHomepoint();
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -117,6 +128,7 @@ public class EntityParachute extends Entity {
 
     @Override
     protected void entityInit() {
+//        getDataManager().register(HOME_COORDS, new BlockPos(0,0,0));
     }
 
     @Override
@@ -534,10 +546,14 @@ public class EntityParachute extends Entity {
 
     @Override
     public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {
+//        int[] coords = { home_coords.getX(), home_coords.getZ() };
+//        nbt.setIntArray("home_coords", coords);
     }
 
     @Override
     public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {
+//        int[] coords = nbt.getIntArray("home_coords");
+//        home_coords = new BlockPos(coords[0], 0, coords[1]);
     }
 
     @Nonnull
