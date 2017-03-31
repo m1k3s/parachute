@@ -104,10 +104,6 @@ public class EntityParachute extends Entity {
         prevPosZ = z;
     }
 
-//    static void setAscendMode(boolean mode) {
-//        ascendMode = mode;
-//    }
-
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!world.isRemote && skyDiver != null) {
@@ -327,39 +323,7 @@ public class EntityParachute extends Entity {
             }
         }
     }
-/*
-    private void controlParachute() {
-        if (isBeingRidden()) {
-            if (leftInputDown) {
-                deltaRotation += -1.0;
-            }
-            if (rightInputDown) {
-                ++deltaRotation;
-            }
-            double forward = 0.0;
-            if (rightInputDown != leftInputDown && !forwardInputDown && !backInputDown) {
-                forward += 0.005;
-            }
-            rotationYaw += deltaRotation;
-            if (forwardInputDown) {
-                forward += 0.04;
-            }
-            if (backInputDown) {
-                forward -= 0.005;
-            }
-            motionX += Math.sin(Math.toRadians(-rotationYaw) * forward);
-            motionZ += Math.cos(Math.toRadians(rotationYaw) * forward);
-        }
-    }
 
-    @SideOnly(Side.CLIENT)
-    public void updateInputs(boolean left, boolean right, boolean forward, boolean back) {
-        leftInputDown = left;
-        rightInputDown = right;
-        forwardInputDown = forward;
-        backInputDown = back;
-    }
-*/
     // check for bad weather, if the biome can rain or snow check to see
     // if it is raining (or snowing) or thundering.
     private boolean isBadWeather() {
@@ -393,10 +357,6 @@ public class EntityParachute extends Entity {
                 descentRate += 0.004;
             }
         }
-
-//        if (!allowThermals && !lavaThermals) {
-//            return descentRate;
-//        }
 
         if (lavaThermals) {
             descentRate = doHeatSourceThermals();
