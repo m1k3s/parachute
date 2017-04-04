@@ -73,7 +73,7 @@ public class SetHomePointCommand extends CommandBase {
             if (args.length == 0) { // set waypoint to current position
                 BlockPos bp = new BlockPos(sender.getPosition());
                 HudGuiRenderer.setHomepoint(new int[] {bp.getX(), bp.getZ()});
-                ConfigHandler.setHomepoint(bp.getX(), bp.getZ());
+//                ConfigHandler.setHomepoint(bp.getX(), bp.getZ());
                 notifyCommandListener(sender, this, "commands.sethomepoint.current", bp.getX(), bp.getZ());
             } else if (isNumeric(args[0]) && isNumeric(args[1])) {
                 HudGuiRenderer.setWaypoint(new int[] {Integer.parseInt(args[0]), Integer.parseInt(args[1])});

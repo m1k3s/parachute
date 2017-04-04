@@ -97,8 +97,8 @@ public class Parachute {
         event.registerServerCommand(new SetWaypointCommand());
         event.registerServerCommand(new EnableWaypointCommand());
         event.registerServerCommand(new ShowWaypointCommand());
-        event.registerServerCommand(new SetHomePointCommand());
-        event.registerServerCommand(new ShowHomepointCommand());
+//        event.registerServerCommand(new SetHomePointCommand());
+//        event.registerServerCommand(new ShowHomepointCommand());
     }
 
     public String getVersion() {

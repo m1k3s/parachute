@@ -67,7 +67,7 @@ public class ShowHomepointCommand extends CommandBase {
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         World world = sender.getEntityWorld();
         if (!world.isRemote) { // server side
-            notifyCommandListener(sender, this, "commands.showhomepoint.success", ConfigHandler.getHomepointString());
+//            notifyCommandListener(sender, this, "commands.showhomepoint.success", ConfigHandler.getHomepointString());
         }
     }
 

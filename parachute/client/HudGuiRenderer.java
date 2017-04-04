@@ -229,11 +229,11 @@ public class HudGuiRenderer extends Gui {
     // set by the player in the config.
     public double getHomeDirection() {
         BlockPos blockpos;
-        if (ConfigHandler.getUseSpawnPoint()) {
+//        if (ConfigHandler.getUseSpawnPoint()) {
             blockpos = mc.world.getSpawnPoint();
-        } else {
-            blockpos = ConfigHandler.getHomepoint();
-        }
+//        } else {
+//            blockpos = ConfigHandler.getHomepoint();
+//        }
         double delta = Math.atan2(blockpos.getZ() - mc.player.posZ, blockpos.getX() - mc.player.posX);
         double relAngle = delta - Math.toRadians(mc.player.rotationYaw);
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
@@ -241,11 +241,11 @@ public class HudGuiRenderer extends Gui {
 
     public double getHomeDistance() {
         BlockPos blockpos;
-        if (ConfigHandler.getUseSpawnPoint()) {
+//        if (ConfigHandler.getUseSpawnPoint()) {
             blockpos = mc.world.getSpawnPoint();
-        } else {
-            blockpos = ConfigHandler.getHomepoint();
-        }
+//        } else {
+//            blockpos = ConfigHandler.getHomepoint();
+//        }
         double a = Math.pow(blockpos.getZ() - mc.player.posZ, 2);
         double b = Math.pow(blockpos.getX() - mc.player.posX, 2);
         return Math.sqrt(a + b);

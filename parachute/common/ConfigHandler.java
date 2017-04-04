@@ -52,10 +52,10 @@ public class ConfigHandler {
     private static double aadAltitude;
     private static double minFallDistance;
     private static boolean aadImmediate;
-    private static boolean useSpawnPoint;
+//    private static boolean useSpawnPoint;
     private static double burnVolume;
     private static int[] waypoint;
-    private static int[] homepoint;
+//    private static int[] homepoint;
     private static boolean dismounting;
 
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.name, Parachute.mcversion);
@@ -75,11 +75,11 @@ public class ConfigHandler {
     private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
     private static final String aadImmedComment = "AAD deploys immediately after the player falls more than minFallDistance"; // > minFalldistance meters
     private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
-    private static final String useSpawnPointComment = "use spawn point for home direction if true or input your own coords if false";
+//    private static final String useSpawnPointComment = "use spawn point for home direction if true or input your own coords if false";
     private static final String burnVolumeComment = "set the burn sound volume (0.0 to 1.0)";
     private static final String colorComment = "Select a parachute color, random, or custom[0-9]";
     private static final String waypointComment = "waypoint coordinates [X, Z]";
-    private static final String homepointComment = "homepoint coordinates [X, Z]";
+//    private static final String homepointComment = "homepoint coordinates [X, Z]";
     private static final String[] colorValues = {
             "random",
             "black",
@@ -157,9 +157,9 @@ public class ConfigHandler {
         Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0);
         Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment);
 
-        Property useSpawnPointProp = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment);
+//        Property useSpawnPointProp = config.get(Configuration.CATEGORY_GENERAL, "usespawnpoint", true, useSpawnPointComment);
         Property waypointProp = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment);
-        Property homepointProp = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment);
+//        Property homepointProp = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment);
 
         Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white");
         chuteColorProp.setComment(colorComment);
@@ -183,9 +183,9 @@ public class ConfigHandler {
         propertyOrder.add(aadAltitudeProp.getName());
         propertyOrder.add(weatherAffectsDriftProp.getName());
         propertyOrder.add(constantTurbulenceProp.getName());
-        propertyOrder.add(useSpawnPointProp.getName());
+//        propertyOrder.add(useSpawnPointProp.getName());
         propertyOrder.add(waypointProp.getName());
-        propertyOrder.add(homepointProp.getName());
+//        propertyOrder.add(homepointProp.getName());
         propertyOrder.add(chuteColorProp.getName());
         config.setCategoryPropertyOrder(Configuration.CATEGORY_GENERAL, propertyOrder);
 
@@ -206,10 +206,10 @@ public class ConfigHandler {
             aadAltitude = aadAltitudeProp.getDouble(10.0);
             minFallDistance = minFallDistanceProp.getDouble(5.0);
             aadImmediate = aadImmediateProp.getBoolean(false);
-            useSpawnPoint = useSpawnPointProp.getBoolean(true);
+//            useSpawnPoint = useSpawnPointProp.getBoolean(true);
             burnVolume = burnVolumeProp.getDouble(1.0);
             waypoint = waypointProp.getIntList();
-            homepoint = homepointProp.getIntList();
+//            homepoint = homepointProp.getIntList();
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
@@ -235,10 +235,10 @@ public class ConfigHandler {
         aadAltitudeProp.set(aadAltitude);
         minFallDistanceProp.set(minFallDistance);
         aadImmediateProp.set(aadImmediate);
-        useSpawnPointProp.set(useSpawnPoint);
+//        useSpawnPointProp.set(useSpawnPoint);
         burnVolumeProp.set(burnVolume);
         waypointProp.set(waypoint);
-        homepointProp.set(homepoint);
+//        homepointProp.set(homepoint);
 
         if (config.hasChanged()) {
             config.save();
@@ -345,9 +345,9 @@ public class ConfigHandler {
         return aadImmediate;
     }
 
-    public static boolean getUseSpawnPoint() {
-        return useSpawnPoint;
-    }
+//    public static boolean getUseSpawnPoint() {
+//        return useSpawnPoint;
+//    }
 
     @SuppressWarnings("unused")
     public static BlockPos getWaypoint() {
@@ -362,25 +362,25 @@ public class ConfigHandler {
         waypoint[1] = z;
     }
 
-    public static BlockPos getHomepoint() {
-        return new BlockPos(homepoint[0], 0, homepoint[1]);
-    }
-
-    public static void setHomepoint(int x, int z) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment);
-        prop.set(new int[]{x, z});
-        config.save();
-        homepoint[0] = x;
-        homepoint[1] = z;
-    }
+//    public static BlockPos getHomepoint() {
+//        return new BlockPos(homepoint[0], 0, homepoint[1]);
+////    }
+//
+//    public static void setHomepoint(int x, int z) {
+//        Property prop = config.get(Configuration.CATEGORY_GENERAL, "homepoint", new int[]{0, 0}, homepointComment);
+//        prop.set(new int[]{x, z});
+//        config.save();
+//        homepoint[0] = x;
+//        homepoint[1] = z;
+//    }
 
     public static String getWaypointString() {
         return String.format("%d %d", waypoint[0], waypoint[1]);
     }
 
-    public static String getHomepointString() {
-        return String.format("%d %d", homepoint[0], homepoint[1]);
-    }
+//    public static String getHomepointString() {
+//        return String.format("%d %d", homepoint[0], homepoint[1]);
+////    }
 
     public static boolean isDismounting() {
         return dismounting;
