@@ -78,9 +78,6 @@ public class HudGuiRenderer extends Gui {
     public static int wayPointX;
     public static int wayPointZ;
     private static boolean wayPointEnabled;
-    // home direction
-    public static int homePointX;
-    public static int homePointZ;
 
     public HudGuiRenderer() {
         super();
@@ -107,8 +104,6 @@ public class HudGuiRenderer extends Gui {
         yOffset = 14;
         wayPointX = 0;
         wayPointZ = 0;
-        homePointX = 0;
-        homePointZ = 0;
         // disable the waypoint display
         wayPointEnabled = false;
 
@@ -228,24 +223,14 @@ public class HudGuiRenderer extends Gui {
     // the home point can be either the world spawn point or a waypoint
     // set by the player in the config.
     public double getHomeDirection() {
-        BlockPos blockpos;
-//        if (ConfigHandler.getUseSpawnPoint()) {
-            blockpos = mc.world.getSpawnPoint();
-//        } else {
-//            blockpos = ConfigHandler.getHomepoint();
-//        }
+        BlockPos blockpos = mc.world.getSpawnPoint();
         double delta = Math.atan2(blockpos.getZ() - mc.player.posZ, blockpos.getX() - mc.player.posX);
         double relAngle = delta - Math.toRadians(mc.player.rotationYaw);
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 
     public double getHomeDistance() {
-        BlockPos blockpos;
-//        if (ConfigHandler.getUseSpawnPoint()) {
-            blockpos = mc.world.getSpawnPoint();
-//        } else {
-//            blockpos = ConfigHandler.getHomepoint();
-//        }
+        BlockPos blockpos = mc.world.getSpawnPoint();
         double a = Math.pow(blockpos.getZ() - mc.player.posZ, 2);
         double b = Math.pow(blockpos.getX() - mc.player.posX, 2);
         return Math.sqrt(a + b);
@@ -298,11 +283,6 @@ public class HudGuiRenderer extends Gui {
     public static void setWaypoint(int[] waypoint) {
         wayPointX = waypoint[0];
         wayPointZ = waypoint[1];
-    }
-
-    public static void setHomepoint(int[] homepoint) {
-        homePointX = homepoint[0];
-        homePointZ = homepoint[1];
     }
 
     public static void enableWaypoint(boolean enabled) {
