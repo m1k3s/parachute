@@ -87,6 +87,7 @@ public class EntityParachute extends Entity {
         setSize(1.5f, 0.0625f);
         motionFactor = 0.07;
         ascendMode = false;
+        updateBlocked = false;
         setSilent(false);
         ConfigHandler.setIsDismounting(false);
     }
@@ -115,6 +116,11 @@ public class EntityParachute extends Entity {
     private void killParachute() {
         ParachuteCommonProxy.setDeployed(false);
         setDead();
+    }
+
+    @Override
+    public boolean canRiderInteract() {
+        return true;
     }
 
     @Override

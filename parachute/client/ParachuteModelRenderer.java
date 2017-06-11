@@ -21,16 +21,20 @@
  */
 package com.parachute.client;
 
+/*import com.google.common.collect.Lists;
+import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.PositionTextureVertex;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
+*/
 public class ParachuteModelRenderer {
-
+/*
     private ParachuteTexturedQuad faces[];
     private final int left;
     private final int top;
@@ -42,10 +46,13 @@ public class ParachuteModelRenderer {
     public float rotateAngleZ;
     private boolean compiled;
     private int displayList;
+    public List<ModelBox> cubeList;
     private boolean mirror;
     private boolean showModel;
     private float textureWidth;
     private float textureHeight;
+    private int textureOffsetX;
+    private int textureOffsetY;
 
     public ParachuteModelRenderer(int x, int y) {
         textureWidth = 64.0F;
@@ -54,9 +61,15 @@ public class ParachuteModelRenderer {
         displayList = 0;
         mirror = false;
         showModel = true;
+        cubeList = Lists.newArrayList();
         left = x;
         top = y;
         setTextureSize(textureWidth, textureHeight);
+    }
+
+    public void addBox(float offX, float offY, float offZ, int width, int height, int depth) {
+        cubeList.add(new ModelBox(this, this.textureOffsetX, this.textureOffsetY, offX, offY, offZ, width, height, depth, 0.0F));
+        return this;
     }
 
     public void addBox(float x, float y, float z, float w, float h, float d) {
@@ -218,10 +231,10 @@ public class ParachuteModelRenderer {
     private void compileDisplayList(float scale) {
         displayList = GLAllocation.generateDisplayLists(1);
         GL11.glNewList(displayList, GL11.GL_COMPILE);
-        VertexBuffer vertexBuffer = Tessellator.getInstance().getBuffer();
+        BufferBuilder vertexBuffer = Tessellator.getInstance().getBuffer();
 
         for (ParachuteTexturedQuad face : faces) {
-            face.draw(vertexBuffer, scale);
+            face.r(vertexBuffer, scale);
         }
 
         GL11.glEndList();
@@ -232,5 +245,5 @@ public class ParachuteModelRenderer {
         textureWidth = width;
         textureHeight = height;
     }
-
+*/
 }

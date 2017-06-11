@@ -22,7 +22,6 @@
 package com.parachute.common;
 
 import net.minecraft.item.Item;
-import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -43,13 +42,13 @@ import net.minecraftforge.fml.common.SidedProxy;
 public class Parachute {
 
     public static final String modid = "parachutemod";
-    public static final String modversion = "1.6.2";
-    public static final String mcversion = "1.11.2";
+    public static final String modversion = "1.7.0";
+    public static final String mcversion = "1.12";
     public static final String name = "Parachute Mod NG";
     public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
     public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
     public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
-    public static Achievement buildParachute;
+//    public static Achievement buildParachute;
 
     @SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
     public static ParachuteCommonProxy proxy;

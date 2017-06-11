@@ -22,8 +22,8 @@
 package com.parachute.client;
 
 import net.minecraft.client.model.PositionTextureVertex;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -55,7 +55,7 @@ public class ParachuteTexturedQuad {
         vertexPositions = texCoords;
     }
 
-    public void draw(VertexBuffer vertexBuffer, float scale) {
+    public void draw(BufferBuilder vertexBuffer, float scale) {
         Vec3d vec3 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[0].vector3D);
         Vec3d vec31 = vertexPositions[1].vector3D.subtractReverse(vertexPositions[2].vector3D);
         Vec3d vec32 = vec31.crossProduct(vec3).normalize();

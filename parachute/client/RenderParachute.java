@@ -68,7 +68,7 @@ public class RenderParachute extends Render<EntityParachute> {
     }
 
     public void renderParachuteCords(EntityPlayer rider, float partialTicks) {
-        final float b = rider.getBrightness(partialTicks);
+        final float b = rider.getBrightness();
 
         final float lx[] = {-8f, 0f, -8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f};
         final float ly[] = {0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f, 0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f};
