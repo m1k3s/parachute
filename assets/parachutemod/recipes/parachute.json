@@ -1,0 +1,22 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "X X",
+    " L "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:wool"
+    },
+    "X": {
+      "item": "minecraft:string"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "item": "parachutemod:parachute"
+  }
+}
