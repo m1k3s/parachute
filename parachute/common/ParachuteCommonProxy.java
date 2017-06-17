@@ -92,6 +92,7 @@ public class ParachuteCommonProxy {
 
         // recipe to craft the parachute
 //        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.WOOL, 'X', Items.STRING, 'L', Items.LEATHER);
+		// GameRegistry.register(new ItemStack(Parachute.parachuteItem, 1), new ResourceLocation(Parachute.modid + ":recipes/parachute.json"));
 
         // add parachute crafting achievement
 //        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.BUILD_WORK_BENCH);
