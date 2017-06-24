@@ -107,7 +107,7 @@ public class HudGuiRenderer extends Gui {
         // disable the waypoint display
         wayPointEnabled = false;
 
-        fontRenderer = mc.fontRendererObj;
+        fontRenderer = mc.fontRenderer;
         fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
     }
 

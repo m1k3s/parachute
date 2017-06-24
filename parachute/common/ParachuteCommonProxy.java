@@ -25,23 +25,21 @@ package com.parachute.common;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-//import net.minecraft.init.Blocks;
-//import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-//import net.minecraft.item.ItemStack;
-//import net.minecraft.stats.Achievement;
-//import net.minecraft.stats.AchievementList;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-//import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -65,16 +63,16 @@ public class ParachuteCommonProxy {
         EntityRegistry.registerModEntity(new ResourceLocation(Parachute.modid, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
 
         Parachute.parachuteItem = new ItemParachute().setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
-        GameRegistry.register(Parachute.parachuteItem);
+        ForgeRegistries.ITEMS.register(Parachute.parachuteItem);
 
         final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
         Parachute.packItem = new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType).setUnlocalizedName(packName).setRegistryName(packResource);
-        GameRegistry.register(Parachute.packItem);
+        ForgeRegistries.ITEMS.register(Parachute.packItem);
 
-        GameRegistry.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":chuteopen")).setRegistryName("chuteopen"));
+        ForgeRegistries.SOUND_EVENTS.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":chuteopen")).setRegistryName("chuteopen"));
         openChute = getRegisteredSoundEvent(Parachute.modid + ":chuteopen");
         
-        GameRegistry.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":burn")).setRegistryName("burn"));
+        ForgeRegistries.SOUND_EVENTS.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":burn")).setRegistryName("burn"));
         burnChute = getRegisteredSoundEvent(Parachute.modid + ":burn");
         
         PacketHandler.init();
@@ -91,8 +89,11 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
 
         // recipe to craft the parachute
-//        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.WOOL, 'X', Items.STRING, 'L', Items.LEATHER);
-		// GameRegistry.register(new ItemStack(Parachute.parachuteItem, 1), new ResourceLocation(Parachute.modid + ":recipes/parachute.json"));
+        GameRegistry.addShapedRecipe(new ResourceLocation(Parachute.modid + ":recipes/parachute.json"),
+                null,
+                new ItemStack(Parachute.parachuteItem, 1),
+                "###", "X X", " L ", '#', Blocks.WOOL, 'X', Items.STRING, 'L', Items.LEATHER);
+//		ForgeRegistries.RECIPES.register(new ResourceLocation(Parachute.modid + ":recipes/parachute.json"));
 
         // add parachute crafting achievement
 //        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.BUILD_WORK_BENCH);

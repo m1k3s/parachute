@@ -21,16 +21,16 @@
  */
 package com.parachute.client;
 
-import net.minecraft.client.model.PositionTextureVertex;
+/*import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
-
+*/
 public class ParachuteTexturedQuad {
 
-    public PositionTextureVertex vertexPositions[];
+/*    public PositionTextureVertex vertexPositions[];
 
     public ParachuteTexturedQuad(PositionTextureVertex vertices[]) {
         vertexPositions = vertices;
@@ -74,6 +74,6 @@ public class ParachuteTexturedQuad {
         }
 
         Tessellator.getInstance().draw();
-    }
+    }*/
 
 }
