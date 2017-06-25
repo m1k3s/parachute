@@ -46,8 +46,8 @@ public class PlayerTickEventHandler {
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
-            EntityEquipmentSlot armorSlot = ParachuteCommonProxy.armorType;
-            ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
+            EntityEquipmentSlot armorSlot = ParachuteModRegistration.armorType;
+            ItemStack armor = player.getItemStackFromSlot(ParachuteModRegistration.armorType);
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
             ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(EnumHand.OFF_HAND);
             boolean deployed = ParachuteCommonProxy.onParachute(player);
@@ -56,7 +56,7 @@ public class PlayerTickEventHandler {
                 player.inventory.armorInventory.set(armorSlot.getIndex(), ItemStack.EMPTY);
             } else {
                 if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
-                    player.inventory.armorInventory.set(armorSlot.getIndex(), new ItemStack(Parachute.packItem));
+                    player.inventory.armorInventory.set(armorSlot.getIndex(), new ItemStack(ParachuteModRegistration.packItem));
                 }
             }
         }

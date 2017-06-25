@@ -41,12 +41,13 @@ public class ItemParachute extends Item {
 
     private static boolean active;
 
-    public ItemParachute() {
+    public ItemParachute(String itemName) {
         super();
         setMaxDamage(ToolMaterial.IRON.getMaxUses());
         maxStackSize = 4;
         active = ConfigHandler.getIsAADActive();
         setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode
+        setItemName(this, itemName);
     }
 
     @Nonnull
@@ -112,6 +113,11 @@ public class ItemParachute extends Item {
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return Items.STRING == repair.getItem();
+    }
+
+    public static void setItemName(final Item item, final String itemName) {
+        item.setRegistryName(Parachute.modid, itemName);
+        item.setUnlocalizedName(item.getRegistryName().toString());
     }
 
 }

@@ -21,7 +21,7 @@
  */
 package com.parachute.common;
 
-import net.minecraft.item.Item;
+//import net.minecraft.item.Item;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -53,8 +53,8 @@ public class Parachute {
     @SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
     public static ParachuteCommonProxy proxy;
 
-    public static Item parachuteItem;
-    public static Item packItem;
+//    public static Item parachuteItem;
+//    public static Item packItem;
 
     @Mod.Instance(modid)
     public static Parachute instance;
@@ -63,7 +63,7 @@ public class Parachute {
     @Mod.EventHandler
     public void Construct(FMLConstructionEvent event) {
         int buildVersion = ForgeVersion.getBuildVersion();
-        int minimumForgeBuildVersion = 2201;
+        int minimumForgeBuildVersion = 2363;
         if (buildVersion < minimumForgeBuildVersion) {
             proxy.error(String.format("This mod requires Forge Mod Loader build version of %d or higher", minimumForgeBuildVersion));
             proxy.error(String.format("You are running Forge Mod Loader build version %d", buildVersion));

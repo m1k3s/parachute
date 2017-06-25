@@ -324,7 +324,7 @@ public class ConfigHandler {
 
     public static int getParachuteDamageAmount(ItemStack itemStack) {
         if (singleUse) {
-            return Parachute.parachuteItem.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
+            return ParachuteModRegistration.parachuteItem.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
         }
         return 1;
     }
