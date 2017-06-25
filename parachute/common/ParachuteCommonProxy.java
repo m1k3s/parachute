@@ -41,7 +41,6 @@ import org.apache.logging.log4j.Logger;
 public class ParachuteCommonProxy {
 
     private static final Logger logger = LogManager.getLogger(Parachute.modid);
-//    public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST; // type: ARMOR, index: 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
     private static final String parachuteName = "parachute";
     private static final String packName = "pack";
     private static boolean deployed = false;
@@ -56,12 +55,6 @@ public class ParachuteCommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         int entityID = 1;
         EntityRegistry.registerModEntity(new ResourceLocation(Parachute.modid, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
-
-//        Parachute.parachuteItem = new ItemParachute().setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
-
-//        final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
-//        Parachute.packItem = new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType).setUnlocalizedName(packName).setRegistryName(packResource);
-
         PacketHandler.init();
     }
 
