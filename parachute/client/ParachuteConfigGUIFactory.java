@@ -38,7 +38,7 @@ public class ParachuteConfigGUIFactory implements IModGuiFactory {
 
     @Override
     public boolean hasConfigGui() {
-        return false;
+        return true;
     }
 
     @Override
