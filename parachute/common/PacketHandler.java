@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketHandler {
 
-    public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(Parachute.modid);
+    public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(Parachute.MODID);
     private static final int PacketID = 0;
 
     public static void init() {

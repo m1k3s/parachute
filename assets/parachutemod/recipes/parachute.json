@@ -16,7 +16,7 @@
       "item": "minecraft:string"
     },
     "L": {
-      "item": "minecraft:leather"
+      "item": "#ANY_LEATHER"
     }
   },
   "result": {

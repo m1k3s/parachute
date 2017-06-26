@@ -116,7 +116,7 @@ public class ItemParachute extends Item {
     }
 
     public static void setItemName(final Item item, final String itemName) {
-        item.setRegistryName(Parachute.modid, itemName);
+        item.setRegistryName(Parachute.MODID, itemName);
         item.setUnlocalizedName(item.getRegistryName().toString());
     }
 

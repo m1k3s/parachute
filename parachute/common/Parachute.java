@@ -21,7 +21,7 @@
  */
 package com.parachute.common;
 
-//import net.minecraft.item.Item;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -31,32 +31,29 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.SidedProxy;
 
 @Mod(
-    modid = Parachute.modid,
-    name = Parachute.name,
-    version = Parachute.modversion,
-    acceptedMinecraftVersions = Parachute.mcversion,
-    guiFactory = Parachute.guifactory,
+    modid = Parachute.MODID,
+    name = Parachute.NAME,
+    version = Parachute.MODVERSION,
+    acceptedMinecraftVersions = Parachute.MCVERSION,
+    guiFactory = Parachute.GUIFACTORY,
     dependencies = "required-after:FML"
 )
 
 public class Parachute {
 
-    public static final String modid = "parachutemod";
-    public static final String modversion = "1.7.0";
-    public static final String mcversion = "1.12";
-    public static final String name = "Parachute Mod NG";
-    public static final String guifactory = "com.parachute.client.ParachuteConfigGUIFactory";
+    public static final String MODID = "parachutemod";
+    public static final String MODVERSION = "1.7.0";
+    public static final String MCVERSION = "1.12";
+    public static final String NAME = "Parachute Mod NG";
+    public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
     public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
     public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
-//    public static Achievement buildParachute;
+    public static Advancement buildParachute;
 
     @SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
     public static ParachuteCommonProxy proxy;
 
-//    public static Item parachuteItem;
-//    public static Item packItem;
-
-    @Mod.Instance(modid)
+    @Mod.Instance(MODID)
     public static Parachute instance;
 
     @SuppressWarnings("unused")
@@ -99,7 +96,7 @@ public class Parachute {
     }
 
     public String getVersion() {
-        return Parachute.modversion;
+        return Parachute.MODVERSION;
     }
 
 }

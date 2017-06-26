@@ -67,5 +67,16 @@
         "data" : 15
       }
     ]
-  }
+  },
+  {
+      "name": "ANY_LEATHER",
+      "ingredient": [
+        {
+            "item": "minecraft:leather"
+        },
+        {
+            "item": "minecraft:rabbit_hide"
+        }
+    ]
+  }       
 ]

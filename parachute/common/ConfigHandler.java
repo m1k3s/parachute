@@ -56,7 +56,7 @@ public class ConfigHandler {
     private static int[] waypoint;
     private static boolean dismounting;
 
-    private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.name, Parachute.mcversion);
+    private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
     private static final String usageComment = "set to true for parachute single use"; // false
     private static final String heightComment = "0 (zero) disables altitude limiting"; // 256
     private static final String thermalComment = "enable thermal rise by pressing the space bar"; // true
@@ -237,8 +237,8 @@ public class ConfigHandler {
     public static class ConfigEventHandler {
         @SubscribeEvent
         public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-            if (event.getModID().equals(Parachute.modid)) {
-                Parachute.proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.name));
+            if (event.getModID().equals(Parachute.MODID)) {
+                Parachute.proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.NAME));
                 ConfigHandler.updateConfigFromGUI();
             }
         }

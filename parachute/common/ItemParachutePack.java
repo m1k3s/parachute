@@ -59,9 +59,9 @@ public class ItemParachutePack extends ItemArmor {
     @Override
     public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
         if (itemstack.getItem() == ParachuteModRegistration.packItem) {
-            return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
+            return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
         }
-        return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
+        return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
     }
 
     @Override
@@ -76,8 +76,8 @@ public class ItemParachutePack extends ItemArmor {
     }
 
     public static void setItemName(final Item item, final String itemName) {
-        item.setRegistryName(Parachute.modid, itemName);
-        item.setUnlocalizedName(itemName);
+        item.setRegistryName(Parachute.MODID, itemName);
+        item.setUnlocalizedName(item.getRegistryName().toString());
     }
 
 }

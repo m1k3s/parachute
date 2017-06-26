@@ -34,10 +34,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber
 public class ParachuteModRegistration {
 
-    public static final Item parachuteItem = new ItemParachute("parachute");//.setUnlocalizedName("parachute").setRegistryName(Parachute.modid, "parachute");
+    public static final Item parachuteItem = new ItemParachute("parachute");
     public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST;
     static final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
-    public static final Item packItem = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, renderIndex, armorType, "pack");//.setUnlocalizedName("pack").setRegistryName(packResource);
+    public static final Item packItem = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, renderIndex, armorType, "pack");
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
@@ -47,10 +47,10 @@ public class ParachuteModRegistration {
 
     @SubscribeEvent
     public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
-        event.getRegistry().register(new SoundEvent(new ResourceLocation(Parachute.modid + ":chuteopen")).setRegistryName("chuteopen"));
-        event.getRegistry().register(new SoundEvent(new ResourceLocation(Parachute.modid + ":burn")).setRegistryName("burn"));
-        ParachuteCommonProxy.openChute = getRegisteredSoundEvent(Parachute.modid + ":chuteopen");
-        ParachuteCommonProxy.burnChute = getRegisteredSoundEvent(Parachute.modid + ":burn");
+        event.getRegistry().register(new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen"));
+        event.getRegistry().register(new SoundEvent(new ResourceLocation(Parachute.MODID + ":burn")).setRegistryName("burn"));
+        ParachuteCommonProxy.openChute = getRegisteredSoundEvent(Parachute.MODID + ":chuteopen");
+        ParachuteCommonProxy.burnChute = getRegisteredSoundEvent(Parachute.MODID + ":burn");
     }
 
     private static SoundEvent getRegisteredSoundEvent(String id) {

@@ -25,8 +25,6 @@ package com.parachute.common;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-//import net.minecraft.inventory.EntityEquipmentSlot;
-//import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -40,7 +38,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ParachuteCommonProxy {
 
-    private static final Logger logger = LogManager.getLogger(Parachute.modid);
+    private static final Logger logger = LogManager.getLogger(Parachute.MODID);
     private static final String parachuteName = "parachute";
     private static final String packName = "pack";
     private static boolean deployed = false;
@@ -49,12 +47,12 @@ public class ParachuteCommonProxy {
     public static SoundEvent openChute;
     public static SoundEvent burnChute;
 
-    public static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.modid + ":" + parachuteName);
-    public static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.modid + ":" + packName);
+    public static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + parachuteName);
+    public static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + packName);
 
     public void preInit(FMLPreInitializationEvent event) {
         int entityID = 1;
-        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.modid, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
         PacketHandler.init();
     }
 
@@ -69,9 +67,9 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
 
         // add parachute crafting achievement
-//        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.BUILD_WORK_BENCH);
+//        Parachute.buildParachute = new Advancement("achievement.buildParachute", "buildParachute", 0, 0, ParachuteModRegistration.parachuteItem, AdvancementList.Listener);
 //        Parachute.buildParachute.registerStat();
-//        AchievementPage.registerAchievementPage(new AchievementPage("Parachute", Parachute.buildParachute));
+//        AdvancementManager(new AchievementPage("Parachute", Parachute.buildParachute));
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();

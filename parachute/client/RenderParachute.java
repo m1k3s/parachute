@@ -102,10 +102,10 @@ public class RenderParachute extends Render<EntityParachute> {
             if (rand.nextBoolean()) {
                 parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + getRandomColor() + ".png");
             } else {
-                parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + getRandomCustomColor() + ".png");
+                parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/blocks/" + getRandomCustomColor() + ".png");
             }
         } else if (color.toLowerCase().startsWith("custom")) {
-            parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + color + ".png");
+            parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/blocks/" + color + ".png");
         } else {
             parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + color + ".png");
         }
@@ -118,10 +118,10 @@ public class RenderParachute extends Render<EntityParachute> {
                 if (rand.nextBoolean()) {
                     parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + getRandomColor() + ".png");
                 } else {
-                    parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + getRandomCustomColor() + ".png");
+                    parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/blocks/" + getRandomCustomColor() + ".png");
                 }
             } else if (color.toLowerCase().startsWith("custom")) {
-                parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + color + ".png");
+                parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/blocks/" + color + ".png");
             } else {
                 parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + color + ".png");
             }
