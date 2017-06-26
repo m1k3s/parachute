@@ -39,18 +39,19 @@ import org.apache.logging.log4j.Logger;
 public class ParachuteCommonProxy {
 
     private static final Logger logger = LogManager.getLogger(Parachute.MODID);
-    private static final String parachuteName = "parachute";
-    private static final String packName = "pack";
+    public static final String parachuteName = "parachute";
+    public static final String packName = "pack";
     private static boolean deployed = false;
     private static final double offsetY = 2.5;
 
-    public static SoundEvent openChute;
-    public static SoundEvent burnChute;
+    public static SoundEvent OPENCHUTE;
+    public static SoundEvent BURNCHUTE;
 
     public static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + parachuteName);
     public static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + packName);
 
     public void preInit(FMLPreInitializationEvent event) {
+        info("preInit Common side");
         int entityID = 1;
         EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
         PacketHandler.init();

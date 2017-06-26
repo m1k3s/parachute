@@ -68,7 +68,7 @@ public class ItemParachute extends Item {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
         float volume = 1.0F;
-        chute.playSound(ParachuteCommonProxy.openChute, volume, pitch());
+        chute.playSound(ParachuteCommonProxy.OPENCHUTE, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
@@ -115,7 +115,7 @@ public class ItemParachute extends Item {
         return Items.STRING == repair.getItem();
     }
 
-    public static void setItemName(final Item item, final String itemName) {
+    public void setItemName(final Item item, final String itemName) {
         item.setRegistryName(Parachute.MODID, itemName);
         item.setUnlocalizedName(item.getRegistryName().toString());
     }

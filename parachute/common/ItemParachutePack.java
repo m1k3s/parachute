@@ -21,6 +21,7 @@
  */
 package com.parachute.common;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -39,6 +40,12 @@ public class ItemParachutePack extends ItemArmor {
         setMaxDamage(armorMaterial.getDurability(armorType));
         setItemName(this, itemName);
         maxStackSize = 1;
+    }
+
+    // don't display the pack item in the CreativeTab inventory
+    @Override
+    public CreativeTabs getCreativeTab() {
+        return null;
     }
 
     // if the player has tried to move the parachute pack item to another inventory slot
@@ -75,7 +82,7 @@ public class ItemParachutePack extends ItemArmor {
         return 1;
     }
 
-    public static void setItemName(final Item item, final String itemName) {
+    public void setItemName(final Item item, final String itemName) {
         item.setRegistryName(Parachute.MODID, itemName);
         item.setUnlocalizedName(item.getRegistryName().toString());
     }
