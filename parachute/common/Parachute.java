@@ -35,8 +35,7 @@ import net.minecraftforge.fml.common.SidedProxy;
     name = Parachute.NAME,
     version = Parachute.MODVERSION,
     acceptedMinecraftVersions = Parachute.MCVERSION,
-    guiFactory = Parachute.GUIFACTORY,
-    dependencies = "required-after:FML"
+    guiFactory = Parachute.GUIFACTORY
 )
 
 public class Parachute {

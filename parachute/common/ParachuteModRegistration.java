@@ -29,7 +29,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber
@@ -37,20 +36,19 @@ public class ParachuteModRegistration {
 
     public static final Item parachuteItem = new ItemParachute(ParachuteCommonProxy.parachuteName);
     public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST;
-    static final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
+    static final int renderIndex = 1; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
     public static final Item packItem = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, renderIndex, armorType, ParachuteCommonProxy.packName);
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        final IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(packItem);
-        registry.register(parachuteItem);
+        event.getRegistry().registerAll(packItem, parachuteItem);
     }
 
     @SubscribeEvent
     public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
-        event.getRegistry().register(new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen"));
-        event.getRegistry().register(new SoundEvent(new ResourceLocation(Parachute.MODID + ":burn")).setRegistryName("burn"));
+        SoundEvent open = new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen");
+        SoundEvent burn = new SoundEvent(new ResourceLocation(Parachute.MODID + ":burn")).setRegistryName("burn");
+        event.getRegistry().registerAll(open, burn);
         ParachuteCommonProxy.OPENCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":chuteopen");
         ParachuteCommonProxy.BURNCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":burn");
     }
@@ -63,4 +61,5 @@ public class ParachuteModRegistration {
             return soundevent;
         }
     }
+
 }

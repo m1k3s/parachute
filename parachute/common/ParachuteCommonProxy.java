@@ -23,7 +23,6 @@
 
 package com.parachute.common;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
@@ -47,11 +46,7 @@ public class ParachuteCommonProxy {
     public static SoundEvent OPENCHUTE;
     public static SoundEvent BURNCHUTE;
 
-    public static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + parachuteName);
-    public static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + packName);
-
     public void preInit(FMLPreInitializationEvent event) {
-        info("preInit Common side");
         int entityID = 1;
         EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
         PacketHandler.init();
