@@ -24,6 +24,9 @@
 package com.parachute.common;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -32,6 +35,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,9 +50,15 @@ public class ParachuteCommonProxy {
     public static SoundEvent OPENCHUTE;
     public static SoundEvent BURNCHUTE;
 
+    public static final Item parachuteItem = new ItemParachute(ParachuteCommonProxy.parachuteName);
+    public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST;
+    static final int renderIndex = 1; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
+    public static final Item packItem = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, renderIndex, armorType, ParachuteCommonProxy.packName);
+
     public void preInit(FMLPreInitializationEvent event) {
         int entityID = 1;
         EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
+        GameRegistry.findRegistry(Item.class).registerAll(packItem, parachuteItem);
         PacketHandler.init();
     }
 
@@ -62,8 +72,8 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
 
-        // add parachute crafting achievement
-//        Parachute.buildParachute = new Advancement("achievement.buildParachute", "buildParachute", 0, 0, ParachuteModRegistration.parachuteItem, AdvancementList.Listener);
+        // add parachute crafting advancement
+//        Parachute.buildParachute = new Advancement(new ResourceLocation(Parachute.MODID, parachuteName), "buildParachute", 0, 0, ParachuteCommonProxy.parachuteItem, "");
 //        Parachute.buildParachute.registerStat();
 //        AdvancementManager(new AchievementPage("Parachute", Parachute.buildParachute));
 

@@ -36,7 +36,6 @@ import net.minecraft.item.Item;
 
 import javax.annotation.Nonnull;
 
-
 public class ItemParachute extends Item {
 
     private static boolean active;
@@ -47,7 +46,8 @@ public class ItemParachute extends Item {
         maxStackSize = 4;
         active = ConfigHandler.getIsAADActive();
         setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode
-        setItemName(this, itemName);
+        setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
+        setUnlocalizedName(Parachute.MODID + ":" + itemName);
     }
 
     @Nonnull
@@ -113,11 +113,6 @@ public class ItemParachute extends Item {
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return Items.STRING == repair.getItem();
-    }
-
-    public void setItemName(final Item item, final String itemName) {
-        item.setRegistryName(Parachute.MODID, itemName);
-        item.setUnlocalizedName(item.getRegistryName().toString());
     }
 
 }

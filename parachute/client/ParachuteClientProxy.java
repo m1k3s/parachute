@@ -24,7 +24,6 @@ package com.parachute.client;
 import com.parachute.common.Parachute;
 import com.parachute.common.ParachuteCommonProxy;
 import com.parachute.common.EntityParachute;
-import com.parachute.common.ParachuteModRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
@@ -46,8 +45,8 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
         ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.parachuteName);
         ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.packName);
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
-        ModelLoader.setCustomModelResourceLocation(ParachuteModRegistration.parachuteItem, 0, parachuteResource);
-        ModelLoader.setCustomModelResourceLocation(ParachuteModRegistration.packItem, 0, packResource);
+        ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.parachuteItem, 0, parachuteResource);
+        ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.packItem, 0, packResource);
     }
 
     @SuppressWarnings("unchecked")

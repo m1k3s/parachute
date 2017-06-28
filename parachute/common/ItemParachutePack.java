@@ -24,10 +24,10 @@ package com.parachute.common;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 
@@ -38,7 +38,8 @@ public class ItemParachutePack extends ItemArmor {
     public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType, String itemName) {
         super(armorMaterial, renderIndex, armorType);
         setMaxDamage(armorMaterial.getDurability(armorType));
-        setItemName(this, itemName);
+        setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
+        setUnlocalizedName(Parachute.MODID + ":" + itemName);
         maxStackSize = 1;
     }
 
@@ -56,7 +57,7 @@ public class ItemParachutePack extends ItemArmor {
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (stack.getItem() instanceof ItemParachutePack) {
             if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
-                if (ParachuteModRegistration.armorType.getIndex() != itemSlot) {
+                if (ParachuteCommonProxy.armorType.getIndex() != itemSlot) {
                     ((EntityPlayer) entityIn).inventory.deleteStack(stack);
                 }
             }
@@ -65,7 +66,7 @@ public class ItemParachutePack extends ItemArmor {
 
     @Override
     public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (itemstack.getItem() == ParachuteModRegistration.packItem) {
+        if (itemstack.getItem() == ParachuteCommonProxy.packItem) {
             return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
         }
         return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
@@ -80,11 +81,6 @@ public class ItemParachutePack extends ItemArmor {
     @Override
     public int getEntityLifespan(ItemStack itemStack, World world) {
         return 1;
-    }
-
-    public void setItemName(final Item item, final String itemName) {
-        item.setRegistryName(Parachute.MODID, itemName);
-        item.setUnlocalizedName(item.getRegistryName().toString());
     }
 
 }

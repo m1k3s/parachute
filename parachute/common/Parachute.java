@@ -47,7 +47,7 @@ public class Parachute {
     public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
     public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
     public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
-    public static Advancement buildParachute;
+//    public static Advancement buildParachute;
 
     @SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
     public static ParachuteCommonProxy proxy;

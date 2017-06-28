@@ -21,9 +21,6 @@
  */
 package com.parachute.common;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -32,17 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber
-public class ParachuteModRegistration {
-
-    public static final Item parachuteItem = new ItemParachute(ParachuteCommonProxy.parachuteName);
-    public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST;
-    static final int renderIndex = 1; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
-    public static final Item packItem = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, renderIndex, armorType, ParachuteCommonProxy.packName);
-
-    @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().registerAll(packItem, parachuteItem);
-    }
+public class ParachuteSoundsRegistration {
 
     @SubscribeEvent
     public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
