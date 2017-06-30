@@ -5,11 +5,11 @@
 		"description": "Adds a Parachute to the game. Jump off cliffs! Base Jumping!! Soar to new heights!",
 		"version": $version,
 		"mcversion": $mcversion,
-		"url": "",
+		"url": "https://minecraft.curseforge.com/projects/parachutemod",
 		"updateUrl": "",
 		"authorList": [ "crackedEgg" ],
 		"credits": "Created by crackedEgg",
-		"logoFile": "pack.png",
+		"logoFile": "",
 		"screenshots": [],
 		"parent": "",
 		"dependencies": [ "mod_MinecraftForge" ]
