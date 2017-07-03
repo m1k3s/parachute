@@ -56,7 +56,7 @@ public class PlayerTickEventHandler {
                 player.inventory.armorInventory.set(armorSlot.getIndex(), ItemStack.EMPTY);
             } else {
                 if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
-                    player.inventory.armorInventory.set(armorSlot.getIndex(), new ItemStack(Parachute.packItem));
+                    player.inventory.armorInventory.set(armorSlot.getIndex(), new ItemStack(ParachuteCommonProxy.packItem));
                 }
             }
         }

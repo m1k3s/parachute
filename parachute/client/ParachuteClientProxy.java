@@ -21,10 +21,11 @@
  */
 package com.parachute.client;
 
+import com.parachute.common.Parachute;
 import com.parachute.common.ParachuteCommonProxy;
 import com.parachute.common.EntityParachute;
-import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.*;
@@ -41,9 +42,11 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
+        ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.parachuteName);
+        ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.packName);
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
-        ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, ParachuteCommonProxy.parachuteResource);
-        ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, ParachuteCommonProxy.packResource);
+        ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.parachuteItem, 0, parachuteResource);
+        ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.packItem, 0, packResource);
     }
 
     @SuppressWarnings("unchecked")
@@ -58,7 +61,6 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
-         info(Parachute.modid + "Received postInit(FMLPostInitializationEvent event)");
     }
 
 }

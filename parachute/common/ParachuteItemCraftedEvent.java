@@ -37,7 +37,7 @@ public class ParachuteItemCraftedEvent {
     @SubscribeEvent
     public void event(PlayerEvent.ItemCraftedEvent craftedEvent) {
         if (craftedEvent.crafting.getItem() instanceof ItemParachute) {
-            craftedEvent.player.addStat(Parachute.buildParachute, 1);
+//            craftedEvent.player.addStat(Parachute.buildParachute, 1);
             EnumDyeColor[] canopy = new EnumDyeColor[3];
             for (int k = 0; k < 3; k++) { // scan the top three slots for same colored wool blocks
                 ItemStack stack = craftedEvent.craftMatrix.getStackInSlot(k);

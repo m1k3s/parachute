@@ -37,18 +37,17 @@ public class ParachuteConfigGUIFactory implements IModGuiFactory {
     }
 
     @Override
-    public Class<? extends GuiScreen> mainConfigGuiClass() {
-        return ParachuteConfigGUI.class;
+    public boolean hasConfigGui() {
+        return true;
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen guiScreen) {
+        return new ParachuteConfigGUI(guiScreen);
     }
 
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement runtimeOptionCategoryElement) {
         return null;
     }
 

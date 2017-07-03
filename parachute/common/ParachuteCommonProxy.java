@@ -23,60 +23,42 @@
 
 package com.parachute.common;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraft.stats.AchievementList;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ParachuteCommonProxy {
 
-    private static final Logger logger = LogManager.getLogger(Parachute.modid);
-    public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST; // type: ARMOR, index: 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
-    private static final String parachuteName = "parachute";
-    private static final String packName = "pack";
+    private static final Logger logger = LogManager.getLogger(Parachute.MODID);
+    public static final String parachuteName = "parachute";
+    public static final String packName = "pack";
     private static boolean deployed = false;
     private static final double offsetY = 2.5;
 
-    public static SoundEvent openChute;
-    public static SoundEvent burnChute;
+    public static SoundEvent OPENCHUTE;
+    public static SoundEvent BURNCHUTE;
 
-    protected static ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.modid + ":" + parachuteName);
-    protected static ModelResourceLocation packResource = new ModelResourceLocation(Parachute.modid + ":" + packName);
+    public static final Item parachuteItem = new ItemParachute(ParachuteCommonProxy.parachuteName);
+    public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST;
+    static final int renderIndex = 1; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
+    public static final Item packItem = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, renderIndex, armorType, ParachuteCommonProxy.packName);
 
     public void preInit(FMLPreInitializationEvent event) {
         int entityID = 1;
-        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.modid, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
-
-        Parachute.parachuteItem = new ItemParachute().setUnlocalizedName(parachuteName).setRegistryName(parachuteResource);
-        GameRegistry.register(Parachute.parachuteItem);
-
-        final int renderIndex = 0; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
-        Parachute.packItem = new ItemParachutePack(ArmorMaterial.LEATHER, renderIndex, armorType).setUnlocalizedName(packName).setRegistryName(packResource);
-        GameRegistry.register(Parachute.packItem);
-
-        GameRegistry.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":chuteopen")).setRegistryName("chuteopen"));
-        openChute = getRegisteredSoundEvent(Parachute.modid + ":chuteopen");
-        
-        GameRegistry.register(new SoundEvent(new ResourceLocation(Parachute.modid + ":burn")).setRegistryName("burn"));
-        burnChute = getRegisteredSoundEvent(Parachute.modid + ":burn");
-        
+        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
+        GameRegistry.findRegistry(Item.class).registerAll(packItem, parachuteItem);
         PacketHandler.init();
     }
 
@@ -90,13 +72,10 @@ public class ParachuteCommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
 
-        // recipe to craft the parachute
-        GameRegistry.addRecipe(new ItemStack(Parachute.parachuteItem, 1), "###", "X X", " L ", '#', Blocks.WOOL, 'X', Items.STRING, 'L', Items.LEATHER);
-
-        // add parachute crafting achievement
-        Parachute.buildParachute = new Achievement("achievement.buildParachute", "buildParachute", 0, 0, Parachute.parachuteItem, AchievementList.BUILD_WORK_BENCH);
-        Parachute.buildParachute.registerStat();
-        AchievementPage.registerAchievementPage(new AchievementPage("Parachute", Parachute.buildParachute));
+        // add parachute crafting advancement
+//        Parachute.buildParachute = new Advancement(new ResourceLocation(Parachute.MODID, parachuteName), "buildParachute", 0, 0, ParachuteCommonProxy.parachuteItem, "");
+//        Parachute.buildParachute.registerStat();
+//        AdvancementManager(new AchievementPage("Parachute", Parachute.buildParachute));
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
@@ -160,15 +139,6 @@ public class ParachuteCommonProxy {
 
     public static double getOffsetY() {
         return offsetY;
-    }
-
-    private static SoundEvent getRegisteredSoundEvent(String id) {
-        SoundEvent soundevent = SoundEvent.REGISTRY.getObject(new ResourceLocation(id));
-        if (soundevent == null) {
-            throw new IllegalStateException("Invalid Sound requested: " + id);
-        } else {
-            return soundevent;
-        }
     }
 
 }

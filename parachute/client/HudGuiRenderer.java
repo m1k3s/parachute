@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class HudGuiRenderer extends Gui {
 
     // the parachute-hud.png image uses some ELD Unofficial Continuation Project textures, modified to suit the parachute HUD.
-    protected static final ResourceLocation hudTexture = new ResourceLocation(Parachute.modid + ":" + "textures/gui/parachute-hud.png");
+    protected static final ResourceLocation hudTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/parachute-hud.png");
     private static FontRenderer fontRenderer;
     public static double altitude;
     private final Minecraft mc = Minecraft.getMinecraft();
@@ -107,7 +107,7 @@ public class HudGuiRenderer extends Gui {
         // disable the waypoint display
         wayPointEnabled = false;
 
-        fontRenderer = mc.fontRendererObj;
+        fontRenderer = mc.fontRenderer;
         fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
     }
 

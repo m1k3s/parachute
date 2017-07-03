@@ -68,7 +68,7 @@ public class RenderParachute extends Render<EntityParachute> {
     }
 
     public void renderParachuteCords(EntityPlayer rider, float partialTicks) {
-        final float b = rider.getBrightness(partialTicks);
+        final float b = rider.getBrightness();
 
         final float lx[] = {-8f, 0f, -8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f};
         final float ly[] = {0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f, 0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f};
@@ -102,10 +102,10 @@ public class RenderParachute extends Render<EntityParachute> {
             if (rand.nextBoolean()) {
                 parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + getRandomColor() + ".png");
             } else {
-                parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + getRandomCustomColor() + ".png");
+                parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/blocks/" + getRandomCustomColor() + ".png");
             }
         } else if (color.toLowerCase().startsWith("custom")) {
-            parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + color + ".png");
+            parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/blocks/" + color + ".png");
         } else {
             parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + color + ".png");
         }
@@ -118,10 +118,10 @@ public class RenderParachute extends Render<EntityParachute> {
                 if (rand.nextBoolean()) {
                     parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + getRandomColor() + ".png");
                 } else {
-                    parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + getRandomCustomColor() + ".png");
+                    parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/blocks/" + getRandomCustomColor() + ".png");
                 }
             } else if (color.toLowerCase().startsWith("custom")) {
-                parachuteTexture = new ResourceLocation(Parachute.modid + ":textures/blocks/" + color + ".png");
+                parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/blocks/" + color + ".png");
             } else {
                 parachuteTexture = new ResourceLocation("textures/blocks/wool_colored_" + color + ".png");
             }

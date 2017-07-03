@@ -21,11 +21,13 @@
  */
 package com.parachute.common;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 
@@ -33,10 +35,18 @@ import net.minecraft.world.World;
 // on the player when the parachute item is selected in the hot bar.
 public class ItemParachutePack extends ItemArmor {
 
-    public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType) {
+    public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType, String itemName) {
         super(armorMaterial, renderIndex, armorType);
         setMaxDamage(armorMaterial.getDurability(armorType));
+        setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
+        setUnlocalizedName(Parachute.MODID + ":" + itemName);
         maxStackSize = 1;
+    }
+
+    // don't display the pack item in the CreativeTab inventory
+    @Override
+    public CreativeTabs getCreativeTab() {
+        return null;
     }
 
     // if the player has tried to move the parachute pack item to another inventory slot
@@ -56,10 +66,10 @@ public class ItemParachutePack extends ItemArmor {
 
     @Override
     public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (itemstack.getItem() == Parachute.packItem) {
-            return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
+        if (itemstack.getItem() == ParachuteCommonProxy.packItem) {
+            return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
         }
-        return Parachute.modid.toLowerCase() + ":textures/models/armor/pack.png";
+        return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
     }
 
     @Override

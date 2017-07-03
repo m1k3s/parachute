@@ -36,17 +36,18 @@ import net.minecraft.item.Item;
 
 import javax.annotation.Nonnull;
 
-
 public class ItemParachute extends Item {
 
     private static boolean active;
 
-    public ItemParachute() {
+    public ItemParachute(String itemName) {
         super();
         setMaxDamage(ToolMaterial.IRON.getMaxUses());
         maxStackSize = 4;
         active = ConfigHandler.getIsAADActive();
         setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode
+        setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
+        setUnlocalizedName(Parachute.MODID + ":" + itemName);
     }
 
     @Nonnull
@@ -67,7 +68,7 @@ public class ItemParachute extends Item {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
         float volume = 1.0F;
-        chute.playSound(ParachuteCommonProxy.openChute, volume, pitch());
+        chute.playSound(ParachuteCommonProxy.OPENCHUTE, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
