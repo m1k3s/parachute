@@ -2,6 +2,8 @@ language.name=English
 language.region=US
 language.code=en_US
 
+parachutemod.config.title=Parachutemod Config
+
 item.parachutemod:parachute.name=Parachute
 item.parachutemod:pack.name=Pack
 
