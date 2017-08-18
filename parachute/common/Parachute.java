@@ -21,7 +21,7 @@
  */
 package com.parachute.common;
 
-import net.minecraft.advancements.Advancement;
+//import net.minecraft.advancements.Advancement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -41,8 +41,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 public class Parachute {
 
     public static final String MODID = "parachutemod";
-    public static final String MODVERSION = "1.7.0";
-    public static final String MCVERSION = "1.12";
+    public static final String MODVERSION = "1.7.1";
+    public static final String MCVERSION = "1.12.1";
     public static final String NAME = "Parachute Mod NG";
     public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
     public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
