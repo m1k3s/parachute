@@ -18,6 +18,9 @@ stat.parachuteDistance.desc=Distance traveled by parachute
 achievement.buildParachute=Parachute crafted
 achievement.buildParachute.desc=You have crafted a parachute!
 
+key.category.parachutemod:general=Parachute Keys
+key.parachutemod:poweredflight=Parachute Powered Flight
+
 commands.setwaypoint.success=Waypoint is set to %d %d
 commands.setwaypoint.failure=waypoint values must be numeric
 commands.setwaypoint.current=Waypoint is set to current position (%d %d)

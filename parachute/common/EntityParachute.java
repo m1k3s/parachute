@@ -39,7 +39,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sun.security.krb5.Config;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -60,12 +59,13 @@ public class EntityParachute extends Entity {
     private boolean showContrails;
     private boolean autoDismount;
     private boolean dismountInWater;
-    private boolean poweredMovement;
+    private boolean poweredFlight;
+    private int poweredFlightTimer;
 
-
-    private final static double drift = 0.004; // value applied to motionY to descend or drift downward
-    private final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
-    private final static double pitchFactor = (1.0 / 2250.0);
+    private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
+    private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ASCEND
+    private final static double PITCH_FACTOR = (1.0 / 2250.0);
+    private final static int POWERED_FLIGHT_TIMER_VALUE = 200; // about 10 seconds
 
     private static boolean ascendMode;
 
@@ -80,7 +80,8 @@ public class EntityParachute extends Entity {
         autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
-        poweredMovement = false;
+        poweredFlight = ConfigHandler.isPoweredFlight();
+        poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -145,8 +146,8 @@ public class EntityParachute extends Entity {
         return getEntityBoundingBox();
     }
 
-    // skydiver should 'hang' when on the parachute and then
-    // 'pick up legs' when landing.
+    // skydiver should hang when on the parachute and then
+    // pick up legs when landing.
     @Override
     public boolean shouldRiderSit() {
         Entity skyDiver = getControllingPassenger();
@@ -231,7 +232,7 @@ public class EntityParachute extends Entity {
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
         if (showContrails) {
-            generateContrails(poweredMovement/*ascendMode*/);
+            generateContrails(poweredFlight);
         }
 
         prevPosX = posX;
@@ -254,13 +255,27 @@ public class EntityParachute extends Entity {
         // moveForward is > 0.0 when the 'W' key is pressed. Value is either 0.0 | ~0.98
         if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
             EntityLivingBase pilot = (EntityLivingBase) skyDiver;
-            poweredMovement = (pilot.moveForward > 0.0) && ConfigHandler.getPoweredFlight();
+            poweredFlight = ((pilot.moveForward > 0.0) && ConfigHandler.isPoweredFlight());
             double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
             motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
             motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-            if (poweredMovement) {
-                motionY -= pilot.rotationPitch * pitchFactor;
+            if (poweredFlight && poweredFlightTimer > 0) {
+                motionY -= pilot.rotationPitch * PITCH_FACTOR;
                 playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+            }
+        }
+
+        if (poweredFlight) {
+            poweredFlightTimer--; // drain the timer
+            if (poweredFlightTimer <= 0) {
+                ConfigHandler.setPoweredFlight(false);
+                ConfigHandler.setRechargeLock(true);
+            }
+        } else if (ConfigHandler.getRechargeLock()) {
+            poweredFlightTimer++; // recharge the timer, takes about 10 seconds when fully discharged
+            if (poweredFlightTimer >= POWERED_FLIGHT_TIMER_VALUE) {
+                poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
+                ConfigHandler.setRechargeLock(false);
             }
         }
 
@@ -287,7 +302,7 @@ public class EntityParachute extends Entity {
         }
 
         // calculate the descent rate
-        if (!poweredMovement) {
+        if (!poweredFlight) {
             motionY -= currentDescentRate();
         }
 
@@ -350,7 +365,7 @@ public class EntityParachute extends Entity {
     // the space bar has been pressed. weather and lava affect
     // the final result.
     private double currentDescentRate() {
-        double descentRate = drift; // defaults to drift
+        double descentRate = DRIFT; // defaults to DRIFT
 
         EntityPlayer entityPlayer = (EntityPlayer) getControllingPassenger();
         if (entityPlayer != null) {
@@ -379,12 +394,12 @@ public class EntityParachute extends Entity {
 
         if (allowThermals && ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
             playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
-            descentRate = ascend;
+            descentRate = ASCEND;
         }
 
         if (maxAltitude > 0.0D) { // altitude limiting
             if (posY >= maxAltitude) {
-                descentRate = drift;
+                descentRate = DRIFT;
             }
         }
 
@@ -411,17 +426,17 @@ public class EntityParachute extends Entity {
     }
 
     private double doHeatSourceThermals() {
-        double thermals = drift;
+        double thermals = DRIFT;
         final double inc = 0.5;
 
         BlockPos blockPos = new BlockPos(posX, posY - ParachuteCommonProxy.getOffsetY() - maxThermalRise, posZ);
 
         if (isHeatSourceInRange(blockPos)) {
             curLavaDistance += inc;
-            thermals = ascend;
+            thermals = ASCEND;
             if (curLavaDistance >= maxThermalRise) {
                 curLavaDistance = lavaDistance;
-                thermals = drift;
+                thermals = DRIFT;
             }
         } else {
             curLavaDistance = lavaDistance;

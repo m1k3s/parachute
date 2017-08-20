@@ -1,6 +1,6 @@
 
 /*
- * KeyBindingHandler.java
+ * ModKeyBindings.java
  *
  *  Copyright (c) 2017 Michael Sheppard
  *
@@ -22,22 +22,18 @@
 
 package com.parachute.client;
 
-import com.parachute.common.ConfigHandler;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.lwjgl.input.Keyboard;
 
-@SuppressWarnings("unused")
+public class ModKeyBindings {
 
-@Mod.EventBusSubscriber(Side.CLIENT)
-public class KeyBindingHandler {
-    @SubscribeEvent
-    public static void clientTick(final TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    private static final String CATEGORY = "key.category.parachutemod:general";
 
-        if (ModKeyBindings.POWEREDFLIGHT.isPressed()) {
-            ConfigHandler.togglePoweredFlight();
-        }
+    public static final KeyBinding POWEREDFLIGHT = new KeyBinding("key.parachutemod:poweredflight", KeyConflictContext.IN_GAME, Keyboard.KEY_P, CATEGORY);
+
+    public static void registerKeyBinding() {
+        ClientRegistry.registerKeyBinding(POWEREDFLIGHT);
     }
 }
