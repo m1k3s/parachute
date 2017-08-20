@@ -47,6 +47,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
         ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.parachuteItem, 0, parachuteResource);
         ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.packItem, 0, packResource);
+        ModKeyBinding.registerKeyBinding();
     }
 
     @SuppressWarnings("unchecked")

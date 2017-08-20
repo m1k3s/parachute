@@ -39,6 +39,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sun.security.krb5.Config;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -59,12 +60,12 @@ public class EntityParachute extends Entity {
     private boolean showContrails;
     private boolean autoDismount;
     private boolean dismountInWater;
+    private boolean poweredMovement;
 
-//    private final static DataParameter<BlockPos> HOME_COORDS = EntityDataManager.createKey(EntityParachute.class, DataSerializers.BLOCK_POS);
 
     private final static double drift = 0.004; // value applied to motionY to descend or drift downward
     private final static double ascend = drift * -10.0; // -0.04 - value applied to motionY to ascend
-//    private static BlockPos home_coords;
+    private final static double pitchFactor = (1.0 / 2250.0);
 
     private static boolean ascendMode;
 
@@ -79,7 +80,7 @@ public class EntityParachute extends Entity {
         autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
-//        home_coords = ConfigHandler.getHomepoint();
+        poweredMovement = false;
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -129,9 +130,7 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    protected void entityInit() {
-//        getDataManager().register(HOME_COORDS, new BlockPos(0,0,0));
-    }
+    protected void entityInit() {}
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
@@ -232,7 +231,7 @@ public class EntityParachute extends Entity {
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
         if (showContrails) {
-            generateContrails(ascendMode);
+            generateContrails(poweredMovement/*ascendMode*/);
         }
 
         prevPosX = posX;
@@ -255,9 +254,14 @@ public class EntityParachute extends Entity {
         // moveForward is > 0.0 when the 'W' key is pressed. Value is either 0.0 | ~0.98
         if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
             EntityLivingBase pilot = (EntityLivingBase) skyDiver;
+            poweredMovement = (pilot.moveForward > 0.0) && ConfigHandler.getPoweredFlight();
             double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
             motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
             motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+            if (poweredMovement) {
+                motionY -= pilot.rotationPitch * pitchFactor;
+                playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+            }
         }
 
         // forward velocity after forward movement is applied
@@ -283,7 +287,9 @@ public class EntityParachute extends Entity {
         }
 
         // calculate the descent rate
-        motionY -= currentDescentRate();
+        if (!poweredMovement) {
+            motionY -= currentDescentRate();
+        }
 
         // apply momentum
         motionX *= 0.99;
@@ -511,16 +517,10 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {
-//        int[] coords = { home_coords.getX(), home_coords.getZ() };
-//        nbt.setIntArray("home_coords", coords);
-    }
+    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {}
 
     @Override
-    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {
-//        int[] coords = nbt.getIntArray("home_coords");
-//        home_coords = new BlockPos(coords[0], 0, coords[1]);
-    }
+    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {}
 
     @Nonnull
     @Override
