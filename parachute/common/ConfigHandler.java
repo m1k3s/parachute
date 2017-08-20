@@ -28,6 +28,8 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -228,7 +230,7 @@ public class ConfigHandler {
         burnVolumeProp.set(burnVolume);
         waypointProp.set(waypoint);
 
-        if (config.hasChanged()) {
+        if (config.hasChanged() && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             config.save();
         }
     }
@@ -236,7 +238,7 @@ public class ConfigHandler {
     @SuppressWarnings("unused")
     public static class ConfigEventHandler {
         @SubscribeEvent
-        public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+        public void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(Parachute.MODID)) {
                 Parachute.proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.NAME));
                 ConfigHandler.updateConfigFromGUI();
