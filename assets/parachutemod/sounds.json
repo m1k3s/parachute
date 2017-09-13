@@ -14,5 +14,12 @@
 		"sounds": [
 			"parachutemod:burn1"
 		]
+	},
+
+	"lift": {
+		"category": "neutral",
+		"sounds": [
+			"parachutemod:lift1"
+		]
 	}
 }

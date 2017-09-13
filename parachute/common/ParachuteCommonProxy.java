@@ -49,6 +49,7 @@ public class ParachuteCommonProxy {
 
     public static SoundEvent OPENCHUTE;
     public static SoundEvent BURNCHUTE;
+    public static SoundEvent LIFTCHUTE;
 
     public static final Item parachuteItem = new ItemParachute(ParachuteCommonProxy.parachuteName);
     public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST;

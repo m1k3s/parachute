@@ -393,7 +393,7 @@ public class EntityParachute extends Entity {
         }
 
         if (allowThermals && ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
-            playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+            playSound(ParachuteCommonProxy.LIFTCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
             descentRate = ASCEND;
         }
 
