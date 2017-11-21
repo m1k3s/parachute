@@ -57,6 +57,8 @@ public class ConfigHandler {
     private static double burnVolume;
     private static int[] waypoint;
     private static boolean dismounting;
+    private static boolean poweredFlightToggle;
+    private static boolean rechargeLock;
 
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
     private static final String usageComment = "set to true for parachute single use"; // false
@@ -111,6 +113,9 @@ public class ConfigHandler {
     public static void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         updateConfigFromFile();
+
+        poweredFlightToggle = false;
+        rechargeLock = false;
     }
 
     public static void updateConfigFromFile() {
@@ -358,6 +363,32 @@ public class ConfigHandler {
 
     public static void setIsDismounting(boolean value) {
         dismounting = value;
+    }
+
+    public static void setRechargeLock(boolean lockState) {
+        rechargeLock = lockState;
+    }
+
+    public static boolean getRechargeLock() {
+        return rechargeLock;
+    }
+
+    public static void setPoweredFlight(boolean poweredState) {
+        poweredFlightToggle = poweredState;
+    }
+
+    public static void togglePoweredFlight()
+    {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+            if (!rechargeLock) {
+                setPoweredFlight(!poweredFlightToggle);
+            }
+        }
+    }
+
+    public static boolean isPoweredFlight()
+    {
+        return poweredFlightToggle;
     }
 
 }
