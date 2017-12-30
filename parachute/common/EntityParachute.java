@@ -59,8 +59,9 @@ public class EntityParachute extends Entity {
     private boolean showContrails;
     private boolean autoDismount;
     private boolean dismountInWater;
-    private boolean poweredFlight;
+    private boolean allowPoweredFlight;
     private int poweredFlightTimer;
+    private boolean canPowerFlight;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ASCEND
@@ -80,7 +81,7 @@ public class EntityParachute extends Entity {
         autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
-        poweredFlight = ConfigHandler.isPoweredFlight();
+        allowPoweredFlight = ConfigHandler.getAllowPoweredFlight();
         poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
 
         curLavaDistance = lavaDistance;
@@ -232,7 +233,7 @@ public class EntityParachute extends Entity {
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
         if (showContrails) {
-            generateContrails(poweredFlight);
+            generateContrails(allowPoweredFlight);
         }
 
         prevPosX = posX;
@@ -253,19 +254,23 @@ public class EntityParachute extends Entity {
 
         // update forward velocity for 'W' key press
         // moveForward is > 0.0 when the 'W' key is pressed. Value is either 0.0 | ~0.98
-        if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
-            EntityLivingBase pilot = (EntityLivingBase) skyDiver;
-            poweredFlight = ((pilot.moveForward > 0.0) && ConfigHandler.isPoweredFlight());
-            double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
-            motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-            motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-            if (poweredFlight && poweredFlightTimer > 0) {
-                motionY -= pilot.rotationPitch * PITCH_FACTOR;
-                playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+        if (ConfigHandler.getAllowContolledFlight()) {
+            if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
+                EntityLivingBase pilot = (EntityLivingBase) skyDiver;
+                canPowerFlight = ((pilot.moveForward > 0.0) && ConfigHandler.isPoweredFlight() && allowPoweredFlight);
+                double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
+                motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+                motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
+                if (canPowerFlight && poweredFlightTimer > 0) {
+                    motionY -= pilot.rotationPitch * PITCH_FACTOR;
+                    playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+                }
             }
+        } else {
+            canPowerFlight = false;
         }
 
-        if (poweredFlight) {
+        if (canPowerFlight) {
             poweredFlightTimer--; // drain the timer
             if (poweredFlightTimer <= 0) {
                 ConfigHandler.setPoweredFlight(false);
@@ -302,7 +307,7 @@ public class EntityParachute extends Entity {
         }
 
         // calculate the descent rate
-        if (!poweredFlight) {
+        if (!allowPoweredFlight) {
             motionY -= currentDescentRate();
         }
 
