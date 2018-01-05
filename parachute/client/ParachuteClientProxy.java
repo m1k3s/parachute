@@ -24,9 +24,11 @@ package com.parachute.client;
 import com.parachute.common.Parachute;
 import com.parachute.common.ParachuteCommonProxy;
 import com.parachute.common.EntityParachute;
+import com.parachute.common.ParachuteInputEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.*;
 
@@ -55,8 +57,9 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
     public void Init(FMLInitializationEvent event) {
         super.Init(event);
 
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
+        MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
+        MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
+        MinecraftForge.EVENT_BUS.register(new ParachuteInputEvent());
     }
 
     @Override
