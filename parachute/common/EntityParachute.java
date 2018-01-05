@@ -59,14 +59,14 @@ public class EntityParachute extends Entity {
     private boolean showContrails;
     private boolean autoDismount;
     private boolean dismountInWater;
-    private boolean allowPoweredFlight;
-    private int poweredFlightTimer;
-    private boolean canPowerFlight;
+//    private boolean allowPoweredFlight;
+//    private int poweredFlightTimer;
+//    private boolean canPowerFlight;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ASCEND
-    private final static double PITCH_FACTOR = (1.0 / 2250.0);
-    private final static int POWERED_FLIGHT_TIMER_VALUE = 200; // about 10 seconds
+//    private final static double PITCH_FACTOR = (1.0 / 2250.0);
+//    private final static int POWERED_FLIGHT_TIMER_VALUE = 200; // about 10 seconds
 
     private static boolean ascendMode;
 
@@ -81,8 +81,8 @@ public class EntityParachute extends Entity {
         autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
-        allowPoweredFlight = ConfigHandler.getAllowPoweredFlight();
-        poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
+//        allowPoweredFlight = ConfigHandler.getAllowPoweredFlight();
+//        poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -233,7 +233,7 @@ public class EntityParachute extends Entity {
         double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
         if (showContrails) {
-            generateContrails(allowPoweredFlight);
+            generateContrails(/*allowPoweredFlight*/ascendMode);
         }
 
         prevPosX = posX;
@@ -254,35 +254,35 @@ public class EntityParachute extends Entity {
 
         // update forward velocity for 'W' key press
         // moveForward is > 0.0 when the 'W' key is pressed. Value is either 0.0 | ~0.98
-        if (ConfigHandler.getAllowContolledFlight()) {
+//        if (ConfigHandler.getAllowContolledFlight()) {
             if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
                 EntityLivingBase pilot = (EntityLivingBase) skyDiver;
-                canPowerFlight = ((pilot.moveForward > 0.0) && ConfigHandler.isPoweredFlight() && allowPoweredFlight);
+//                canPowerFlight = ((pilot.moveForward > 0.0) && ConfigHandler.isPoweredFlight() && allowPoweredFlight);
                 double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
                 motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
                 motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-                if (canPowerFlight && poweredFlightTimer > 0) {
-                    motionY -= pilot.rotationPitch * PITCH_FACTOR;
-                    playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
-                }
+//                if (canPowerFlight && poweredFlightTimer > 0) {
+//                    motionY -= pilot.rotationPitch * PITCH_FACTOR;
+//                    playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+//                }
             }
-        } else {
-            canPowerFlight = false;
-        }
+//        } else {
+//            canPowerFlight = false;
+//        }
 
-        if (canPowerFlight) {
-            poweredFlightTimer--; // drain the timer
-            if (poweredFlightTimer <= 0) {
-                ConfigHandler.setPoweredFlight(false);
-                ConfigHandler.setRechargeLock(true);
-            }
-        } else if (ConfigHandler.getRechargeLock()) {
-            poweredFlightTimer++; // recharge the timer, takes about 10 seconds when fully discharged
-            if (poweredFlightTimer >= POWERED_FLIGHT_TIMER_VALUE) {
-                poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
-                ConfigHandler.setRechargeLock(false);
-            }
-        }
+//        if (canPowerFlight) {
+//            poweredFlightTimer--; // drain the timer
+//            if (poweredFlightTimer <= 0) {
+//                ConfigHandler.setPoweredFlight(false);
+//                ConfigHandler.setRechargeLock(true);
+//            }
+//        } else if (ConfigHandler.getRechargeLock()) {
+//            poweredFlightTimer++; // recharge the timer, takes about 10 seconds when fully discharged
+//            if (poweredFlightTimer >= POWERED_FLIGHT_TIMER_VALUE) {
+//                poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
+//                ConfigHandler.setRechargeLock(false);
+//            }
+//        }
 
         // forward velocity after forward movement is applied
         double adjustedVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
@@ -307,9 +307,9 @@ public class EntityParachute extends Entity {
         }
 
         // calculate the descent rate
-        if (!allowPoweredFlight) {
+//        if (!allowPoweredFlight) {
             motionY -= currentDescentRate();
-        }
+//        }
 
         // apply momentum
         motionX *= 0.99;
@@ -423,9 +423,7 @@ public class EntityParachute extends Entity {
         RayTraceResult mop = world.rayTraceBlocks(v1, v2, true);
         if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
             BlockPos blockpos = mop.getBlockPos();
-            if (isHeatSource(blockpos)) {
-                return true;
-            }
+            return isHeatSource(blockpos);
         }
         return false;
     }

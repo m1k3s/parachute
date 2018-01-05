@@ -57,10 +57,10 @@ public class ConfigHandler {
     private static double burnVolume;
     private static int[] waypoint;
     private static boolean dismounting;
-    private static boolean poweredFlightToggle;
-    private static boolean rechargeLock;
-    private static boolean allowPoweredFlight;
-    private static boolean allowControlledFlight;
+//    private static boolean poweredFlightToggle;
+//    private static boolean rechargeLock;
+//    private static boolean allowPoweredFlight;
+//    private static boolean allowControlledFlight;
 
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
     private static final String usageComment = "set to true for parachute single use"; // false
@@ -82,8 +82,8 @@ public class ConfigHandler {
     private static final String burnVolumeComment = "set the burn sound volume (0.0 to 1.0)";
     private static final String colorComment = "Select a parachute color, random, or custom[0-9]";
     private static final String waypointComment = "waypoint coordinates [X, Z]";
-    private static final String allowPoweredFlightComment = "allow the use of the powered flight engine";
-    private static final String allowControlledFlightComment = "uncontrolled flight disables all control, steering and forward motion";
+//    private static final String allowPoweredFlightComment = "allow the use of the powered flight engine";
+//    private static final String allowControlledFlightComment = "uncontrolled flight disables all control, steering and forward motion";
     private static final String[] colorValues = {
             "random",
             "black",
@@ -118,8 +118,8 @@ public class ConfigHandler {
         config = new Configuration(event.getSuggestedConfigurationFile());
         updateConfigFromFile();
 
-        poweredFlightToggle = false;
-        rechargeLock = false;
+//        poweredFlightToggle = false;
+//        rechargeLock = false;
     }
 
     public static void updateConfigFromFile() {
@@ -145,8 +145,8 @@ public class ConfigHandler {
         Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment);
         Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256);
         Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
-        Property poweredProp = config.get(Configuration.CATEGORY_GENERAL, "allowPoweredFlight", false, allowPoweredFlightComment);
-        Property controlledFlight = config.get(Configuration.CATEGORY_GENERAL, "controlledFlight", true, allowControlledFlightComment);
+//        Property poweredProp = config.get(Configuration.CATEGORY_GENERAL, "allowPoweredFlight", false, allowPoweredFlightComment);
+//        Property controlledFlight = config.get(Configuration.CATEGORY_GENERAL, "controlledFlight", true, allowControlledFlightComment);
         Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment);
         Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
 
@@ -176,8 +176,8 @@ public class ConfigHandler {
         propertyOrder.add(singleUseProp.getName());
         propertyOrder.add(heightLimitProp.getName());
         propertyOrder.add(thermalsProp.getName());
-        propertyOrder.add(poweredProp.getName());
-        propertyOrder.add(controlledFlight.getName());
+//        propertyOrder.add(poweredProp.getName());
+//        propertyOrder.add(controlledFlight.getName());
         propertyOrder.add(autoDismountProp.getName());
         propertyOrder.add(dismountInWaterProp.getName());
         propertyOrder.add(showContrailsProp.getName());
@@ -200,8 +200,8 @@ public class ConfigHandler {
             singleUse = singleUseProp.getBoolean(false);
             heightLimit = heightLimitProp.getInt(256);
             thermals = thermalsProp.getBoolean(true);
-            allowPoweredFlight = poweredProp.getBoolean(false);
-            allowControlledFlight = controlledFlight.getBoolean(true);
+//            allowPoweredFlight = poweredProp.getBoolean(false);
+//            allowControlledFlight = controlledFlight.getBoolean(true);
             lavaThermals = lavaThermalsProp.getBoolean(false);
             minLavaDistance = minLavaDistanceProp.getDouble(3.0);
             maxLavaDistance = maxLavaDistanceProp.getDouble(48.0);
@@ -229,8 +229,8 @@ public class ConfigHandler {
         singleUseProp.set(singleUse);
         heightLimitProp.set(heightLimit);
         thermalsProp.set(thermals);
-        poweredProp.set(allowPoweredFlight);
-        controlledFlight.set(allowControlledFlight);
+//        poweredProp.set(allowPoweredFlight);
+//        controlledFlight.set(allowControlledFlight);
         lavaThermalsProp.set(lavaThermals);
         minLavaDistanceProp.set(minLavaDistance);
         maxLavaDistanceProp.set(maxLavaDistance);
@@ -279,11 +279,11 @@ public class ConfigHandler {
         return thermals;
     }
 
-    public static boolean getAllowPoweredFlight() { return allowPoweredFlight; }
+//    public static boolean getAllowPoweredFlight() { return allowPoweredFlight; }
 
-    public static boolean getAllowContolledFlight() {
-        return allowControlledFlight;
-    }
+//    public static boolean getAllowContolledFlight() {
+//        return allowControlledFlight;
+//    }
 
     public static String getChuteColor() {
         return chuteColor;
@@ -383,30 +383,30 @@ public class ConfigHandler {
         dismounting = value;
     }
 
-    public static void setRechargeLock(boolean lockState) {
-        rechargeLock = lockState;
-    }
+//    public static void setRechargeLock(boolean lockState) {
+//        rechargeLock = lockState;
+//    }
 
-    public static boolean getRechargeLock() {
-        return rechargeLock;
-    }
+//    public static boolean getRechargeLock() {
+//        return rechargeLock;
+//    }
 
-    public static void setPoweredFlight(boolean poweredState) {
-        poweredFlightToggle = poweredState;
-    }
+//    public static void setPoweredFlight(boolean poweredState) {
+//        poweredFlightToggle = poweredState;
+//    }
 
-    public static void togglePoweredFlight()
-    {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            if (!rechargeLock && allowPoweredFlight) {
-                setPoweredFlight(!poweredFlightToggle);
-            }
-        }
-    }
-
-    public static boolean isPoweredFlight()
-    {
-        return poweredFlightToggle;
-    }
+//    public static void togglePoweredFlight()
+//    {
+//        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+//            if (!rechargeLock && allowPoweredFlight) {
+//                setPoweredFlight(!poweredFlightToggle);
+//            }
+//        }
+//    }
+//
+//    public static boolean isPoweredFlight()
+//    {
+//        return poweredFlightToggle;
+//    }
 
 }
