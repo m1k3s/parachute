@@ -24,14 +24,10 @@ package com.parachute.common;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
-//import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-//import net.minecraft.network.datasync.DataParameter;
-//import net.minecraft.network.datasync.DataSerializers;
-//import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.*;
@@ -49,7 +45,6 @@ public class EntityParachute extends Entity {
     private double velocityX;
     private double velocityY;
     private double velocityZ;
-//    private double motionFactor;
     private double maxAltitude;
     private boolean allowThermals;
     private boolean lavaThermals;
@@ -60,16 +55,11 @@ public class EntityParachute extends Entity {
     private boolean showContrails;
     private boolean autoDismount;
     private boolean dismountInWater;
-//    private boolean allowPoweredFlight;
-//    private int poweredFlightTimer;
-//    private boolean canPowerFlight;
 
     private float deltaRotation;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ASCEND
-//    private final static double PITCH_FACTOR = (1.0 / 2250.0);
-//    private final static int POWERED_FLIGHT_TIMER_VALUE = 200; // about 10 seconds
 
     private static boolean ascendMode;
 
@@ -84,14 +74,11 @@ public class EntityParachute extends Entity {
         autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
-//        allowPoweredFlight = ConfigHandler.getAllowPoweredFlight();
-//        poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
 
         curLavaDistance = lavaDistance;
         this.world = world;
         preventEntitySpawning = true;
         setSize(1.5f, 0.0625f);
-//        motionFactor = 0.07;
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);
@@ -221,46 +208,47 @@ public class EntityParachute extends Entity {
         velocityZ = motionZ = z;
     }
 
+    // updateInputs is called by ParachuteInputEvent class
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && world.isRemote) {
             float motionFactor = 0.0f;
 
             if (input.forwardKeyDown) {
-                motionFactor += 0.04;
+                motionFactor += 0.02;
             }
             if (input.backKeyDown) {
-                motionFactor -= 0.005;
+                motionFactor -= 0.008;
             }
             if (input.leftKeyDown) {
-                deltaRotation += -1.0;
+                deltaRotation += -0.35;
             }
             if (input.rightKeyDown) {
-                ++deltaRotation;
+                deltaRotation += 0.35;
             }
-            if (input.rightKeyDown != input.leftKeyDown && !input.forwardKeyDown && !input.backKeyDown) {
-                motionFactor += 0.005;
-            }
+
+            ascendMode = input.jump;
+
+            motionY -= currentDescentRate();
             rotationYaw += deltaRotation;
 
             motionX += (double) (MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor);
-            motionZ += (double) (MathHelper.cos((float)Math.toRadians(rotationYaw)) * motionFactor);
+            motionZ += (double) (MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor);
+
+            if (((ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
+                applyTurbulence(world.isThundering());
+            }
         }
     }
 
     @Override
     public void onUpdate() {
         Entity skyDiver = getControllingPassenger();
-        super.onUpdate();
-
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && !world.isRemote) { // server side
             killParachute();
             return;
         }
-
-        // initial forward velocity for this update
-//        double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
         if (showContrails) {
             generateContrails(ascendMode);
@@ -269,6 +257,8 @@ public class EntityParachute extends Entity {
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;
+
+        super.onUpdate();
 
         // drop the chute when close to ground if enabled
         // FIXME: autoDismount will not work on multiplayer
@@ -282,95 +272,17 @@ public class EntityParachute extends Entity {
             }
         }
 
-        // update forward velocity for 'W' key press
-        // moveForward is > 0.0 when the 'W' key is pressed. Value is either 0.0 | ~0.98
-//        if (ConfigHandler.getAllowContolledFlight()) {
-//            if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
-//                EntityLivingBase pilot = (EntityLivingBase) skyDiver;
-//                canPowerFlight = ((pilot.moveForward > 0.0) && ConfigHandler.isPoweredFlight() && allowPoweredFlight);
-//                double yaw = pilot.rotationYaw + -pilot.moveStrafing * 90.0;
-//                motionX += -Math.sin(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-//                motionZ += Math.cos(Math.toRadians(yaw)) * motionFactor * 0.05 * (pilot.moveForward * 1.05);
-//                if (canPowerFlight && poweredFlightTimer > 0) {
-//                    motionY -= pilot.rotationPitch * PITCH_FACTOR;
-//                    playSound(ParachuteCommonProxy.BURNCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
-//                }
-//            }
-//        } else {
-//            canPowerFlight = false;
-//        }
-
-//        if (canPowerFlight) {
-//            poweredFlightTimer--; // drain the timer
-//            if (poweredFlightTimer <= 0) {
-//                ConfigHandler.setPoweredFlight(false);
-//                ConfigHandler.setRechargeLock(true);
-//            }
-//        } else if (ConfigHandler.getRechargeLock()) {
-//            poweredFlightTimer++; // recharge the timer, takes about 10 seconds when fully discharged
-//            if (poweredFlightTimer >= POWERED_FLIGHT_TIMER_VALUE) {
-//                poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
-//                ConfigHandler.setRechargeLock(false);
-//            }
-//        }
-
-        // forward velocity after forward movement is applied
-//        double adjustedVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
-//        // clamp the adjustedVelocity and modify motionX/Z
-//        if (adjustedVelocity > 0.35D) {
-//            double motionAdj = 0.35D / adjustedVelocity;
-//            motionX *= motionAdj;
-//            motionZ *= motionAdj;
-//            adjustedVelocity = 0.35D;
-//        }
-//        // clamp the motionFactor between 0.07 and 0.35
-//        if (adjustedVelocity > initialVelocity && motionFactor < 0.35D) {
-//            motionFactor += (0.35D - motionFactor) / 35.0D;
-//            if (motionFactor > 0.35D) {
-//                motionFactor = 0.35D;
-//            }
-//        } else {
-//            motionFactor -= (motionFactor - 0.07D) / 35.0D;
-//            if (motionFactor < 0.07D) {
-//                motionFactor = 0.07D;
-//            }
-//        }
-
-        // calculate the descent rate
-//        if (!allowPoweredFlight) {
-        motionY -= currentDescentRate();
-//        }
+        if (allowThermals && ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
+            playSound(ParachuteCommonProxy.LIFTCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+        }
 
         // apply momentum
-        updateMotion();
-//        motionX *= 0.9;
-//        motionY *= (motionY < 0.0 ? 0.95 : 0.98); // rises faster than falls
-//        motionZ *= 0.9;
-//        deltaRotation *= 0.9;
+        motionX *= 0.97;
+        motionY *= (motionY < 0.0 ? 0.95 : 0.98); // rises faster than falls
+        motionZ *= 0.97;
+        deltaRotation *= 0.9;
         // move the parachute with the motion equations applied
         move(MoverType.SELF, motionX, motionY, motionZ);
-
-        // update pitch and yaw. Pitch is always 0.0
-//        rotationPitch = 0.0f;
-//        double deltaYaw = rotationYaw;
-//        double delta_X = prevPosX - posX;
-//        double delta_Z = prevPosZ - posZ;
-//
-//        // update direction (yaw)
-//        if ((delta_X * delta_X + delta_Z * delta_Z) > 0.001) {
-//            deltaYaw = Math.toDegrees(Math.atan2(delta_Z, delta_X));
-//        }
-//
-//        // update and clamp yaw between -180 and 180
-//        double adjustedYaw = MathHelper.wrapDegrees(deltaYaw - rotationYaw);
-//        // update final yaw and apply to parachute
-//        rotationYaw += adjustedYaw;
-//        setRotation(rotationYaw, rotationPitch);
-
-        // finally apply turbulence if flags allow
-        if (((ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
-            applyTurbulence(world.isThundering());
-        }
 
         // something bad happened, somehow the skydiver was killed.
         if (!world.isRemote && skyDiver != null && skyDiver.isDead) { // server side
@@ -430,7 +342,6 @@ public class EntityParachute extends Entity {
         }
 
         if (allowThermals && ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
-            playSound(ParachuteCommonProxy.LIFTCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
             descentRate = ASCEND;
         }
 
@@ -511,9 +422,7 @@ public class EntityParachute extends Entity {
             deltaY /= deltaPos;
             deltaZ /= deltaPos;
 
-            if (deltaInv > 1.0) {
-                deltaInv = 1.0;
-            }
+            deltaInv = deltaInv > 1.0 ? 1.0 : deltaInv;
 
             deltaX *= deltaInv;
             deltaY *= deltaInv;
@@ -541,11 +450,11 @@ public class EntityParachute extends Entity {
         double cosYaw = 2.0 * Math.cos(Math.toRadians(90.0 + rotationYaw));
         double sinYaw = 2.0 * Math.sin(Math.toRadians(90.0 + rotationYaw));
 
-        for (int k = 0; (double) k < 2.0 + velocity; k++) {
+        for (int k = 0; (double) k < 1.0 + velocity; k++) {
             double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
-            double x = prevPosX - cosYaw * -0.45 + sinYaw * sign;
+            double x = posX + cosYaw * -0.45 + sinYaw * sign;
             double y = posY - 0.25;
-            double z = prevPosZ - sinYaw * -0.45 - cosYaw * sign;
+            double z = posZ + sinYaw * -0.45 - cosYaw * sign;
 
             if (ascending) {
                 world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, motionX, motionY, motionZ);
@@ -558,18 +467,11 @@ public class EntityParachute extends Entity {
 
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
-//        double x = posX + (Math.cos(Math.toRadians(rotationYaw)) * 0.04);
-//        double y = posY + getMountedYOffset() + passenger.getYOffset();
-//        double z = posZ + (Math.sin(Math.toRadians(rotationYaw)) * 0.04);
-//        passenger.setPosition(x, y, z);
-//        passenger.setRenderYawOffset(rotationYaw + 90.0f);
-//        passenger.setRotationYawHead(rotationYaw + 90);
         if (isPassenger(passenger)) {
-            float f = 0.0F;
-            float f1 = (float) ((isDead ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
+            float offset = (float) ((isDead ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
 
-            Vec3d vec3d = (new Vec3d((double) f, 0.0D, 0.0D)).rotateYaw(-rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
-            passenger.setPosition(posX + vec3d.x, posY + (double) f1, posZ + vec3d.z);
+            Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
+            passenger.setPosition(posX + vec3d.x, posY + (double) offset, posZ + vec3d.z);
             passenger.rotationYaw += deltaRotation;
             passenger.setRotationYawHead(passenger.getRotationYawHead() + deltaRotation);
             applyYawToEntity(passenger);
@@ -578,18 +480,17 @@ public class EntityParachute extends Entity {
 
     protected void applyYawToEntity(Entity entityToUpdate) {
         entityToUpdate.setRenderYawOffset(rotationYaw);
-        float f = MathHelper.wrapDegrees(entityToUpdate.rotationYaw - rotationYaw);
-        float f1 = MathHelper.clamp(f, -105.0F, 105.0F);
-        entityToUpdate.prevRotationYaw += f1 - f;
-        entityToUpdate.rotationYaw += f1 - f;
+        float yaw = MathHelper.wrapDegrees(entityToUpdate.rotationYaw - rotationYaw);
+        float yawClamp = MathHelper.clamp(yaw, -105.0F, 105.0F);
+        entityToUpdate.prevRotationYaw += yawClamp - yaw;
+        entityToUpdate.rotationYaw += yawClamp - yaw;
         entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
     }
 
-    private void updateMotion() {
-        motionX *= 0.95;
-        motionY *= (motionY < 0.0 ? 0.95 : 0.98); // rises faster than falls
-        motionZ *= 0.95;
-        deltaRotation *= 0.9;
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void applyOrientationToEntity(Entity entityToUpdate) {
+        applyYawToEntity(entityToUpdate);
     }
 
     @Override

@@ -53,7 +53,6 @@ public class RenderParachute extends Render<EntityParachute> {
 
         GlStateManager.translate((float) x, (float) y, (float) z);
         GlStateManager.rotate(90.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
-//        GlStateManager.rotate(90, 0.0F, 1.0F, 0.0F);
 
         if (!bindEntityTexture(entityparachute)) {
             return;
@@ -69,6 +68,7 @@ public class RenderParachute extends Render<EntityParachute> {
         super.doRender(entityparachute, x, y, z, rotationYaw, partialTicks);
     }
 
+    @SuppressWarnings("unused")
     public void renderParachuteCords(EntityPlayer rider, float partialTicks) {
         final float b = rider.getBrightness();
 
