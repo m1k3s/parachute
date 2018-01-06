@@ -24,7 +24,7 @@ package com.parachute.common;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+//import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -49,7 +49,7 @@ public class EntityParachute extends Entity {
     private double velocityX;
     private double velocityY;
     private double velocityZ;
-    private double motionFactor;
+//    private double motionFactor;
     private double maxAltitude;
     private boolean allowThermals;
     private boolean lavaThermals;
@@ -60,22 +60,16 @@ public class EntityParachute extends Entity {
     private boolean showContrails;
     private boolean autoDismount;
     private boolean dismountInWater;
-    private boolean allowPoweredFlight;
+//    private boolean allowPoweredFlight;
 //    private int poweredFlightTimer;
 //    private boolean canPowerFlight;
-    
+
     private float deltaRotation;
-    private int lerpSteps;
-    private double chutePitch;
-    private double lerpY;
-    private double lerpZ;
-    private double boatYaw;
-    private double lerpXRot;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ASCEND
 //    private final static double PITCH_FACTOR = (1.0 / 2250.0);
-    private final static int POWERED_FLIGHT_TIMER_VALUE = 200; // about 10 seconds
+//    private final static int POWERED_FLIGHT_TIMER_VALUE = 200; // about 10 seconds
 
     private static boolean ascendMode;
 
@@ -90,14 +84,14 @@ public class EntityParachute extends Entity {
         autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
-        allowPoweredFlight = ConfigHandler.getAllowPoweredFlight();
+//        allowPoweredFlight = ConfigHandler.getAllowPoweredFlight();
 //        poweredFlightTimer = POWERED_FLIGHT_TIMER_VALUE;
 
         curLavaDistance = lavaDistance;
         this.world = world;
         preventEntitySpawning = true;
         setSize(1.5f, 0.0625f);
-        motionFactor = 0.07;
+//        motionFactor = 0.07;
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);
@@ -205,25 +199,19 @@ public class EntityParachute extends Entity {
     @SideOnly(Side.CLIENT)
     @Override
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int inc, boolean teleport) {
-//        double deltaX = x - posX;
-//        double deltaY = y - posY;
-//        double deltaZ = z - posZ;
-//        double magnitude = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
-//
-//        if (magnitude <= 1.0D) {
-//            return;
-//        }
-//
-//        // forward & vertical motion
-//        motionX = velocityX;
-//        motionY = velocityY;
-//        motionZ = velocityZ;
-        chutePitch = x;
-        lerpY = y;
-        lerpZ = z;
-        boatYaw = (double)yaw;
-        lerpXRot = (double)pitch;
-        lerpSteps = 10;
+        double deltaX = x - posX;
+        double deltaY = y - posY;
+        double deltaZ = z - posZ;
+        double magnitude = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+
+        if (magnitude <= 1.0D) {
+            return;
+        }
+
+        // forward & vertical motion
+        motionX = velocityX;
+        motionY = velocityY;
+        motionZ = velocityZ;
     }
 
     @Override
@@ -236,25 +224,26 @@ public class EntityParachute extends Entity {
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && world.isRemote) {
             float motionFactor = 0.0f;
+
             if (input.forwardKeyDown) {
-                motionFactor += 0.04F;
+                motionFactor += 0.04;
             }
             if (input.backKeyDown) {
-                motionFactor -= 0.005F;
+                motionFactor -= 0.005;
             }
             if (input.leftKeyDown) {
-                deltaRotation += -1.0F;
+                deltaRotation += -1.0;
             }
             if (input.rightKeyDown) {
                 ++deltaRotation;
             }
             if (input.rightKeyDown != input.leftKeyDown && !input.forwardKeyDown && !input.backKeyDown) {
-                motionFactor += 0.005F;
+                motionFactor += 0.005;
             }
             rotationYaw += deltaRotation;
 
-            motionX += (double) (MathHelper.sin(-rotationYaw * 0.017453292F) * motionFactor);
-            motionZ += (double) (MathHelper.cos(rotationYaw * 0.017453292F) * motionFactor);
+            motionX += (double) (MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor);
+            motionZ += (double) (MathHelper.cos((float)Math.toRadians(rotationYaw)) * motionFactor);
         }
     }
 
@@ -262,7 +251,6 @@ public class EntityParachute extends Entity {
     public void onUpdate() {
         Entity skyDiver = getControllingPassenger();
         super.onUpdate();
-        tickLerp();
 
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
@@ -275,7 +263,7 @@ public class EntityParachute extends Entity {
 //        double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
         if (showContrails) {
-            generateContrails(allowPoweredFlight);
+            generateContrails(ascendMode);
         }
 
         prevPosX = posX;
@@ -350,14 +338,15 @@ public class EntityParachute extends Entity {
 
         // calculate the descent rate
 //        if (!allowPoweredFlight) {
-            motionY -= currentDescentRate();
+        motionY -= currentDescentRate();
 //        }
 
         // apply momentum
-        motionX *= 0.9;
-        motionY *= (motionY < 0.0 ? 0.95 : 0.98); // rises faster than falls
-        motionZ *= 0.9;
-        deltaRotation *= 0.9;
+        updateMotion();
+//        motionX *= 0.9;
+//        motionY *= (motionY < 0.0 ? 0.95 : 0.98); // rises faster than falls
+//        motionZ *= 0.9;
+//        deltaRotation *= 0.9;
         // move the parachute with the motion equations applied
         move(MoverType.SELF, motionX, motionY, motionZ);
 
@@ -549,14 +538,14 @@ public class EntityParachute extends Entity {
     // like, you can think of the trails as chemtrails.
     private void generateContrails(boolean ascending) {
         double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
-        double cosYaw = 2.0 * Math.cos(Math.toRadians(rotationYaw));
-        double sinYaw = 2.0 * Math.sin(Math.toRadians(rotationYaw));
+        double cosYaw = 2.0 * Math.cos(Math.toRadians(90.0 + rotationYaw));
+        double sinYaw = 2.0 * Math.sin(Math.toRadians(90.0 + rotationYaw));
 
         for (int k = 0; (double) k < 2.0 + velocity; k++) {
             double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
-            double x = prevPosX - cosYaw * -0.35 + sinYaw * sign;
+            double x = prevPosX - cosYaw * -0.45 + sinYaw * sign;
             double y = posY - 0.25;
-            double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;
+            double z = prevPosZ - sinYaw * -0.45 - cosYaw * sign;
 
             if (ascending) {
                 world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, motionX, motionY, motionZ);
@@ -596,20 +585,11 @@ public class EntityParachute extends Entity {
         entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
     }
 
-    private void tickLerp()
-    {
-        if (this.lerpSteps > 0 && !this.canPassengerSteer())
-        {
-            double d0 = posX + (chutePitch - posX) / (double)lerpSteps;
-            double d1 = posY + (lerpY - posY) / (double)lerpSteps;
-            double d2 = posZ + (lerpZ - posZ) / (double)lerpSteps;
-            double d3 = MathHelper.wrapDegrees(boatYaw - (double)rotationYaw);
-            rotationYaw = (float)((double)rotationYaw + d3 / (double)lerpSteps);
-            rotationPitch = (float)((double)rotationPitch + (lerpXRot - (double)rotationPitch) / (double)lerpSteps);
-            --lerpSteps;
-            setPosition(d0, d1, d2);
-            setRotation(rotationYaw, rotationPitch);
-        }
+    private void updateMotion() {
+        motionX *= 0.95;
+        motionY *= (motionY < 0.0 ? 0.95 : 0.98); // rises faster than falls
+        motionZ *= 0.95;
+        deltaRotation *= 0.9;
     }
 
     @Override

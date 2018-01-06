@@ -52,7 +52,8 @@ public class RenderParachute extends Render<EntityParachute> {
         GlStateManager.pushMatrix();
 
         GlStateManager.translate((float) x, (float) y, (float) z);
-        GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(90.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
+//        GlStateManager.rotate(90, 0.0F, 1.0F, 0.0F);
 
         if (!bindEntityTexture(entityparachute)) {
             return;
@@ -62,6 +63,7 @@ public class RenderParachute extends Render<EntityParachute> {
             EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
             renderParachuteCords(rider, partialTicks);
         }
+        GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 
         GlStateManager.popMatrix();
         super.doRender(entityparachute, x, y, z, rotationYaw, partialTicks);
