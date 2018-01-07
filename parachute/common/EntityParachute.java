@@ -220,16 +220,18 @@ public class EntityParachute extends Entity {
                 motionFactor -= 0.008;
             }
             if (input.leftKeyDown) {
-                deltaRotation += -0.35;
+                deltaRotation += -0.25;
             }
             if (input.rightKeyDown) {
-                deltaRotation += 0.35;
+                deltaRotation += 0.25;
             }
 
             ascendMode = input.jump;
 
             motionY -= currentDescentRate();
             rotationYaw += deltaRotation;
+
+            ConfigHandler.setParachuteDirection(rotationYaw);
 
             motionX += (double) (MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor);
             motionZ += (double) (MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor);
@@ -450,16 +452,16 @@ public class EntityParachute extends Entity {
         double cosYaw = 2.0 * Math.cos(Math.toRadians(90.0 + rotationYaw));
         double sinYaw = 2.0 * Math.sin(Math.toRadians(90.0 + rotationYaw));
 
-        for (int k = 0; (double) k < 1.0 + velocity; k++) {
+        for (int k = 0; (double) k < 2.0 + velocity; k++) {
             double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
-            double x = posX + cosYaw * -0.45 + sinYaw * sign;
+            double x = posX + (posX - prevPosX) + cosYaw * -0.45 + sinYaw * sign;
             double y = posY - 0.25;
-            double z = posZ + sinYaw * -0.45 - cosYaw * sign;
+            double z = posZ + (posZ - prevPosZ) + sinYaw * -0.45 - cosYaw * sign;
 
             if (ascending) {
-                world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, motionX, motionY, motionZ);
+                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, x, y, z, motionX, motionY, motionZ);
             }
-            if (velocity > 0.01) {
+            if (! ascending && velocity > 0.01) {
                 world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
             }
         }

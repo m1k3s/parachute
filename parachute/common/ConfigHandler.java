@@ -58,6 +58,8 @@ public class ConfigHandler {
     private static int[] waypoint;
     private static boolean dismounting;
 
+    private static double parachuteDirection;
+
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
     private static final String usageComment = "set to true for parachute single use"; // false
     private static final String heightComment = "0 (zero) disables altitude limiting"; // 256
@@ -111,6 +113,8 @@ public class ConfigHandler {
     public static void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         updateConfigFromFile();
+
+        parachuteDirection = 0.0;
     }
 
     public static void updateConfigFromFile() {
@@ -358,5 +362,13 @@ public class ConfigHandler {
 
     public static void setIsDismounting(boolean value) {
         dismounting = value;
+    }
+
+    public static void setParachuteDirection(double dir) {
+        parachuteDirection = dir;
+    }
+
+    public static double getParachuteDirection() {
+        return parachuteDirection;
     }
 }

@@ -74,6 +74,9 @@ public class HudGuiRenderer extends Gui {
     private int blinkX;
     private final int blinkTime;
     private final int yOffset;
+    private final int bigLedXY;
+    // parachute direction indicator
+    private int chuteBubble;
     // waypoint
     public static int wayPointX;
     public static int wayPointZ;
@@ -93,6 +96,7 @@ public class HudGuiRenderer extends Gui {
         colorDimGreen = 0xcc008800;
         aadWidth = 16;
         aadHeight = 25;
+        bigLedXY = 15;
         ledY = 39;
         lightY = 44;
         red = 0;
@@ -102,6 +106,7 @@ public class HudGuiRenderer extends Gui {
         blinkX = red;
         blinkTime = 5;
         yOffset = 14;
+        chuteBubble = 0;
         wayPointX = 0;
         wayPointZ = 0;
         // disable the waypoint display
@@ -139,10 +144,13 @@ public class HudGuiRenderer extends Gui {
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection();
                 double distance = getHomeDistance();
-                double heading = (((mc.player.rotationYaw + 180.0) % 360) + 360) % 360;
+                double heading = (((ConfigHandler.getParachuteDirection() + 180.0) % 360) + 360) % 360;
+                double chuteDir = (((mc.player.rotationYaw + 180.0) % 360) + 360) % 360;
+                Parachute.proxy.info("chute facing direction: " + chuteDir);
 
                 // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
                 drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
+                drawTexturedModalRect(hudX, hudY + hudHeight, 0, 59, hudWidth, 9); // draw the chute bubble frame
 
                 // determine which LED to light, homeDir is in range -180 to 180
                 // for any value under -80 or over 80 the LED is fixed to the
@@ -156,6 +164,19 @@ public class HudGuiRenderer extends Gui {
                 }
                 drawTexturedModalRect(hudX + ledX, hudY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
 
+                // this indicator points to the parachute facing direction. once the
+                // green bubble is centered the player is facing in the same
+                // direction as the chute.
+                double playerLook = chuteDir - heading;
+                if (playerLook < -80) {
+                    chuteBubble = 1;
+                } else if ((playerLook - 80) * (playerLook - -80) < 0) {
+                    chuteBubble = (int) Math.floor((playerLook + 80.0) + 12);
+                } else if (playerLook > 80) {
+                    chuteBubble = 170;
+                }
+                drawTexturedModalRect(hudX + chuteBubble, hudY + hudHeight, 68, lightY, 1, 8); // draw the chute bubble
+
                 // AAD status
                 int aadIconX;
                 int aadIconY = 8;
@@ -168,17 +189,17 @@ public class HudGuiRenderer extends Gui {
 
                 // manual dismount indicator
                 if (ConfigHandler.isAutoDismount()) { // auto dismount is engaged
-                    drawTexturedModalRect(hudX - 18, hudY + yOffset, dark, lightY, 16, 16);
+                    drawTexturedModalRect(hudX - 18, hudY + yOffset, dark, lightY, bigLedXY, bigLedXY);
                 } else { // auto dismount is disabled
                     if (altitude > 10) {
-                        drawTexturedModalRect(hudX - 18, hudY + yOffset, green, lightY, 16, 16);
+                        drawTexturedModalRect(hudX - 18, hudY + yOffset, green, lightY, bigLedXY, bigLedXY);
                     } else if (altitude <= 10 && altitude > 3) {
-                        drawTexturedModalRect(hudX - 18, hudY + yOffset, red, lightY, 16, 16);
+                        drawTexturedModalRect(hudX - 18, hudY + yOffset, red, lightY, bigLedXY, bigLedXY);
                     } else if (altitude <= 3) { // make this blink
                         if ((blink % blinkTime) == 0) {
                             blinkX = blinkX == red ? darkRed : red;
                         }
-                        drawTexturedModalRect(hudX - 18, hudY + yOffset, blinkX, lightY, 16, 16);
+                        drawTexturedModalRect(hudX - 18, hudY + yOffset, blinkX, lightY, bigLedXY, bigLedXY);
                         blink++;
                     }
                 }
