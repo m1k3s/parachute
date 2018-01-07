@@ -82,6 +82,8 @@ public class HudGuiRenderer extends Gui {
     public static int wayPointZ;
     private static boolean wayPointEnabled;
 
+    double chuteFacing;
+
     public HudGuiRenderer() {
         super();
         hudWidth = 182;
@@ -140,13 +142,13 @@ public class HudGuiRenderer extends Gui {
                                                      GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 RenderHelper.enableGUIStandardItemLighting();
 
+                chuteFacing = ConfigHandler.getParachuteDirection();
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection();
                 double distance = getHomeDistance();
-                double heading = (((ConfigHandler.getParachuteDirection() + 180.0) % 360) + 360) % 360;
+                double heading = (((chuteFacing + 180.0) % 360) + 360) % 360;
                 double chuteDir = (((mc.player.rotationYaw + 180.0) % 360) + 360) % 360;
-                Parachute.proxy.info("chute facing direction: " + chuteDir);
 
                 // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
                 drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
@@ -246,7 +248,7 @@ public class HudGuiRenderer extends Gui {
     public double getHomeDirection() {
         BlockPos blockpos = mc.world.getSpawnPoint();
         double delta = Math.atan2(blockpos.getZ() - mc.player.posZ, blockpos.getX() - mc.player.posX);
-        double relAngle = delta - Math.toRadians(mc.player.rotationYaw);
+        double relAngle = delta - Math.toRadians(chuteFacing);
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 

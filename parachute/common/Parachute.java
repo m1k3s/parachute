@@ -40,7 +40,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 public class Parachute {
 
     public static final String MODID = "parachutemod";
-    public static final String MODVERSION = "1.7.3";
+    public static final String MODVERSION = "1.7.4_wasd";
     public static final String MCVERSION = "1.12.2";
     public static final String NAME = "Parachute Mod NG";
     public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
