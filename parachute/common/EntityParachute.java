@@ -214,16 +214,16 @@ public class EntityParachute extends Entity {
             float motionFactor = 0.0f;
 
             if (input.forwardKeyDown) {
-                motionFactor += 0.02;
+                motionFactor += 0.015;
             }
             if (input.backKeyDown) {
                 motionFactor -= 0.008;
             }
             if (input.leftKeyDown) {
-                deltaRotation += -0.25;
+                deltaRotation += -0.2;
             }
             if (input.rightKeyDown) {
-                deltaRotation += 0.25;
+                deltaRotation += 0.2;
             }
 
             ascendMode = input.jump;
@@ -231,7 +231,7 @@ public class EntityParachute extends Entity {
             motionY -= currentDescentRate();
             rotationYaw += deltaRotation;
 
-            ConfigHandler.setParachuteDirection(rotationYaw);
+//            ConfigHandler.setParachuteDirection(rotationYaw);
 
             motionX += (double) (MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor);
             motionZ += (double) (MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor);

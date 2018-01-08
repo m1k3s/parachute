@@ -58,7 +58,7 @@ public class ConfigHandler {
     private static int[] waypoint;
     private static boolean dismounting;
 
-    private static double parachuteDirection;
+//    private static double parachuteDirection;
 
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
     private static final String usageComment = "set to true for parachute single use"; // false
@@ -114,7 +114,7 @@ public class ConfigHandler {
         config = new Configuration(event.getSuggestedConfigurationFile());
         updateConfigFromFile();
 
-        parachuteDirection = 0.0;
+//        parachuteDirection = 0.0;
     }
 
     public static void updateConfigFromFile() {
@@ -364,11 +364,11 @@ public class ConfigHandler {
         dismounting = value;
     }
 
-    public static void setParachuteDirection(double dir) {
-        parachuteDirection = dir;
-    }
-
-    public static double getParachuteDirection() {
-        return parachuteDirection;
-    }
+//    public static void setParachuteDirection(double dir) {
+//        parachuteDirection = dir;
+//    }
+//
+//    public static double getParachuteDirection() {
+//        return parachuteDirection;
+//    }
 }
