@@ -516,7 +516,7 @@ public class EntityParachute extends Entity {
             double z = prevPosZ - sinYaw * -0.35 - cosYaw * sign;
 
             if (ascending) {
-                world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, motionX, motionY, motionZ);
+                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, x, y, z, motionX, motionY, motionZ);
             }
             if (velocity > 0.01) {
                 world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
