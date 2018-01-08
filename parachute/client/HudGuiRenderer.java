@@ -100,7 +100,7 @@ public class HudGuiRenderer extends Gui {
         aadHeight = 25;
         bigLedXY = 15;
         ledY = 39;
-        lightY = 44;
+        lightY = 46;
         red = 0;
         darkRed = 48;
         green = 16;
@@ -152,7 +152,7 @@ public class HudGuiRenderer extends Gui {
 
                 // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
                 drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
-                drawTexturedModalRect(hudX, hudY + hudHeight, 0, 59, hudWidth, 9); // draw the chute bubble frame
+                drawTexturedModalRect(hudX, hudY + hudHeight, 0, 60, hudWidth, 9); // draw the chute bubble frame
 
                 // determine which LED to light, homeDir is in range -180 to 180
                 // for any value under -80 or over 80 the LED is fixed to the
@@ -173,11 +173,11 @@ public class HudGuiRenderer extends Gui {
                 if (playerLook < -80) {
                     chuteBubble = 1;
                 } else if ((playerLook - 80) * (playerLook - -80) < 0) {
-                    chuteBubble = (int) Math.floor((playerLook + 80.0) + 12);
+                    chuteBubble = (int) Math.floor((playerLook + 80.0) + 11);
                 } else if (playerLook > 80) {
                     chuteBubble = 170;
                 }
-                drawTexturedModalRect(hudX + chuteBubble, hudY + hudHeight, 68, lightY, 1, 8); // draw the chute bubble
+                drawTexturedModalRect(hudX + chuteBubble, hudY + hudHeight, 67, lightY, 3, 7); // draw the chute bubble
 
                 // AAD status
                 int aadIconX;
