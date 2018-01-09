@@ -76,14 +76,12 @@ public class HudGuiRenderer extends Gui {
     private final int blinkTime;
     private final int yOffset;
     private final int bigLedXY;
-    // parachute direction indicator
-    private int chuteBubble;
     // waypoint
     public static int wayPointX;
     public static int wayPointZ;
     private static boolean wayPointEnabled;
 
-    double chuteFacing;
+    double chuteHeading;
 
     public HudGuiRenderer() {
         super();
@@ -99,9 +97,9 @@ public class HudGuiRenderer extends Gui {
         colorDimGreen = 0xcc008800;
         aadWidth = 16;
         aadHeight = 25;
-        bigLedXY = 15;
+        bigLedXY = 16;
         ledY = 39;
-        lightY = 46;
+        lightY = 44;
         red = 0;
         darkRed = 48;
         green = 16;
@@ -109,7 +107,6 @@ public class HudGuiRenderer extends Gui {
         blinkX = red;
         blinkTime = 5;
         yOffset = 14;
-        chuteBubble = 0;
         wayPointX = 0;
         wayPointZ = 0;
         // disable the waypoint display
@@ -132,7 +129,6 @@ public class HudGuiRenderer extends Gui {
             int hudY = 2; // top edge of GUI
             int textX = hudX + 30; // xcoord for text
             int textY = hudY + 22; // ycoord for text
-            int ledX = 1;
 
             if (ParachuteCommonProxy.onParachute(mc.player)) {
                 mc.getTextureManager().bindTexture(hudTexture);
@@ -149,10 +145,9 @@ public class HudGuiRenderer extends Gui {
 
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
-                double homeDir = getHomeDirection();
+                double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
-                double chuteHeading = (((chute.rotationYaw + 180.0) % 360) + 360) % 360;
-//                double playerFacing = (((mc.player.rotationYaw + 180.0) % 360) + 360) % 360;
+                chuteHeading = calcParachuteHeading(chute.rotationYaw);
 
                 // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
                 drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
@@ -161,27 +156,15 @@ public class HudGuiRenderer extends Gui {
                 // determine which LED to light, homeDir is in range -180 to 180
                 // for any value under -80 or over 80 the LED is fixed to the
                 // left or right end of the slider respectively.
-                if (homeDir < -80) {
-                    ledX = 1;
-                } else if ((homeDir - 80) * (homeDir - -80) < 0) {
-                    ledX = (int) Math.floor((homeDir + 80.0) + 4);
-                } else if (homeDir > 80) {
-                    ledX = 170;
-                }
+                int ledX = calcHomeDirection(homeDir);
                 drawTexturedModalRect(hudX + ledX, hudY, ledX, ledY, ledWidth, ledHeight); // draw the lit LED
 
                 // this indicator points to the parachute facing direction. once the
                 // red indicator is centered the player is facing in the same
                 // direction as the chute.
-                double playerLook = chute.rotationYaw - mc.player.getRotationYawHead();
-                if (playerLook < -80) {
-                    chuteBubble = 0;
-                } else if ((playerLook - 80) * (playerLook - -80) < 0) {
-                    chuteBubble = (int) Math.floor((playerLook + 80.0) + 11);
-                } else if (playerLook > 80) {
-                    chuteBubble = 178;
-                }
-                drawTexturedModalRect(hudX + chuteBubble, hudY + hudHeight, 67, lightY, 3, 7); // draw the chute bubble
+                double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
+                int chuteBubble = calcAndWrapChuteFacing(playerLook);
+                drawTexturedModalRect(hudX + chuteBubble, hudY + hudHeight, 67, 46, 3, 7); // draw the chute bubble
 
                 // AAD status
                 int aadIconX;
@@ -245,14 +228,30 @@ public class HudGuiRenderer extends Gui {
         return String.format("%.1f", d);
     }
 
+    private double calcParachuteHeading(double yaw) {
+        return (((yaw + 180.0) % 360) + 360) % 360;
+    }
+
+    private int calcAndWrapChuteFacing(double playerLook) {
+        int bubble = (int) Math.floor((playerLook + 80.0) + 11);
+        bubble = bubble < 0 ? 0 : bubble > 179 ? 179 : bubble;
+        return bubble;
+    }
+
+    private int calcHomeDirection(double dir) {
+        int ledX = (int) Math.floor((dir + 80.0) + 4);
+        ledX = ledX < 0 ? 0 : ledX > 170 ? 170 : ledX;
+        return ledX;
+    }
+
     // difference angle in degrees the chute is facing from the home point.
     // zero degrees means the chute is facing the home point.
     // the home point can be either the world spawn point or a waypoint
     // set by the player in the config.
-    public double getHomeDirection() {
+    public double getHomeDirection(double yaw) {
         BlockPos blockpos = mc.world.getSpawnPoint();
         double delta = Math.atan2(blockpos.getZ() - mc.player.posZ, blockpos.getX() - mc.player.posX);
-        double relAngle = delta - Math.toRadians(chuteFacing);
+        double relAngle = delta - Math.toRadians(yaw);
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 

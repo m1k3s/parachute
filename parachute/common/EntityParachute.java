@@ -231,8 +231,6 @@ public class EntityParachute extends Entity {
             motionY -= currentDescentRate();
             rotationYaw += deltaRotation;
 
-//            ConfigHandler.setParachuteDirection(rotationYaw);
-
             motionX += (double) (MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor);
             motionZ += (double) (MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor);
 
@@ -452,8 +450,8 @@ public class EntityParachute extends Entity {
         double cosYaw = 2.0 * Math.cos(Math.toRadians(90.0 + rotationYaw));
         double sinYaw = 2.0 * Math.sin(Math.toRadians(90.0 + rotationYaw));
 
-        for (int k = 0; (double) k < 2.0 + velocity; k++) {
-            double sign = (double) (rand.nextInt(2) * 2 - 1) * 0.7;
+        for (int k = 0; (double) k < 1.0 + velocity; k++) {
+            double sign = (rand.nextInt(2) * 2 - 1) * 0.7;
             double x = posX + (posX - prevPosX) + cosYaw * -0.45 + sinYaw * sign;
             double y = posY - 0.25;
             double z = posZ + (posZ - prevPosZ) + sinYaw * -0.45 - cosYaw * sign;
