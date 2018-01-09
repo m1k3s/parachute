@@ -81,7 +81,7 @@ public class HudGuiRenderer extends Gui {
     public static int wayPointZ;
     private static boolean wayPointEnabled;
 
-    double chuteHeading;
+    double compassHeading;
 
     public HudGuiRenderer() {
         super();
@@ -147,7 +147,7 @@ public class HudGuiRenderer extends Gui {
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
-                chuteHeading = calcParachuteHeading(chute.rotationYaw);
+                compassHeading = calcCompassHeading(chute.rotationYaw);
 
                 // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
                 drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight); // draw the main hud
@@ -163,7 +163,7 @@ public class HudGuiRenderer extends Gui {
                 // red indicator is centered the player is facing in the same
                 // direction as the chute.
                 double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
-                int chuteBubble = calcAndWrapChuteFacing(playerLook);
+                int chuteBubble = calcPlayerChuteFacing(playerLook);
                 drawTexturedModalRect(hudX + chuteBubble, hudY + hudHeight, 67, 46, 3, 7); // draw the chute bubble
 
                 // AAD status
@@ -214,7 +214,7 @@ public class HudGuiRenderer extends Gui {
                 fontRenderer.drawStringWithShadow(format(altitude), (textX + 5) - fieldWidth, textY, colorAltitude());
                 // draw the compass heading text
                 fontRenderer.drawStringWithShadow(I18n.format("gui.hud.compass"), hudX + 123, hudY + 12, colorDimBlue);
-                fontRenderer.drawStringWithShadow(format(chuteHeading), (textX + 118) - fieldWidth, textY, colorCompass(chuteHeading));
+                fontRenderer.drawStringWithShadow(format(compassHeading), (textX + 118) - fieldWidth, textY, colorCompass(compassHeading));
                 // draw the distance to the home point text
                 fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
             }
@@ -228,11 +228,11 @@ public class HudGuiRenderer extends Gui {
         return String.format("%.1f", d);
     }
 
-    private double calcParachuteHeading(double yaw) {
+    private double calcCompassHeading(double yaw) {
         return (((yaw + 180.0) % 360) + 360) % 360;
     }
 
-    private int calcAndWrapChuteFacing(double playerLook) {
+    private int calcPlayerChuteFacing(double playerLook) {
         int bubble = (int) Math.floor((playerLook + 80.0) + 11);
         bubble = bubble < 0 ? 0 : bubble > 179 ? 179 : bubble;
         return bubble;
