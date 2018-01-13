@@ -31,7 +31,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.resources.I18n;
+//import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -60,8 +60,10 @@ public class HudGuiRenderer extends Gui {
     private final int colorRed;
     private final int colorGreen;
     private final int colorBlue;
-    private final int colorDimBlue;
+//    private final int colorDimBlue;
     private final int colorDimGreen;
+    private final int colorDimRed;
+    private final int colorDimYellow;
     // AAD icon
     private final int aadWidth;
     private final int aadHeight;
@@ -90,10 +92,12 @@ public class HudGuiRenderer extends Gui {
         ledWidth = 11;
         ledHeight = 5;
         colorYellow = 0xffaaaa00;
+        colorDimYellow = 0xcc888800;
         colorRed = 0xffaa0000;
+        colorDimRed = 0xcc880000;
         colorGreen = 0xff00aa00;
         colorBlue = 0xff0000aa;
-        colorDimBlue = 0xcc000088;
+//        colorDimBlue = 0xcc000088;
         colorDimGreen = 0xcc008800;
         aadWidth = 16;
         aadHeight = 25;
@@ -210,11 +214,11 @@ public class HudGuiRenderer extends Gui {
                 }
 
                 // draw the altitude text
-                fontRenderer.drawStringWithShadow(I18n.format("gui.hud.altitude"), hudX + 18, hudY + 12, colorDimBlue);
+//                fontRenderer.drawStringWithShadow(I18n.format("gui.hud.altitude"), hudX + 18, hudY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(format(altitude), (textX + 5) - fieldWidth, textY, colorAltitude());
                 // draw the compass heading text
-                fontRenderer.drawStringWithShadow(I18n.format("gui.hud.compass"), hudX + 123, hudY + 12, colorDimBlue);
-                fontRenderer.drawStringWithShadow(format(compassHeading), (textX + 118) - fieldWidth, textY, colorCompass(compassHeading));
+//                fontRenderer.drawStringWithShadow(I18n.format("gui.hud.compass"), hudX + 123, hudY + 12, colorDimBlue);
+                fontRenderer.drawStringWithShadow(format(compassHeading), (textX + 118) - fieldWidth, textY, colorDimGreen);//colorCompass(compassHeading));
                 // draw the distance to the home point text
                 fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
             }
@@ -263,7 +267,7 @@ public class HudGuiRenderer extends Gui {
     }
 
     public int colorAltitude() {
-        return (altitude <= 10.0 && altitude >= 0.0) ? colorRed : altitude < 0.0 ? colorYellow : colorGreen;
+        return (altitude <= 10.0 && altitude >= 0.0) ? colorDimRed : altitude <= 15.0 && altitude > 10.0 ? colorDimYellow : colorDimGreen;
     }
 
     // quadrant color code
@@ -271,6 +275,7 @@ public class HudGuiRenderer extends Gui {
     // 45 to 134 yellow, mostly east
     // 135 to 224 red, mostly south
     // 225 to 314 blue, mostly west
+    @SuppressWarnings("unused")
     public int colorCompass(double d) {
         return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
                 (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;

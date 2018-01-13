@@ -56,7 +56,11 @@ public class EntityParachute extends Entity {
     private boolean autoDismount;
     private boolean dismountInWater;
 
-    private float deltaRotation;
+    private double deltaRotation;
+    private double forwardMomentum;
+    private double backMOmentum;
+    private double rotationMomentum;
+    private double slideMomentum;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ASCEND
@@ -74,6 +78,11 @@ public class EntityParachute extends Entity {
         autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
+
+        forwardMomentum = ConfigHandler.getForwardMomentum();
+        backMOmentum = ConfigHandler.getBackMomentum();
+        rotationMomentum = ConfigHandler.getRotationMomentum();
+        slideMomentum = ConfigHandler.getSlideMomentum();
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -211,19 +220,24 @@ public class EntityParachute extends Entity {
     // updateInputs is called by ParachuteInputEvent class
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && world.isRemote) {
-            float motionFactor = 0.0f;
+            double motionFactor = 0.0f;
 
             if (input.forwardKeyDown) {
-                motionFactor += 0.015;
+                motionFactor += forwardMomentum;
             }
             if (input.backKeyDown) {
-                motionFactor -= 0.008;
+                motionFactor -= backMOmentum;
             }
             if (input.leftKeyDown) {
-                deltaRotation += -0.2;
+                deltaRotation += -(rotationMomentum);
             }
             if (input.rightKeyDown) {
-                deltaRotation += 0.2;
+                deltaRotation += rotationMomentum;
+            }
+
+            // slight forward momentum while turning
+            if (input.rightKeyDown != input.leftKeyDown && !input.forwardKeyDown && !input.backKeyDown) {
+                motionFactor += slideMomentum;
             }
 
             ascendMode = input.jump;
@@ -231,8 +245,8 @@ public class EntityParachute extends Entity {
             motionY -= currentDescentRate();
             rotationYaw += deltaRotation;
 
-            motionX += (double) (MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor);
-            motionZ += (double) (MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor);
+            motionX += MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor;
+            motionZ += MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor;
 
             if (((ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
                 applyTurbulence(world.isThundering());
@@ -473,7 +487,7 @@ public class EntityParachute extends Entity {
             Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
             passenger.setPosition(posX + vec3d.x, posY + (double) offset, posZ + vec3d.z);
             passenger.rotationYaw += deltaRotation;
-            passenger.setRotationYawHead(passenger.getRotationYawHead() + deltaRotation);
+            passenger.setRotationYawHead(passenger.getRotationYawHead() + (float)deltaRotation);
             applyYawToEntity(passenger);
         }
     }

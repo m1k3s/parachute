@@ -58,7 +58,10 @@ public class ConfigHandler {
     private static int[] waypoint;
     private static boolean dismounting;
 
-//    private static double parachuteDirection;
+    private static double forwardMomentum;
+    private static double backMomentum;
+    private static double rotationMomentum;
+    private static double slideMomentum;
 
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
     private static final String usageComment = "set to true for parachute single use"; // false
@@ -80,6 +83,10 @@ public class ConfigHandler {
     private static final String burnVolumeComment = "set the burn sound volume (0.0 to 1.0)";
     private static final String colorComment = "Select a parachute color, random, or custom[0-9]";
     private static final String waypointComment = "waypoint coordinates [X, Z]";
+    private static final String forwardMotionComment = "delta forward momentum value";
+    private static final String backMotionComment = "delta back momentum value";
+    private static final String turnMotionComment = "delta rotation momentum value";
+    private static final String slideMotionComment = "delta slide momentum value";
     private static final String[] colorValues = {
             "random",
             "black",
@@ -113,8 +120,6 @@ public class ConfigHandler {
     public static void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         updateConfigFromFile();
-
-//        parachuteDirection = 0.0;
     }
 
     public static void updateConfigFromFile() {
@@ -142,6 +147,11 @@ public class ConfigHandler {
         Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
         Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment);
         Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
+
+        Property forwardMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
+        Property backMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "backMomentum", 0.008, backMotionComment);
+        Property leftMotionProp = config.get(Configuration.CATEGORY_GENERAL, "rotationMomentum", -0.2, turnMotionComment);
+        Property slideMotionProp = config.get(Configuration.CATEGORY_GENERAL, "slideMomentum", 0.005, slideMotionComment);
 
         Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment);
         Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
@@ -185,6 +195,10 @@ public class ConfigHandler {
         propertyOrder.add(constantTurbulenceProp.getName());
         propertyOrder.add(waypointProp.getName());
         propertyOrder.add(chuteColorProp.getName());
+        propertyOrder.add(forwardMOtionProp.getName());
+        propertyOrder.add(backMOtionProp.getName());
+        propertyOrder.add(leftMotionProp.getName());
+        propertyOrder.add(slideMotionProp.getName());
         config.setCategoryPropertyOrder(Configuration.CATEGORY_GENERAL, propertyOrder);
 
         if (fromFields) {
@@ -206,12 +220,14 @@ public class ConfigHandler {
             aadImmediate = aadImmediateProp.getBoolean(false);
             burnVolume = burnVolumeProp.getDouble(1.0);
             waypoint = waypointProp.getIntList();
+            forwardMomentum = forwardMOtionProp.getDouble();
+            backMomentum = backMOtionProp.getDouble();
+            rotationMomentum = leftMotionProp.getDouble();
+            slideMomentum = slideMotionProp.getDouble();
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
         thermals = thermals && !(lavaThermals && lavaDisablesThermalProp.getBoolean());
-//        boolean thermalsDisabled = !(lavaThermals && lavaDisablesThermalProp.getBoolean());
-//        thermals = thermals ? thermalsDisabled : thermals;
         // used to signal that a player has dismounted
         dismounting = false;
 
@@ -233,6 +249,10 @@ public class ConfigHandler {
         aadImmediateProp.set(aadImmediate);
         burnVolumeProp.set(burnVolume);
         waypointProp.set(waypoint);
+        forwardMOtionProp.set(forwardMomentum);
+        backMOtionProp.set(backMomentum);
+        leftMotionProp.set(rotationMomentum);
+        slideMotionProp.set(slideMomentum);
 
         if (config.hasChanged() && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             config.save();
@@ -364,11 +384,20 @@ public class ConfigHandler {
         dismounting = value;
     }
 
-//    public static void setParachuteDirection(double dir) {
-//        parachuteDirection = dir;
-//    }
-//
-//    public static double getParachuteDirection() {
-//        return parachuteDirection;
-//    }
+    public static double getForwardMomentum() {
+        return forwardMomentum;
+    }
+
+    public static double getBackMomentum() {
+        return backMomentum;
+    }
+
+    public static double getRotationMomentum() {
+        return rotationMomentum;
+    }
+
+    public static double getSlideMomentum() {
+        return slideMomentum;
+    }
+
 }

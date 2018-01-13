@@ -22,7 +22,6 @@
 package com.parachute.common;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-//import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 
@@ -35,13 +34,10 @@ public class PlayerFallEvent {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onFallEvent(LivingFallEvent event) {
-//        EntityLivingBase pilot = event.getEntityLiving();
         if (event.getEntityLiving() instanceof EntityPlayer && ConfigHandler.isDismounting()) {
 			event.setCanceled(true);
 			event.setDistance(0.0f);
 			event.setDamageMultiplier(0.0f);
-//            pilot.fallDistance = 0.0f;
-//            pilot.isCollided = false;
             ConfigHandler.setIsDismounting(false);
         }
     }
