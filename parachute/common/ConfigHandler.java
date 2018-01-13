@@ -85,7 +85,7 @@ public class ConfigHandler {
     private static final String waypointComment = "waypoint coordinates [X, Z]";
     private static final String forwardMotionComment = "delta forward momentum value";
     private static final String backMotionComment = "delta back momentum value";
-    private static final String turnMotionComment = "delta rotation momentum value";
+    private static final String rotationMomentumComment = "delta rotation momentum value";
     private static final String slideMotionComment = "delta slide momentum value";
     private static final String[] colorValues = {
             "random",
@@ -150,7 +150,7 @@ public class ConfigHandler {
 
         Property forwardMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
         Property backMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "backMomentum", 0.008, backMotionComment);
-        Property leftMotionProp = config.get(Configuration.CATEGORY_GENERAL, "rotationMomentum", -0.2, turnMotionComment);
+        Property leftMotionProp = config.get(Configuration.CATEGORY_GENERAL, "rotationMomentum", 0.2, rotationMomentumComment);
         Property slideMotionProp = config.get(Configuration.CATEGORY_GENERAL, "slideMomentum", 0.005, slideMotionComment);
 
         Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment);
