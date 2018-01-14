@@ -21,10 +21,7 @@
  */
 package com.parachute.client;
 
-import com.parachute.common.Parachute;
-import com.parachute.common.ParachuteCommonProxy;
-import com.parachute.common.EntityParachute;
-import com.parachute.common.ParachuteInputEvent;
+import com.parachute.common.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
@@ -58,7 +55,11 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
         super.Init(event);
 
         MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
-        MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
+        if (ConfigHandler.getUseCompassHUD()) {
+            MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
+        } else {
+            MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
+        }
         MinecraftForge.EVENT_BUS.register(new ParachuteInputEvent());
     }
 

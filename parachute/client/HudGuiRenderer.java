@@ -31,7 +31,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-//import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -97,7 +96,6 @@ public class HudGuiRenderer extends Gui {
         colorDimRed = 0xcc880000;
         colorGreen = 0xff00aa00;
         colorBlue = 0xff0000aa;
-//        colorDimBlue = 0xcc000088;
         colorDimGreen = 0xcc008800;
         aadWidth = 16;
         aadHeight = 25;
@@ -129,7 +127,7 @@ public class HudGuiRenderer extends Gui {
 
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             ScaledResolution sr = new ScaledResolution(mc);
-            int hudX = sr.getScaledWidth() / 2 - (hudWidth / 2); // left edge of GUI
+            int hudX = (sr.getScaledWidth() / 2) - (hudWidth / 2); // left edge of GUI
             int hudY = 2; // top edge of GUI
             int textX = hudX + 30; // xcoord for text
             int textY = hudY + 22; // ycoord for text
@@ -173,11 +171,7 @@ public class HudGuiRenderer extends Gui {
                 // AAD status
                 int aadIconX;
                 int aadIconY = 8;
-                if (ConfigHandler.getIsAADActive()) {
-                    aadIconX = 199;
-                } else {
-                    aadIconX = 182;
-                }
+                aadIconX = ConfigHandler.getIsAADActive() ? 199 : 182;
                 drawTexturedModalRect(hudX + hudWidth + 2, hudY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
                 // manual dismount indicator
@@ -208,16 +202,14 @@ public class HudGuiRenderer extends Gui {
                         ledX = 170;
                     }
                     // draw the waypoint bar background
-                    drawTexturedModalRect(hudX, hudY + hudHeight, 0, 0, hudWidth, ledHeight);
+                    drawTexturedModalRect(hudX, hudY + hudHeight + 9, 0, 0, hudWidth, ledHeight);
                     // draw the lit LED
-                    drawTexturedModalRect(hudX + ledX, hudY + hudHeight, ledX, ledY, ledWidth, ledHeight);
+                    drawTexturedModalRect(hudX + ledX, hudY + hudHeight + 9, ledX, ledY, ledWidth, ledHeight);
                 }
 
                 // draw the altitude text
-//                fontRenderer.drawStringWithShadow(I18n.format("gui.hud.altitude"), hudX + 18, hudY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(format(altitude), (textX + 5) - fieldWidth, textY, colorAltitude());
                 // draw the compass heading text
-//                fontRenderer.drawStringWithShadow(I18n.format("gui.hud.compass"), hudX + 123, hudY + 12, colorDimBlue);
                 fontRenderer.drawStringWithShadow(format(compassHeading), (textX + 118) - fieldWidth, textY, colorDimGreen);//colorCompass(compassHeading));
                 // draw the distance to the home point text
                 fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
@@ -237,13 +229,13 @@ public class HudGuiRenderer extends Gui {
     }
 
     private int calcPlayerChuteFacing(double playerLook) {
-        int bubble = (int) Math.floor((playerLook + 80.0) + 11);
+        int bubble = (int) Math.floor(playerLook + 91.0);
         bubble = bubble < 0 ? 0 : bubble > 179 ? 179 : bubble;
         return bubble;
     }
 
     private int calcHomeDirection(double dir) {
-        int ledX = (int) Math.floor((dir + 80.0) + 4);
+        int ledX = (int) Math.floor(dir + 84.0);
         ledX = ledX < 0 ? 0 : ledX > 170 ? 170 : ledX;
         return ledX;
     }
