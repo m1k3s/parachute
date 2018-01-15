@@ -149,7 +149,7 @@ public class ConfigHandler {
         Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment);
         Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256);
         Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
-        Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment);
+        Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", false, autoComment);
         Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
 
         Property forwardMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
@@ -157,15 +157,15 @@ public class ConfigHandler {
         Property leftMotionProp = config.get(Configuration.CATEGORY_GENERAL, "rotationMomentum", 0.2, rotationMomentumComment);
         Property slideMotionProp = config.get(Configuration.CATEGORY_GENERAL, "slideMomentum", 0.005, slideMotionComment);
 
-        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment);
+        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, trailsComment);
         Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
         Property useCompassHUDProp = config.get(Configuration.CATEGORY_GENERAL, "useCompassHUD", true, useCompassHUDComment);
         Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, noHUDComment);
 
-        Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", false, lavaThermalComment);
+        Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, lavaThermalComment);
         Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0);
         Property maxLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0);
-        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment);
+        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", false, lavaDisablesComment);
 
         Property weatherAffectsDriftProp = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment);
         Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment);
@@ -213,14 +213,14 @@ public class ConfigHandler {
             singleUse = singleUseProp.getBoolean(false);
             heightLimit = heightLimitProp.getInt(256);
             thermals = thermalsProp.getBoolean(true);
-            lavaThermals = lavaThermalsProp.getBoolean(false);
+            lavaThermals = lavaThermalsProp.getBoolean(true);
             minLavaDistance = minLavaDistanceProp.getDouble(3.0);
             maxLavaDistance = maxLavaDistanceProp.getDouble(48.0);
-            autoDismount = autoDismountProp.getBoolean(true);
+            autoDismount = autoDismountProp.getBoolean(false);
             chuteColor = chuteColorProp.getString();
             weatherAffectsDrift = weatherAffectsDriftProp.getBoolean(true);
             constantTurbulence = constantTurbulenceProp.getBoolean(false);
-            showContrails = showContrailsProp.getBoolean(false);
+            showContrails = showContrailsProp.getBoolean(true);
             dismountInWater = dismountInWaterProp.getBoolean(false);
             isAADActive = isAADActiveProp.getBoolean(false);
             aadAltitude = aadAltitudeProp.getDouble(10.0);
@@ -228,12 +228,12 @@ public class ConfigHandler {
             aadImmediate = aadImmediateProp.getBoolean(false);
             burnVolume = burnVolumeProp.getDouble(1.0);
             waypoint = waypointProp.getIntList();
-            forwardMomentum = forwardMOtionProp.getDouble();
-            backMomentum = backMOtionProp.getDouble();
-            rotationMomentum = leftMotionProp.getDouble();
-            slideMomentum = slideMotionProp.getDouble();
-            useCompassHUD = useCompassHUDProp.getBoolean();
-            noHUD = noHUDProp.getBoolean();
+            forwardMomentum = forwardMOtionProp.getDouble(0.015);
+            backMomentum = backMOtionProp.getDouble(0.008);
+            rotationMomentum = leftMotionProp.getDouble(0.2);
+            slideMomentum = slideMotionProp.getDouble(0.005);
+            useCompassHUD = useCompassHUDProp.getBoolean(true);
+            noHUD = noHUDProp.getBoolean(false);
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals

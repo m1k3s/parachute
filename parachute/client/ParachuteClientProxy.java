@@ -43,7 +43,7 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
         super.preInit(event);
         ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.parachuteName);
         ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.packName);
-        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
+        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
         ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.parachuteItem, 0, parachuteResource);
         ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.packItem, 0, packResource);
         ModKeyBindings.registerKeyBinding();
@@ -55,12 +55,14 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
         super.Init(event);
 
         MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
-        if (!ConfigHandler.getNoHUD() && ConfigHandler.getUseCompassHUD()) {
-            MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
-        } else {
-            MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
-        }
         MinecraftForge.EVENT_BUS.register(new ParachuteInputEvent());
+        if (!ConfigHandler.getNoHUD()) {
+            if (ConfigHandler.getUseCompassHUD()) {
+                MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
+            } else {
+                MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
+            }
+        }
     }
 
     @Override

@@ -108,9 +108,9 @@ public class HudCompassRenderer extends Gui {
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(0.5, 0.5, 0.5);
 
-                GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+//                GlStateManager.enableBlend();
+//                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+//                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
                 // draw the parachute/player facing bubble underneath
                 double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
@@ -125,25 +125,25 @@ public class HudCompassRenderer extends Gui {
                 // draw the altitude text
                 String text;
                 int height = fontRenderer.FONT_HEIGHT;
-                drawText(format(altitude), textX, textY - height - 8, colorAltitude());
+                drawCenteredText(format(altitude), textX, textY - height - 8, colorAltitude());
 
                 // draw the compass heading text
-                drawText(format(compassHeading), textX, textY - height - 18, colorDimGreen);
+                drawCenteredText(format(compassHeading), textX, textY - (height * 2) - 8, colorDimGreen);
 
                 // draw the distance to the home point text
-                drawText(format(distance), textX, textY + height + 2, colorDimGreen);
+                drawCenteredText(format(distance), textX, textY + height - 2, colorDimGreen);
 
                 boolean aadActive = ConfigHandler.getIsAADActive();
-                drawText("* AAD *", textX, textY + height + 12, aadActive ? colorDimGreen : colorDimRed);
+                drawCenteredText("* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorDimGreen : colorDimRed);
 
-                GlStateManager.disableBlend();
+//                GlStateManager.disableBlend();
 
                 GlStateManager.popMatrix();
             }
         }
     }
 
-    private void drawText(String text, int x, int y, int color) {
+    private void drawCenteredText(String text, int x, int y, int color) {
         int width = fontRenderer.getStringWidth(text) / 2;
         fontRenderer.drawStringWithShadow(text, x - width, y, color);
     }
@@ -153,6 +153,7 @@ public class HudCompassRenderer extends Gui {
     private void drawBubble(float bubble, ResourceLocation texture) {
         GlStateManager.pushMatrix();
 
+        // scale again, final scale is 25% of original size
         GlStateManager.scale(0.5, 0.5, 0.5);
         mc.getTextureManager().bindTexture(texture);
         // draw the bubble
@@ -169,7 +170,9 @@ public class HudCompassRenderer extends Gui {
 
         float tx = hudX + (hudWidth / 2);
         float ty = hudY + (hudHeight / 2);
+        // scale again, final scale is 25% of original size
         GlStateManager.scale(0.5, 0.5, 0.5);
+        // translate to center and rotate
         GlStateManager.translate(tx, ty, 0);
         GlStateManager.rotate(degrees, 0, 0, 1);
         GlStateManager.translate(-tx, -ty, 0);

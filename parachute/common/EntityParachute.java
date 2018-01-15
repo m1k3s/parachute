@@ -355,7 +355,7 @@ public class EntityParachute extends Entity {
             }
         }
 
-        if (allowThermals && ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
+        if (allowThermals && ascendMode) {
             descentRate = ASCEND;
         }
 
