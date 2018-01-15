@@ -35,7 +35,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+
+@SideOnly(Side.CLIENT)
 public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation compassTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
     protected static final ResourceLocation homeTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
@@ -108,10 +112,6 @@ public class HudCompassRenderer extends Gui {
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(0.5, 0.5, 0.5);
 
-//                GlStateManager.enableBlend();
-//                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-//                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-
                 // draw the parachute/player facing bubble underneath
                 double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
                 drawBubble(calcPlayerChuteFacing(playerLook), bubbleTexture);
@@ -125,28 +125,27 @@ public class HudCompassRenderer extends Gui {
                 // draw the altitude text
                 String text;
                 int height = fontRenderer.FONT_HEIGHT;
-                drawCenteredText(format(altitude), textX, textY - height - 8, colorAltitude());
+                drawCenteredString(fontRenderer, format(altitude), textX, textY - height - 8, colorAltitude());
 
                 // draw the compass heading text
-                drawCenteredText(format(compassHeading), textX, textY - (height * 2) - 8, colorDimGreen);
+                drawCenteredString(fontRenderer, format(compassHeading), textX, textY - (height * 2) - 8, colorDimGreen);
 
                 // draw the distance to the home point text
-                drawCenteredText(format(distance), textX, textY + height - 2, colorDimGreen);
+                drawCenteredString(fontRenderer, format(distance), textX, textY + height - 2, colorDimGreen);
 
                 boolean aadActive = ConfigHandler.getIsAADActive();
-                drawCenteredText("* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorDimGreen : colorDimRed);
-
-//                GlStateManager.disableBlend();
+                drawCenteredString(fontRenderer, "* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorDimGreen : colorDimRed);
 
                 GlStateManager.popMatrix();
             }
         }
     }
 
-    private void drawCenteredText(String text, int x, int y, int color) {
-        int width = fontRenderer.getStringWidth(text) / 2;
-        fontRenderer.drawStringWithShadow(text, x - width, y, color);
-    }
+//    private void drawCenteredText(String text, int x, int y, int color) {
+//        int width = fontRenderer.getStringWidth(text) / 2;
+//        fontRenderer.drawStringWithShadow(text, x - width, y, color);
+//        drawCenteredString(fontRenderer, text, x, y, color);
+//    }
 
     // drawTexturedModalRect
     // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
