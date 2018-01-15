@@ -1,5 +1,5 @@
 /*
- * HudGuiRenderer2.java
+ * HudCompassRenderer.java
  *
  *  Copyright (c) 2018 Michael Sheppard
  *
@@ -87,10 +87,10 @@ public class HudCompassRenderer extends Gui {
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             ScaledResolution sr = new ScaledResolution(mc);
 
-            hudX = 2;//sr.getScaledWidth() - (hudWidth / 2); // left edge of GUI
-            hudY = 2; // top edge of GUI
-            int textX = hudWidth / 4; // xcoord for text
-            int textY = hudHeight / 4; // ycoord for text
+            hudX = 5; // left edge of GUI screen
+            hudY = 5; // top edge of GUI screen
+            int textX = hudX + (hudWidth / 4); // xcoord for text
+            int textY = hudY + (hudHeight / 4); // ycoord for text
 
             if (ParachuteCommonProxy.onParachute(mc.player)) {
                 EntityParachute chute = (EntityParachute) mc.player.getRidingEntity();
@@ -98,16 +98,19 @@ public class HudCompassRenderer extends Gui {
                     return;
                 }
 
-                GlStateManager.enableRescaleNormal();
-                GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 compassHeading = calcCompassHeading(chute.rotationYaw);
+
+                // scale the HUD to 50%
+                GlStateManager.pushMatrix();
+                GlStateManager.scale(0.5, 0.5, 0.5);
+
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
                 // draw the parachute/player facing bubble underneath
                 double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
@@ -122,26 +125,27 @@ public class HudCompassRenderer extends Gui {
                 // draw the altitude text
                 String text;
                 int height = fontRenderer.FONT_HEIGHT;
-                text = format(altitude);
-                int width = fontRenderer.getStringWidth(text) / 2;
-                fontRenderer.drawStringWithShadow(text, textX - width, textY - height - 8, colorAltitude());
+                drawText(format(altitude), textX, textY - height - 8, colorAltitude());
 
                 // draw the compass heading text
-                text = format(compassHeading);
-                width = fontRenderer.getStringWidth(text) / 2;
-                fontRenderer.drawStringWithShadow(text, textX - width, textY - height - 18, colorDimGreen);
+                drawText(format(compassHeading), textX, textY - height - 18, colorDimGreen);
 
                 // draw the distance to the home point text
-                text = format(distance);
-                width = fontRenderer.getStringWidth(text) / 2;
-                fontRenderer.drawStringWithShadow(text, textX - width, textY + height + 2, colorDimGreen);
+                drawText(format(distance), textX, textY + height + 2, colorDimGreen);
 
                 boolean aadActive = ConfigHandler.getIsAADActive();
-                text = "* AAD *";
-                width = fontRenderer.getStringWidth(text) / 2 ;
-                fontRenderer.drawStringWithShadow(text, textX - width, textY + height + 12, aadActive ? colorDimGreen : colorDimRed);
+                drawText("* AAD *", textX, textY + height + 12, aadActive ? colorDimGreen : colorDimRed);
+
+                GlStateManager.disableBlend();
+
+                GlStateManager.popMatrix();
             }
         }
+    }
+
+    private void drawText(String text, int x, int y, int color) {
+        int width = fontRenderer.getStringWidth(text) / 2;
+        fontRenderer.drawStringWithShadow(text, x - width, y, color);
     }
 
     // drawTexturedModalRect
@@ -169,6 +173,7 @@ public class HudCompassRenderer extends Gui {
         GlStateManager.translate(tx, ty, 0);
         GlStateManager.rotate(degrees, 0, 0, 1);
         GlStateManager.translate(-tx, -ty, 0);
+
         mc.getTextureManager().bindTexture(texture);
         drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight);
 

@@ -58,6 +58,7 @@ public class ConfigHandler {
     private static int[] waypoint;
     private static boolean dismounting;
     private static boolean useCompassHUD;
+    private static boolean noHUD;
 
     private static double forwardMomentum;
     private static double backMomentum;
@@ -89,6 +90,7 @@ public class ConfigHandler {
     private static final String rotationMomentumComment = "delta rotation momentum value";
     private static final String slideMotionComment = "delta slide momentum value";
     private static final String useCompassHUDComment = "use the new compass HUD - Requires a restart!";
+    private static final String noHUDComment = "Disable the HUD - Requires a restart!";
     private static final String[] colorValues = {
             "random",
             "black",
@@ -158,6 +160,7 @@ public class ConfigHandler {
         Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment);
         Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
         Property useCompassHUDProp = config.get(Configuration.CATEGORY_GENERAL, "useCompassHUD", true, useCompassHUDComment);
+        Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, noHUDComment);
 
         Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", false, lavaThermalComment);
         Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0);
@@ -187,6 +190,7 @@ public class ConfigHandler {
         propertyOrder.add(showContrailsProp.getName());
         propertyOrder.add(burnVolumeProp.getName());
         propertyOrder.add(useCompassHUDProp.getName());
+        propertyOrder.add(noHUDProp.getName());
         propertyOrder.add(lavaThermalsProp.getName());
         propertyOrder.add(minLavaDistanceProp.getName());
         propertyOrder.add(maxLavaDistanceProp.getName());
@@ -229,6 +233,7 @@ public class ConfigHandler {
             rotationMomentum = leftMotionProp.getDouble();
             slideMomentum = slideMotionProp.getDouble();
             useCompassHUD = useCompassHUDProp.getBoolean();
+            noHUD = noHUDProp.getBoolean();
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
@@ -259,6 +264,7 @@ public class ConfigHandler {
         leftMotionProp.set(rotationMomentum);
         slideMotionProp.set(slideMomentum);
         useCompassHUDProp.set(useCompassHUD);
+        noHUDProp.set(noHUD);
 
         if (config.hasChanged() && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             config.save();
@@ -408,6 +414,10 @@ public class ConfigHandler {
 
     public static boolean getUseCompassHUD() {
         return  useCompassHUD;
+    }
+
+    public static boolean getNoHUD() {
+        return noHUD;
     }
 
 }

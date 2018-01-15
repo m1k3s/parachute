@@ -139,11 +139,11 @@ public class HudGuiRenderer extends Gui {
                     return;
                 }
 
-                GlStateManager.enableRescaleNormal();
-                GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                RenderHelper.enableGUIStandardItemLighting();
+//                GlStateManager.enableRescaleNormal();
+//                GlStateManager.enableBlend();
+//                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+//                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+//                RenderHelper.enableGUIStandardItemLighting();
 
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
@@ -214,9 +214,9 @@ public class HudGuiRenderer extends Gui {
                 // draw the distance to the home point text
                 fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
             }
-            RenderHelper.disableStandardItemLighting();
-            GlStateManager.disableRescaleNormal();
-            GlStateManager.disableBlend();
+//            RenderHelper.disableStandardItemLighting();
+//            GlStateManager.disableRescaleNormal();
+//            GlStateManager.disableBlend();
         }
     }
 
