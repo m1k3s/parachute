@@ -1,10 +1,34 @@
+commit 37937bcff00724c49b235259cff44fb1a84f2769
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 15 09:34:47 2018 -0500
+
+    remove blending in HUD
+    fix text coords in HUD
+    renamed drawString to drawCenteredString
+    fixed hoHUD logic in client proxy
+    changed default values in configHandler
+            autoDismount = false
+            showContrails = true
+            lavaThermals = true
+            lavaDisablesThermals = false
+    added default values in property getters
+    removed old comment in EntityParachute
+
+commit a1e1697ca6be3bb2f88f830f97b846a2c5750362
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 14 19:32:41 2018 -0500
+
+    created and added Changelog
+
 commit 835e203bfad6e6b4cfef0c682cf25f4b704db801
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Jan 14 19:24:49 2018 -0500
 
     changes to the textures (I'm not very good at this part). added a
-    config option to disable the HUD altogether. Fixed the text offset code to
-    account for the origin of the HUD.
+    config option
+    to disable the HUD altogether. Fixed the text offset code to
+    account for
+    the origin of the HUD.
 
 commit 87274ab3fdc4bb7411e3d7d10215242e5fda9216
 Author: m1k3s <pbrane0@gmail.com>
@@ -24,7 +48,8 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Sat Jan 13 08:25:36 2018 -0500
 
     changed hud colors and added text to hud image. added momentum values
-    to config class.
+    to config
+    class.
 
 commit d99f632cde1f668d8400cc24b548278bcd0a4591
 Author: m1k3s <pbrane0@gmail.com>
@@ -60,7 +85,8 @@ commit 813a56de985677630fc7c658caa10de3ee20f22c
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Jan 7 12:12:31 2018 -0500
 
-    fine tuning WASD controls. Modified HUD to show player facing direction
+    fine tuning WASD controls. Modified HUD to show player facing
+    direction
     relative to parachute facing direction, allows the player to line up
     with the parachute direction of travel for better flight control.
 
@@ -89,7 +115,8 @@ Date:   Sat Dec 30 08:27:18 2017 -0500
 
     reworked poweredflight toggle and added/testing feasability of
     uncontrolled flight. disables the forward/steering control. can be
-    used in conjunction with turbulence
+    used in
+    conjunction with turbulence
 
 commit 3af6d1997ef73b1cbe39d92411a16458e1f185d0
 Author: m1k3s <pbrane0@gmail.com>
