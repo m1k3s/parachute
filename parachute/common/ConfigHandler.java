@@ -89,8 +89,8 @@ public class ConfigHandler {
     private static final String backMotionComment = "delta back momentum value";
     private static final String rotationMomentumComment = "delta rotation momentum value";
     private static final String slideMotionComment = "delta slide momentum value";
-    private static final String useCompassHUDComment = "use the new compass HUD - Requires a restart!";
-    private static final String noHUDComment = "Disable the HUD - Requires a restart!";
+    private static final String useCompassHUDComment = "use the new compass HUD";
+    private static final String noHUDComment = "Disable the HUD";
     private static final String[] colorValues = {
             "random",
             "black",

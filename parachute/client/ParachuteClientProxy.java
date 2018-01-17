@@ -56,13 +56,8 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
 
         MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
         MinecraftForge.EVENT_BUS.register(new ParachuteInputEvent());
-        if (!ConfigHandler.getNoHUD()) {
-            if (ConfigHandler.getUseCompassHUD()) {
-                MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
-            } else {
-                MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
-            }
-        }
+        MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
+        MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
     }
 
     @Override
