@@ -27,6 +27,8 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 
 public class PlayerFallEvent {
 
+    public static boolean isDismounting;
+
     public PlayerFallEvent() {
         Parachute.proxy.info("PlayerFallEvent ctor");
     }
@@ -34,7 +36,7 @@ public class PlayerFallEvent {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onFallEvent(LivingFallEvent event) {
-        if (event.getEntityLiving() instanceof EntityPlayer && ConfigHandler.isDismounting()) {
+        if (event.getEntityLiving() instanceof EntityPlayer && isDismounting) { //ConfigHandler.isDismounting()) {
 			event.setCanceled(true);
 			event.setDistance(0.0f);
 			event.setDamageMultiplier(0.0f);

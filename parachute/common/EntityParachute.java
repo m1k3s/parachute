@@ -91,7 +91,8 @@ public class EntityParachute extends Entity {
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);
-        ConfigHandler.setIsDismounting(false);
+//        ConfigHandler.setIsDismounting(false);
+        PlayerFallEvent.isDismounting = false;
     }
 
     public EntityParachute(World world, double x, double y, double z) {
@@ -110,7 +111,8 @@ public class EntityParachute extends Entity {
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!world.isRemote && skyDiver != null) {
-            ConfigHandler.setIsDismounting(true);
+            //ConfigHandler.setIsDismounting(true);
+            PlayerFallEvent.isDismounting = true;
             killParachute();
         }
     }
