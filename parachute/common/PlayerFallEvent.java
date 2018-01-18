@@ -40,7 +40,8 @@ public class PlayerFallEvent {
 			event.setCanceled(true);
 			event.setDistance(0.0f);
 			event.setDamageMultiplier(0.0f);
-            ConfigHandler.setIsDismounting(false);
+//            ConfigHandler.setIsDismounting(false);
+            isDismounting = false;
         }
     }
 }

@@ -133,7 +133,7 @@ public class ParachuteCommonProxy {
     public static void setDeployed(boolean isDeployed) {
         deployed = isDeployed;
     }
-    
+
     public static boolean isDeployed() {
 		return deployed;
 	}

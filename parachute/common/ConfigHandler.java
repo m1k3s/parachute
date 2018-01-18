@@ -56,7 +56,7 @@ public class ConfigHandler {
     private static boolean aadImmediate;
     private static double burnVolume;
     private static int[] waypoint;
-    private static boolean dismounting;
+//    private static boolean dismounting;
     private static boolean useCompassHUD;
     private static boolean noHUD;
 
@@ -239,7 +239,7 @@ public class ConfigHandler {
         // if lava thermals are allowed check allow/disallow space bar thermals
         thermals = thermals && !(lavaThermals && lavaDisablesThermalProp.getBoolean());
         // used to signal that a player has dismounted
-        dismounting = false;
+//        dismounting = false;
 
         singleUseProp.set(singleUse);
         heightLimitProp.set(heightLimit);
@@ -388,13 +388,13 @@ public class ConfigHandler {
         return String.format("%d %d", waypoint[0], waypoint[1]);
     }
 
-    public static boolean isDismounting() {
-        return dismounting;
-    }
+//    public static boolean isDismounting() {
+//        return dismounting;
+//    }
 
-    public static void setIsDismounting(boolean value) {
-        dismounting = value;
-    }
+//    public static void setIsDismounting(boolean value) {
+//        dismounting = value;
+//    }
 
     public static double getForwardMomentum() {
         return forwardMomentum;
