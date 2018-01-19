@@ -23,8 +23,6 @@ package com.parachute.common;
 
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -58,12 +56,10 @@ public class AscendKeyPressMessage implements IMessage {
     public static class Handler implements IMessageHandler<AscendKeyPressMessage, IMessage> {
         @Override
         public IMessage onMessage(final AscendKeyPressMessage msg, final MessageContext ctx) {
-            IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.world;
-            mainThread.addScheduledTask(() -> {
-                EntityPlayerMP entityPlayer = ctx.getServerHandler().player;
-                if (entityPlayer != null && entityPlayer.getRidingEntity() instanceof EntityParachute) {
-//                    EntityParachute.setAscendMode(msg.keyPressed);
-                    PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
+            EntityPlayerMP serverPlayer = ctx.getServerHandler().player;
+            serverPlayer.getServerWorld().addScheduledTask(() -> {
+                if (serverPlayer.getRidingEntity() instanceof EntityParachute) {
+                    PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(serverPlayer);
                     if (pi != null) {
                         pi.setAscendMode(msg.keyPressed);
                     }
