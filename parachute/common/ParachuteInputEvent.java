@@ -1,8 +1,7 @@
-
 /*
- * KeyBindingHandler.java
+ * ParachuteInputEvent.java
  *
- *  Copyright (c) 2017 Michael Sheppard
+ *  Copyright (c) 2018 Michael Sheppard
  *
  * =====GPL=============================================================
  * This program is free software: you can redistribute it and/or modify
@@ -20,24 +19,22 @@
  * =====================================================================
  */
 
-package com.parachute.client;
+package com.parachute.common;
 
-import com.parachute.common.ConfigHandler;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
-@SuppressWarnings("unused")
+public class ParachuteInputEvent {
 
-@Mod.EventBusSubscriber(Side.CLIENT)
-public class KeyBindingHandler {
     @SubscribeEvent
-    public static void clientTick(final TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-
-        if (ModKeyBindings.POWEREDFLIGHT.isPressed()) {
-            ConfigHandler.togglePoweredFlight();
+    public void inputEvent(InputUpdateEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof EntityPlayer) {
+            if (entity.isRiding() && (entity.getRidingEntity() instanceof EntityParachute)) {
+                ((EntityParachute)entity.getRidingEntity()).updateInputs(event.getMovementInput());
+            }
         }
     }
 }

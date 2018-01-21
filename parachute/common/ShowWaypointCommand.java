@@ -23,7 +23,6 @@
 package com.parachute.common;
 
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -64,7 +63,7 @@ public class ShowWaypointCommand extends CommandBase {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
         World world = sender.getEntityWorld();
         if (!world.isRemote) { // server side
             notifyCommandListener(sender, this, "commands.showwaypoint.success", ConfigHandler.getWaypointString());

@@ -21,7 +21,6 @@
  */
 package com.parachute.client;
 
-import com.parachute.common.ConfigHandler;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import java.util.Random;
@@ -32,13 +31,16 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 
+@SideOnly(Side.CLIENT)
 public class RenderParachute extends Render<EntityParachute> {
 
-    private static String curColor = ConfigHandler.getChuteColor();
+    private static String curColor;
     protected static ModelBase modelParachute = new ModelParachute();
     private static ResourceLocation parachuteTexture = null;
     private static final Random rand = new Random(System.currentTimeMillis());
@@ -52,7 +54,7 @@ public class RenderParachute extends Render<EntityParachute> {
         GlStateManager.pushMatrix();
 
         GlStateManager.translate((float) x, (float) y, (float) z);
-        GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(90.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
 
         if (!bindEntityTexture(entityparachute)) {
             return;
@@ -62,11 +64,13 @@ public class RenderParachute extends Render<EntityParachute> {
             EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
             renderParachuteCords(rider, partialTicks);
         }
+        GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 
         GlStateManager.popMatrix();
         super.doRender(entityparachute, x, y, z, rotationYaw, partialTicks);
     }
 
+    @SuppressWarnings("unused")
     public void renderParachuteCords(EntityPlayer rider, float partialTicks) {
         final float b = rider.getBrightness();
 

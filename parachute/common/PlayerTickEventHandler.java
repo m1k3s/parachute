@@ -46,17 +46,17 @@ public class PlayerTickEventHandler {
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
-            EntityEquipmentSlot armorSlot = ParachuteCommonProxy.armorType;
-            ItemStack armor = player.getItemStackFromSlot(ParachuteCommonProxy.armorType);
+            EntityEquipmentSlot armorSlot = Parachute.armorType;
+            ItemStack armor = player.getItemStackFromSlot(Parachute.armorType);
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
             ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(EnumHand.OFF_HAND);
-            boolean deployed = ParachuteCommonProxy.onParachute(player);
+            boolean deployed = Parachute.onParachute(player);
 
             if (!deployed && armor.getItem() instanceof ItemParachutePack && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemParachute))) {
                 player.inventory.armorInventory.set(armorSlot.getIndex(), ItemStack.EMPTY);
             } else {
                 if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
-                    player.inventory.armorInventory.set(armorSlot.getIndex(), new ItemStack(ParachuteCommonProxy.packItem));
+                    player.inventory.armorInventory.set(armorSlot.getIndex(), new ItemStack(Parachute.packItem));
                 }
             }
         }
@@ -67,7 +67,7 @@ public class PlayerTickEventHandler {
     // altitude, if autoAltitude has been reached, deploy. If the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
-        if (ConfigHandler.getIsAADActive() && !ParachuteCommonProxy.onParachute(player)) {
+        if (ConfigHandler.getIsAADActive() && !Parachute.onParachute(player)) {
             ItemStack heldItem = null;
             Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {
@@ -75,13 +75,13 @@ public class PlayerTickEventHandler {
                     heldItem = itemStack;
                 }
             }
-            if (ConfigHandler.getAADImmediate() && ParachuteCommonProxy.canActivateAADImmediate(player)) {
+            if (ConfigHandler.getAADImmediate() && Parachute.canActivateAADImmediate(player)) {
                 if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
                     ((ItemParachute) heldItem.getItem()).deployParachute(player.world, player);
                 }
             } else {
-                boolean autoAltitudeReached = ParachuteCommonProxy.getAutoActivateAltitude(player);
-                if (autoAltitudeReached && ParachuteCommonProxy.isFalling(player)) {
+                boolean autoAltitudeReached = Parachute.getAutoActivateAltitude(player);
+                if (autoAltitudeReached && Parachute.isFalling(player)) {
                     if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
                         ((ItemParachute) heldItem.getItem()).deployParachute(player.world, player);
                     }

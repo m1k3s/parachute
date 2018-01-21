@@ -27,7 +27,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class PlayerLoginHandler {
 
-    public PlayerLoginHandler() {}
+    public PlayerLoginHandler() {
+    }
 
     @SuppressWarnings("unused")
     @SubscribeEvent
@@ -39,8 +40,8 @@ public class PlayerLoginHandler {
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         PlayerInfo PI = new PlayerInfo("");
-        for(int i = 0; i < PlayerManager.getInstance().Players.size(); i++) {
-            if(PlayerManager.getInstance().Players.get(i).getName().equals(event.player.getDisplayNameString())) {
+        for (int i = 0; i < PlayerManager.getInstance().Players.size(); i++) {
+            if (PlayerManager.getInstance().Players.get(i).getName().equals(event.player.getDisplayNameString())) {
                 PlayerManager.getInstance().Players.remove(i);
             }
         }

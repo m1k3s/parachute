@@ -1,8 +1,7 @@
-
 /*
- * ModKeyBindings.java
+ * IProxy.java
  *
- *  Copyright (c) 2017 Michael Sheppard
+ *  Copyright (c) 2018 Michael Sheppard
  *
  * =====GPL=============================================================
  * This program is free software: you can redistribute it and/or modify
@@ -20,20 +19,11 @@
  * =====================================================================
  */
 
-package com.parachute.client;
+package com.parachute.common;
 
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.input.Keyboard;
+public interface IProxy {
 
-public class ModKeyBindings {
-
-    private static final String CATEGORY = "key.category.parachutemod:general";
-
-    public static final KeyBinding POWEREDFLIGHT = new KeyBinding("key.parachutemod:poweredflight", KeyConflictContext.IN_GAME, Keyboard.KEY_P, CATEGORY);
-
-    public static void registerKeyBinding() {
-        ClientRegistry.registerKeyBinding(POWEREDFLIGHT);
-    }
+    void preInit();
+    void Init();
+    void postInit();
 }

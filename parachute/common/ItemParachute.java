@@ -39,6 +39,7 @@ import javax.annotation.Nonnull;
 public class ItemParachute extends Item {
 
     private static boolean active;
+    private static final double OFFSET = 2.5;
 
     public ItemParachute(String itemName) {
         super();
@@ -54,7 +55,7 @@ public class ItemParachute extends Item {
     @SuppressWarnings("unchecked")
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
+        if (Parachute.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
             deployParachute(world, entityplayer);
         } else { // toggle the AAD state
             toggleAAD(itemstack, world, entityplayer);
@@ -63,12 +64,10 @@ public class ItemParachute extends Item {
     }
 
     public void deployParachute(World world, EntityPlayer entityplayer) {
-        double offset = ParachuteCommonProxy.getOffsetY();
-
-        EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
-        chute.rotationYaw = entityplayer.rotationYaw - 90.0f; // set parachute facing player direction
+        EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
+        chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
         float volume = 1.0F;
-        chute.playSound(ParachuteCommonProxy.OPENCHUTE, volume, pitch());
+        chute.playSound(Parachute.OPENCHUTE, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
@@ -76,7 +75,7 @@ public class ItemParachute extends Item {
             world.spawnEntity(chute);
         }
         entityplayer.startRiding(chute);
-        ParachuteCommonProxy.setDeployed(true);
+        Parachute.setDeployed(true);
         entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
         ItemStack itemstack = null;
@@ -92,6 +91,7 @@ public class ItemParachute extends Item {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
             }
         }
+
     }
 
     // this function toggles the AAD state but does not update the saved config.

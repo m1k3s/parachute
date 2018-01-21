@@ -56,11 +56,13 @@ public class ConfigHandler {
     private static boolean aadImmediate;
     private static double burnVolume;
     private static int[] waypoint;
-    private static boolean dismounting;
-    private static boolean poweredFlightToggle;
-    private static boolean rechargeLock;
-    private static boolean allowPoweredFlight;
-    private static boolean allowControlledFlight;
+    private static boolean useCompassHUD;
+    private static boolean noHUD;
+
+    private static double forwardMomentum;
+    private static double backMomentum;
+    private static double rotationMomentum;
+    private static double slideMomentum;
 
     private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
     private static final String usageComment = "set to true for parachute single use"; // false
@@ -82,8 +84,12 @@ public class ConfigHandler {
     private static final String burnVolumeComment = "set the burn sound volume (0.0 to 1.0)";
     private static final String colorComment = "Select a parachute color, random, or custom[0-9]";
     private static final String waypointComment = "waypoint coordinates [X, Z]";
-    private static final String allowPoweredFlightComment = "allow the use of the powered flight engine";
-    private static final String allowControlledFlightComment = "uncontrolled flight disables all control, steering and forward motion";
+    private static final String forwardMotionComment = "delta forward momentum value";
+    private static final String backMotionComment = "delta back momentum value";
+    private static final String rotationMomentumComment = "delta rotation momentum value";
+    private static final String slideMotionComment = "delta slide momentum value";
+    private static final String useCompassHUDComment = "use the new compass HUD";
+    private static final String noHUDComment = "Disable the HUD";
     private static final String[] colorValues = {
             "random",
             "black",
@@ -117,9 +123,6 @@ public class ConfigHandler {
     public static void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         updateConfigFromFile();
-
-        poweredFlightToggle = false;
-        rechargeLock = false;
     }
 
     public static void updateConfigFromFile() {
@@ -145,18 +148,23 @@ public class ConfigHandler {
         Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment);
         Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256);
         Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
-        Property poweredProp = config.get(Configuration.CATEGORY_GENERAL, "allowPoweredFlight", false, allowPoweredFlightComment);
-        Property controlledFlight = config.get(Configuration.CATEGORY_GENERAL, "controlledFlight", true, allowControlledFlightComment);
-        Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", true, autoComment);
+        Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", false, autoComment);
         Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
 
-        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", false, trailsComment);
-        Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
+        Property forwardMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
+        Property backMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "backMomentum", 0.008, backMotionComment);
+        Property leftMotionProp = config.get(Configuration.CATEGORY_GENERAL, "rotationMomentum", 0.2, rotationMomentumComment);
+        Property slideMotionProp = config.get(Configuration.CATEGORY_GENERAL, "slideMomentum", 0.005, slideMotionComment);
 
-        Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", false, lavaThermalComment);
+        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, trailsComment);
+        Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
+        Property useCompassHUDProp = config.get(Configuration.CATEGORY_GENERAL, "useCompassHUD", true, useCompassHUDComment);
+        Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, noHUDComment);
+
+        Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, lavaThermalComment);
         Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0);
         Property maxLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0);
-        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", true, lavaDisablesComment);
+        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", false, lavaDisablesComment);
 
         Property weatherAffectsDriftProp = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment);
         Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment);
@@ -168,7 +176,7 @@ public class ConfigHandler {
 
         Property waypointProp = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment);
 
-        Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white");
+        Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black");
         chuteColorProp.setComment(colorComment);
         chuteColorProp.setValidValues(colorValues);
 
@@ -176,12 +184,12 @@ public class ConfigHandler {
         propertyOrder.add(singleUseProp.getName());
         propertyOrder.add(heightLimitProp.getName());
         propertyOrder.add(thermalsProp.getName());
-        propertyOrder.add(poweredProp.getName());
-        propertyOrder.add(controlledFlight.getName());
         propertyOrder.add(autoDismountProp.getName());
         propertyOrder.add(dismountInWaterProp.getName());
         propertyOrder.add(showContrailsProp.getName());
         propertyOrder.add(burnVolumeProp.getName());
+        propertyOrder.add(useCompassHUDProp.getName());
+        propertyOrder.add(noHUDProp.getName());
         propertyOrder.add(lavaThermalsProp.getName());
         propertyOrder.add(minLavaDistanceProp.getName());
         propertyOrder.add(maxLavaDistanceProp.getName());
@@ -194,22 +202,24 @@ public class ConfigHandler {
         propertyOrder.add(constantTurbulenceProp.getName());
         propertyOrder.add(waypointProp.getName());
         propertyOrder.add(chuteColorProp.getName());
+        propertyOrder.add(forwardMOtionProp.getName());
+        propertyOrder.add(backMOtionProp.getName());
+        propertyOrder.add(leftMotionProp.getName());
+        propertyOrder.add(slideMotionProp.getName());
         config.setCategoryPropertyOrder(Configuration.CATEGORY_GENERAL, propertyOrder);
 
         if (fromFields) {
             singleUse = singleUseProp.getBoolean(false);
             heightLimit = heightLimitProp.getInt(256);
             thermals = thermalsProp.getBoolean(true);
-            allowPoweredFlight = poweredProp.getBoolean(false);
-            allowControlledFlight = controlledFlight.getBoolean(true);
-            lavaThermals = lavaThermalsProp.getBoolean(false);
+            lavaThermals = lavaThermalsProp.getBoolean(true);
             minLavaDistance = minLavaDistanceProp.getDouble(3.0);
             maxLavaDistance = maxLavaDistanceProp.getDouble(48.0);
-            autoDismount = autoDismountProp.getBoolean(true);
+            autoDismount = autoDismountProp.getBoolean(false);
             chuteColor = chuteColorProp.getString();
             weatherAffectsDrift = weatherAffectsDriftProp.getBoolean(true);
             constantTurbulence = constantTurbulenceProp.getBoolean(false);
-            showContrails = showContrailsProp.getBoolean(false);
+            showContrails = showContrailsProp.getBoolean(true);
             dismountInWater = dismountInWaterProp.getBoolean(false);
             isAADActive = isAADActiveProp.getBoolean(false);
             aadAltitude = aadAltitudeProp.getDouble(10.0);
@@ -217,20 +227,20 @@ public class ConfigHandler {
             aadImmediate = aadImmediateProp.getBoolean(false);
             burnVolume = burnVolumeProp.getDouble(1.0);
             waypoint = waypointProp.getIntList();
+            forwardMomentum = forwardMOtionProp.getDouble(0.015);
+            backMomentum = backMOtionProp.getDouble(0.008);
+            rotationMomentum = leftMotionProp.getDouble(0.2);
+            slideMomentum = slideMotionProp.getDouble(0.005);
+            useCompassHUD = useCompassHUDProp.getBoolean(true);
+            noHUD = noHUDProp.getBoolean(false);
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
         thermals = thermals && !(lavaThermals && lavaDisablesThermalProp.getBoolean());
-//        boolean thermalsDisabled = !(lavaThermals && lavaDisablesThermalProp.getBoolean());
-//        thermals = thermals ? thermalsDisabled : thermals;
-        // used to signal that a player has dismounted
-        dismounting = false;
 
         singleUseProp.set(singleUse);
         heightLimitProp.set(heightLimit);
         thermalsProp.set(thermals);
-        poweredProp.set(allowPoweredFlight);
-        controlledFlight.set(allowControlledFlight);
         lavaThermalsProp.set(lavaThermals);
         minLavaDistanceProp.set(minLavaDistance);
         maxLavaDistanceProp.set(maxLavaDistance);
@@ -246,6 +256,12 @@ public class ConfigHandler {
         aadImmediateProp.set(aadImmediate);
         burnVolumeProp.set(burnVolume);
         waypointProp.set(waypoint);
+        forwardMOtionProp.set(forwardMomentum);
+        backMOtionProp.set(backMomentum);
+        leftMotionProp.set(rotationMomentum);
+        slideMotionProp.set(slideMomentum);
+        useCompassHUDProp.set(useCompassHUD);
+        noHUDProp.set(noHUD);
 
         if (config.hasChanged() && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             config.save();
@@ -257,7 +273,7 @@ public class ConfigHandler {
         @SubscribeEvent
         public void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(Parachute.MODID)) {
-                Parachute.proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.NAME));
+                Parachute.instance.info(String.format("Configuration changes have been updated for the %s", Parachute.NAME));
                 ConfigHandler.updateConfigFromGUI();
             }
         }
@@ -279,18 +295,12 @@ public class ConfigHandler {
         return thermals;
     }
 
-    public static boolean getAllowPoweredFlight() { return allowPoweredFlight; }
-
-    public static boolean getAllowContolledFlight() {
-        return allowControlledFlight;
-    }
-
     public static String getChuteColor() {
         return chuteColor;
     }
 
     public static void setChuteColor(String color) {
-        Property prop = config.get(Configuration.CATEGORY_CLIENT, "chuteColor", "white", colorComment);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black", colorComment);
         prop.set(color);
         config.save();
         chuteColor = color;
@@ -329,7 +339,7 @@ public class ConfigHandler {
     }
 
     public static void setAADState(boolean state) {
-        Property prop = config.get(Configuration.CATEGORY_CLIENT, "isAADActive", false, isAADActiveComment);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment);
         prop.set(state);
         config.save();
         isAADActive = state;
@@ -349,7 +359,7 @@ public class ConfigHandler {
 
     public static int getParachuteDamageAmount(ItemStack itemStack) {
         if (singleUse) {
-            return ParachuteCommonProxy.parachuteItem.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
+            return Parachute.parachuteItem.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
         }
         return 1;
     }
@@ -375,38 +385,28 @@ public class ConfigHandler {
         return String.format("%d %d", waypoint[0], waypoint[1]);
     }
 
-    public static boolean isDismounting() {
-        return dismounting;
+    public static double getForwardMomentum() {
+        return forwardMomentum;
     }
 
-    public static void setIsDismounting(boolean value) {
-        dismounting = value;
+    public static double getBackMomentum() {
+        return backMomentum;
     }
 
-    public static void setRechargeLock(boolean lockState) {
-        rechargeLock = lockState;
+    public static double getRotationMomentum() {
+        return rotationMomentum;
     }
 
-    public static boolean getRechargeLock() {
-        return rechargeLock;
+    public static double getSlideMomentum() {
+        return slideMomentum;
     }
 
-    public static void setPoweredFlight(boolean poweredState) {
-        poweredFlightToggle = poweredState;
+    public static boolean getUseCompassHUD() {
+        return  useCompassHUD;
     }
 
-    public static void togglePoweredFlight()
-    {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            if (!rechargeLock && allowPoweredFlight) {
-                setPoweredFlight(!poweredFlightToggle);
-            }
-        }
-    }
-
-    public static boolean isPoweredFlight()
-    {
-        return poweredFlightToggle;
+    public static boolean getNoHUD() {
+        return noHUD;
     }
 
 }

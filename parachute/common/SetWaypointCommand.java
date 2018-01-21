@@ -24,7 +24,6 @@ package com.parachute.common;
 
 import com.parachute.client.HudGuiRenderer;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -67,7 +66,7 @@ public class SetWaypointCommand extends CommandBase {
     }
 
     @Override
-    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
+    public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
         World world = sender.getEntityWorld();
         if (!world.isRemote) { // server side
             if (args.length == 0) { // set waypoint to current position
