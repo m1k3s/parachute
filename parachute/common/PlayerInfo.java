@@ -41,4 +41,5 @@ public class PlayerInfo {
     public String getName() {
         return name;
     }
+
 }

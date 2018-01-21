@@ -39,6 +39,7 @@ import javax.annotation.Nonnull;
 public class ItemParachute extends Item {
 
     private static boolean active;
+    private static final double OFFSET = 2.5;
 
     public ItemParachute(String itemName) {
         super();
@@ -63,9 +64,7 @@ public class ItemParachute extends Item {
     }
 
     public void deployParachute(World world, EntityPlayer entityplayer) {
-        double offset = ParachuteCommonProxy.getOffsetY();
-
-        EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + offset, entityplayer.posZ);
+        EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
         float volume = 1.0F;
         chute.playSound(ParachuteCommonProxy.OPENCHUTE, volume, pitch());
@@ -81,17 +80,23 @@ public class ItemParachute extends Item {
 
         ItemStack itemstack = null;
         Iterable<ItemStack> heldEquipment = entityplayer.getHeldEquipment();
-        for (ItemStack itemStack : heldEquipment) {
+        for (
+                ItemStack itemStack : heldEquipment)
+
+        {
             if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
                 itemstack = itemStack;
             }
         }
-        if (itemstack != null) {
+        if (itemstack != null)
+
+        {
             boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
             if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
             }
         }
+
     }
 
     // this function toggles the AAD state but does not update the saved config.

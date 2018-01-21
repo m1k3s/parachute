@@ -21,10 +21,7 @@
  */
 package com.parachute.client;
 
-import com.parachute.common.ConfigHandler;
-import com.parachute.common.EntityParachute;
-import com.parachute.common.Parachute;
-import com.parachute.common.ParachuteCommonProxy;
+import com.parachute.common.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 //import net.minecraft.client.renderer.RenderHelper;
@@ -142,12 +139,6 @@ public class HudGuiRenderer extends Gui {
                     return;
                 }
 
-//                GlStateManager.enableRescaleNormal();
-//                GlStateManager.enableBlend();
-//                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-//                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-//                RenderHelper.enableGUIStandardItemLighting();
-
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
@@ -217,9 +208,6 @@ public class HudGuiRenderer extends Gui {
                 // draw the distance to the home point text
                 fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
             }
-//            RenderHelper.disableStandardItemLighting();
-//            GlStateManager.disableRescaleNormal();
-//            GlStateManager.disableBlend();
         }
     }
 

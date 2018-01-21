@@ -36,20 +36,16 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
     // grab the 'jump' key from the game settings. defaults to the space bar. This allows the
     // player to change the jump key and the parachute will use the new jump key
     private static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
-//    private static boolean deployed = false;
-//    private static final double offsetY = 2.5;
 
     @SuppressWarnings("unchecked")
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-//        ConfigHandler.preInit(event);
         ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.parachuteName);
         ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.packName);
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
         ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.parachuteItem, 0, parachuteResource);
         ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.packItem, 0, packResource);
-        ModKeyBindings.registerKeyBinding();
     }
 
     @SuppressWarnings("unchecked")
@@ -67,5 +63,4 @@ public class ParachuteClientProxy extends ParachuteCommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
     }
-
 }

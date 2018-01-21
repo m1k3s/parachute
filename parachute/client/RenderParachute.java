@@ -21,7 +21,6 @@
  */
 package com.parachute.client;
 
-import com.parachute.common.ConfigHandler;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import java.util.Random;
@@ -41,7 +40,7 @@ import javax.annotation.Nonnull;
 @SideOnly(Side.CLIENT)
 public class RenderParachute extends Render<EntityParachute> {
 
-    private static String curColor = ConfigHandler.getChuteColor();
+    private static String curColor;
     protected static ModelBase modelParachute = new ModelParachute();
     private static ResourceLocation parachuteTexture = null;
     private static final Random rand = new Random(System.currentTimeMillis());

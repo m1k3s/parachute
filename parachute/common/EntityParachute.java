@@ -64,6 +64,7 @@ public class EntityParachute extends Entity {
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ASCEND
+    private final static double OFFSET = 2.5; // player Y offset from parachute
 
     private static boolean ascendMode;
 
@@ -91,7 +92,7 @@ public class EntityParachute extends Entity {
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);
-//        ConfigHandler.setIsDismounting(false);
+//        ModConfigHandler.ConfigOptions.setIsDismounting(false);
         PlayerFallEvent.isDismounting = false;
     }
 
@@ -111,7 +112,7 @@ public class EntityParachute extends Entity {
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!world.isRemote && skyDiver != null) {
-            //ConfigHandler.setIsDismounting(true);
+            //ModConfigHandler.ConfigOptions.setIsDismounting(true);
             PlayerFallEvent.isDismounting = true;
             killParachute();
         }
@@ -186,7 +187,7 @@ public class EntityParachute extends Entity {
 
     @Override
     public double getMountedYOffset() {
-        return -(ParachuteCommonProxy.getOffsetY());
+        return -OFFSET;
     }
 
     @Override
@@ -391,7 +392,7 @@ public class EntityParachute extends Entity {
         double thermals = DRIFT;
         final double inc = 0.5;
 
-        BlockPos blockPos = new BlockPos(posX, posY - ParachuteCommonProxy.getOffsetY() - maxThermalRise, posZ);
+        BlockPos blockPos = new BlockPos(posX, posY - OFFSET - maxThermalRise, posZ);
 
         if (isHeatSourceInRange(blockPos)) {
             curLavaDistance += inc;

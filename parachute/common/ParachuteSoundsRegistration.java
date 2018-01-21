@@ -34,13 +34,11 @@ public class ParachuteSoundsRegistration {
     @SubscribeEvent
     public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
         SoundEvent open = new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen");
-        SoundEvent burn = new SoundEvent(new ResourceLocation(Parachute.MODID + ":burn")).setRegistryName("burn");
         SoundEvent lift = new SoundEvent(new ResourceLocation(Parachute.MODID + ":lift")).setRegistryName("lift");
 
-        event.getRegistry().registerAll(open, burn, lift);
+        event.getRegistry().registerAll(open, lift);
 
         ParachuteCommonProxy.OPENCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":chuteopen");
-        ParachuteCommonProxy.BURNCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":burn");
         ParachuteCommonProxy.LIFTCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":lift");
     }
 

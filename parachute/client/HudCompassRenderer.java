@@ -144,12 +144,6 @@ public class HudCompassRenderer extends Gui {
         }
     }
 
-//    private void drawCenteredText(String text, int x, int y, int color) {
-//        int width = fontRenderer.getStringWidth(text) / 2;
-//        fontRenderer.drawStringWithShadow(text, x - width, y, color);
-//        drawCenteredString(fontRenderer, text, x, y, color);
-//    }
-
     // drawTexturedModalRect
     // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
     private void drawBubble(float bubble, ResourceLocation texture) {

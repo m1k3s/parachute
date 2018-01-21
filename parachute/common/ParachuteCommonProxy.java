@@ -45,10 +45,8 @@ public class ParachuteCommonProxy {
     public static final String parachuteName = "parachute";
     public static final String packName = "pack";
     private static boolean deployed = false;
-    private static final double offsetY = 2.5;
 
     public static SoundEvent OPENCHUTE;
-    public static SoundEvent BURNCHUTE;
     public static SoundEvent LIFTCHUTE;
 
     public static final Item parachuteItem = new ItemParachute(ParachuteCommonProxy.parachuteName);
@@ -65,7 +63,6 @@ public class ParachuteCommonProxy {
 
     @SuppressWarnings("unchecked") // no type specifiers in minecraft StatList
     public void Init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new ConfigHandler.ConfigEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
         MinecraftForge.EVENT_BUS.register(new ParachuteItemCraftedEvent());
@@ -137,9 +134,5 @@ public class ParachuteCommonProxy {
     public static boolean isDeployed() {
 		return deployed;
 	}
-
-    public static double getOffsetY() {
-        return offsetY;
-    }
 
 }
