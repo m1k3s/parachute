@@ -30,7 +30,7 @@ public class PlayerFallEvent {
     public static boolean isDismounting;
 
     public PlayerFallEvent() {
-        Parachute.proxy.info("PlayerFallEvent ctor");
+        Parachute.instance.info("PlayerFallEvent ctor");
     }
 
     @SuppressWarnings("unused")

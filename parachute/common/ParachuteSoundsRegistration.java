@@ -38,8 +38,8 @@ public class ParachuteSoundsRegistration {
 
         event.getRegistry().registerAll(open, lift);
 
-        ParachuteCommonProxy.OPENCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":chuteopen");
-        ParachuteCommonProxy.LIFTCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":lift");
+        Parachute.OPENCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":chuteopen");
+        Parachute.LIFTCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":lift");
     }
 
     private static SoundEvent getRegisteredSoundEvent(String id) {

@@ -35,12 +35,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerMountEvent {
 
-    public PlayerMountEvent() { Parachute.proxy.info("PlayerMountEvent ctor"); }
+    public PlayerMountEvent() { Parachute.instance.info("PlayerMountEvent ctor"); }
 
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMount(EntityMountEvent event) {
-        if (event.getEntityBeingMounted() instanceof EntityParachute && ParachuteCommonProxy.isDeployed() && !event.isMounting()) {
+        if (event.getEntityBeingMounted() instanceof EntityParachute && Parachute.isDeployed() && !event.isMounting()) {
 //            if (event.getEntity().world.isRemote) {
 //                event.setCanceled(true);
 //            }

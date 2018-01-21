@@ -24,7 +24,6 @@ package com.parachute.client;
 import com.parachute.common.ConfigHandler;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
-import com.parachute.common.ParachuteCommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -99,7 +98,7 @@ public class HudCompassRenderer extends Gui {
             int textX = hudX + (hudWidth / 4); // xcoord for text
             int textY = hudY + (hudHeight / 4); // ycoord for text
 
-            if (ParachuteCommonProxy.onParachute(mc.player)) {
+            if (Parachute.onParachute(mc.player)) {
                 EntityParachute chute = (EntityParachute) mc.player.getRidingEntity();
                 if (chute == null) {
                     return;

@@ -119,7 +119,7 @@ public class EntityParachute extends Entity {
     }
 
     private void killParachute() {
-        ParachuteCommonProxy.setDeployed(false);
+        Parachute.setDeployed(false);
         setDead();
     }
 
@@ -290,7 +290,7 @@ public class EntityParachute extends Entity {
         }
 
         if (allowThermals && ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
-            playSound(ParachuteCommonProxy.LIFTCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+            playSound(Parachute.LIFTCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
         }
 
         // apply momentum

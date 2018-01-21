@@ -21,11 +21,11 @@
  */
 package com.parachute.client;
 
-import com.parachute.common.*;
+import com.parachute.common.ConfigHandler;
+import com.parachute.common.EntityParachute;
+import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-//import net.minecraft.client.renderer.RenderHelper;
-//import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.math.BlockPos;
@@ -132,7 +132,7 @@ public class HudGuiRenderer extends Gui {
             int textX = hudX + 30; // xcoord for text
             int textY = hudY + 22; // ycoord for text
 
-            if (ParachuteCommonProxy.onParachute(mc.player)) {
+            if (Parachute.onParachute(mc.player)) {
                 mc.getTextureManager().bindTexture(hudTexture);
                 EntityParachute chute = (EntityParachute) mc.player.getRidingEntity();
                 if (chute == null) {

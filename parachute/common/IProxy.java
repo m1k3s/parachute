@@ -1,10 +1,10 @@
 /*
- * PlayerHurtEvent.java
+ * IProxy.java
  *
- * Copyright (c) 2017 Michael Sheppard
+ *  Copyright (c) 2018 Michael Sheppard
  *
- *  =====GPL=============================================================
- * $program is free software: you can redistribute it and/or modify
+ * =====GPL=============================================================
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -17,21 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses.
  * =====================================================================
- *
  */
 
 package com.parachute.common;
 
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+public interface IProxy {
 
-public class PlayerHurtEvent {
-    @SuppressWarnings("unused")
-    @SubscribeEvent
-    public void SkydiverHurtEvent(LivingHurtEvent event) {
-        if (event.getEntityLiving().isRiding() && Parachute.isDeployed()) {
-            event.setCanceled(true);
-            event.setAmount(0.0f);
-        }
-    }
+    void preInit();
+    void Init();
+    void postInit();
 }

@@ -55,7 +55,7 @@ public class ItemParachute extends Item {
     @SuppressWarnings("unchecked")
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (ParachuteCommonProxy.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
+        if (Parachute.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
             deployParachute(world, entityplayer);
         } else { // toggle the AAD state
             toggleAAD(itemstack, world, entityplayer);
@@ -67,7 +67,7 @@ public class ItemParachute extends Item {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
         float volume = 1.0F;
-        chute.playSound(ParachuteCommonProxy.OPENCHUTE, volume, pitch());
+        chute.playSound(Parachute.OPENCHUTE, volume, pitch());
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
@@ -75,22 +75,17 @@ public class ItemParachute extends Item {
             world.spawnEntity(chute);
         }
         entityplayer.startRiding(chute);
-        ParachuteCommonProxy.setDeployed(true);
+        Parachute.setDeployed(true);
         entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
         ItemStack itemstack = null;
         Iterable<ItemStack> heldEquipment = entityplayer.getHeldEquipment();
-        for (
-                ItemStack itemStack : heldEquipment)
-
-        {
+        for (ItemStack itemStack : heldEquipment) {
             if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
                 itemstack = itemStack;
             }
         }
-        if (itemstack != null)
-
-        {
+        if (itemstack != null) {
             boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
             if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);

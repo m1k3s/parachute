@@ -56,7 +56,6 @@ public class ConfigHandler {
     private static boolean aadImmediate;
     private static double burnVolume;
     private static int[] waypoint;
-//    private static boolean dismounting;
     private static boolean useCompassHUD;
     private static boolean noHUD;
 
@@ -177,7 +176,7 @@ public class ConfigHandler {
 
         Property waypointProp = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment);
 
-        Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "white");
+        Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black");
         chuteColorProp.setComment(colorComment);
         chuteColorProp.setValidValues(colorValues);
 
@@ -238,8 +237,6 @@ public class ConfigHandler {
 
         // if lava thermals are allowed check allow/disallow space bar thermals
         thermals = thermals && !(lavaThermals && lavaDisablesThermalProp.getBoolean());
-        // used to signal that a player has dismounted
-//        dismounting = false;
 
         singleUseProp.set(singleUse);
         heightLimitProp.set(heightLimit);
@@ -276,7 +273,7 @@ public class ConfigHandler {
         @SubscribeEvent
         public void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(Parachute.MODID)) {
-                Parachute.proxy.info(String.format("Configuration changes have been updated for the %s", Parachute.NAME));
+                Parachute.instance.info(String.format("Configuration changes have been updated for the %s", Parachute.NAME));
                 ConfigHandler.updateConfigFromGUI();
             }
         }
@@ -303,7 +300,7 @@ public class ConfigHandler {
     }
 
     public static void setChuteColor(String color) {
-        Property prop = config.get(Configuration.CATEGORY_CLIENT, "chuteColor", "white", colorComment);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black", colorComment);
         prop.set(color);
         config.save();
         chuteColor = color;
@@ -342,7 +339,7 @@ public class ConfigHandler {
     }
 
     public static void setAADState(boolean state) {
-        Property prop = config.get(Configuration.CATEGORY_CLIENT, "isAADActive", false, isAADActiveComment);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment);
         prop.set(state);
         config.save();
         isAADActive = state;
@@ -362,7 +359,7 @@ public class ConfigHandler {
 
     public static int getParachuteDamageAmount(ItemStack itemStack) {
         if (singleUse) {
-            return ParachuteCommonProxy.parachuteItem.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
+            return Parachute.parachuteItem.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
         }
         return 1;
     }
@@ -387,14 +384,6 @@ public class ConfigHandler {
     public static String getWaypointString() {
         return String.format("%d %d", waypoint[0], waypoint[1]);
     }
-
-//    public static boolean isDismounting() {
-//        return dismounting;
-//    }
-
-//    public static void setIsDismounting(boolean value) {
-//        dismounting = value;
-//    }
 
     public static double getForwardMomentum() {
         return forwardMomentum;
