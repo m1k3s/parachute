@@ -83,7 +83,7 @@ public class HudCompassRenderer extends Gui {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        if (ConfigHandler.getNoHUD() || !ConfigHandler.getUseCompassHUD()) {
+        if (ClientConfiguration.getNoHUD() || !ClientConfiguration.getUseCompassHUD()) {
             return;
         }
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
@@ -219,7 +219,7 @@ public class HudCompassRenderer extends Gui {
     }
 
     public int colorAltitude() {
-        return (altitude <= 10.0 && altitude >= 0.0) ? colorDimRed : altitude <= 15.0 && altitude > 10.0 ? colorDimYellow : colorDimGreen;
+        return altitude <= 10.0 ? colorDimRed : altitude <= 15.0 && altitude > 10.0 ? colorDimYellow : colorDimGreen;
     }
 
     // quadrant color code

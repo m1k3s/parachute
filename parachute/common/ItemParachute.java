@@ -21,6 +21,7 @@
  */
 package com.parachute.common;
 
+import com.parachute.client.ClientConfiguration;
 import com.parachute.client.RenderParachute;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -70,7 +71,7 @@ public class ItemParachute extends Item {
         chute.playSound(Parachute.OPENCHUTE, volume, pitch());
 
         if (world.isRemote) { // client side
-            RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
+            RenderParachute.setParachuteColor(ClientConfiguration.getChuteColor());
         } else { // server side
             world.spawnEntity(chute);
         }

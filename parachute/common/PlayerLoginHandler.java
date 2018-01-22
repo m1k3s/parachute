@@ -22,6 +22,7 @@
 
 package com.parachute.common;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -34,6 +35,10 @@ public class PlayerLoginHandler {
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerManager.getInstance().Players.add(new PlayerInfo(event.player.getDisplayNameString()));
+        String color = ConfigHandler.getChuteColor();
+        boolean noHUD = ConfigHandler.getNoHUD();
+        boolean useCompassHUD = ConfigHandler.getUseCompassHUD();
+        PacketHandler.network.sendTo(new ClientConfigMessage(color, noHUD, useCompassHUD), (EntityPlayerMP)event.player);
     }
 
     @SuppressWarnings("unused")

@@ -119,7 +119,7 @@ public class HudGuiRenderer extends Gui {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        if (ConfigHandler.getNoHUD() || ConfigHandler.getUseCompassHUD()) {
+        if (ClientConfiguration.getNoHUD() || ClientConfiguration.getUseCompassHUD()) {
             return;
         }
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {

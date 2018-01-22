@@ -41,15 +41,13 @@ public class AscendKeyPressMessage implements IMessage {
         this.keyPressed = keyPressed;
     }
 
-    // the server does not respond with any messages so this isn't being used;
     @Override
-    public void fromBytes(ByteBuf bb) {
+    public void fromBytes(ByteBuf bb) { // client ==> server
         keyPressed = bb.readBoolean();
     }
 
-    // write the data to the stream
     @Override
-    public void toBytes(ByteBuf bb) {
+    public void toBytes(ByteBuf bb) { // server ==> client
         bb.writeBoolean(keyPressed);
     }
 
@@ -69,5 +67,4 @@ public class AscendKeyPressMessage implements IMessage {
             return null;
         }
     }
-
 }

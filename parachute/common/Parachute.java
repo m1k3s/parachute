@@ -120,14 +120,6 @@ public class Parachute {
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
         Parachute.parachuteDistance.initIndependentStat().registerStat();
-        int fv = ForgeVersion.getBuildVersion();
-        if (fv < 1928) {
-            StatList.ALL_STATS.add(Parachute.parachuteDeployed); // not needed in forge 1928 and higher
-            StatList.ALL_STATS.add(Parachute.parachuteDistance);
-            info("Forge Version is " + fv + ", manually registered parachute stats.");
-        } else {
-            info("Forge Version is " + fv + ", Forge auto registered parachute stats.");
-        }
         proxy.Init();
     }
 
