@@ -27,7 +27,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -55,7 +54,6 @@ public class Parachute {
     private static final Logger logger = LogManager.getLogger(Parachute.MODID);
     public static final String parachuteName = "parachute";
     public static final String packName = "pack";
-    private static boolean deployed = false;
 
     public static SoundEvent OPENCHUTE;
     public static SoundEvent LIFTCHUTE;
@@ -112,11 +110,6 @@ public class Parachute {
         MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
 
-        // add parachute crafting advancement
-//        Parachute.buildParachute = new Advancement(new ResourceLocation(Parachute.MODID, parachuteName), "buildParachute", 0, 0, ParachuteCommonProxy.parachuteItem, "");
-//        Parachute.buildParachute.registerStat();
-//        AdvancementManager(new AchievementPage("Parachute", Parachute.buildParachute));
-
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
         Parachute.parachuteDistance.initIndependentStat().registerStat();
@@ -170,18 +163,6 @@ public class Parachute {
 
     public static boolean isFalling(EntityPlayer player) {
         return (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder());
-    }
-
-    public static boolean onParachute(EntityPlayer entity) {
-        return entity.isRiding() && isDeployed();
-    }
-
-    public static void setDeployed(boolean isDeployed) {
-        deployed = isDeployed;
-    }
-
-    public static boolean isDeployed() {
-        return deployed;
     }
 
 }

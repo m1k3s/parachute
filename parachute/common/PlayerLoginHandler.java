@@ -31,20 +31,16 @@ public class PlayerLoginHandler {
     public PlayerLoginHandler() {
     }
 
-    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        PlayerManager.getInstance().Players.add(new PlayerInfo(event.player.getDisplayNameString()));
         String color = ConfigHandler.getChuteColor();
         boolean noHUD = ConfigHandler.getNoHUD();
         boolean useCompassHUD = ConfigHandler.getUseCompassHUD();
         PacketHandler.network.sendTo(new ClientConfigMessage(color, noHUD, useCompassHUD), (EntityPlayerMP)event.player);
     }
 
-    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        PlayerInfo PI = new PlayerInfo("");
         for (int i = 0; i < PlayerManager.getInstance().Players.size(); i++) {
             if (PlayerManager.getInstance().Players.get(i).getName().equals(event.player.getDisplayNameString())) {
                 PlayerManager.getInstance().Players.remove(i);

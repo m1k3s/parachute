@@ -43,20 +43,20 @@ public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation compassTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
     protected static final ResourceLocation homeTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
     protected static final ResourceLocation bubbleTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-bubble.png");
-    private static FontRenderer fontRenderer;
+    private static final Minecraft mc = Minecraft.getMinecraft();
+    private static FontRenderer fontRenderer = mc.fontRenderer;
+
     public static double altitude;
-    private final Minecraft mc = Minecraft.getMinecraft();
 
-    private final int hudWidth;
-    private final int hudHeight;
+    private final int hudWidth = 256;
+    private final int hudHeight = 256;
 
-    private final int colorYellow;
-    private final int colorRed;
-    private final int colorGreen;
-    private final int colorBlue;
-    private final int colorDimGreen;
-    private final int colorDimRed;
-    private final int colorDimYellow;
+//    private final int colorYellow = 0xffaaaa00;
+//    private final int colorRed = 0xffaa0000;
+//    private final int colorGreen = 0xff00aa00;
+//    private final int colorBlue = 0xff0000aa;
+    private final int colorDimGreen = 0xcc008800;
+    private final int colorDimRed = 0xcc880000;
 
     double compassHeading;
 
@@ -65,40 +65,26 @@ public class HudCompassRenderer extends Gui {
 
     public HudCompassRenderer() {
         super();
-
-        hudWidth = 256;
-        hudHeight = 256;
-
-        colorYellow = 0xffaaaa00;
-        colorDimYellow = 0xcc888800;
-        colorRed = 0xffaa0000;
-        colorDimRed = 0xcc880000;
-        colorGreen = 0xff00aa00;
-        colorBlue = 0xff0000aa;
-        colorDimGreen = 0xcc008800;
-
-        fontRenderer = mc.fontRenderer;
     }
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onRender(RenderGameOverlayEvent.Post event) {
-        if (ClientConfiguration.getNoHUD() || !ClientConfiguration.getUseCompassHUD()) {
-            return;
-        }
+    public void drawCompassHUD(RenderGameOverlayEvent.Post event) {
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
             return;
         }
-
+        if (ClientConfiguration.getNoHUD() || !ClientConfiguration.getUseCompassHUD()) {
+            return;
+        }
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            ScaledResolution sr = new ScaledResolution(mc);
+            ScaledResolution sr = event.getResolution();
 
             hudX = 5; // left edge of GUI screen
             hudY = 5; // top edge of GUI screen
             int textX = hudX + (hudWidth / 4); // xcoord for text
             int textY = hudY + (hudHeight / 4); // ycoord for text
 
-            if (Parachute.onParachute(mc.player)) {
+            if (mc.player.getRidingEntity() instanceof EntityParachute) {
                 EntityParachute chute = (EntityParachute) mc.player.getRidingEntity();
                 if (chute == null) {
                     return;
@@ -219,6 +205,7 @@ public class HudCompassRenderer extends Gui {
     }
 
     public int colorAltitude() {
+        int colorDimYellow = 0xcc888800;
         return altitude <= 10.0 ? colorDimRed : altitude <= 15.0 && altitude > 10.0 ? colorDimYellow : colorDimGreen;
     }
 
@@ -228,10 +215,10 @@ public class HudCompassRenderer extends Gui {
     // 135 to 224 red, mostly south
     // 225 to 314 blue, mostly west
     @SuppressWarnings("unused")
-    public int colorCompass(double d) {
-        return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
-                (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
-    }
+//    public int colorCompass(double d) {
+//        return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
+//                (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
+//    }
 
     // calculate altitude in meters above ground. starting at the entity
     // count down until a non-air block is encountered.

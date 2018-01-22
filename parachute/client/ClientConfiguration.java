@@ -22,6 +22,8 @@
 package com.parachute.client;
 
 
+import com.parachute.common.Parachute;
+
 public class ClientConfiguration {
     private static String chuteColor;
     private static boolean noHUD;
@@ -30,14 +32,17 @@ public class ClientConfiguration {
     public ClientConfiguration() {}
 
     public static void setChuteColor(String color) {
+        Parachute.instance.info("ClientConfiguration: setChuteColor");
         chuteColor = color;
     }
 
     public static void setNoHUD(boolean value) {
+        Parachute.instance.info("ClientConfiguration: setNoHUD");
         noHUD = value;
     }
 
     public static void setUseCompassHUD(boolean value) {
+        Parachute.instance.info("ClientConfiguration: setUseCompassHUD");
         useCompassHUD = value;
     }
 

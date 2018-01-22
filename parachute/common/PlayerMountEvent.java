@@ -40,7 +40,8 @@ public class PlayerMountEvent {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMount(EntityMountEvent event) {
-        if (event.getEntityBeingMounted() instanceof EntityParachute && Parachute.isDeployed() && !event.isMounting()) {
+        //Parachute.isDeployed()
+        if (event.getEntityBeingMounted() instanceof EntityParachute && !event.isMounting()) {
 //            if (event.getEntity().world.isRemote) {
 //                event.setCanceled(true);
 //            }

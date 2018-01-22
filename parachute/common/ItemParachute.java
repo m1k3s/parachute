@@ -76,7 +76,6 @@ public class ItemParachute extends Item {
             world.spawnEntity(chute);
         }
         entityplayer.startRiding(chute);
-        Parachute.setDeployed(true);
         entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
         ItemStack itemstack = null;
