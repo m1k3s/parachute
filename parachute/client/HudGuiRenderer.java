@@ -28,6 +28,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -118,7 +119,7 @@ public class HudGuiRenderer extends Gui {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        if (ConfigHandler.getNoHUD() || ConfigHandler.getUseCompassHUD()) {
+        if (ClientConfiguration.getNoHUD() || ClientConfiguration.getUseCompassHUD()) {
             return;
         }
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
@@ -138,6 +139,11 @@ public class HudGuiRenderer extends Gui {
                 if (chute == null) {
                     return;
                 }
+
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
@@ -207,6 +213,9 @@ public class HudGuiRenderer extends Gui {
                 fontRenderer.drawStringWithShadow(format(compassHeading), (textX + 118) - fieldWidth, textY, colorDimGreen);//colorCompass(compassHeading));
                 // draw the distance to the home point text
                 fontRenderer.drawStringWithShadow(format(distance), (textX + 65) - fieldWidth, textY, colorDimGreen);
+
+                GlStateManager.disableRescaleNormal();
+                GlStateManager.disableBlend();
             }
         }
     }

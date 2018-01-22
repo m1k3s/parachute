@@ -28,8 +28,6 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -263,7 +261,7 @@ public class ConfigHandler {
         useCompassHUDProp.set(useCompassHUD);
         noHUDProp.set(noHUD);
 
-        if (config.hasChanged() && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+        if (config.hasChanged()) {
             config.save();
         }
     }
@@ -275,6 +273,7 @@ public class ConfigHandler {
             if (event.getModID().equals(Parachute.MODID)) {
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s", Parachute.NAME));
                 ConfigHandler.updateConfigFromGUI();
+                PacketHandler.network.sendToAll(new ClientConfigMessage(chuteColor, noHUD, useCompassHUD));
             }
         }
     }

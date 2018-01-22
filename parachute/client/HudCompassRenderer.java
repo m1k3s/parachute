@@ -83,7 +83,7 @@ public class HudCompassRenderer extends Gui {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        if (ConfigHandler.getNoHUD() || !ConfigHandler.getUseCompassHUD()) {
+        if (ClientConfiguration.getNoHUD() || !ClientConfiguration.getUseCompassHUD()) {
             return;
         }
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
@@ -103,6 +103,11 @@ public class HudCompassRenderer extends Gui {
                 if (chute == null) {
                     return;
                 }
+
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
@@ -139,6 +144,9 @@ public class HudCompassRenderer extends Gui {
                 drawCenteredString(fontRenderer, "* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorDimGreen : colorDimRed);
 
                 GlStateManager.popMatrix();
+
+                GlStateManager.disableRescaleNormal();
+                GlStateManager.disableBlend();
             }
         }
     }
@@ -211,7 +219,7 @@ public class HudCompassRenderer extends Gui {
     }
 
     public int colorAltitude() {
-        return (altitude <= 10.0 && altitude >= 0.0) ? colorDimRed : altitude <= 15.0 && altitude > 10.0 ? colorDimYellow : colorDimGreen;
+        return altitude <= 10.0 ? colorDimRed : altitude <= 15.0 && altitude > 10.0 ? colorDimYellow : colorDimGreen;
     }
 
     // quadrant color code
