@@ -36,7 +36,8 @@ public class PlayerLoginHandler {
         String color = ConfigHandler.getChuteColor();
         boolean noHUD = ConfigHandler.getNoHUD();
         boolean useCompassHUD = ConfigHandler.getUseCompassHUD();
-        PacketHandler.network.sendTo(new ClientConfigMessage(color, noHUD, useCompassHUD), (EntityPlayerMP)event.player);
+        double burnVolume = ConfigHandler.getBurnVolume();
+        PacketHandler.network.sendTo(new ClientConfigMessage(color, noHUD, useCompassHUD, burnVolume), (EntityPlayerMP)event.player);
     }
 
     @SubscribeEvent

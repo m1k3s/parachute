@@ -21,15 +21,13 @@
  */
 package com.parachute.common;
 
+import com.parachute.client.ClientConfiguration;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +53,6 @@ public class ConfigHandler {
     private static double minFallDistance;
     private static boolean aadImmediate;
     private static double burnVolume;
-    private static int[] waypoint;
     private static boolean useCompassHUD;
     private static boolean noHUD;
 
@@ -83,7 +80,6 @@ public class ConfigHandler {
     private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
     private static final String burnVolumeComment = "set the burn sound volume (0.0 to 1.0)";
     private static final String colorComment = "Select a parachute color, random, or custom[0-9]";
-    private static final String waypointComment = "waypoint coordinates [X, Z]";
     private static final String forwardMotionComment = "delta forward momentum value";
     private static final String backMotionComment = "delta back momentum value";
     private static final String rotationMomentumComment = "delta rotation momentum value";
@@ -151,8 +147,8 @@ public class ConfigHandler {
         Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", false, autoComment);
         Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
 
-        Property forwardMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
-        Property backMOtionProp = config.get(Configuration.CATEGORY_GENERAL, "backMomentum", 0.008, backMotionComment);
+        Property forwardMotionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
+        Property backMotionProp = config.get(Configuration.CATEGORY_GENERAL, "backMomentum", 0.008, backMotionComment);
         Property leftMotionProp = config.get(Configuration.CATEGORY_GENERAL, "rotationMomentum", 0.2, rotationMomentumComment);
         Property slideMotionProp = config.get(Configuration.CATEGORY_GENERAL, "slideMomentum", 0.005, slideMotionComment);
 
@@ -173,8 +169,6 @@ public class ConfigHandler {
         Property aadAltitudeProp = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment, 5.0, 100.0);
         Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0);
         Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment);
-
-        Property waypointProp = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment);
 
         Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black");
         chuteColorProp.setComment(colorComment);
@@ -200,10 +194,9 @@ public class ConfigHandler {
         propertyOrder.add(aadAltitudeProp.getName());
         propertyOrder.add(weatherAffectsDriftProp.getName());
         propertyOrder.add(constantTurbulenceProp.getName());
-        propertyOrder.add(waypointProp.getName());
         propertyOrder.add(chuteColorProp.getName());
-        propertyOrder.add(forwardMOtionProp.getName());
-        propertyOrder.add(backMOtionProp.getName());
+        propertyOrder.add(forwardMotionProp.getName());
+        propertyOrder.add(backMotionProp.getName());
         propertyOrder.add(leftMotionProp.getName());
         propertyOrder.add(slideMotionProp.getName());
         config.setCategoryPropertyOrder(Configuration.CATEGORY_GENERAL, propertyOrder);
@@ -226,9 +219,8 @@ public class ConfigHandler {
             minFallDistance = minFallDistanceProp.getDouble(5.0);
             aadImmediate = aadImmediateProp.getBoolean(false);
             burnVolume = burnVolumeProp.getDouble(1.0);
-            waypoint = waypointProp.getIntList();
-            forwardMomentum = forwardMOtionProp.getDouble(0.015);
-            backMomentum = backMOtionProp.getDouble(0.008);
+            forwardMomentum = forwardMotionProp.getDouble(0.015);
+            backMomentum = backMotionProp.getDouble(0.008);
             rotationMomentum = leftMotionProp.getDouble(0.2);
             slideMomentum = slideMotionProp.getDouble(0.005);
             useCompassHUD = useCompassHUDProp.getBoolean(true);
@@ -255,9 +247,8 @@ public class ConfigHandler {
         minFallDistanceProp.set(minFallDistance);
         aadImmediateProp.set(aadImmediate);
         burnVolumeProp.set(burnVolume);
-        waypointProp.set(waypoint);
-        forwardMOtionProp.set(forwardMomentum);
-        backMOtionProp.set(backMomentum);
+        forwardMotionProp.set(forwardMomentum);
+        backMotionProp.set(backMomentum);
         leftMotionProp.set(rotationMomentum);
         slideMotionProp.set(slideMomentum);
         useCompassHUDProp.set(useCompassHUD);
@@ -268,16 +259,18 @@ public class ConfigHandler {
         }
     }
 
-    @SuppressWarnings("unused")
+    // only used on the client
     public static class ConfigEventHandler {
         @SubscribeEvent
         public void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(Parachute.MODID)) {
-                Parachute.instance.info(String.format("Configuration changes have been updated for the %s", Parachute.NAME));
                 ConfigHandler.updateConfigFromGUI();
-                if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-                    PacketHandler.network.sendToAll(new ClientConfigMessage(chuteColor, noHUD, useCompassHUD));
-                }
+                // update the client side options
+                ClientConfiguration.setChuteColor(chuteColor);
+                ClientConfiguration.setNoHUD(noHUD);
+                ClientConfiguration.setUseCompassHUD(useCompassHUD);
+                ClientConfiguration.setBurnVolume(burnVolume);
+                Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }
     }
@@ -369,23 +362,6 @@ public class ConfigHandler {
 
     public static boolean getAADImmediate() {
         return aadImmediate;
-    }
-
-    @SuppressWarnings("unused")
-    public static BlockPos getWaypoint() {
-        return new BlockPos(waypoint[0], 0, waypoint[1]);
-    }
-
-    public static void setWaypoint(int x, int z) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "waypoint", new int[]{0, 0}, waypointComment);
-        prop.set(new int[]{x, z});
-        config.save();
-        waypoint[0] = x;
-        waypoint[1] = z;
-    }
-
-    public static String getWaypointString() {
-        return String.format("%d %d", waypoint[0], waypoint[1]);
     }
 
     public static double getForwardMomentum() {

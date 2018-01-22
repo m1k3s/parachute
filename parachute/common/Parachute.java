@@ -102,7 +102,6 @@ public class Parachute {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void Init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new ConfigHandler.ConfigEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerFallEvent());
         MinecraftForge.EVENT_BUS.register(new ParachuteItemCraftedEvent());
@@ -120,15 +119,6 @@ public class Parachute {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit();
-    }
-
-    @SuppressWarnings("unused")
-    @Mod.EventHandler
-    public void ServerLoad(FMLServerStartingEvent event) {
-        // register parachute commands
-        event.registerServerCommand(new SetWaypointCommand());
-        event.registerServerCommand(new EnableWaypointCommand());
-        event.registerServerCommand(new ShowWaypointCommand());
     }
 
     public String getVersion() {

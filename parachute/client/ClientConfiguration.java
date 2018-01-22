@@ -22,28 +22,31 @@
 package com.parachute.client;
 
 
-import com.parachute.common.Parachute;
-
+// The ClientConfiguration class contains all the client
+// controlled options. The other config options are
+// server side options. This is a WIP.
 public class ClientConfiguration {
     private static String chuteColor;
     private static boolean noHUD;
     private static boolean useCompassHUD;
+    private static double burnVolume;
 
     public ClientConfiguration() {}
 
     public static void setChuteColor(String color) {
-        Parachute.instance.info("ClientConfiguration: setChuteColor");
         chuteColor = color;
     }
 
     public static void setNoHUD(boolean value) {
-        Parachute.instance.info("ClientConfiguration: setNoHUD");
         noHUD = value;
     }
 
     public static void setUseCompassHUD(boolean value) {
-        Parachute.instance.info("ClientConfiguration: setUseCompassHUD");
         useCompassHUD = value;
+    }
+
+    public static void setBurnVolume(double value) {
+        burnVolume = value;
     }
 
     public static String getChuteColor() {
@@ -56,5 +59,9 @@ public class ClientConfiguration {
 
     public static boolean getUseCompassHUD() {
         return useCompassHUD;
+    }
+
+    public static float getBurnVolume() {
+        return (float)burnVolume;
     }
 }

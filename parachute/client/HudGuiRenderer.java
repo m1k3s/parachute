@@ -57,7 +57,6 @@ public class HudGuiRenderer extends Gui {
     private final int colorRed;
     private final int colorGreen;
     private final int colorBlue;
-//    private final int colorDimBlue;
     private final int colorDimGreen;
     private final int colorDimRed;
     private final int colorDimYellow;
@@ -75,10 +74,6 @@ public class HudGuiRenderer extends Gui {
     private final int blinkTime;
     private final int yOffset;
     private final int bigLedXY;
-    // waypoint
-    public static int wayPointX;
-    public static int wayPointZ;
-    private static boolean wayPointEnabled;
 
     double compassHeading;
 
@@ -107,10 +102,6 @@ public class HudGuiRenderer extends Gui {
         blinkX = red;
         blinkTime = 5;
         yOffset = 14;
-        wayPointX = 0;
-        wayPointZ = 0;
-        // disable the waypoint display
-        wayPointEnabled = false;
 
         fontRenderer = mc.fontRenderer;
         fieldWidth = fontRenderer.getStringWidth("000.0") / 2;
@@ -188,22 +179,6 @@ public class HudGuiRenderer extends Gui {
                         drawTexturedModalRect(hudX - 18, hudY + yOffset, blinkX, lightY, bigLedXY, bigLedXY);
                         blink++;
                     }
-                }
-
-                if (wayPointEnabled) {
-                    double waypointDirection = getWaypointDirection(wayPointX, wayPointZ);
-                    // draw the waypoint heading
-                    if (waypointDirection < -80) {
-                        ledX = 1;
-                    } else if ((waypointDirection - 80) * (waypointDirection - -80) < 0) {
-                        ledX = (int) Math.floor((waypointDirection + 80.0) + 4);
-                    } else if (waypointDirection > 80) {
-                        ledX = 170;
-                    }
-                    // draw the waypoint bar background
-                    drawTexturedModalRect(hudX, hudY + hudHeight + 9, 0, 0, hudWidth, ledHeight);
-                    // draw the lit LED
-                    drawTexturedModalRect(hudX + ledX, hudY + hudHeight + 9, ledX, ledY, ledWidth, ledHeight);
                 }
 
                 // draw the altitude text
@@ -286,33 +261,6 @@ public class HudGuiRenderer extends Gui {
             return entityPos.getY() - blockPos.getY();
         }
         return 1000.0 * mc.world.rand.nextGaussian();
-    }
-
-    // difference angle in degrees the player is facing from the waypoint.
-    // zero degrees means the player is facing the waypoint.
-    public double getWaypointDirection(int waypointX, int waypointZ) {
-        BlockPos blockpos = new BlockPos(waypointX, 0, waypointZ);
-        double delta = Math.atan2(blockpos.getZ() - mc.player.posZ, blockpos.getX() - mc.player.posX);
-        double relAngle = delta - Math.toRadians(mc.player.rotationYaw);
-        return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
-    }
-
-    @SuppressWarnings("unused")
-    public static int[] getWaypoint() {
-        return new int[]{wayPointX, wayPointZ};
-    }
-
-    public static void setWaypoint(int[] waypoint) {
-        wayPointX = waypoint[0];
-        wayPointZ = waypoint[1];
-    }
-
-    public static void enableWaypoint(boolean enabled) {
-        wayPointEnabled = enabled;
-    }
-
-    public static boolean getEnableWaypoint() {
-        return wayPointEnabled;
     }
 
 }
