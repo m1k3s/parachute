@@ -22,6 +22,7 @@
 
 package com.parachute.common;
 
+import com.parachute.client.ClientConfiguration;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
@@ -288,7 +289,7 @@ public class EntityParachute extends Entity {
         }
 
         if (allowThermals && ascendMode && skyDiver != null) { // play the lift sound. kinda like a hot air balloon's burners effect
-            skyDiver.playSound(Parachute.LIFTCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+            skyDiver.playSound(Parachute.LIFTCHUTE, ClientConfiguration.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
         }
 
         // apply momentum

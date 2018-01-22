@@ -32,16 +32,18 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ClientConfigMessage implements IMessage {
     private String chuteColor;
-    boolean noHUD;
-    boolean useCompassHUD;
+    private boolean noHUD;
+    private boolean useCompassHUD;
+    private double burnVolume;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
-    public ClientConfigMessage(String chuteColor, boolean noHUD, boolean useCompassHUD) {
+    public ClientConfigMessage(String chuteColor, boolean noHUD, boolean useCompassHUD, double burnVolume) {
         this.chuteColor = chuteColor;
         this.noHUD = noHUD;
         this.useCompassHUD = useCompassHUD;
+        this.burnVolume = burnVolume;
     }
 
     @Override
@@ -49,6 +51,7 @@ public class ClientConfigMessage implements IMessage {
         chuteColor = ByteBufUtils.readUTF8String(byteBuf);
         noHUD = byteBuf.readBoolean();
         useCompassHUD = byteBuf.readBoolean();
+        burnVolume = byteBuf.readDouble();
     }
 
     @Override
@@ -56,6 +59,7 @@ public class ClientConfigMessage implements IMessage {
         ByteBufUtils.writeUTF8String(byteBuf, chuteColor);
         byteBuf.writeBoolean(noHUD);
         byteBuf.writeBoolean(useCompassHUD);
+        byteBuf.writeDouble(burnVolume);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -66,6 +70,7 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setChuteColor(msg.chuteColor);
                 ClientConfiguration.setNoHUD(msg.noHUD);
                 ClientConfiguration.setUseCompassHUD(msg.useCompassHUD);
+                ClientConfiguration.setBurnVolume(msg.burnVolume);
                 RenderParachute.setParachuteColor(ClientConfiguration.getChuteColor());
             });
             return null;
