@@ -112,14 +112,12 @@ public class EntityParachute extends Entity {
     void dismountParachute() {
         Entity skyDiver = getControllingPassenger();
         if (!world.isRemote && skyDiver != null) {
-            //ModConfigHandler.ConfigOptions.setIsDismounting(true);
             PlayerFallEvent.isDismounting = true;
             killParachute();
         }
     }
 
     private void killParachute() {
-        Parachute.setDeployed(false);
         setDead();
     }
 
@@ -289,8 +287,8 @@ public class EntityParachute extends Entity {
             }
         }
 
-        if (allowThermals && ascendMode) { // play the burn sound. kinda like a hot air balloon's burners effect
-            playSound(Parachute.LIFTCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+        if (allowThermals && ascendMode && skyDiver != null) { // play the lift sound. kinda like a hot air balloon's burners effect
+            skyDiver.playSound(Parachute.LIFTCHUTE, ConfigHandler.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
         }
 
         // apply momentum

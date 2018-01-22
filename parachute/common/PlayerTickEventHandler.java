@@ -50,7 +50,7 @@ public class PlayerTickEventHandler {
             ItemStack armor = player.getItemStackFromSlot(Parachute.armorType);
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
             ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(EnumHand.OFF_HAND);
-            boolean deployed = Parachute.onParachute(player);
+            boolean deployed = player.getRidingEntity() instanceof EntityParachute;
 
             if (!deployed && armor.getItem() instanceof ItemParachutePack && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemParachute))) {
                 player.inventory.armorInventory.set(armorSlot.getIndex(), ItemStack.EMPTY);
@@ -67,7 +67,7 @@ public class PlayerTickEventHandler {
     // altitude, if autoAltitude has been reached, deploy. If the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
-        if (ConfigHandler.getIsAADActive() && !Parachute.onParachute(player)) {
+        if (ConfigHandler.getIsAADActive() && !(player.getRidingEntity() instanceof EntityParachute)) {
             ItemStack heldItem = null;
             Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {

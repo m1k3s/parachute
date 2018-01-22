@@ -118,14 +118,13 @@ public class HudGuiRenderer extends Gui {
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onRender(RenderGameOverlayEvent.Post event) {
-        if (ClientConfiguration.getNoHUD() || ClientConfiguration.getUseCompassHUD()) {
-            return;
-        }
+    public void drawCenterHUD(RenderGameOverlayEvent.Post event) {
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
             return;
         }
-
+        if (ClientConfiguration.getNoHUD() || ClientConfiguration.getUseCompassHUD()) {
+            return;
+        }
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             ScaledResolution sr = new ScaledResolution(mc);
             int hudX = (sr.getScaledWidth() / 2) - (hudWidth / 2); // left edge of GUI
@@ -133,7 +132,7 @@ public class HudGuiRenderer extends Gui {
             int textX = hudX + 30; // xcoord for text
             int textY = hudY + 22; // ycoord for text
 
-            if (Parachute.onParachute(mc.player)) {
+            if (mc.player.getRidingEntity() instanceof EntityParachute) {
                 mc.getTextureManager().bindTexture(hudTexture);
                 EntityParachute chute = (EntityParachute) mc.player.getRidingEntity();
                 if (chute == null) {

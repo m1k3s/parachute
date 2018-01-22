@@ -52,5 +52,8 @@ public class ParachuteClientProxy implements IProxy {
         MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
     }
 
-    public void postInit() {}
+    public void postInit() {
+//        MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
+//        MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
+    }
 }

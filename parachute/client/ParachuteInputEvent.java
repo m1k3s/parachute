@@ -19,8 +19,9 @@
  * =====================================================================
  */
 
-package com.parachute.common;
+package com.parachute.client;
 
+import com.parachute.common.EntityParachute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.InputUpdateEvent;
