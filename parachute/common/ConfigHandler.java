@@ -28,8 +28,8 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+//import net.minecraftforge.fml.relauncher.Side;
+//import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -263,7 +263,7 @@ public class ConfigHandler {
         useCompassHUDProp.set(useCompassHUD);
         noHUDProp.set(noHUD);
 
-        if (config.hasChanged() && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+        if (config.hasChanged()) { // && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             config.save();
         }
     }

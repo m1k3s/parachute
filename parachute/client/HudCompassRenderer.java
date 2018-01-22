@@ -104,6 +104,11 @@ public class HudCompassRenderer extends Gui {
                     return;
                 }
 
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
@@ -139,6 +144,9 @@ public class HudCompassRenderer extends Gui {
                 drawCenteredString(fontRenderer, "* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorDimGreen : colorDimRed);
 
                 GlStateManager.popMatrix();
+
+                GlStateManager.disableRescaleNormal();
+                GlStateManager.disableBlend();
             }
         }
     }

@@ -42,6 +42,7 @@ public class ParachuteClientProxy implements IProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
         ModelLoader.setCustomModelResourceLocation(Parachute.parachuteItem, 0, parachuteResource);
         ModelLoader.setCustomModelResourceLocation(Parachute.packItem, 0, packResource);
+        RenderParachute.setParachuteColor(ConfigHandler.getChuteColor());
     }
 
     public void Init() {
