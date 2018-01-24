@@ -22,6 +22,7 @@
 package com.parachute.client;
 
 
+
 // The ClientConfiguration class contains all the client
 // controlled options. The other config options are
 // server side options. This is a WIP.

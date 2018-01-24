@@ -93,7 +93,6 @@ public class EntityParachute extends Entity {
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);
-//        ModConfigHandler.ConfigOptions.setIsDismounting(false);
         PlayerFallEvent.isDismounting = false;
     }
 
@@ -510,12 +509,10 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {
-    }
+    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {}
 
     @Override
-    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {
-    }
+    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {}
 
     @Nonnull
     @Override

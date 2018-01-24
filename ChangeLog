@@ -1,3 +1,115 @@
+commit 5a7d0e35fff57e36fe21942b0ec67267999236ee
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 09:54:34 2018 -0500
+
+    removed crafting of colored parachutes, client has ability to
+    set color
+    removed ParachuteItemCraftedEvent class
+    removed side test in PlayerTickEventHandler - for now
+    minor code cleanup
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 42d3ac66fce53f10ddb8f194c8ed87bc97361cca
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 22 17:50:32 2018 -0500
+
+    removed waypoints and commands
+    gave the compass HUD a darker center
+    added the burn volume to the client controlled options
+    suddenly realized the ConfigEventHandler is client-side (doh)
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 6ebab9722dd0f709e452b6548f1bcb565f7e1404
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 22 16:29:34 2018 -0500
+
+    move ParachuteInputEvent class to client directory
+    removed onParachute method, use player.getRiddenEntity instanceof
+    EntityParachute
+    HUD now renders in multiplayer
+    client config variables don't update in multiplayer - WIP
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit b717b32bf6856ba74a881a6c14d805a745bb45f9
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 22 11:16:52 2018 -0500
+
+    new ClientConfiguration class -
+    added separate client config variables for
+            chuteColor
+            noHUD
+            useCompassHUD
+
+    new ClientConfigMessage class
+    client configs are updated from the server when the player logs in
+    client config are also updated from the config GUI
+
+commit fd81935f42c3e1117b49e2b52af5ca4cf782f155
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 21 20:36:16 2018 -0500
+
+    added a default value to the chute color on the client side.
+
+commit 7543fed682e82e1a3d90d702415a2e8ebec2a6c1
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 21 13:02:02 2018 -0500
+
+    Added IProxy interface
+    client and server proxies are not implementations of IProxy
+    Moved all ParachuteCommonProxy code into the main mod file
+    Parachute.java
+    removed all references to ParachuteCommonProxy
+    removed ParachuteCommonProxy.java
+
+commit ecd52fb3b6a214aa49c54bd66208501d767f280f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 21 11:13:30 2018 -0500
+
+    removed unused MogKeyBindings class
+    code cleanup from failed client/server config sync attempt
+
+commit d384a8887ee318e8b6d196c5de005501579a4f9f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 19 08:46:42 2018 -0500
+
+    rewrite AscendKeyPressMessage IMessageHandler to use addScheduledTask
+
+commit 42ac8aa51e84db0a6ee6913b7512924e2947b50f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 18 12:52:20 2018 -0500
+
+    updated HUD textures
+    trying to move all config to client only, not working
+
+commit 0e38b35e91315191c4ff06d180d6c15acccd5575
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 17 16:57:08 2018 -0500
+
+    moved isDismounting function out of the ConfigHandler
+
+commit 0698b116182fe9f2716da3d55d0db4a5e37caa40
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 17 15:52:04 2018 -0500
+
+    enabled realtime hud switching. no more restarts.
+
+commit d0984d5c1c136e5f9f26dc9216d7b827d3357021
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 15 16:48:35 2018 -0500
+
+    adding changed files like I should have done on the previous commit.
+
+commit 80b850cc7c4b731649a04b5255fca6a47bc48cc6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 15 16:48:03 2018 -0500
+
+    started using the Gui class drawCenteredString
+    HUD not showing up in multiplayer - trying to figure it out
+    added sideonly to RenderParachute class
+
 commit 37937bcff00724c49b235259cff44fb1a84f2769
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Jan 15 09:34:47 2018 -0500
