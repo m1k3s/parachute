@@ -65,4 +65,5 @@ public class ClientConfiguration {
     public static float getBurnVolume() {
         return (float)burnVolume;
     }
+
 }

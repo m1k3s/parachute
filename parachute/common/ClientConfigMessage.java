@@ -35,6 +35,7 @@ public class ClientConfigMessage implements IMessage {
     private boolean noHUD;
     private boolean useCompassHUD;
     private double burnVolume;
+    private boolean autoDismount;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}

@@ -40,7 +40,6 @@ public class ConfigHandler {
     private static int heightLimit;
     private static String chuteColor;
     private static boolean thermals;
-    private static boolean autoDismount;
     private static boolean weatherAffectsDrift;
     private static boolean lavaThermals;
     private static double minLavaDistance;
@@ -68,7 +67,6 @@ public class ConfigHandler {
     private static final String lavaThermalComment = "use lava heat to get thermals to rise up, optionally disables space bar thermals"; // false
     private static final String minLavaDistanceComment = "minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava!"; // 3.0
     private static final String maxLavaDistanceComment = "maximum distance to rise from lava thermals"; // 48
-    private static final String autoComment = "If true the parachute will dismount the player automatically, if false the player has to use LSHIFT to dismount the parachute"; // true
     private static final String weatherComment = "set to false if you don't want the drift rate to be affected by bad weather"; // true
     private static final String turbulenceComment = "set to true to always feel the turbulent world of Minecraft"; // false
     private static final String trailsComment = "set to true to show contrails from parachute"; // false
@@ -144,7 +142,6 @@ public class ConfigHandler {
         Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment);
         Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256);
         Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
-        Property autoDismountProp = config.get(Configuration.CATEGORY_GENERAL, "autoDismount", false, autoComment);
         Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
 
         Property forwardMotionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
@@ -178,7 +175,6 @@ public class ConfigHandler {
         propertyOrder.add(singleUseProp.getName());
         propertyOrder.add(heightLimitProp.getName());
         propertyOrder.add(thermalsProp.getName());
-        propertyOrder.add(autoDismountProp.getName());
         propertyOrder.add(dismountInWaterProp.getName());
         propertyOrder.add(showContrailsProp.getName());
         propertyOrder.add(burnVolumeProp.getName());
@@ -208,7 +204,6 @@ public class ConfigHandler {
             lavaThermals = lavaThermalsProp.getBoolean(true);
             minLavaDistance = minLavaDistanceProp.getDouble(3.0);
             maxLavaDistance = maxLavaDistanceProp.getDouble(48.0);
-            autoDismount = autoDismountProp.getBoolean(false);
             chuteColor = chuteColorProp.getString();
             weatherAffectsDrift = weatherAffectsDriftProp.getBoolean(true);
             constantTurbulence = constantTurbulenceProp.getBoolean(false);
@@ -236,7 +231,6 @@ public class ConfigHandler {
         lavaThermalsProp.set(lavaThermals);
         minLavaDistanceProp.set(minLavaDistance);
         maxLavaDistanceProp.set(maxLavaDistance);
-        autoDismountProp.set(autoDismount);
         chuteColorProp.set(chuteColor);
         weatherAffectsDriftProp.set(weatherAffectsDrift);
         constantTurbulenceProp.set(constantTurbulence);
@@ -325,10 +319,6 @@ public class ConfigHandler {
 
     public static boolean getShowContrails() {
         return showContrails;
-    }
-
-    public static boolean isAutoDismount() {
-        return autoDismount;
     }
 
     public static boolean getIsAADActive() {
