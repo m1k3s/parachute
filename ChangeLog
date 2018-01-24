@@ -1,3 +1,15 @@
+commit 5a7d0e35fff57e36fe21942b0ec67267999236ee
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 09:54:34 2018 -0500
+
+    removed crafting of colored parachutes, client has ability to
+    set color
+    removed ParachuteItemCraftedEvent class
+    removed side test in PlayerTickEventHandler - for now
+    minor code cleanup
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
 commit 42d3ac66fce53f10ddb8f194c8ed87bc97361cca
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Jan 22 17:50:32 2018 -0500
