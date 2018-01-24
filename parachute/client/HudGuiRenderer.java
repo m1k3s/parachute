@@ -69,7 +69,6 @@ public class HudGuiRenderer extends Gui {
     private final int red;
     private final int darkRed;
     private final int green;
-    private final int dark;
     private int blinkX;
     private final int blinkTime;
     private final int yOffset;
@@ -98,7 +97,6 @@ public class HudGuiRenderer extends Gui {
         red = 0;
         darkRed = 48;
         green = 16;
-        dark = 32;
         blinkX = red;
         blinkTime = 5;
         yOffset = 14;
@@ -164,21 +162,17 @@ public class HudGuiRenderer extends Gui {
                 aadIconX = ConfigHandler.getIsAADActive() ? 199 : 182;
                 drawTexturedModalRect(hudX + hudWidth + 2, hudY + 8, aadIconX, aadIconY, aadWidth, aadHeight); // draw the AAD indicator
 
-                // manual dismount indicator
-                if (ConfigHandler.isAutoDismount()) { // auto dismount is engaged
-                    drawTexturedModalRect(hudX - 18, hudY + yOffset, dark, lightY, bigLedXY, bigLedXY);
-                } else { // auto dismount is disabled
-                    if (altitude > 10) {
-                        drawTexturedModalRect(hudX - 18, hudY + yOffset, green, lightY, bigLedXY, bigLedXY);
-                    } else if (altitude <= 10 && altitude > 3) {
-                        drawTexturedModalRect(hudX - 18, hudY + yOffset, red, lightY, bigLedXY, bigLedXY);
-                    } else if (altitude <= 3) { // make this blink
-                        if ((blink % blinkTime) == 0) {
-                            blinkX = blinkX == red ? darkRed : red;
-                        }
-                        drawTexturedModalRect(hudX - 18, hudY + yOffset, blinkX, lightY, bigLedXY, bigLedXY);
-                        blink++;
+                // ground proximity indicator
+                if (altitude > 10) {
+                    drawTexturedModalRect(hudX - 18, hudY + yOffset, green, lightY, bigLedXY, bigLedXY);
+                } else if (altitude <= 10 && altitude > 3) {
+                    drawTexturedModalRect(hudX - 18, hudY + yOffset, red, lightY, bigLedXY, bigLedXY);
+                } else if (altitude <= 3) { // make this blink
+                    if ((blink % blinkTime) == 0) {
+                        blinkX = blinkX == red ? darkRed : red;
                     }
+                    drawTexturedModalRect(hudX - 18, hudY + yOffset, blinkX, lightY, bigLedXY, bigLedXY);
+                    blink++;
                 }
 
                 // draw the altitude text

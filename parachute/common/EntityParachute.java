@@ -23,7 +23,6 @@
 package com.parachute.common;
 
 import com.parachute.client.ClientConfiguration;
-import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,7 +53,6 @@ public class EntityParachute extends Entity {
     private double curLavaDistance;
     private boolean allowTurbulence;
     private boolean showContrails;
-    private boolean autoDismount;
     private boolean dismountInWater;
 
     private double deltaRotation;
@@ -77,7 +75,6 @@ public class EntityParachute extends Entity {
         allowThermals = ConfigHandler.getAllowThermals();
         maxAltitude = ConfigHandler.getMaxAltitude();
         lavaThermals = ConfigHandler.getAllowLavaThermals();
-        autoDismount = ConfigHandler.isAutoDismount();
         dismountInWater = ConfigHandler.getDismountInWater();
         maxThermalRise = ConfigHandler.getMaxLavaDistance();
 
@@ -275,18 +272,6 @@ public class EntityParachute extends Entity {
 
         super.onUpdate();
 
-        // drop the chute when close to ground if enabled
-        // FIXME: autoDismount will not work on multiplayer
-        // FIXME: I have disabled it server side for now.
-        if (!world.isRemote && autoDismount && skyDiver != null) {
-            double pilotFeetPos = skyDiver.getEntityBoundingBox().minY;
-            BlockPos bp = new BlockPos(skyDiver.posX, pilotFeetPos, skyDiver.posZ);
-            if (checkForGroundProximity(bp)) {
-                killParachute();
-                return;
-            }
-        }
-
         if (allowThermals && ascendMode && skyDiver != null) { // play the lift sound. kinda like a hot air balloon's burners effect
             skyDiver.playSound(Parachute.LIFTCHUTE, ClientConfiguration.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
         }
@@ -405,19 +390,6 @@ public class EntityParachute extends Entity {
         return thermals;
     }
 
-    // BlockPos bp is the pilot's position. The pilot's feet posY - 1.0
-    // to be exact. We check for air blocks, flowers, leaves, and grass at
-    // that position Y. The check for leaves means the parachute can get
-    // hung up in the trees. Also means that the pilot must manually
-    // dismount to land on trees. Dismounting over water is handled by the
-    // shouldDismountInWater method and config option.
-    private boolean checkForGroundProximity(BlockPos bp) {
-        Block block = world.getBlockState(bp).getBlock();
-        boolean isAir = (block == Blocks.AIR);
-        boolean isVegetation = (block instanceof BlockFlower) || (block instanceof BlockGrass) || (block instanceof BlockLeaves);
-        return (!isAir && !isVegetation);
-    }
-
     // apply 'turbulence' in the form of a collision force
     private void applyTurbulence(boolean roughWeather) {
         double rmin = 0.1;
@@ -474,7 +446,7 @@ public class EntityParachute extends Entity {
             if (ascending) {
                 world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, x, y, z, motionX, motionY, motionZ);
             }
-            if (! ascending && velocity > 0.01) {
+            if (!ascending && velocity > 0.01) {
                 world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
             }
         }
