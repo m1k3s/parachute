@@ -33,7 +33,7 @@ public class PlayerTickEventHandler {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase.equals(TickEvent.Phase.START) && event.side.isServer()) {
+        if (event.phase.equals(TickEvent.Phase.START)/* && event.side.isServer()*/) {
             autoActivateDevice(event.player);
             togglePlayerParachutePack(event.player);
         }

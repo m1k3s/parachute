@@ -295,6 +295,7 @@ public class ConfigHandler {
         return chuteColor;
     }
 
+    @SuppressWarnings("unused")
     public static void setChuteColor(String color) {
         Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black", colorComment);
         prop.set(color);
