@@ -38,11 +38,29 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
+////////////////////////////////////////////////
+// to position HUD in upper right corner
+//      int padding = 20;
+//
+//      hudX = ((width * scale) - hudWidth) - padding;
+//      hudY = padding;
+//      int textX = (hudWidth * scale) - (hudWidth / 2) - (padding / 2);
+//      int textY = hudY + (hudHeight / scale) - (padding / 2);
+//
+// to position HUD in upper left corner
+//      int padding = 20;
+//
+//      hudX = padding;
+//      hudY = padding;
+//      int textX = hudX + (hudWidth / 4);
+//      int textY = hudY + (hudHeight / 4);
+
 @SideOnly(Side.CLIENT)
 public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation compassTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
     protected static final ResourceLocation homeTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
     protected static final ResourceLocation bubbleTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-bubble.png");
+    protected static final ResourceLocation reticuleTexture = new ResourceLocation((Parachute.MODID + ":" + "textures/gui/hud-reticule.png"));
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static FontRenderer fontRenderer = mc.fontRenderer;
 
@@ -51,10 +69,6 @@ public class HudCompassRenderer extends Gui {
     private final int hudWidth = 256;
     private final int hudHeight = 256;
 
-//    private final int colorYellow = 0xffaaaa00;
-//    private final int colorRed = 0xffaa0000;
-//    private final int colorGreen = 0xff00aa00;
-//    private final int colorBlue = 0xff0000aa;
     private final int colorDimGreen = 0xcc008800;
     private final int colorDimRed = 0xcc880000;
 
@@ -78,22 +92,22 @@ public class HudCompassRenderer extends Gui {
         }
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             ScaledResolution sr = event.getResolution();
+            int scale = sr.getScaleFactor();
+            int width = sr.getScaledWidth();
+            int padding = 20;
 
-            hudX = 5; // left edge of GUI screen
-            hudY = 5; // top edge of GUI screen
-            int textX = hudX + (hudWidth / 4); // xcoord for text
-            int textY = hudY + (hudHeight / 4); // ycoord for text
+            hudX = ((width * scale) - hudWidth) - padding; // position HUD on top right
+            hudY = padding; // top of HUD 'padding' pixels from top
+
+            // initial text coords
+            int textX = (hudWidth * scale) - (hudWidth / 2) - (padding / 2);
+            int textY = hudY + (hudHeight / scale) - (padding / 2);
 
             if (mc.player.getRidingEntity() instanceof EntityParachute) {
                 EntityParachute chute = (EntityParachute) mc.player.getRidingEntity();
                 if (chute == null) {
                     return;
                 }
-
-                GlStateManager.enableRescaleNormal();
-                GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
@@ -103,6 +117,12 @@ public class HudCompassRenderer extends Gui {
 
                 // scale the HUD to 50%
                 GlStateManager.pushMatrix();
+
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
                 GlStateManager.scale(0.5, 0.5, 0.5);
 
                 // draw the parachute/player facing bubble underneath
@@ -110,10 +130,13 @@ public class HudCompassRenderer extends Gui {
                 drawBubble(calcPlayerChuteFacing(playerLook), bubbleTexture);
 
                 // draw the compass
-                drawTextureWithRotation((float)compassHeading, compassTexture);
+                drawTextureWithRotation((float) -compassHeading, compassTexture);
 
                 // draw the home direction
-                drawTextureWithRotation((float)homeDir, homeTexture);
+                drawTextureWithRotation((float) homeDir, homeTexture);
+
+                // draw the reticule on top
+                drawReticule(reticuleTexture);
 
                 // draw the altitude text
                 String text;
@@ -129,12 +152,25 @@ public class HudCompassRenderer extends Gui {
                 boolean aadActive = ConfigHandler.getIsAADActive();
                 drawCenteredString(fontRenderer, "* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorDimGreen : colorDimRed);
 
-                GlStateManager.popMatrix();
-
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
+
+                GlStateManager.popMatrix();
             }
         }
+    }
+
+    // drawReticule
+    private void drawReticule(ResourceLocation texture) {
+        GlStateManager.pushMatrix();
+
+        // scale again, final scale is 25% of original size
+        GlStateManager.scale(0.5, 0.5, 0.5);
+        mc.getTextureManager().bindTexture(texture);
+        // draw the bubble
+        drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight);
+
+        GlStateManager.popMatrix();
     }
 
     // drawTexturedModalRect
