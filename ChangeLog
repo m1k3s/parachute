@@ -1,3 +1,28 @@
+commit 24c1f1a2f665b6adac33e5fa4d861de0b20037fa
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 20:14:01 2018 -0500
+
+    fixed compass heading in rotated textures
+    moved HUD to upper right corner
+    added a reticule to the compass HUD
+        a red rectangle indicating the direction
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit fae282c262fcb6e53f31aa044ee1bad48334949d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 12:48:59 2018 -0500
+
+    removed autoDismount feature, doesn't work at all
+       LSHIFT is the prefered way to dismount in minecraft
+    some more minor code cleanup
+
+commit 75dd7e5852f9e263ca68a0f0eaa768cf122507d3
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 10:52:14 2018 -0500
+
+    updated Changelog
+
 commit 5a7d0e35fff57e36fe21942b0ec67267999236ee
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Jan 24 09:54:34 2018 -0500
