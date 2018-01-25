@@ -125,17 +125,17 @@ public class HudCompassRenderer extends Gui {
 
                 GlStateManager.scale(0.5, 0.5, 0.5);
 
-                // draw the parachute/player facing bubble underneath
+                // 1. draw the compass
+                drawTextureWithRotation((float) -compassHeading, compassTexture);
+
+                // 2. draw the home direction
+                drawTextureWithRotation((float) homeDir, homeTexture);
+
+                // 3. draw the parachute/player facing bubble
                 double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
                 drawBubble(calcPlayerChuteFacing(playerLook), bubbleTexture);
 
-                // draw the compass
-                drawTextureWithRotation((float) -compassHeading, compassTexture);
-
-                // draw the home direction
-                drawTextureWithRotation((float) homeDir, homeTexture);
-
-                // draw the reticule on top
+                // 4, draw the reticule on top
                 drawReticule(reticuleTexture);
 
                 // draw the altitude text
