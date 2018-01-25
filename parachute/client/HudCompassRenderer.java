@@ -66,16 +66,22 @@ public class HudCompassRenderer extends Gui {
 
     public static double altitude;
 
+    private static int count = 0;
+
     private final int hudWidth = 256;
     private final int hudHeight = 256;
 
-    private final int colorDimGreen = 0xcc008800;
-    private final int colorDimRed = 0xcc880000;
+    private final int colorGreen = 0xff00ff00;
+    private final int colorRed = 0xffff0000;
 
     double compassHeading;
 
     private int hudX;
     private int hudY;
+
+    // display variables
+    private boolean aadActive;
+    private String alt, compass, dist;
 
     public HudCompassRenderer() {
         super();
@@ -87,7 +93,7 @@ public class HudCompassRenderer extends Gui {
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
             return;
         }
-        if (ClientConfiguration.getNoHUD() || !ClientConfiguration.getUseCompassHUD()) {
+        if (ClientConfiguration.getNoHUD()) {
             return;
         }
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
@@ -138,19 +144,26 @@ public class HudCompassRenderer extends Gui {
                 // 4, draw the reticule on top
                 drawReticule(reticuleTexture);
 
-                // draw the altitude text
-                String text;
                 int height = fontRenderer.FONT_HEIGHT;
-                drawCenteredString(fontRenderer, format(altitude), textX, textY - height - 8, colorAltitude());
+                if (count % 10 == 0) { // damping the update
+                    aadActive = ConfigHandler.getIsAADActive();
+                    alt = format(altitude);
+                    compass = format(compassHeading);
+                    dist = format(distance);
+                }
+                count++;
+
+                // draw the altitude text
+                drawCenteredString(fontRenderer, alt, textX, textY - height - 8, colorAltitude());
 
                 // draw the compass heading text
-                drawCenteredString(fontRenderer, format(compassHeading), textX, textY - (height * 2) - 8, colorDimGreen);
+                drawCenteredString(fontRenderer, compass, textX, textY - (height * 2) - 8, colorGreen);
 
                 // draw the distance to the home point text
-                drawCenteredString(fontRenderer, format(distance), textX, textY + height - 2, colorDimGreen);
+                drawCenteredString(fontRenderer, dist, textX, textY + height - 2, colorGreen);
 
-                boolean aadActive = ConfigHandler.getIsAADActive();
-                drawCenteredString(fontRenderer, "* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorDimGreen : colorDimRed);
+                // AAD active
+                drawCenteredString(fontRenderer, "* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorGreen : colorRed);
 
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
@@ -241,8 +254,8 @@ public class HudCompassRenderer extends Gui {
     }
 
     public int colorAltitude() {
-        int colorDimYellow = 0xcc888800;
-        return altitude <= 10.0 ? colorDimRed : altitude <= 15.0 && altitude > 10.0 ? colorDimYellow : colorDimGreen;
+        int colorYellow = 0xffffff00;
+        return altitude <= 10.0 ? colorRed : altitude <= 15.0 && altitude > 10.0 ? colorYellow : colorGreen;
     }
 
     // quadrant color code

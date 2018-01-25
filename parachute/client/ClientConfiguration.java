@@ -29,7 +29,6 @@ package com.parachute.client;
 public class ClientConfiguration {
     private static String chuteColor;
     private static boolean noHUD;
-    private static boolean useCompassHUD;
     private static double burnVolume;
 
     public ClientConfiguration() {}
@@ -42,10 +41,6 @@ public class ClientConfiguration {
         noHUD = value;
     }
 
-    public static void setUseCompassHUD(boolean value) {
-        useCompassHUD = value;
-    }
-
     public static void setBurnVolume(double value) {
         burnVolume = value;
     }
@@ -56,10 +51,6 @@ public class ClientConfiguration {
 
     public static boolean getNoHUD() {
         return noHUD;
-    }
-
-    public static boolean getUseCompassHUD() {
-        return useCompassHUD;
     }
 
     public static float getBurnVolume() {
