@@ -52,7 +52,6 @@ public class ConfigHandler {
     private static double minFallDistance;
     private static boolean aadImmediate;
     private static double burnVolume;
-    private static boolean useCompassHUD;
     private static boolean noHUD;
 
     private static double forwardMomentum;
@@ -82,7 +81,6 @@ public class ConfigHandler {
     private static final String backMotionComment = "delta back momentum value";
     private static final String rotationMomentumComment = "delta rotation momentum value";
     private static final String slideMotionComment = "delta slide momentum value";
-    private static final String useCompassHUDComment = "use the new compass HUD";
     private static final String noHUDComment = "Disable the HUD";
     private static final String[] colorValues = {
             "random",
@@ -151,7 +149,6 @@ public class ConfigHandler {
 
         Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, trailsComment);
         Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
-        Property useCompassHUDProp = config.get(Configuration.CATEGORY_GENERAL, "useCompassHUD", true, useCompassHUDComment);
         Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, noHUDComment);
 
         Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, lavaThermalComment);
@@ -178,7 +175,6 @@ public class ConfigHandler {
         propertyOrder.add(dismountInWaterProp.getName());
         propertyOrder.add(showContrailsProp.getName());
         propertyOrder.add(burnVolumeProp.getName());
-        propertyOrder.add(useCompassHUDProp.getName());
         propertyOrder.add(noHUDProp.getName());
         propertyOrder.add(lavaThermalsProp.getName());
         propertyOrder.add(minLavaDistanceProp.getName());
@@ -218,7 +214,6 @@ public class ConfigHandler {
             backMomentum = backMotionProp.getDouble(0.008);
             rotationMomentum = leftMotionProp.getDouble(0.2);
             slideMomentum = slideMotionProp.getDouble(0.005);
-            useCompassHUD = useCompassHUDProp.getBoolean(true);
             noHUD = noHUDProp.getBoolean(false);
         }
 
@@ -245,7 +240,6 @@ public class ConfigHandler {
         backMotionProp.set(backMomentum);
         leftMotionProp.set(rotationMomentum);
         slideMotionProp.set(slideMomentum);
-        useCompassHUDProp.set(useCompassHUD);
         noHUDProp.set(noHUD);
 
         if (config.hasChanged()) {
@@ -262,7 +256,6 @@ public class ConfigHandler {
                 // update the client side options
                 ClientConfiguration.setChuteColor(chuteColor);
                 ClientConfiguration.setNoHUD(noHUD);
-                ClientConfiguration.setUseCompassHUD(useCompassHUD);
                 ClientConfiguration.setBurnVolume(burnVolume);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
@@ -371,9 +364,6 @@ public class ConfigHandler {
         return slideMomentum;
     }
 
-    public static boolean getUseCompassHUD() {
-        return  useCompassHUD;
-    }
 
     public static boolean getNoHUD() {
         return noHUD;

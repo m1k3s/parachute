@@ -87,7 +87,7 @@ public class HudCompassRenderer extends Gui {
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
             return;
         }
-        if (ClientConfiguration.getNoHUD() || !ClientConfiguration.getUseCompassHUD()) {
+        if (ClientConfiguration.getNoHUD()) {
             return;
         }
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
