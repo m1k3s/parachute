@@ -60,7 +60,8 @@ public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation compassTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
     protected static final ResourceLocation homeTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
     protected static final ResourceLocation bubbleTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-bubble.png");
-    protected static final ResourceLocation reticuleTexture = new ResourceLocation((Parachute.MODID + ":" + "textures/gui/hud-reticule.png"));
+    protected static final ResourceLocation reticuleTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule.png");
+    protected static final ResourceLocation backgroundTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-background.png");
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static FontRenderer fontRenderer = mc.fontRenderer;
 
@@ -131,19 +132,21 @@ public class HudCompassRenderer extends Gui {
 
                 GlStateManager.scale(0.5, 0.5, 0.5);
 
-                // 1. draw the compass
+                // 1. draw the background
+                drawTextureFixed(backgroundTexture);
+
+                // 2. draw the compass ring
                 drawTextureWithRotation((float) -compassHeading, compassTexture);
 
-                // 2. draw the home direction
+                // 3. draw the home direction ring
                 drawTextureWithRotation((float) homeDir, homeTexture);
 
-                // 3. draw the parachute/player facing bubble
+                // 4. draw the parachute/player facing bubble
                 double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
-//                drawBubble(calcPlayerChuteFacing(playerLook), bubbleTexture);
                 drawTextureWithRotation((float)calcBubbleDegrees(playerLook), bubbleTexture);
 
-                // 4, draw the reticule on top
-                drawReticule(reticuleTexture);
+                // 5. draw the reticule on top
+                drawTextureFixed(reticuleTexture);
 
                 // damping the update
                 if (count % 10 == 0) {
@@ -155,17 +158,17 @@ public class HudCompassRenderer extends Gui {
                 count++;
 
                 int hFont = fontRenderer.FONT_HEIGHT;
-                // draw the altitude text
-                drawCenteredString(fontRenderer, alt, textX, textY - hFont - 8, colorAltitude());
+                // 1. draw the compass heading text
+                drawCenteredString(fontRenderer, compass, textX, textY - (hFont * 2) - 2, colorGreen);
 
-                // draw the compass heading text
-                drawCenteredString(fontRenderer, compass, textX, textY - (hFont * 2) - 8, colorGreen);
+                // 2. draw the altitude text
+                drawCenteredString(fontRenderer, alt, textX, textY - hFont - 2, colorAltitude());
 
-                // draw the distance to the home point text
-                drawCenteredString(fontRenderer, dist, textX, textY + hFont - 2, colorGreen);
+                // 3. draw the distance to the home point text
+                drawCenteredString(fontRenderer, dist, textX, textY + 2, colorGreen);
 
-                // AAD active
-                drawCenteredString(fontRenderer, "* AAD *", textX, textY + (hFont * 2) - 2, aadActive ? colorGreen : colorRed);
+                // 4. AAD active indicator
+                drawCenteredString(fontRenderer, "* AAD *", textX, textY + hFont + 2, aadActive ? colorGreen : colorRed);
 
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
@@ -175,34 +178,18 @@ public class HudCompassRenderer extends Gui {
         }
     }
 
-    // drawReticule
-    private void drawReticule(ResourceLocation texture) {
+
+    // draw a texture
+    private void drawTextureFixed(ResourceLocation texture) {
         GlStateManager.pushMatrix();
 
         // scale again, final scale is 25% of original size
         GlStateManager.scale(0.5, 0.5, 0.5);
         mc.getTextureManager().bindTexture(texture);
-        // draw the bubble
         drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight);
 
         GlStateManager.popMatrix();
     }
-
-    // drawTexturedModalRect
-    // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
-//    private void drawBubble(float bubble, ResourceLocation texture) {
-//        GlStateManager.pushMatrix();
-//
-//        // scale again, final scale is 25% of original size
-//        GlStateManager.scale(0.5, 0.5, 0.5);
-//        mc.getTextureManager().bindTexture(texture);
-//        // draw the bubble
-//        drawTexturedModalRect(hudX + bubble, hudY + (hudHeight / 2) - 9, 0, 0, 16, 16);
-//        // draw the line
-//        drawTexturedModalRect(hudX, hudY + 20, 0, 20, hudWidth, hudHeight - 20);
-//
-//        GlStateManager.popMatrix();
-//    }
 
     // draw the compass/home textures
     private void drawTextureWithRotation(float degrees, ResourceLocation texture) {
@@ -230,12 +217,6 @@ public class HudCompassRenderer extends Gui {
     private double calcCompassHeading(double yaw) {
         return (((yaw + 180.0) % 360) + 360) % 360;
     }
-
-//    private int calcPlayerChuteFacing(double playerLook) {
-//        int bubble = (int) Math.floor(playerLook + 120.0);
-//        bubble = bubble < 58 ? 58 : bubble > 184 ? 184 : bubble;
-//        return bubble;
-//    }
 
     private double calcBubbleDegrees(double playerlook) {
         return MathHelper.wrapDegrees(playerlook);
