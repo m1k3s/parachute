@@ -139,13 +139,14 @@ public class HudCompassRenderer extends Gui {
 
                 // 3. draw the parachute/player facing bubble
                 double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
-                drawBubble(calcPlayerChuteFacing(playerLook), bubbleTexture);
+//                drawBubble(calcPlayerChuteFacing(playerLook), bubbleTexture);
+                drawTextureWithRotation((float)calcBubbleDegrees(playerLook), bubbleTexture);
 
                 // 4, draw the reticule on top
                 drawReticule(reticuleTexture);
 
-                int height = fontRenderer.FONT_HEIGHT;
-                if (count % 10 == 0) { // damping the update
+                // damping the update
+                if (count % 10 == 0) {
                     aadActive = ConfigHandler.getIsAADActive();
                     alt = format(altitude);
                     compass = format(compassHeading);
@@ -153,17 +154,18 @@ public class HudCompassRenderer extends Gui {
                 }
                 count++;
 
+                int hFont = fontRenderer.FONT_HEIGHT;
                 // draw the altitude text
-                drawCenteredString(fontRenderer, alt, textX, textY - height - 8, colorAltitude());
+                drawCenteredString(fontRenderer, alt, textX, textY - hFont - 8, colorAltitude());
 
                 // draw the compass heading text
-                drawCenteredString(fontRenderer, compass, textX, textY - (height * 2) - 8, colorGreen);
+                drawCenteredString(fontRenderer, compass, textX, textY - (hFont * 2) - 8, colorGreen);
 
                 // draw the distance to the home point text
-                drawCenteredString(fontRenderer, dist, textX, textY + height - 2, colorGreen);
+                drawCenteredString(fontRenderer, dist, textX, textY + hFont - 2, colorGreen);
 
                 // AAD active
-                drawCenteredString(fontRenderer, "* AAD *", textX, textY + (height * 2) - 2, aadActive ? colorGreen : colorRed);
+                drawCenteredString(fontRenderer, "* AAD *", textX, textY + (hFont * 2) - 2, aadActive ? colorGreen : colorRed);
 
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
@@ -188,19 +190,19 @@ public class HudCompassRenderer extends Gui {
 
     // drawTexturedModalRect
     // Params: int screenX, int screenY, int textureX, int textureY, int width, int height
-    private void drawBubble(float bubble, ResourceLocation texture) {
-        GlStateManager.pushMatrix();
-
-        // scale again, final scale is 25% of original size
-        GlStateManager.scale(0.5, 0.5, 0.5);
-        mc.getTextureManager().bindTexture(texture);
-        // draw the bubble
-        drawTexturedModalRect(hudX + bubble, hudY + (hudHeight / 2) - 9, 0, 0, 16, 16);
-        // draw the line
-        drawTexturedModalRect(hudX, hudY + 20, 0, 20, hudWidth, hudHeight - 20);
-
-        GlStateManager.popMatrix();
-    }
+//    private void drawBubble(float bubble, ResourceLocation texture) {
+//        GlStateManager.pushMatrix();
+//
+//        // scale again, final scale is 25% of original size
+//        GlStateManager.scale(0.5, 0.5, 0.5);
+//        mc.getTextureManager().bindTexture(texture);
+//        // draw the bubble
+//        drawTexturedModalRect(hudX + bubble, hudY + (hudHeight / 2) - 9, 0, 0, 16, 16);
+//        // draw the line
+//        drawTexturedModalRect(hudX, hudY + 20, 0, 20, hudWidth, hudHeight - 20);
+//
+//        GlStateManager.popMatrix();
+//    }
 
     // draw the compass/home textures
     private void drawTextureWithRotation(float degrees, ResourceLocation texture) {
@@ -229,10 +231,14 @@ public class HudCompassRenderer extends Gui {
         return (((yaw + 180.0) % 360) + 360) % 360;
     }
 
-    private int calcPlayerChuteFacing(double playerLook) {
-        int bubble = (int) Math.floor(playerLook + 120.0);
-        bubble = bubble < 8 ? 8 : bubble > 248 ? 248 : bubble;
-        return bubble;
+//    private int calcPlayerChuteFacing(double playerLook) {
+//        int bubble = (int) Math.floor(playerLook + 120.0);
+//        bubble = bubble < 58 ? 58 : bubble > 184 ? 184 : bubble;
+//        return bubble;
+//    }
+
+    private double calcBubbleDegrees(double playerlook) {
+        return MathHelper.wrapDegrees(playerlook);
     }
 
     // difference angle in degrees the chute is facing from the home point.
@@ -257,17 +263,6 @@ public class HudCompassRenderer extends Gui {
         int colorYellow = 0xffffff00;
         return altitude <= 10.0 ? colorRed : altitude <= 15.0 && altitude > 10.0 ? colorYellow : colorGreen;
     }
-
-    // quadrant color code
-    // 315 to 44 green, mostly north
-    // 45 to 134 yellow, mostly east
-    // 135 to 224 red, mostly south
-    // 225 to 314 blue, mostly west
-    @SuppressWarnings("unused")
-//    public int colorCompass(double d) {
-//        return (d >= 0 && d < 45.0) ? colorGreen : (d >= 45.0 && d < 135.0) ? colorYellow :
-//                (d >= 135.0 && d < 225.0) ? colorRed : (d >= 225.0 && d < 315.0) ? colorBlue : colorGreen;
-//    }
 
     // calculate altitude in meters above ground. starting at the entity
     // count down until a non-air block is encountered.
