@@ -1,3 +1,64 @@
+commit 030de5aa8ce3bcee5254df1a78e05e48c1a5353a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 27 11:02:01 2018 -0500
+
+    new improved HUD, even better than before
+    minor code changes to HudCompassRenderer
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 10e6701df5fd77d346f1e1a49031d61d7ed894e3
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 26 16:33:12 2018 -0500
+
+    added new HUD textures
+    moved HUD text closer to center
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 6aff8d94ffdb1142b1e6f33aade874a21c4d2d05
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 26 08:44:10 2018 -0500
+
+    more tweaking of the HUD, I'm not an artist.
+    changed the player facing bubble to a rotating bubble
+    moved the GIMP xcf file to the base directory
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit f4da6f139cef533561fb8c7ebeab00055b2cd799
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 25 14:14:56 2018 -0500
+
+    brightened text colors
+    added a 0.5 second damping to the text updates
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 15ac737c5d2ae26ca4852222a3f1c9cf0225e1cb
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 25 10:01:08 2018 -0500
+
+    removed all traces of old HUD
+    removed config variables related to old HUD
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 93c425ffad6a8882883163ebc75c8943eb7d5c4c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 25 08:03:56 2018 -0500
+
+    changed the compass HUD appearance (colors mostly)
+    moved the order of renderering in HudCompassRenderer class
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 05d906222af57d67876d53a996ad564d2045789d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 20:16:05 2018 -0500
+
+    updated Changelog
+
 commit 24c1f1a2f665b6adac33e5fa4d861de0b20037fa
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Jan 24 20:14:01 2018 -0500
