@@ -40,7 +40,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 ////////////////////////////////////////////////
 // to position HUD in upper right corner
-//      int padding = 20;
 //
 //      hudX = ((width * scale) - hudWidth) - padding;
 //      hudY = padding;
@@ -48,7 +47,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 //      int textY = hudY + (hudHeight / scale) - (padding / 2);
 //
 // to position HUD in upper left corner
-//      int padding = 20;
 //
 //      hudX = padding;
 //      hudY = padding;
@@ -103,10 +101,9 @@ public class HudCompassRenderer extends Gui {
             int width = sr.getScaledWidth();
             int padding = 20;
 
-            hudX = ((width * scale) - hudWidth) - padding; // position HUD on top right
-            hudY = padding; // top of HUD 'padding' pixels from top
+            hudX = ((width * scale) - hudWidth) - padding;
+            hudY = padding;
 
-            // initial text coords
             int textX = (hudWidth * scale) - (hudWidth / 2) - (padding / 2);
             int textY = hudY + (hudHeight / scale) - (padding / 2);
 
@@ -130,6 +127,12 @@ public class HudCompassRenderer extends Gui {
                 GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
                         GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
+                // textures are 256x256, scale to 50% first, then in the
+                // texture drawing methods scale and additional 50%, the
+                // final scaled textures are 64x64 on screen
+                // this method scales the texture and text correctly because
+                // we need the texture at 25% of original size and the text at
+                // 50% of original size
                 GlStateManager.scale(0.5, 0.5, 0.5);
 
                 // 1. draw the background
@@ -142,13 +145,13 @@ public class HudCompassRenderer extends Gui {
                 drawTextureWithRotation((float) homeDir, homeTexture);
 
                 // 4. draw the parachute/player facing bubble
-                double playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
-                drawTextureWithRotation((float)calcBubbleDegrees(playerLook), bubbleTexture);
+                float playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
+                drawTextureWithRotation(playerLook, bubbleTexture);
 
                 // 5. draw the reticule on top
                 drawTextureFixed(reticuleTexture);
 
-                // damping the update
+                // damping the update ( 20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
                     aadActive = ConfigHandler.getIsAADActive();
                     alt = format(altitude);
@@ -164,7 +167,7 @@ public class HudCompassRenderer extends Gui {
                 // 2. draw the altitude text
                 drawCenteredString(fontRenderer, alt, textX, textY - hFont - 2, colorAltitude());
 
-                // 3. draw the distance to the home point text
+                // 3. draw the distance to the home/spawn point text
                 drawCenteredString(fontRenderer, dist, textX, textY + 2, colorGreen);
 
                 // 4. AAD active indicator
@@ -216,10 +219,6 @@ public class HudCompassRenderer extends Gui {
 
     private double calcCompassHeading(double yaw) {
         return (((yaw + 180.0) % 360) + 360) % 360;
-    }
-
-    private double calcBubbleDegrees(double playerlook) {
-        return MathHelper.wrapDegrees(playerlook);
     }
 
     // difference angle in degrees the chute is facing from the home point.
