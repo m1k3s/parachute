@@ -39,14 +39,13 @@ import javax.annotation.Nonnull;
 
 public class ItemParachute extends Item {
 
-    private static boolean active;
+    private static boolean active = ConfigHandler.getIsAADActive();
     private static final double OFFSET = 2.5;
 
     public ItemParachute(String itemName) {
         super();
         setMaxDamage(ToolMaterial.IRON.getMaxUses());
         maxStackSize = 4;
-        active = ConfigHandler.getIsAADActive();
         setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode
         setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
         setUnlocalizedName(Parachute.MODID + ":" + itemName);
@@ -97,12 +96,14 @@ public class ItemParachute extends Item {
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        if (!world.isRemote && entityplayer != null) { // server side
-            active = !active;
-            itemstack.setStackDisplayName(active ? "Parachute|AAD" : "Parachute");
-            ConfigHandler.setAADState(active);
-        } else if (world.isRemote && entityplayer != null) { // client side
-            world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+        if (entityplayer != null) {
+            if (!world.isRemote) { // server side
+                active = !active;
+                itemstack.setStackDisplayName(active ? "Parachute|AUTO" : "Parachute");
+                ConfigHandler.setAADState(active);
+            } else { // client side
+                world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+            }
         }
     }
 

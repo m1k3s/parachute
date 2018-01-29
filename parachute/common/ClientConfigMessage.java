@@ -34,14 +34,16 @@ public class ClientConfigMessage implements IMessage {
     private String chuteColor;
     private boolean noHUD;
     private double burnVolume;
+    private String hudPosition;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
-    public ClientConfigMessage(String chuteColor, boolean noHUD, double burnVolume) {
+    public ClientConfigMessage(String chuteColor, boolean noHUD, double burnVolume, String hudPosition) {
         this.chuteColor = chuteColor;
         this.noHUD = noHUD;
         this.burnVolume = burnVolume;
+        this.hudPosition = hudPosition;
     }
 
     @Override
@@ -49,6 +51,7 @@ public class ClientConfigMessage implements IMessage {
         chuteColor = ByteBufUtils.readUTF8String(byteBuf);
         noHUD = byteBuf.readBoolean();
         burnVolume = byteBuf.readDouble();
+        hudPosition = ByteBufUtils.readUTF8String(byteBuf);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class ClientConfigMessage implements IMessage {
         ByteBufUtils.writeUTF8String(byteBuf, chuteColor);
         byteBuf.writeBoolean(noHUD);
         byteBuf.writeDouble(burnVolume);
+        ByteBufUtils.writeUTF8String(byteBuf, hudPosition);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -66,7 +70,8 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setChuteColor(msg.chuteColor);
                 ClientConfiguration.setNoHUD(msg.noHUD);
                 ClientConfiguration.setBurnVolume(msg.burnVolume);
-                RenderParachute.setParachuteColor(ClientConfiguration.getChuteColor());
+                ClientConfiguration.setHudPosition(msg.hudPosition);
+                RenderParachute.setParachuteColor(msg.chuteColor);
             });
             return null;
         }

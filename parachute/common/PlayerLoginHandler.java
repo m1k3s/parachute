@@ -36,7 +36,8 @@ public class PlayerLoginHandler {
         String color = ConfigHandler.getChuteColor();
         boolean noHUD = ConfigHandler.getNoHUD();
         double burnVolume = ConfigHandler.getBurnVolume();
-        PacketHandler.network.sendTo(new ClientConfigMessage(color, noHUD, burnVolume), (EntityPlayerMP)event.player);
+        String hudPosition = ConfigHandler.getHudPosition();
+        PacketHandler.network.sendTo(new ClientConfigMessage(color, noHUD, burnVolume, hudPosition), (EntityPlayerMP)event.player);
     }
 
     @SubscribeEvent

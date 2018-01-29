@@ -30,6 +30,7 @@ public class ClientConfiguration {
     private static String chuteColor;
     private static boolean noHUD;
     private static double burnVolume;
+    private static String hudPosition;
 
     public ClientConfiguration() {}
 
@@ -45,6 +46,10 @@ public class ClientConfiguration {
         burnVolume = value;
     }
 
+    public static void setHudPosition(String value) {
+        hudPosition = value;
+    }
+
     public static String getChuteColor() {
         return chuteColor;
     }
@@ -55,6 +60,10 @@ public class ClientConfiguration {
 
     public static float getBurnVolume() {
         return (float)burnVolume;
+    }
+
+    public static String getHudPosition() {
+        return hudPosition;
     }
 
 }

@@ -53,6 +53,7 @@ public class ConfigHandler {
     private static boolean aadImmediate;
     private static double burnVolume;
     private static boolean noHUD;
+    private static String hudPosition;
 
     private static double forwardMomentum;
     private static double backMomentum;
@@ -82,6 +83,7 @@ public class ConfigHandler {
     private static final String rotationMomentumComment = "delta rotation momentum value";
     private static final String slideMotionComment = "delta slide momentum value";
     private static final String noHUDComment = "Disable the HUD";
+    private static final String hudPositionComment = "The HUD can be positioned in the upper left, upper center, or upper right";
     private static final String[] colorValues = {
             "random",
             "black",
@@ -110,6 +112,12 @@ public class ConfigHandler {
             "custom7",
             "custom8",
             "custom9",
+    };
+
+    private static final String[] hudPositions = {
+            "left",
+            "center",
+            "right"
     };
 
     public static void preInit(FMLPreInitializationEvent event) {
@@ -168,6 +176,10 @@ public class ConfigHandler {
         chuteColorProp.setComment(colorComment);
         chuteColorProp.setValidValues(colorValues);
 
+        Property hudPositionProp = config.get(Configuration.CATEGORY_GENERAL, "hudPosition", "right");
+        hudPositionProp.setComment(hudPositionComment);
+        hudPositionProp.setValidValues(hudPositions);
+
         List<String> propertyOrder = new ArrayList<>();
         propertyOrder.add(singleUseProp.getName());
         propertyOrder.add(heightLimitProp.getName());
@@ -175,6 +187,7 @@ public class ConfigHandler {
         propertyOrder.add(dismountInWaterProp.getName());
         propertyOrder.add(showContrailsProp.getName());
         propertyOrder.add(burnVolumeProp.getName());
+        propertyOrder.add(hudPositionProp.getName());
         propertyOrder.add(noHUDProp.getName());
         propertyOrder.add(lavaThermalsProp.getName());
         propertyOrder.add(minLavaDistanceProp.getName());
@@ -215,6 +228,7 @@ public class ConfigHandler {
             rotationMomentum = leftMotionProp.getDouble(0.2);
             slideMomentum = slideMotionProp.getDouble(0.005);
             noHUD = noHUDProp.getBoolean(false);
+            hudPosition = hudPositionProp.getString();
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
@@ -241,6 +255,7 @@ public class ConfigHandler {
         leftMotionProp.set(rotationMomentum);
         slideMotionProp.set(slideMomentum);
         noHUDProp.set(noHUD);
+        hudPositionProp.set(hudPosition);
 
         if (config.hasChanged()) {
             config.save();
@@ -257,6 +272,7 @@ public class ConfigHandler {
                 ClientConfiguration.setChuteColor(chuteColor);
                 ClientConfiguration.setNoHUD(noHUD);
                 ClientConfiguration.setBurnVolume(burnVolume);
+                ClientConfiguration.setHudPosition(hudPosition);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }
@@ -367,6 +383,10 @@ public class ConfigHandler {
 
     public static boolean getNoHUD() {
         return noHUD;
+    }
+
+    public static String getHudPosition() {
+        return hudPosition;
     }
 
 }
