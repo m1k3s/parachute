@@ -38,28 +38,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
-////////////////////////////////////////////////
-// to position HUD in upper right corner
-//
-//      hudX = ((width * scale) - hudWidth) - padding;
-//      hudY = padding;
-//      int textX = (hudWidth * scale) - (hudWidth / 2) - (padding / 2);
-//      int textY = hudY + (hudHeight / scale) - (padding / 2);
-//
-// to position HUD in upper left corner
-//
-//      hudX = padding;
-//      hudY = padding;
-//      int textX = hudX + (hudWidth / 4);
-//      int textY = hudY + (hudHeight / 4);
-
 @SideOnly(Side.CLIENT)
 public class HudCompassRenderer extends Gui {
-    protected static final ResourceLocation compassTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
-    protected static final ResourceLocation homeTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
-    protected static final ResourceLocation bubbleTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-bubble.png");
-    protected static final ResourceLocation reticuleTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule.png");
-    protected static final ResourceLocation backgroundTexture = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-background.png");
+    protected static final ResourceLocation COMPASS_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
+    protected static final ResourceLocation HOME_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
+    protected static final ResourceLocation BUBBLE_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-bubble.png");
+    protected static final ResourceLocation RETICULE_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule.png");
+    protected static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-background.png");
+    protected static final ResourceLocation NIGHT_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-night.png");
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static FontRenderer fontRenderer = mc.fontRenderer;
 
@@ -78,8 +64,6 @@ public class HudCompassRenderer extends Gui {
     private int hudX;
     private int hudY;
 
-    // display variables
-    private boolean aadActive;
     private String alt, compass, dist;
 
     public HudCompassRenderer() {
@@ -92,93 +76,112 @@ public class HudCompassRenderer extends Gui {
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
             return;
         }
-        if (ClientConfiguration.getNoHUD()) {
+        if (ClientConfiguration.getNoHUD() || !mc.gameSettings.fullScreen) {
             return;
         }
         if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            ScaledResolution sr = event.getResolution();
+            ScaledResolution sr = new ScaledResolution(mc);
             int scale = sr.getScaleFactor();
-            int width = sr.getScaledWidth();
+            int width = sr.getScaledWidth() * scale;
+            int height = sr.getScaledHeight() * scale;
             int padding = 20;
 
-            hudX = ((width * scale) - hudWidth) - padding;
+            String position = ClientConfiguration.getHudPosition();
+            switch (position) {
+                case "left":
+                    hudX = padding;
+                    break;
+                case "center":
+                    hudX = (width - hudWidth) / 2;
+                    break;
+                default: // "right"
+                    hudX = (width - hudWidth) - padding;
+                    break;
+            }
             hudY = padding;
 
-            int textX = (hudWidth * scale) - (hudWidth / 2) - (padding / 2);
-            int textY = hudY + (hudHeight / scale) - (padding / 2);
+            int textX = hudX + (hudWidth / 2);
+            int textY = hudY + (hudHeight / 2);
 
             if (mc.player.getRidingEntity() instanceof EntityParachute) {
                 EntityParachute chute = (EntityParachute) mc.player.getRidingEntity();
                 if (chute == null) {
                     return;
                 }
+                fontRenderer.setUnicodeFlag(true);
 
                 BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 compassHeading = calcCompassHeading(chute.rotationYaw);
+                boolean aadActive = ConfigHandler.getIsAADActive();
 
-                // scale the HUD to 50%
                 GlStateManager.pushMatrix();
 
                 GlStateManager.enableRescaleNormal();
                 GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-                // textures are 256x256, scale to 50% first, then in the
-                // texture drawing methods scale and additional 50%, the
-                // final scaled textures are 64x64 on screen
-                // this method scales the texture and text correctly because
-                // we need the texture at 25% of original size and the text at
-                // 50% of original size
-                GlStateManager.scale(0.5, 0.5, 0.5);
+                GlStateManager.scale(0.25, 0.25, 0.25);
 
                 // 1. draw the background
-                drawTextureFixed(backgroundTexture);
+                if (isNightTime()) {
+                    drawTextureFixed(NIGHT_TEXTURE);
+                }
+                drawTextureFixed(BACKGROUND_TEXTURE);
 
                 // 2. draw the compass ring
-                drawTextureWithRotation((float) -compassHeading, compassTexture);
+                drawTextureWithRotation((float) -compassHeading, COMPASS_TEXTURE);
 
                 // 3. draw the home direction ring
-                drawTextureWithRotation((float) homeDir, homeTexture);
+                drawTextureWithRotation((float) homeDir, HOME_TEXTURE);
 
                 // 4. draw the parachute/player facing bubble
                 float playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
-                drawTextureWithRotation(playerLook, bubbleTexture);
+                drawTextureWithRotation(playerLook, BUBBLE_TEXTURE);
 
                 // 5. draw the reticule on top
-                drawTextureFixed(reticuleTexture);
+                drawTextureFixed(RETICULE_TEXTURE);
 
-                // damping the update ( 20 ticks/second modulo 10 is about 1/2 second updates)
+                // damping the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
-                    aadActive = ConfigHandler.getIsAADActive();
-                    alt = format(altitude);
-                    compass = format(compassHeading);
-                    dist = format(distance);
+                    alt = formatBold(altitude);
+                    compass = formatBold(compassHeading);
+                    dist = formatBold(distance);
                 }
                 count++;
+
+                // scale text up to 50%
+                GlStateManager.scale(2.0, 2.0, 2.0);
+                // scale the text coords as well
+                textX /= 2;
+                textY /= 2;
 
                 int hFont = fontRenderer.FONT_HEIGHT;
                 // 1. draw the compass heading text
                 drawCenteredString(fontRenderer, compass, textX, textY - (hFont * 2) - 2, colorGreen);
 
                 // 2. draw the altitude text
-                drawCenteredString(fontRenderer, alt, textX, textY - hFont - 2, colorAltitude());
+                drawCenteredString(fontRenderer, alt, textX, textY - hFont, colorAltitude());
 
                 // 3. draw the distance to the home/spawn point text
                 drawCenteredString(fontRenderer, dist, textX, textY + 2, colorGreen);
 
                 // 4. AAD active indicator
-                drawCenteredString(fontRenderer, "* AAD *", textX, textY + hFont + 2, aadActive ? colorGreen : colorRed);
+                drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, aadActive ? colorGreen : colorRed);
 
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
 
                 GlStateManager.popMatrix();
+                fontRenderer.setUnicodeFlag(false);
             }
         }
+    }
+
+    private boolean isNightTime() {
+        return mc.world.getWorldTime() > 12515 && mc.world.getWorldTime() < 23000;
     }
 
 
@@ -186,8 +189,6 @@ public class HudCompassRenderer extends Gui {
     private void drawTextureFixed(ResourceLocation texture) {
         GlStateManager.pushMatrix();
 
-        // scale again, final scale is 25% of original size
-        GlStateManager.scale(0.5, 0.5, 0.5);
         mc.getTextureManager().bindTexture(texture);
         drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight);
 
@@ -200,8 +201,6 @@ public class HudCompassRenderer extends Gui {
 
         float tx = hudX + (hudWidth / 2);
         float ty = hudY + (hudHeight / 2);
-        // scale again, final scale is 25% of original size
-        GlStateManager.scale(0.5, 0.5, 0.5);
         // translate to center and rotate
         GlStateManager.translate(tx, ty, 0);
         GlStateManager.rotate(degrees, 0, 0, 1);
@@ -213,8 +212,14 @@ public class HudCompassRenderer extends Gui {
         GlStateManager.popMatrix();
     }
 
-    public String format(double d) {
-        return String.format("%.1f", d);
+    // §k	Obfuscated
+    // §l	Bold
+    // §m	Strikethrough
+    // §n	Underline
+    // §o	Italic
+    // §r	Reset
+    public String formatBold(double d) {
+        return String.format("§l%.1f", d);
     }
 
     private double calcCompassHeading(double yaw) {
