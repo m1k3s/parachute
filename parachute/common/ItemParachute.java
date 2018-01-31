@@ -39,7 +39,7 @@ import javax.annotation.Nonnull;
 
 public class ItemParachute extends Item {
 
-    private static boolean active = ConfigHandler.getIsAADActive();
+//    private static boolean active = ConfigHandler.getIsAADActive();
     private static final double OFFSET = 2.5;
 
     public ItemParachute(String itemName) {
@@ -96,6 +96,7 @@ public class ItemParachute extends Item {
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        boolean active = ConfigHandler.getIsAADActive();
         if (entityplayer != null) {
             if (!world.isRemote) { // server side
                 active = !active;

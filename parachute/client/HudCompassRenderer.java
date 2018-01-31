@@ -46,6 +46,7 @@ public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation RETICULE_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule.png");
     protected static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-background.png");
     protected static final ResourceLocation NIGHT_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-night.png");
+    protected static final ResourceLocation CLOCK_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-clock.png");
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static FontRenderer fontRenderer = mc.fontRenderer;
 
@@ -70,7 +71,7 @@ public class HudCompassRenderer extends Gui {
         super();
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "IfCanBeSwitch"})
     @SubscribeEvent
     public void drawCompassHUD(RenderGameOverlayEvent.Post event) {
         if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
@@ -87,16 +88,16 @@ public class HudCompassRenderer extends Gui {
             int padding = 20;
 
             String position = ClientConfiguration.getHudPosition();
-            switch (position) {
-                case "left":
-                    hudX = padding;
-                    break;
-                case "center":
-                    hudX = (width - hudWidth) / 2;
-                    break;
-                default: // "right"
-                    hudX = (width - hudWidth) - padding;
-                    break;
+            if (position == null) {
+                position = "right";
+            }
+
+            if (position.equals("left")) {
+                hudX = padding;
+            } else if (position.equals("center")) {
+                hudX = (width - hudWidth) / 2;
+            } else {
+                hudX = (width - hudWidth) - padding;
             }
             hudY = padding;
 
@@ -144,6 +145,9 @@ public class HudCompassRenderer extends Gui {
                 // 5. draw the reticule on top
                 drawTextureFixed(RETICULE_TEXTURE);
 
+                // 6. draw the digital clock
+                drawClock(CLOCK_TEXTURE);
+
                 // damping the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
                     alt = formatBold(altitude);
@@ -171,6 +175,9 @@ public class HudCompassRenderer extends Gui {
                 // 4. AAD active indicator
                 drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, aadActive ? colorGreen : colorRed);
 
+                // 5. Minecraft time in HH:MM:SS
+                drawCenteredString(fontRenderer, formatMinecraftTime(mc.world.getWorldTime()), textX, textY + (hudHeight / 4) + 3, colorRed);
+
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
 
@@ -181,9 +188,18 @@ public class HudCompassRenderer extends Gui {
     }
 
     private boolean isNightTime() {
-        return mc.world.getWorldTime() > 12515 && mc.world.getWorldTime() < 23000;
+        long ticks = mc.world.getWorldTime() % 24000;
+        return ticks > 12550 && ticks < 23000;
     }
 
+    private void drawClock(ResourceLocation texture) {
+        GlStateManager.pushMatrix();
+
+        mc.getTextureManager().bindTexture(texture);
+        drawTexturedModalRect((hudX + (hudWidth / 2)) - 51, hudY + hudHeight + 2, 0, 0, 102, 25);
+
+        GlStateManager.popMatrix();
+    }
 
     // draw a texture
     private void drawTextureFixed(ResourceLocation texture) {
@@ -220,6 +236,14 @@ public class HudCompassRenderer extends Gui {
     // §r	Reset
     public String formatBold(double d) {
         return String.format("§l%.1f", d);
+    }
+
+    public String formatMinecraftTime(double ticks) {
+        double real = (ticks % 24000) * 3.6; // ticks to seconds wrapping ticks if necessary
+        int hours = MathHelper.floor(((real / 3600.0) + 6) % 24); // Minecraft ticks are offset from calendar clock by 6 hours
+        int minutes = MathHelper.floor((real / 60.0) % 60);
+        int seconds = MathHelper.floor(real % 60);
+        return String.format("§l%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     private double calcCompassHeading(double yaw) {
