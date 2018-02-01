@@ -1,3 +1,39 @@
+commit 1b29700190f696efcd631e95b05a218750db2bc7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Feb 1 12:29:40 2018 -0500
+
+    Minor code improvements
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 100e9e0c83edaf994b28285f9fb707b254e992bb
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 31 13:05:12 2018 -0500
+
+    Added a digital clock that shows Minecraft time in HH:MM:SS
+    fixed the right-click not updating the AAD on first click
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 420682592b07001a53bd155ba8a64be5d8cfa487
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 29 18:14:42 2018 -0500
+
+    removed unused entries from en_us.lang file
+    updated all HUD textures
+    added client option to place HUD: left, center, right
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 7cdae7371afc7756d38aa532956f81483206f94d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 27 14:45:09 2018 -0500
+
+    updated Changelog
+    tweaked the bubble and reticule textures
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
 commit 030de5aa8ce3bcee5254df1a78e05e48c1a5353a
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sat Jan 27 11:02:01 2018 -0500
