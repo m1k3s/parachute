@@ -47,6 +47,15 @@ public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-background.png");
     protected static final ResourceLocation NIGHT_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-night.png");
     protected static final ResourceLocation CLOCK_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-clock.png");
+
+    private static final int MOON_RISE = 12600;
+    private static final int SUN_RISE = 22900;
+    private static final int MAX_TICKS = 24000;
+
+    private static final int COLOR_RED = 0xffff0000;
+    private static final int COLOR_GREEN = 0xff00ff00;
+    private static final int COLOR_YELLOW = 0xffffff00;
+
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static FontRenderer fontRenderer = mc.fontRenderer;
 
@@ -56,9 +65,6 @@ public class HudCompassRenderer extends Gui {
 
     private final int hudWidth = 256;
     private final int hudHeight = 256;
-
-    private final int colorGreen = 0xff00ff00;
-    private final int colorRed = 0xffff0000;
 
     double compassHeading;
 
@@ -148,7 +154,7 @@ public class HudCompassRenderer extends Gui {
                 // 6. draw the digital clock
                 drawClock(CLOCK_TEXTURE);
 
-                // damping the update (20 ticks/second modulo 10 is about 1/2 second updates)
+                // damp the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
                     alt = formatBold(altitude);
                     compass = formatBold(compassHeading);
@@ -164,19 +170,19 @@ public class HudCompassRenderer extends Gui {
 
                 int hFont = fontRenderer.FONT_HEIGHT;
                 // 1. draw the compass heading text
-                drawCenteredString(fontRenderer, compass, textX, textY - (hFont * 2) - 2, colorGreen);
+                drawCenteredString(fontRenderer, compass, textX, textY - (hFont * 2) - 2, COLOR_GREEN);
 
                 // 2. draw the altitude text
                 drawCenteredString(fontRenderer, alt, textX, textY - hFont, colorAltitude());
 
                 // 3. draw the distance to the home/spawn point text
-                drawCenteredString(fontRenderer, dist, textX, textY + 2, colorGreen);
+                drawCenteredString(fontRenderer, dist, textX, textY + 2, COLOR_GREEN);
 
                 // 4. AAD active indicator
-                drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, aadActive ? colorGreen : colorRed);
+                drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, aadActive ? COLOR_GREEN : COLOR_RED);
 
                 // 5. Minecraft time in HH:MM:SS
-                drawCenteredString(fontRenderer, formatMinecraftTime(mc.world.getWorldTime()), textX, textY + (hudHeight / 4) + 3, colorRed);
+                drawCenteredString(fontRenderer, formatMinecraftTime(mc.world.getWorldTime()), textX, textY + (hudHeight / 4) + 3, COLOR_RED);
 
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
@@ -188,8 +194,8 @@ public class HudCompassRenderer extends Gui {
     }
 
     private boolean isNightTime() {
-        long ticks = mc.world.getWorldTime() % 24000;
-        return ticks > 12550 && ticks < 23000;
+        long ticks = mc.world.getWorldTime() % MAX_TICKS;
+        return ticks > MOON_RISE && ticks < SUN_RISE;
     }
 
     private void drawClock(ResourceLocation texture) {
@@ -228,6 +234,7 @@ public class HudCompassRenderer extends Gui {
         GlStateManager.popMatrix();
     }
 
+    // Minecraft text style codes
     // §k	Obfuscated
     // §l	Bold
     // §m	Strikethrough
@@ -239,11 +246,11 @@ public class HudCompassRenderer extends Gui {
     }
 
     public String formatMinecraftTime(double ticks) {
-        double real = (ticks % 24000) * 3.6; // ticks to seconds wrapping ticks if necessary
-        int hours = MathHelper.floor(((real / 3600.0) + 6) % 24); // Minecraft ticks are offset from calendar clock by 6 hours
-        int minutes = MathHelper.floor((real / 60.0) % 60);
-        int seconds = MathHelper.floor(real % 60);
-        return String.format("§l%02d:%02d:%02d", hours, minutes, seconds);
+        double realSeconds = (ticks % MAX_TICKS) * 3.6; // ticks to seconds wrapping ticks if necessary
+        int McHours = MathHelper.floor(((realSeconds / 3600.0) + 6) % 24); // Minecraft ticks are offset from calendar clock by 6 hours
+        int McMinutes = MathHelper.floor((realSeconds / 60.0) % 60);
+        int McSeconds = MathHelper.floor(realSeconds % 60);
+        return String.format("§l%02d:%02d:%02d", McHours, McMinutes, McSeconds);
     }
 
     private double calcCompassHeading(double yaw) {
@@ -261,6 +268,7 @@ public class HudCompassRenderer extends Gui {
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 
+    // Thanks to Pythagoras we can calculate the distance to home/spawn
     public double getHomeDistance() {
         BlockPos blockpos = mc.world.getSpawnPoint();
         double a = Math.pow(blockpos.getZ() - mc.player.posZ, 2);
@@ -269,8 +277,7 @@ public class HudCompassRenderer extends Gui {
     }
 
     public int colorAltitude() {
-        int colorYellow = 0xffffff00;
-        return altitude <= 10.0 ? colorRed : altitude <= 15.0 && altitude > 10.0 ? colorYellow : colorGreen;
+        return altitude <= 10.0 ? COLOR_RED : altitude <= 15.0 && altitude > 10.0 ? COLOR_YELLOW : COLOR_GREEN;
     }
 
     // calculate altitude in meters above ground. starting at the entity
