@@ -56,20 +56,18 @@ public class HudCompassRenderer extends Gui {
     private static final int COLOR_GREEN = 0xff00ff00;
     private static final int COLOR_YELLOW = 0xffffff00;
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    private static FontRenderer fontRenderer = mc.fontRenderer;
+    private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
+    private static FontRenderer fontRenderer = MINECRAFT.fontRenderer;
 
     public static double altitude;
 
     private static int count = 0;
 
-    private final int hudWidth = 256;
-    private final int hudHeight = 256;
+    private static final int HUD_WIDTH = 256;
+    private static final int HUD_HEIGHT = 256;
+    private static final int PADDING = 20;
 
     double compassHeading;
-
-    private int hudX;
-    private int hudY;
 
     private String alt, compass, dist;
 
@@ -80,44 +78,44 @@ public class HudCompassRenderer extends Gui {
     @SuppressWarnings({"unused", "IfCanBeSwitch"})
     @SubscribeEvent
     public void drawCompassHUD(RenderGameOverlayEvent.Post event) {
-        if (event.isCancelable() || mc.gameSettings.showDebugInfo || mc.player.onGround) {
+        if (event.isCancelable() || MINECRAFT.gameSettings.showDebugInfo || MINECRAFT.player.onGround) {
             return;
         }
-        if (ClientConfiguration.getNoHUD() || !mc.gameSettings.fullScreen) {
+        if (ClientConfiguration.getNoHUD() || !MINECRAFT.gameSettings.fullScreen) {
             return;
         }
-        if (mc.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            ScaledResolution sr = new ScaledResolution(mc);
+        if (MINECRAFT.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            ScaledResolution sr = new ScaledResolution(MINECRAFT);
             int scale = sr.getScaleFactor();
             int width = sr.getScaledWidth() * scale;
             int height = sr.getScaledHeight() * scale;
-            int padding = 20;
+
 
             String position = ClientConfiguration.getHudPosition();
             if (position == null) {
                 position = "right";
             }
 
+            int hudX;
             if (position.equals("left")) {
-                hudX = padding;
+                hudX = PADDING;
             } else if (position.equals("center")) {
-                hudX = (width - hudWidth) / 2;
+                hudX = (width - HUD_WIDTH) / 2;
             } else {
-                hudX = (width - hudWidth) - padding;
+                hudX = (width - HUD_WIDTH) - PADDING;
             }
-            hudY = padding;
 
-            int textX = hudX + (hudWidth / 2);
-            int textY = hudY + (hudHeight / 2);
+            int textX = hudX + (HUD_WIDTH / 2);
+            int textY = PADDING + (HUD_HEIGHT / 2);
 
-            if (mc.player.getRidingEntity() instanceof EntityParachute) {
-                EntityParachute chute = (EntityParachute) mc.player.getRidingEntity();
+            if (MINECRAFT.player.getRidingEntity() instanceof EntityParachute) {
+                EntityParachute chute = (EntityParachute) MINECRAFT.player.getRidingEntity();
                 if (chute == null) {
                     return;
                 }
                 fontRenderer.setUnicodeFlag(true);
 
-                BlockPos entityPos = new BlockPos(mc.player.posX, mc.player.getEntityBoundingBox().minY, mc.player.posZ);
+                BlockPos entityPos = new BlockPos(MINECRAFT.player.posX, MINECRAFT.player.getEntityBoundingBox().minY, MINECRAFT.player.posZ);
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
@@ -134,25 +132,25 @@ public class HudCompassRenderer extends Gui {
 
                 // 1. draw the background
                 if (isNightTime()) {
-                    drawTextureFixed(NIGHT_TEXTURE);
+                    drawTextureFixed(NIGHT_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
                 }
-                drawTextureFixed(BACKGROUND_TEXTURE);
+                drawTextureFixed(BACKGROUND_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
 
                 // 2. draw the compass ring
-                drawTextureWithRotation((float) -compassHeading, COMPASS_TEXTURE);
+                drawTextureWithRotation((float) -compassHeading, COMPASS_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
 
                 // 3. draw the home direction ring
-                drawTextureWithRotation((float) homeDir, HOME_TEXTURE);
+                drawTextureWithRotation((float) homeDir, HOME_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
 
                 // 4. draw the parachute/player facing bubble
-                float playerLook = MathHelper.wrapDegrees(mc.player.getRotationYawHead() - chute.rotationYaw);
-                drawTextureWithRotation(playerLook, BUBBLE_TEXTURE);
+                float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
+                drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
 
                 // 5. draw the reticule on top
-                drawTextureFixed(RETICULE_TEXTURE);
+                drawTextureFixed(RETICULE_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
 
                 // 6. draw the digital clock
-                drawClock(CLOCK_TEXTURE);
+                drawTextureFixed(CLOCK_TEXTURE, (hudX + (HUD_WIDTH / 2)) - 51, PADDING + HUD_HEIGHT + 2, 102, 25);
 
                 // damp the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
@@ -182,7 +180,7 @@ public class HudCompassRenderer extends Gui {
                 drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, aadActive ? COLOR_GREEN : COLOR_RED);
 
                 // 5. Minecraft time in HH:MM:SS
-                drawCenteredString(fontRenderer, formatMinecraftTime(mc.world.getWorldTime()), textX, textY + (hudHeight / 4) + 3, COLOR_RED);
+                drawCenteredString(fontRenderer, formatMinecraftTime(MINECRAFT.world.getWorldTime()), textX, textY + (HUD_HEIGHT / 4) + 3, COLOR_RED);
 
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
@@ -194,42 +192,33 @@ public class HudCompassRenderer extends Gui {
     }
 
     private boolean isNightTime() {
-        long ticks = mc.world.getWorldTime() % MAX_TICKS;
+        long ticks = MINECRAFT.world.getWorldTime() % MAX_TICKS;
         return ticks > MOON_RISE && ticks < SUN_RISE;
     }
 
-    private void drawClock(ResourceLocation texture) {
+    // draw a fixed texture
+    private void drawTextureFixed(ResourceLocation texture, int screenX, int screenY, int w, int h) {
         GlStateManager.pushMatrix();
 
-        mc.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect((hudX + (hudWidth / 2)) - 51, hudY + hudHeight + 2, 0, 0, 102, 25);
+        MINECRAFT.getTextureManager().bindTexture(texture);
+        drawTexturedModalRect(screenX, screenY, 0, 0, w, h);
 
         GlStateManager.popMatrix();
     }
 
-    // draw a texture
-    private void drawTextureFixed(ResourceLocation texture) {
+    // draw a rotating texture
+    private void drawTextureWithRotation(float degrees, ResourceLocation texture, int screenX, int screenY, int w, int h) {
         GlStateManager.pushMatrix();
 
-        mc.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight);
-
-        GlStateManager.popMatrix();
-    }
-
-    // draw the compass/home textures
-    private void drawTextureWithRotation(float degrees, ResourceLocation texture) {
-        GlStateManager.pushMatrix();
-
-        float tx = hudX + (hudWidth / 2);
-        float ty = hudY + (hudHeight / 2);
+        float tx = screenX + (w / 2);
+        float ty = screenY + (h / 2);
         // translate to center and rotate
         GlStateManager.translate(tx, ty, 0);
         GlStateManager.rotate(degrees, 0, 0, 1);
         GlStateManager.translate(-tx, -ty, 0);
 
-        mc.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(hudX, hudY, 0, 0, hudWidth, hudHeight);
+        MINECRAFT.getTextureManager().bindTexture(texture);
+        drawTexturedModalRect(screenX, screenY, 0, 0, w, h);
 
         GlStateManager.popMatrix();
     }
@@ -262,17 +251,17 @@ public class HudCompassRenderer extends Gui {
     // the home point can be either the world spawn point or a waypoint
     // set by the player in the config.
     public double getHomeDirection(double yaw) {
-        BlockPos blockpos = mc.world.getSpawnPoint();
-        double delta = Math.atan2(blockpos.getZ() - mc.player.posZ, blockpos.getX() - mc.player.posX);
+        BlockPos blockpos = MINECRAFT.world.getSpawnPoint();
+        double delta = Math.atan2(blockpos.getZ() - MINECRAFT.player.posZ, blockpos.getX() - MINECRAFT.player.posX);
         double relAngle = delta - Math.toRadians(yaw);
         return MathHelper.wrapDegrees(Math.toDegrees(relAngle) - 90.0); // degrees
     }
 
     // Thanks to Pythagoras we can calculate the distance to home/spawn
     public double getHomeDistance() {
-        BlockPos blockpos = mc.world.getSpawnPoint();
-        double a = Math.pow(blockpos.getZ() - mc.player.posZ, 2);
-        double b = Math.pow(blockpos.getX() - mc.player.posX, 2);
+        BlockPos blockpos = MINECRAFT.world.getSpawnPoint();
+        double a = Math.pow(blockpos.getZ() - MINECRAFT.player.posZ, 2);
+        double b = Math.pow(blockpos.getX() - MINECRAFT.player.posX, 2);
         return Math.sqrt(a + b);
     }
 
@@ -285,14 +274,14 @@ public class HudCompassRenderer extends Gui {
     // only allow altitude calculations in the surface world
     // return a weirdly random number if in nether or end.
     public double getCurrentAltitude(BlockPos entityPos) {
-        if (mc.world.provider.isSurfaceWorld()) {
+        if (MINECRAFT.world.provider.isSurfaceWorld()) {
             BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
-            while (mc.world.isAirBlock(blockPos.down())) {
+            while (MINECRAFT.world.isAirBlock(blockPos.down())) {
                 blockPos = blockPos.down();
             }
             // calculate the entity's current altitude above the ground
             return entityPos.getY() - blockPos.getY();
         }
-        return 1000.0 * mc.world.rand.nextGaussian();
+        return 1000.0 * MINECRAFT.world.rand.nextGaussian();
     }
 }
