@@ -49,7 +49,7 @@ public class EntityParachute extends Entity {
     private boolean allowThermals;
     private boolean lavaThermals;
     private double lavaDistance;
-    private double maxThermalRise;
+    private double maxLavaDistance;
     private double curLavaDistance;
     private boolean allowTurbulence;
     private boolean showContrails;
@@ -76,7 +76,7 @@ public class EntityParachute extends Entity {
         maxAltitude = ConfigHandler.getMaxAltitude();
         lavaThermals = ConfigHandler.getAllowLavaThermals();
         dismountInWater = ConfigHandler.getDismountInWater();
-        maxThermalRise = ConfigHandler.getMaxLavaDistance();
+        maxLavaDistance = ConfigHandler.getMaxLavaDistance();
 
         forwardMomentum = ConfigHandler.getForwardMomentum();
         backMOmentum = ConfigHandler.getBackMomentum();
@@ -354,8 +354,8 @@ public class EntityParachute extends Entity {
         return descentRate;
     }
 
-    // the following three methods detect lava below the player
-    // at up to 'maxThermalRise' distance.
+    // the following three methods detect lava|fire below the player
+    // at up to 'maxLavaDistance' blocks.
     private boolean isHeatSource(BlockPos bp) {
         return world.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
     }
@@ -375,12 +375,12 @@ public class EntityParachute extends Entity {
         double thermals = DRIFT;
         final double inc = 0.5;
 
-        BlockPos blockPos = new BlockPos(posX, posY - OFFSET - maxThermalRise, posZ);
+        BlockPos blockPos = new BlockPos(posX, posY - OFFSET - maxLavaDistance, posZ);
 
         if (isHeatSourceInRange(blockPos)) {
             curLavaDistance += inc;
             thermals = ASCEND;
-            if (curLavaDistance >= maxThermalRise) {
+            if (curLavaDistance >= maxLavaDistance) {
                 curLavaDistance = lavaDistance;
                 thermals = DRIFT;
             }
