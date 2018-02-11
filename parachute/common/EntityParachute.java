@@ -62,7 +62,7 @@ public class EntityParachute extends Entity {
     private double slideMomentum;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
-    private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ASCEND
+    private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ascend
     private final static double OFFSET = 2.5; // player Y offset from parachute
 
     private static boolean ascendMode;
@@ -486,10 +486,11 @@ public class EntityParachute extends Entity {
     @Override
     public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {}
 
-    @Nonnull
-    @Override
-    public String toString() {
-        return String.format("%s: {x=%.1f, y=%.1f, z=%.1f}, {yaw=%.1f, pitch=%.1f}", getClass().getSimpleName(), posX, posY, posZ, rotationYaw, rotationPitch);
-    }
+//    @Nonnull
+//    @Override
+//    public String toString() {
+//        return String.format("%s: {x=%.1f, y=%.1f, z=%.1f}, {yaw=%.1f, pitch=%.1f}",
+//                getClass().getSimpleName(), posX, posY, posZ, rotationYaw, rotationPitch);
+//    }
 
 }
