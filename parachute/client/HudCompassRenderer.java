@@ -84,13 +84,11 @@ public class HudCompassRenderer extends Gui {
         }
         if (MINECRAFT.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             ScaledResolution sr = new ScaledResolution(MINECRAFT);
-            int scale = sr.getScaleFactor();
-            int width = sr.getScaledWidth() * scale;
-
+            int width = sr.getScaledWidth() * sr.getScaleFactor();
 
             String position = ClientConfiguration.getHudPosition();
             if (position == null) {
-                position = "right";
+                return; //position = "right";
             }
 
             // initialize hudX based on user selected position, 'left', 'center', or 'right'
@@ -104,6 +102,8 @@ public class HudCompassRenderer extends Gui {
                 if (chute == null) {
                     return;
                 }
+                // attempt to use unicode for the HUD font
+                boolean unicodeFlag = fontRenderer.getUnicodeFlag();
                 fontRenderer.setUnicodeFlag(true);
 
                 BlockPos entityPos = new BlockPos(MINECRAFT.player.posX, MINECRAFT.player.getEntityBoundingBox().minY, MINECRAFT.player.posZ);
@@ -171,7 +171,8 @@ public class HudCompassRenderer extends Gui {
                 GlStateManager.disableBlend();
 
                 GlStateManager.popMatrix();
-                fontRenderer.setUnicodeFlag(false);
+                // reset the unicode font flag
+                fontRenderer.setUnicodeFlag(unicodeFlag);
             }
         }
     }
@@ -208,7 +209,7 @@ public class HudCompassRenderer extends Gui {
         GlStateManager.popMatrix();
     }
 
-    // Minecraft text style codes
+    // Minecraft font style codes
     // §k	Obfuscated
     // §l	Bold
     // §m	Strikethrough
