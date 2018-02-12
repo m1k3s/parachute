@@ -39,7 +39,6 @@ import javax.annotation.Nonnull;
 
 public class ItemParachute extends Item {
 
-//    private static boolean active = ConfigHandler.getIsAADActive();
     private static final double OFFSET = 2.5;
 
     public ItemParachute(String itemName) {

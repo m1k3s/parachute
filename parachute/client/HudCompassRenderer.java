@@ -88,7 +88,7 @@ public class HudCompassRenderer extends Gui {
 
             String position = ClientConfiguration.getHudPosition();
             if (position == null) {
-                return; //position = "right";
+                return;
             }
 
             // initialize hudX based on user selected position, 'left', 'center', or 'right'
