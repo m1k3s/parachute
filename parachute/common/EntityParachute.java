@@ -57,7 +57,7 @@ public class EntityParachute extends Entity {
 
     private double deltaRotation;
     private double forwardMomentum;
-    private double backMOmentum;
+    private double backMomentum;
     private double rotationMomentum;
     private double slideMomentum;
 
@@ -79,7 +79,7 @@ public class EntityParachute extends Entity {
         maxLavaDistance = ConfigHandler.getMaxLavaDistance();
 
         forwardMomentum = ConfigHandler.getForwardMomentum();
-        backMOmentum = ConfigHandler.getBackMomentum();
+        backMomentum = ConfigHandler.getBackMomentum();
         rotationMomentum = ConfigHandler.getRotationMomentum();
         slideMomentum = ConfigHandler.getSlideMomentum();
 
@@ -224,7 +224,7 @@ public class EntityParachute extends Entity {
                 motionFactor += forwardMomentum;
             }
             if (input.backKeyDown) {
-                motionFactor -= backMOmentum;
+                motionFactor -= backMomentum;
             }
             if (input.leftKeyDown) {
                 deltaRotation += -(rotationMomentum);
@@ -278,7 +278,7 @@ public class EntityParachute extends Entity {
 
         // apply momentum
         motionX *= 0.97;
-        motionY *= (motionY < 0.0 ? 0.95 : 0.98); // rises faster than falls
+        motionY *= (motionY < 0.0 ? 0.96 : 0.98); // rises faster than falls
         motionZ *= 0.97;
         deltaRotation *= 0.9;
         // move the parachute with the motion equations applied

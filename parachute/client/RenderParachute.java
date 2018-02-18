@@ -62,7 +62,7 @@ public class RenderParachute extends Render<EntityParachute> {
         modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
         if (entityparachute.getControllingPassenger() != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
             EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
-            renderParachuteCords(rider, partialTicks);
+            renderParachuteCords(rider);
         }
         GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 
@@ -70,8 +70,7 @@ public class RenderParachute extends Render<EntityParachute> {
         super.doRender(entityparachute, x, y, z, rotationYaw, partialTicks);
     }
 
-    @SuppressWarnings("unused")
-    public void renderParachuteCords(EntityPlayer rider, float partialTicks) {
+    public void renderParachuteCords(EntityPlayer rider) {
         final float b = rider.getBrightness();
 
         final float lx[] = {-8f, 0f, -8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f};
