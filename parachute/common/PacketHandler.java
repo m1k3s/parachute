@@ -31,7 +31,6 @@ public class PacketHandler {
     private static final int PACKET_ID = 0;
 
     public static void init() {
-        network.registerMessage(AscendKeyPressMessage.Handler.class, AscendKeyPressMessage.class, PACKET_ID, Side.SERVER);
-        network.registerMessage(ClientConfigMessage.Handler.class, ClientConfigMessage.class, PACKET_ID + 1, Side.CLIENT);
+        network.registerMessage(ClientConfigMessage.Handler.class, ClientConfigMessage.class, PACKET_ID, Side.CLIENT);
     }
 }

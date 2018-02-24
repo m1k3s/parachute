@@ -30,16 +30,7 @@ public class PlayerInfo {
         this.name = name;
     }
 
-    public void setAscendMode(boolean m) {
-        mode = m;
-    }
-
-    public boolean getAscendMode() {
-        return mode;
-    }
-
     public String getName() {
         return name;
     }
-
 }

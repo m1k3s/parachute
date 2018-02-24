@@ -46,7 +46,6 @@ public class ParachuteClientProxy implements IProxy {
 
     public void Init() {
         MinecraftForge.EVENT_BUS.register(new ConfigHandler.ConfigEventHandler());
-        MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
         MinecraftForge.EVENT_BUS.register(new ParachuteInputEvent());
         MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
     }
