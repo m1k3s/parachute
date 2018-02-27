@@ -27,10 +27,10 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketHandler {
 
-    public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(Parachute.MODID);
+    public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Parachute.MODID);
     private static final int PACKET_ID = 0;
 
     public static void init() {
-        network.registerMessage(ClientConfigMessage.Handler.class, ClientConfigMessage.class, PACKET_ID, Side.CLIENT);
+        NETWORK.registerMessage(ClientConfigMessage.Handler.class, ClientConfigMessage.class, PACKET_ID, Side.CLIENT);
     }
 }

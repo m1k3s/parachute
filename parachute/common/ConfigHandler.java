@@ -114,7 +114,7 @@ public class ConfigHandler {
             "custom9",
     };
 
-    private static final String[] hudPositions = {
+    private static final String[] HUD_POSITIONS = {
             "left",
             "center",
             "right"
@@ -178,7 +178,7 @@ public class ConfigHandler {
 
         Property hudPositionProp = config.get(Configuration.CATEGORY_GENERAL, "hudPosition", "right");
         hudPositionProp.setComment(hudPositionComment);
-        hudPositionProp.setValidValues(hudPositions);
+        hudPositionProp.setValidValues(HUD_POSITIONS);
 
         List<String> propertyOrder = new ArrayList<>();
         propertyOrder.add(singleUseProp.getName());
@@ -355,7 +355,7 @@ public class ConfigHandler {
 
     public static int getParachuteDamageAmount(ItemStack itemStack) {
         if (singleUse) {
-            return Parachute.parachuteItem.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
+            return Parachute.PARACHUTE_ITEM.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
         }
         return 1;
     }
