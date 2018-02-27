@@ -58,10 +58,10 @@ public class Parachute {
     public static SoundEvent OPENCHUTE;
     public static SoundEvent LIFTCHUTE;
 
-    public static final Item parachuteItem = new ItemParachute(Parachute.parachuteName);
-    public static final EntityEquipmentSlot armorType = EntityEquipmentSlot.CHEST;
-    static final int renderIndex = 1; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
-    public static final Item packItem = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, renderIndex, armorType, Parachute.packName);
+    public static final Item PARACHUTE_ITEM = new ItemParachute(Parachute.parachuteName);
+    public static final EntityEquipmentSlot ARMOR_TYPE = EntityEquipmentSlot.CHEST;
+    static final int RENDER_INDEX = 1; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
+    public static final Item ITEM_PARACHUTE_PACK = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, RENDER_INDEX, ARMOR_TYPE, Parachute.packName);
 
     public static final String MODID = "parachutemod";
     public static final String MODVERSION = "1.7.4";
@@ -94,7 +94,7 @@ public class Parachute {
         ConfigHandler.preInit(event);
         int entityID = 1;
         EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
-        GameRegistry.findRegistry(Item.class).registerAll(packItem, parachuteItem);
+        GameRegistry.findRegistry(Item.class).registerAll(ITEM_PARACHUTE_PACK, PARACHUTE_ITEM);
         PacketHandler.init();
         proxy.preInit();
     }

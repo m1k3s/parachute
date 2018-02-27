@@ -1,3 +1,76 @@
+commit 8b096e2c9b8cf441be061f9c120c0cd4276584fc
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Feb 23 20:38:26 2018 -0500
+
+    removed KeyPressTick class
+    removed AscendKeyPressMessage class
+    and all supporting code
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit ef4ea7f1b279db9676db001a4ea7c44574ab1c73
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 18 11:02:21 2018 -0500
+
+    minor code cleanup, removed some commented code
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 092a1de7bbd68d2ffb5cd1ea2679ce085591102c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Feb 12 10:48:54 2018 -0500
+
+    removed commented code no longer used
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit c1315c069e57d1d6a1550e887a24bfd31d29f879
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 11 07:55:47 2018 -0500
+
+    fixed unicode bug.
+    removed redundant code in HudCompassRenderer
+    commented out unused toString method in EntityParachute
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 447a3d86753739c8d85d506bbfee7d55a5c6add2
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Feb 8 08:31:38 2018 -0500
+
+    changed variable from maxThermalRise to max LavaDistance to better
+    reflect
+       it's purpose.
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 731c82dd66e921fe56417908601aac2074618efd
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 4 11:23:46 2018 -0500
+
+    removed digital clock code/textures - created seperate mod for clock
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit b943ec8aa7cc3b8626874e093a1ecf24a0e8d928
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Feb 1 16:44:38 2018 -0500
+
+    added some static finals
+    changed texture drawing methods to use placement args instead
+    of globals
+    the proof-of-concept digital clock drawing uses drawTextureFixed
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 481346664cf82ba510a6d1e0e42dd4d3d318b53a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Feb 1 12:30:29 2018 -0500
+
+    update Changelog
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
 commit 1b29700190f696efcd631e95b05a218750db2bc7
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Thu Feb 1 12:29:40 2018 -0500

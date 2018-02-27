@@ -22,7 +22,9 @@
 package com.parachute.common;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,34 +32,45 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerTickEventHandler {
 
+    private boolean displayArmorBar;
+
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase.equals(TickEvent.Phase.START)/* && event.side.isServer()*/) {
+        if (event.phase.equals(TickEvent.Phase.START)) {
             autoActivateDevice(event.player);
             togglePlayerParachutePack(event.player);
+            armorBarRenderingHandler(event.player);
         }
     }
 
     // Check the players currently held item and if it is a
-    // parachuteItem set a packItem in the chestplate armor slot.
-    // Remove the packItem if the player is no longer holding the parachuteItem
+    // PARACHUTE_ITEM set a ITEM_PARACHUTE_PACK in the chestplate armor slot.
+    // Remove the ITEM_PARACHUTE_PACK if the player is no longer holding the PARACHUTE_ITEM
     // as long as the player is not on the parachute. If there is already an
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
-            EntityEquipmentSlot armorSlot = Parachute.armorType;
-            ItemStack armor = player.getItemStackFromSlot(Parachute.armorType);
+            ItemStack armor = player.getItemStackFromSlot(Parachute.ARMOR_TYPE);
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
             ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(EnumHand.OFF_HAND);
             boolean deployed = player.getRidingEntity() instanceof EntityParachute;
 
             if (!deployed && armor.getItem() instanceof ItemParachutePack && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemParachute))) {
-                player.inventory.armorInventory.set(armorSlot.getIndex(), ItemStack.EMPTY);
-            } else {
-                if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
-                    player.inventory.armorInventory.set(armorSlot.getIndex(), new ItemStack(Parachute.packItem));
-                }
+                player.inventory.armorInventory.set(Parachute.ARMOR_TYPE.getIndex(), ItemStack.EMPTY);
+            } else if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
+                player.inventory.armorInventory.set(Parachute.ARMOR_TYPE.getIndex(), new ItemStack(Parachute.ITEM_PARACHUTE_PACK));
+            }
+        }
+    }
+
+    private void armorBarRenderingHandler(EntityPlayer player) {
+        if (player != null) {
+            for (EntityEquipmentSlot item : EntityEquipmentSlot.values()) {
+                displayArmorBar = player.getItemStackFromSlot(item).getItem() instanceof ItemArmor;
+            }
+            if (player.world.isRemote) {
+                GuiIngameForge.renderArmor = displayArmorBar;
             }
         }
     }

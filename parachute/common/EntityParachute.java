@@ -110,12 +110,8 @@ public class EntityParachute extends Entity {
         Entity skyDiver = getControllingPassenger();
         if (!world.isRemote && skyDiver != null) {
             PlayerFallEvent.isDismounting = true;
-            killParachute();
+            setDead();
         }
-    }
-
-    private void killParachute() {
-        setDead();
     }
 
     @Override
@@ -258,11 +254,11 @@ public class EntityParachute extends Entity {
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && !world.isRemote) { // server side
-            killParachute();
+            setDead();
             return;
         }
 
-        if (showContrails) {
+        if (showContrails && skyDiver != null) {
             generateContrails(ascendMode);
         }
 
@@ -286,7 +282,7 @@ public class EntityParachute extends Entity {
 
         // something bad happened, somehow the skydiver was killed.
         if (!world.isRemote && skyDiver != null && skyDiver.isDead) { // server side
-            killParachute();
+            setDead();
         }
 
         // update distance for parachute statistics
@@ -315,14 +311,6 @@ public class EntityParachute extends Entity {
     // the final result.
     private double currentDescentRate() {
         double descentRate = DRIFT; // defaults to DRIFT
-
-        EntityPlayer entityPlayer = (EntityPlayer) getControllingPassenger();
-        if (entityPlayer != null) {
-            PlayerInfo pi = PlayerManager.getInstance().getPlayerInfoFromPlayer(entityPlayer);
-            if (pi != null) {
-                ascendMode = pi.getAscendMode();
-            }
-        }
 
         if (ConfigHandler.getWeatherAffectsDrift()) {
             if (world.isRaining()) {  // rain makes you fall faster
@@ -428,7 +416,7 @@ public class EntityParachute extends Entity {
     }
 
     // generate condensation trails at the trailing edge
-    // of the parachute. Yes I know that most parachutes
+    // of the parachute. Yes, I know that most parachutes
     // don't generate contrails (no engines), but most worlds
     // aren't made of blocks with cubic cows either. If you
     // like, you can think of the trails as chemtrails.
@@ -485,12 +473,5 @@ public class EntityParachute extends Entity {
 
     @Override
     public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {}
-
-//    @Nonnull
-//    @Override
-//    public String toString() {
-//        return String.format("%s: {x=%.1f, y=%.1f, z=%.1f}, {yaw=%.1f, pitch=%.1f}",
-//                getClass().getSimpleName(), posX, posY, posZ, rotationYaw, rotationPitch);
-//    }
 
 }
