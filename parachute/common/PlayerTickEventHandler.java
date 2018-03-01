@@ -64,10 +64,14 @@ public class PlayerTickEventHandler {
         }
     }
 
+    // do not display the armorbar if the parachute is selected in the hot bar
+    // and no other armor is being worn
     private void armorBarRenderingHandler(EntityPlayer player) {
         if (player != null) {
-            for (EntityEquipmentSlot item : EntityEquipmentSlot.values()) {
-                displayArmorBar = player.getItemStackFromSlot(item).getItem() instanceof ItemArmor;
+            for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+                if (player.getItemStackFromSlot(slot).getItem() instanceof ItemArmor) {
+                    displayArmorBar = !(player.getItemStackFromSlot(slot).getItem() instanceof ItemParachutePack);
+                }
             }
             if (player.world.isRemote) {
                 GuiIngameForge.renderArmor = displayArmorBar;
