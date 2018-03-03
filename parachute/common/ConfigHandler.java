@@ -54,6 +54,7 @@ public class ConfigHandler {
     private static double burnVolume;
     private static boolean noHUD;
     private static String hudPosition;
+    private static boolean altitudeMSL;
 
     private static double forwardMomentum;
     private static double backMomentum;
@@ -84,6 +85,7 @@ public class ConfigHandler {
     private static final String slideMotionComment = "delta slide momentum value";
     private static final String noHUDComment = "Disable the HUD";
     private static final String hudPositionComment = "The HUD can be positioned in the upper left, upper center, or upper right";
+    private static final String altitudeMSLComment = "Show altitude in MSL, Mean Sea Level";
     private static final String[] colorValues = {
             "random",
             "black",
@@ -158,6 +160,7 @@ public class ConfigHandler {
         Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, trailsComment);
         Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
         Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, noHUDComment);
+        Property altitudeProp = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, altitudeMSLComment);
 
         Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, lavaThermalComment);
         Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0);
@@ -189,6 +192,7 @@ public class ConfigHandler {
         propertyOrder.add(burnVolumeProp.getName());
         propertyOrder.add(hudPositionProp.getName());
         propertyOrder.add(noHUDProp.getName());
+        propertyOrder.add(altitudeProp.getName());
         propertyOrder.add(lavaThermalsProp.getName());
         propertyOrder.add(minLavaDistanceProp.getName());
         propertyOrder.add(maxLavaDistanceProp.getName());
@@ -229,6 +233,7 @@ public class ConfigHandler {
             slideMomentum = slideMotionProp.getDouble(0.005);
             noHUD = noHUDProp.getBoolean(false);
             hudPosition = hudPositionProp.getString();
+            altitudeMSL = altitudeProp.getBoolean();
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
@@ -256,6 +261,7 @@ public class ConfigHandler {
         slideMotionProp.set(slideMomentum);
         noHUDProp.set(noHUD);
         hudPositionProp.set(hudPosition);
+        altitudeProp.set(altitudeMSL);
 
         if (config.hasChanged()) {
             config.save();
@@ -387,6 +393,10 @@ public class ConfigHandler {
 
     public static String getHudPosition() {
         return hudPosition;
+    }
+
+    public static boolean getAltitudeMSL() {
+        return altitudeMSL;
     }
 
 }
