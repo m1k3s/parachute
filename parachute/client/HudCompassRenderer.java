@@ -107,7 +107,11 @@ public class HudCompassRenderer extends Gui {
                 fontRenderer.setUnicodeFlag(true);
 
                 BlockPos entityPos = new BlockPos(MINECRAFT.player.posX, MINECRAFT.player.getEntityBoundingBox().minY, MINECRAFT.player.posZ);
-                altitude = getCurrentAltitude(entityPos);
+                if (ConfigHandler.getAltitudeMSL()) {
+                    altitude = getCurrentAltitudeMSL(entityPos);
+                } else {
+                    altitude = getCurrentAltitude(entityPos);
+                }
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 compassHeading = calcCompassHeading(chute.rotationYaw);
@@ -216,7 +220,7 @@ public class HudCompassRenderer extends Gui {
     // §n	Underline
     // §o	Italic
     // §r	Reset
-    public String formatBold(double d) {
+    private String formatBold(double d) {
         return String.format("§l%.1f", d);
     }
 
@@ -228,7 +232,7 @@ public class HudCompassRenderer extends Gui {
     // zero degrees means the chute is facing the home point.
     // the home point can be either the world spawn point or a waypoint
     // set by the player in the config.
-    public double getHomeDirection(double yaw) {
+    private double getHomeDirection(double yaw) {
         BlockPos blockpos = MINECRAFT.world.getSpawnPoint();
         double delta = Math.atan2(blockpos.getZ() - MINECRAFT.player.posZ, blockpos.getX() - MINECRAFT.player.posX);
         double relAngle = delta - Math.toRadians(yaw);
@@ -236,14 +240,14 @@ public class HudCompassRenderer extends Gui {
     }
 
     // Thanks to Pythagoras we can calculate the distance to home/spawn
-    public double getHomeDistance() {
+    private double getHomeDistance() {
         BlockPos blockpos = MINECRAFT.world.getSpawnPoint();
         double a = Math.pow(blockpos.getZ() - MINECRAFT.player.posZ, 2);
         double b = Math.pow(blockpos.getX() - MINECRAFT.player.posX, 2);
         return Math.sqrt(a + b);
     }
 
-    public int colorAltitude() {
+    private int colorAltitude() {
         return altitude <= 10.0 ? COLOR_RED : altitude <= 15.0 && altitude > 10.0 ? COLOR_YELLOW : COLOR_GREEN;
     }
 
@@ -251,7 +255,7 @@ public class HudCompassRenderer extends Gui {
     // count down until a non-air block is encountered.
     // only allow altitude calculations in the surface world
     // return a weirdly random number if in nether or end.
-    public double getCurrentAltitude(BlockPos entityPos) {
+    private double getCurrentAltitude(BlockPos entityPos) {
         if (MINECRAFT.world.provider.isSurfaceWorld()) {
             BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
             while (MINECRAFT.world.isAirBlock(blockPos.down())) {
@@ -259,6 +263,14 @@ public class HudCompassRenderer extends Gui {
             }
             // calculate the entity's current altitude above the ground
             return entityPos.getY() - blockPos.getY();
+        }
+        return 1000.0 * MINECRAFT.world.rand.nextGaussian();
+    }
+
+    private double getCurrentAltitudeMSL(BlockPos entityPos) {
+        if (MINECRAFT.world.provider.isSurfaceWorld()) {
+            int seaLevel = MINECRAFT.world.getSeaLevel();
+            return entityPos.getY() - seaLevel;
         }
         return 1000.0 * MINECRAFT.world.rand.nextGaussian();
     }

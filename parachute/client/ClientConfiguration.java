@@ -31,6 +31,7 @@ public class ClientConfiguration {
     private static boolean noHUD;
     private static double burnVolume;
     private static String hudPosition;
+    private static boolean altitudeMSL;
 
     public ClientConfiguration() {}
 
@@ -50,6 +51,10 @@ public class ClientConfiguration {
         hudPosition = value;
     }
 
+    public static void setAltitudeMSL(boolean value) {
+        altitudeMSL = value;
+    }
+
     public static String getChuteColor() {
         return chuteColor;
     }
@@ -64,6 +69,10 @@ public class ClientConfiguration {
 
     public static String getHudPosition() {
         return hudPosition;
+    }
+
+    public static boolean getAltitdeMSL() {
+        return altitudeMSL;
     }
 
 }
