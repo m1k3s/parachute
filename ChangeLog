@@ -1,3 +1,34 @@
+commit c478400e523150ae69b148250a824f0274952ad7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Mar 3 10:20:38 2018 -0500
+
+    added option to display altitude in MSL (mean sea level), altitude is
+    normally displayed as distance from player to first non-air block
+    below.
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 12cd17d46280f0a7365d09c38bb4fc06f1c4033f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Mar 1 13:04:10 2018 -0500
+
+    removed keypress class, using movement input only
+    added logic to not display armorbar when on parachutepack is worn
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 4fcebea22f94c35e2c69fba80c77c6f72e3bb087
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Feb 27 08:10:24 2018 -0500
+
+    made all finals UPPERCASE
+    removed killParachute method, replaced with setDead method
+    removed unused field in PlayerInfo
+    cleaned up PlayerMountEvent
+    added logic in PlayerTickHandler to hide armor bar for parachute pack
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
 commit 8b096e2c9b8cf441be061f9c120c0cd4276584fc
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Fri Feb 23 20:38:26 2018 -0500
