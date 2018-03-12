@@ -24,6 +24,7 @@ package com.parachute.common;
 
 import com.parachute.client.ClientConfiguration;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -54,6 +55,7 @@ public class EntityParachute extends Entity {
     private boolean allowTurbulence;
     private boolean showContrails;
     private boolean dismountInWater;
+    private boolean steerBySight;
 
     private double deltaRotation;
     private double forwardMomentum;
@@ -82,6 +84,7 @@ public class EntityParachute extends Entity {
         backMomentum = ConfigHandler.getBackMomentum();
         rotationMomentum = ConfigHandler.getRotationMomentum();
         slideMomentum = ConfigHandler.getSlideMomentum();
+        steerBySight = ConfigHandler.getSteerBySight();
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -222,22 +225,32 @@ public class EntityParachute extends Entity {
             if (input.backKeyDown) {
                 motionFactor -= backMomentum;
             }
-            if (input.leftKeyDown) {
-                deltaRotation += -(rotationMomentum);
-            }
-            if (input.rightKeyDown) {
-                deltaRotation += rotationMomentum;
-            }
+            if (!steerBySight) {
+                if (input.leftKeyDown) {
+                    deltaRotation += -(rotationMomentum);
+                }
+                if (input.rightKeyDown) {
+                    deltaRotation += rotationMomentum;
+                }
 
-            // slight forward momentum while turning
-            if (input.rightKeyDown != input.leftKeyDown && !input.forwardKeyDown && !input.backKeyDown) {
-                motionFactor += slideMomentum;
+                // slight forward momentum while turning
+                if (input.rightKeyDown != input.leftKeyDown && !input.forwardKeyDown && !input.backKeyDown) {
+                    motionFactor += slideMomentum;
+                }
             }
 
             ascendMode = input.jump;
 
             motionY -= currentDescentRate();
-            rotationYaw += deltaRotation;
+            if (!steerBySight) {
+                rotationYaw += deltaRotation;
+            } else {
+                Entity skyDiver = getControllingPassenger();
+                if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
+                    EntityLivingBase pilot = (EntityLivingBase) skyDiver;
+                    rotationYaw = (float) (pilot.rotationYaw + -pilot.moveStrafing * 90.0);
+                }
+            }
 
             motionX += MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor;
             motionZ += MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor;
@@ -271,7 +284,7 @@ public class EntityParachute extends Entity {
         if (allowThermals && ascendMode && skyDiver != null) { // play the lift sound. kinda like a hot air balloon's burners effect
             skyDiver.playSound(Parachute.LIFTCHUTE, ClientConfiguration.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
         }
-
+        
         // apply momentum
         motionX *= 0.97;
         motionY *= (motionY < 0.0 ? 0.96 : 0.98); // rises faster than falls
