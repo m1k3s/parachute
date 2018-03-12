@@ -55,6 +55,7 @@ public class ConfigHandler {
     private static boolean noHUD;
     private static String hudPosition;
     private static boolean altitudeMSL;
+    private static boolean steerBySight;
 
     private static double forwardMomentum;
     private static double backMomentum;
@@ -86,6 +87,7 @@ public class ConfigHandler {
     private static final String noHUDComment = "Disable the HUD";
     private static final String hudPositionComment = "The HUD can be positioned in the upper left, upper center, or upper right";
     private static final String altitudeMSLComment = "Show altitude in MSL, Mean Sea Level";
+    private static final String steerBySightComment = "set to true to steer by player look direction, else WASD steering";
     private static final String[] colorValues = {
             "random",
             "black",
@@ -151,6 +153,7 @@ public class ConfigHandler {
         Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256);
         Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
         Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
+        Property steerBySightProp = config.get(Configuration.CATEGORY_GENERAL, "steerBySight", false, steerBySightComment);
 
         Property forwardMotionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
         Property backMotionProp = config.get(Configuration.CATEGORY_GENERAL, "backMomentum", 0.008, backMotionComment);
@@ -204,6 +207,7 @@ public class ConfigHandler {
         propertyOrder.add(weatherAffectsDriftProp.getName());
         propertyOrder.add(constantTurbulenceProp.getName());
         propertyOrder.add(chuteColorProp.getName());
+        propertyOrder.add(steerBySightProp.getName());
         propertyOrder.add(forwardMotionProp.getName());
         propertyOrder.add(backMotionProp.getName());
         propertyOrder.add(leftMotionProp.getName());
@@ -234,6 +238,7 @@ public class ConfigHandler {
             noHUD = noHUDProp.getBoolean(false);
             hudPosition = hudPositionProp.getString();
             altitudeMSL = altitudeProp.getBoolean();
+            steerBySight = steerBySightProp.getBoolean();
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
@@ -262,6 +267,7 @@ public class ConfigHandler {
         noHUDProp.set(noHUD);
         hudPositionProp.set(hudPosition);
         altitudeProp.set(altitudeMSL);
+        steerBySightProp.set(steerBySight);
 
         if (config.hasChanged()) {
             config.save();
@@ -279,6 +285,8 @@ public class ConfigHandler {
                 ClientConfiguration.setNoHUD(noHUD);
                 ClientConfiguration.setBurnVolume(burnVolume);
                 ClientConfiguration.setHudPosition(hudPosition);
+                ClientConfiguration.setAltitudeMSL(altitudeMSL);
+                ClientConfiguration.setSteerBySight(steerBySight);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }
@@ -397,6 +405,10 @@ public class ConfigHandler {
 
     public static boolean getAltitudeMSL() {
         return altitudeMSL;
+    }
+
+    public static boolean getSteerBySight() {
+        return steerBySight;
     }
 
 }

@@ -36,16 +36,18 @@ public class ClientConfigMessage implements IMessage {
     private double burnVolume;
     private String hudPosition;
     private boolean altitudeMSL;
+    private boolean steerBysight;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
-    public ClientConfigMessage(String chuteColor, boolean noHUD, double burnVolume, String hudPosition, boolean altitudeMSL) {
+    public ClientConfigMessage(String chuteColor, boolean noHUD, double burnVolume, String hudPosition, boolean altitudeMSL, boolean steerBySight) {
         this.chuteColor = chuteColor;
         this.noHUD = noHUD;
         this.burnVolume = burnVolume;
         this.hudPosition = hudPosition;
         this.altitudeMSL = altitudeMSL;
+        this.steerBysight = steerBySight;
     }
 
     @Override
@@ -55,6 +57,7 @@ public class ClientConfigMessage implements IMessage {
         burnVolume = byteBuf.readDouble();
         hudPosition = ByteBufUtils.readUTF8String(byteBuf);
         altitudeMSL = byteBuf.readBoolean();
+        steerBysight = byteBuf.readBoolean();
     }
 
     @Override
@@ -64,6 +67,7 @@ public class ClientConfigMessage implements IMessage {
         byteBuf.writeDouble(burnVolume);
         ByteBufUtils.writeUTF8String(byteBuf, hudPosition);
         byteBuf.writeBoolean(altitudeMSL);
+        byteBuf.writeBoolean(steerBysight);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -76,6 +80,7 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setBurnVolume(msg.burnVolume);
                 ClientConfiguration.setHudPosition(msg.hudPosition);
                 ClientConfiguration.setAltitudeMSL(msg.altitudeMSL);
+                ClientConfiguration.setSteerBySight(msg.steerBysight);
                 RenderParachute.setParachuteColor(msg.chuteColor);
             });
             return null;

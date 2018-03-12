@@ -32,6 +32,7 @@ public class ClientConfiguration {
     private static double burnVolume;
     private static String hudPosition;
     private static boolean altitudeMSL;
+    private static boolean steerBySight;
 
     public ClientConfiguration() {}
 
@@ -55,6 +56,10 @@ public class ClientConfiguration {
         altitudeMSL = value;
     }
 
+    public static void setSteerBySight(boolean value) {
+        steerBySight = value;
+    }
+
     public static String getChuteColor() {
         return chuteColor;
     }
@@ -73,6 +78,10 @@ public class ClientConfiguration {
 
     public static boolean getAltitdeMSL() {
         return altitudeMSL;
+    }
+
+    public static boolean getSteerBySight() {
+        return steerBySight;
     }
 
 }

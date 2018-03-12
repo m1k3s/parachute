@@ -38,7 +38,8 @@ public class PlayerLoginHandler {
         double burnVolume = ConfigHandler.getBurnVolume();
         String hudPosition = ConfigHandler.getHudPosition();
         boolean altitudeMSL = ConfigHandler.getAltitudeMSL();
-        PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, noHUD, burnVolume, hudPosition, altitudeMSL), (EntityPlayerMP)event.player);
+        boolean steerBySight = ConfigHandler.getSteerBySight();
+        PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, noHUD, burnVolume, hudPosition, altitudeMSL, steerBySight), (EntityPlayerMP)event.player);
     }
 
     @SubscribeEvent
