@@ -55,7 +55,6 @@ public class EntityParachute extends Entity {
     private boolean allowTurbulence;
     private boolean showContrails;
     private boolean dismountInWater;
-    private boolean steerBySight;
 
     private double deltaRotation;
     private double forwardMomentum;
@@ -84,7 +83,6 @@ public class EntityParachute extends Entity {
         backMomentum = ConfigHandler.getBackMomentum();
         rotationMomentum = ConfigHandler.getRotationMomentum();
         slideMomentum = ConfigHandler.getSlideMomentum();
-        steerBySight = ConfigHandler.getSteerBySight();
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -218,6 +216,7 @@ public class EntityParachute extends Entity {
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && world.isRemote) {
             double motionFactor = 0.0f;
+            boolean steerBySight = ConfigHandler.getSteerBySight();
 
             if (input.forwardKeyDown) {
                 motionFactor += forwardMomentum;
