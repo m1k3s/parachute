@@ -1,3 +1,13 @@
+commit bc3cfb7103d1e60d3c1a5823477b043c7eaa70c3
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Mar 12 18:19:27 2018 -0400
+
+    added steer-by-sight config option
+    player can now choose the steering method; WASD, or the original
+    steer by sight
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
 commit e56c52a890ae6d00c2cdb8b159a619ad17ad9a57
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sat Mar 10 07:34:33 2018 -0500
