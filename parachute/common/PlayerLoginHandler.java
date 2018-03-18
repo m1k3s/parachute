@@ -22,25 +22,30 @@
 
 package com.parachute.common;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class PlayerLoginHandler {
 
-    public PlayerLoginHandler() {}
-
-    @SuppressWarnings("unused")
-    @SubscribeEvent
-    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        PlayerManager.getInstance().Players.add(new PlayerInfo(event.player.getDisplayNameString()));
+    public PlayerLoginHandler() {
     }
 
-    @SuppressWarnings("unused")
+    @SubscribeEvent
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        String color = ConfigHandler.getChuteColor();
+        boolean noHUD = ConfigHandler.getNoHUD();
+        double burnVolume = ConfigHandler.getBurnVolume();
+        String hudPosition = ConfigHandler.getHudPosition();
+        boolean altitudeMSL = ConfigHandler.getAltitudeMSL();
+        String steeringControl = ConfigHandler.getSteeringControl();
+        PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, noHUD, burnVolume, hudPosition, altitudeMSL, steeringControl), (EntityPlayerMP)event.player);
+    }
+
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        PlayerInfo PI = new PlayerInfo("");
-        for(int i = 0; i < PlayerManager.getInstance().Players.size(); i++) {
-            if(PlayerManager.getInstance().Players.get(i).getName().equals(event.player.getDisplayNameString())) {
+        for (int i = 0; i < PlayerManager.getInstance().Players.size(); i++) {
+            if (PlayerManager.getInstance().Players.get(i).getName().equals(event.player.getDisplayNameString())) {
                 PlayerManager.getInstance().Players.remove(i);
             }
         }

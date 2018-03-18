@@ -25,25 +25,15 @@ package com.parachute.common;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-// this class allows the player to 'drop' the parachute with precision.
-// the vanilla dismount method moves the player away from the mounted object.
-// in this mod the player should be able to dismount the parachute and land
-// directly at the parachute's X and Z location. This performs the same steps
-// as the auto-dismount code. When the player presses the LSHIFT to dismount,
-// cancel the dismount and call the EntityParachute dismount method.
-// FIXME: this is problematic since forge moved the hook.
 
 public class PlayerMountEvent {
 
-    public PlayerMountEvent() { Parachute.proxy.info("PlayerMountEvent ctor"); }
+    public PlayerMountEvent() {}
 
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMount(EntityMountEvent event) {
-        if (event.getEntityBeingMounted() instanceof EntityParachute && ParachuteCommonProxy.isDeployed() && !event.isMounting()) {
-//            if (event.getEntity().world.isRemote) {
-//                event.setCanceled(true);
-//            }
+        if (event.getEntityBeingMounted() instanceof EntityParachute && !event.isMounting()) {
             ((EntityParachute)event.getEntityBeingMounted()).dismountParachute();
         }
     }

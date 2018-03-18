@@ -29,7 +29,7 @@ public class PlayerHurtEvent {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void SkydiverHurtEvent(LivingHurtEvent event) {
-        if (event.getEntityLiving().isRiding() && ParachuteCommonProxy.isDeployed()) {
+        if (event.getEntityLiving().isRiding() && event.getEntityLiving().getRidingEntity() instanceof EntityParachute) {//Parachute.isDeployed()) {
             event.setCanceled(true);
             event.setAmount(0.0f);
         }

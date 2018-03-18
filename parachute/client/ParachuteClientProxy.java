@@ -21,47 +21,29 @@
  */
 package com.parachute.client;
 
-import com.parachute.common.Parachute;
-import com.parachute.common.ParachuteCommonProxy;
-import com.parachute.common.EntityParachute;
-import net.minecraft.client.Minecraft;
+import com.parachute.common.*;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.event.*;
 
 
 @SuppressWarnings("unused")
-public class ParachuteClientProxy extends ParachuteCommonProxy {
+public class ParachuteClientProxy implements IProxy {
 
-    // grab the 'jump' key from the game settings. defaults to the space bar. This allows the
-    // player to change the jump key and the parachute will use the new jump key
-    private static final int ascendKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
-        ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.parachuteName);
-        ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + ParachuteCommonProxy.packName);
-        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new); // java 8
-        ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.parachuteItem, 0, parachuteResource);
-        ModelLoader.setCustomModelResourceLocation(ParachuteCommonProxy.packItem, 0, packResource);
-        ModKeyBindings.registerKeyBinding();
+    public void preInit() {
+        ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + Parachute.PARACHUTE_NAME);
+        ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + Parachute.PACK_NAME);
+        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
+        ModelLoader.setCustomModelResourceLocation(Parachute.PARACHUTE_ITEM, 0, parachuteResource);
+        ModelLoader.setCustomModelResourceLocation(Parachute.ITEM_PARACHUTE_PACK, 0, packResource);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void Init(FMLInitializationEvent event) {
-        super.Init(event);
-
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new KeyPressTick(ascendKey));
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new HudGuiRenderer());
+    public void Init() {
+        MinecraftForge.EVENT_BUS.register(new ConfigHandler.ConfigEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ParachuteInputEvent());
+        MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
     }
 
-    @Override
-    public void postInit(FMLPostInitializationEvent event) {
-        super.postInit(event);
-    }
-
+    public void postInit() {}
 }

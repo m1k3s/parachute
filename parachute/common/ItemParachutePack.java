@@ -57,7 +57,7 @@ public class ItemParachutePack extends ItemArmor {
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (stack.getItem() instanceof ItemParachutePack) {
             if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
-                if (ParachuteCommonProxy.armorType.getIndex() != itemSlot) {
+                if (Parachute.ARMOR_TYPE.getIndex() != itemSlot) {
                     ((EntityPlayer) entityIn).inventory.deleteStack(stack);
                 }
             }
@@ -66,7 +66,7 @@ public class ItemParachutePack extends ItemArmor {
 
     @Override
     public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (itemstack.getItem() == ParachuteCommonProxy.packItem) {
+        if (itemstack.getItem() == Parachute.ITEM_PARACHUTE_PACK) {
             return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
         }
         return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";

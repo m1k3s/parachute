@@ -23,22 +23,18 @@
 package com.parachute.common;
 
 
-import net.minecraftforge.fml.common.event.*;
-
 @SuppressWarnings("unused")
-public class ParachuteServerProxy extends ParachuteCommonProxy {
+public class ParachuteServerProxy implements  IProxy {
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
+    public void preInit() {
     }
 
     @Override
-    public void Init(FMLInitializationEvent event) {
-        super.Init(event);
+    public void Init() {
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {
+    public void postInit() {
     }
 }

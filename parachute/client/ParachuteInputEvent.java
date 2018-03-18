@@ -1,8 +1,7 @@
-
 /*
- * ModKeyBindings.java
+ * ParachuteInputEvent.java
  *
- *  Copyright (c) 2017 Michael Sheppard
+ *  Copyright (c) 2018 Michael Sheppard
  *
  * =====GPL=============================================================
  * This program is free software: you can redistribute it and/or modify
@@ -22,18 +21,21 @@
 
 package com.parachute.client;
 
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.input.Keyboard;
+import com.parachute.common.EntityParachute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.InputUpdateEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class ModKeyBindings {
+public class ParachuteInputEvent {
 
-    private static final String CATEGORY = "key.category.parachutemod:general";
-
-    public static final KeyBinding POWEREDFLIGHT = new KeyBinding("key.parachutemod:poweredflight", KeyConflictContext.IN_GAME, Keyboard.KEY_P, CATEGORY);
-
-    public static void registerKeyBinding() {
-        ClientRegistry.registerKeyBinding(POWEREDFLIGHT);
+    @SubscribeEvent
+    public void inputEvent(InputUpdateEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof EntityPlayer) {
+            if (entity.isRiding() && (entity.getRidingEntity() instanceof EntityParachute)) {
+                ((EntityParachute)entity.getRidingEntity()).updateInputs(event.getMovementInput());
+            }
+        }
     }
 }

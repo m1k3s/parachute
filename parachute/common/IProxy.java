@@ -1,8 +1,7 @@
-
 /*
- * KeyBindingHandler.java
+ * IProxy.java
  *
- *  Copyright (c) 2017 Michael Sheppard
+ *  Copyright (c) 2018 Michael Sheppard
  *
  * =====GPL=============================================================
  * This program is free software: you can redistribute it and/or modify
@@ -20,24 +19,11 @@
  * =====================================================================
  */
 
-package com.parachute.client;
+package com.parachute.common;
 
-//import com.parachute.common.ConfigHandler;
-//import net.minecraftforge.fml.common.Mod;
-//import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-//import net.minecraftforge.fml.common.gameevent.TickEvent;
-//import net.minecraftforge.fml.relauncher.Side;
-//
-//@SuppressWarnings("unused")
-//
-//@Mod.EventBusSubscriber(Side.CLIENT)
-//public class KeyBindingHandler {
-//    @SubscribeEvent
-//    public static void clientTick(final TickEvent.ClientTickEvent event) {
-//        if (event.phase != TickEvent.Phase.END) return;
-//
-//        if (ModKeyBindings.POWEREDFLIGHT.isPressed()) {
-//            ConfigHandler.togglePoweredFlight();
-//        }
-//    }
-//}
+public interface IProxy {
+
+    void preInit();
+    void Init();
+    void postInit();
+}
