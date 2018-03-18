@@ -36,18 +36,18 @@ public class ClientConfigMessage implements IMessage {
     private double burnVolume;
     private String hudPosition;
     private boolean altitudeMSL;
-    private boolean steerBysight;
+    private String steeringControl;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
-    public ClientConfigMessage(String chuteColor, boolean noHUD, double burnVolume, String hudPosition, boolean altitudeMSL, boolean steerBySight) {
+    public ClientConfigMessage(String chuteColor, boolean noHUD, double burnVolume, String hudPosition, boolean altitudeMSL, String steeringControl) {
         this.chuteColor = chuteColor;
         this.noHUD = noHUD;
         this.burnVolume = burnVolume;
         this.hudPosition = hudPosition;
         this.altitudeMSL = altitudeMSL;
-        this.steerBysight = steerBySight;
+        this.steeringControl = steeringControl;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ClientConfigMessage implements IMessage {
         burnVolume = byteBuf.readDouble();
         hudPosition = ByteBufUtils.readUTF8String(byteBuf);
         altitudeMSL = byteBuf.readBoolean();
-        steerBysight = byteBuf.readBoolean();
+        steeringControl = ByteBufUtils.readUTF8String(byteBuf);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ClientConfigMessage implements IMessage {
         byteBuf.writeDouble(burnVolume);
         ByteBufUtils.writeUTF8String(byteBuf, hudPosition);
         byteBuf.writeBoolean(altitudeMSL);
-        byteBuf.writeBoolean(steerBysight);
+        ByteBufUtils.writeUTF8String(byteBuf, steeringControl);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -80,7 +80,7 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setBurnVolume(msg.burnVolume);
                 ClientConfiguration.setHudPosition(msg.hudPosition);
                 ClientConfiguration.setAltitudeMSL(msg.altitudeMSL);
-                ClientConfiguration.setSteerBySight(msg.steerBysight);
+                ClientConfiguration.setSteeringControl(msg.steeringControl);
                 RenderParachute.setParachuteColor(msg.chuteColor);
             });
             return null;

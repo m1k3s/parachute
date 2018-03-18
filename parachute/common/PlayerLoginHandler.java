@@ -38,8 +38,8 @@ public class PlayerLoginHandler {
         double burnVolume = ConfigHandler.getBurnVolume();
         String hudPosition = ConfigHandler.getHudPosition();
         boolean altitudeMSL = ConfigHandler.getAltitudeMSL();
-        boolean steerBySight = ConfigHandler.getSteerBySight();
-        PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, noHUD, burnVolume, hudPosition, altitudeMSL, steerBySight), (EntityPlayerMP)event.player);
+        String steeringControl = ConfigHandler.getSteeringControl();
+        PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, noHUD, burnVolume, hudPosition, altitudeMSL, steeringControl), (EntityPlayerMP)event.player);
     }
 
     @SubscribeEvent

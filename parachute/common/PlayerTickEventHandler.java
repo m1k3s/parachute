@@ -84,7 +84,7 @@ public class PlayerTickEventHandler {
     // altitude, if autoAltitude has been reached, deploy. If the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
-        if (ConfigHandler.getIsAADActive() && !(player.getRidingEntity() instanceof EntityParachute)) {
+        if (ConfigHandler.getAadActive() && !(player.getRidingEntity() instanceof EntityParachute)) {
             ItemStack heldItem = null;
             Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {
