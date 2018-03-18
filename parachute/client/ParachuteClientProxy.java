@@ -32,8 +32,8 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 public class ParachuteClientProxy implements IProxy {
 
     public void preInit() {
-        ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + Parachute.parachuteName);
-        ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + Parachute.packName);
+        ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + Parachute.PARACHUTE_NAME);
+        ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + Parachute.PACK_NAME);
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
         ModelLoader.setCustomModelResourceLocation(Parachute.PARACHUTE_ITEM, 0, parachuteResource);
         ModelLoader.setCustomModelResourceLocation(Parachute.ITEM_PARACHUTE_PACK, 0, packResource);

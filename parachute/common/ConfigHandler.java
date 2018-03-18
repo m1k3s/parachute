@@ -47,7 +47,7 @@ public class ConfigHandler {
     private static boolean constantTurbulence;
     private static boolean showContrails;
     private static boolean dismountInWater;
-    private static boolean isAADActive;
+    private static boolean aadActive;
     private static double aadAltitude;
     private static double minFallDistance;
     private static boolean aadImmediate;
@@ -55,40 +55,40 @@ public class ConfigHandler {
     private static boolean noHUD;
     private static String hudPosition;
     private static boolean altitudeMSL;
-    private static boolean steerBySight;
+    private static String steeringControl;
 
     private static double forwardMomentum;
     private static double backMomentum;
     private static double rotationMomentum;
     private static double slideMomentum;
 
-    private static final String aboutComments = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
-    private static final String usageComment = "set to true for parachute single use"; // false
-    private static final String heightComment = "0 (zero) disables altitude limiting"; // 256
-    private static final String thermalComment = "enable thermal rise by pressing the space bar"; // true
-    private static final String lavaThermalComment = "use lava heat to get thermals to rise up, optionally disables space bar thermals"; // false
-    private static final String minLavaDistanceComment = "minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava!"; // 3.0
-    private static final String maxLavaDistanceComment = "maximum distance to rise from lava thermals"; // 48
-    private static final String weatherComment = "set to false if you don't want the drift rate to be affected by bad weather"; // true
-    private static final String turbulenceComment = "set to true to always feel the turbulent world of Minecraft"; // false
-    private static final String trailsComment = "set to true to show contrails from parachute"; // false
-    private static final String dismountComment = "true to dismount in water"; // false
-    private static final String lavaDisablesComment = "normal thermals are disabled by lava thermals"; // true
-    private static final String isAADActiveComment = "whether or not the AAD starts active"; // false
-    private static final String aadAltitudeComment = "altitude (in meters) at which auto deploy occurs"; // 10 meters
-    private static final String aadImmedComment = "AAD deploys immediately after the player falls more than minFallDistance"; // > minFalldistance meters
-    private static final String minFallDistanceComment = "minimum distance to fall before the AAD deploys"; // 5 meters
-    private static final String burnVolumeComment = "set the burn sound volume (0.0 to 1.0)";
-    private static final String colorComment = "Select a parachute color, random, or custom[0-9]";
-    private static final String forwardMotionComment = "delta forward momentum value";
-    private static final String backMotionComment = "delta back momentum value";
-    private static final String rotationMomentumComment = "delta rotation momentum value";
-    private static final String slideMotionComment = "delta slide momentum value";
-    private static final String noHUDComment = "Disable the HUD";
-    private static final String hudPositionComment = "The HUD can be positioned in the upper left, upper center, or upper right";
-    private static final String altitudeMSLComment = "Show altitude in MSL, Mean Sea Level";
-    private static final String steerBySightComment = "set to true to steer by player look direction, else WASD steering";
-    private static final String[] colorValues = {
+    private static final String ABOUT_COMMENTS = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
+    private static final String USAGE_COMMENT = "set to true for parachute single use"; // false
+    private static final String HEIGHT_COMMENT = "0 (zero) disables altitude limiting"; // 256
+    private static final String THERMAL_COMMENT = "enable thermal rise by pressing the space bar"; // true
+    private static final String LAVA_THERMAL_COMMENT = "use lava heat to get thermals to rise up, optionally disables space bar thermals"; // false
+    private static final String MIN_LAVA_DISTANCE_COMMENT = "minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava!"; // 3.0
+    private static final String MAX_LAVA_DISTANCE_COMMENT = "maximum distance to rise from lava thermals"; // 48
+    private static final String WEATHER_COMMENT = "set to false if you don't want the drift rate to be affected by bad weather"; // true
+    private static final String TURBULENCE_COMMENT = "set to true to always feel the turbulent world of Minecraft"; // false
+    private static final String TRAILS_COMMENT = "set to true to show contrails from parachute"; // false
+    private static final String DISMOUNT_COMMENT = "true to dismount in water"; // false
+    private static final String LAVA_DISABLES_COMMENT = "normal thermals are disabled by lava thermals"; // true
+    private static final String IS_AAD_ACTIVE_COMMENT = "whether or not the AAD starts active"; // false
+    private static final String AAD_ALTITUDE_COMMENT = "altitude (in meters) at which auto deploy occurs"; // 10 meters
+    private static final String AAD_IMMED_COMMENT = "AAD deploys immediately after the player falls more than minFallDistance"; // > minFalldistance meters
+    private static final String MIN_FALL_DISTANCE_COMMENT = "minimum distance to fall before the AAD deploys"; // 5 meters
+    private static final String BURN_VOLUME_COMMENT = "set the burn sound volume (0.0 to 1.0)";
+    private static final String COLOR_COMMENT = "Select a parachute color, random, or custom[0-9]";
+    private static final String FORWARD_MOTION_COMMENT = "delta forward momentum value";
+    private static final String BACK_MOTION_COMMENT = "delta back momentum value";
+    private static final String ROTATION_MOMENTUM_COMMENT = "delta rotation momentum value";
+    private static final String SLIDE_MOTION_COMMENT = "delta slide momentum value";
+    private static final String NO_HUD_COMMENT = "Disable the HUD";
+    private static final String HUD_POSITION_COMMENT = "The HUD can be positioned in the upper left, upper center, or upper right";
+    private static final String ALTITUDE_MSL_COMMENT = "Show altitude in MSL, Mean Sea Level";
+    private static final String STEERING_CONTROL_COMMENT = "set to true to steer by player look direction, else WASD steering";
+    private static final String[] COLOR_VALUES = {
             "random",
             "black",
             "blue",
@@ -124,6 +124,11 @@ public class ConfigHandler {
             "right"
     };
 
+    private static final String[] STEERING_CONTROL = {
+            "WASD",
+            "Sight"
+    };
+
     public static void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         updateConfigFromFile();
@@ -147,43 +152,46 @@ public class ConfigHandler {
             config.load();
         }
 
-        config.setCategoryComment(Configuration.CATEGORY_GENERAL, aboutComments);
+        config.setCategoryComment(Configuration.CATEGORY_GENERAL, ABOUT_COMMENTS);
 
-        Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, usageComment);
-        Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, heightComment, 100, 256);
-        Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, thermalComment);
-        Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, dismountComment);
-        Property steerBySightProp = config.get(Configuration.CATEGORY_GENERAL, "steerBySight", false, steerBySightComment);
+        Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, USAGE_COMMENT);
+        Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, HEIGHT_COMMENT, 100, 256);
+        Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, THERMAL_COMMENT);
+        Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, DISMOUNT_COMMENT);
+        
+        Property steeringControlProp = config.get(Configuration.CATEGORY_GENERAL, "steeringControl", "WASD");
+        steeringControlProp.setComment(STEERING_CONTROL_COMMENT);
+        steeringControlProp.setValidValues(STEERING_CONTROL);
 
-        Property forwardMotionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, forwardMotionComment);
-        Property backMotionProp = config.get(Configuration.CATEGORY_GENERAL, "backMomentum", 0.008, backMotionComment);
-        Property leftMotionProp = config.get(Configuration.CATEGORY_GENERAL, "rotationMomentum", 0.2, rotationMomentumComment);
-        Property slideMotionProp = config.get(Configuration.CATEGORY_GENERAL, "slideMomentum", 0.005, slideMotionComment);
+        Property forwardMotionProp = config.get(Configuration.CATEGORY_GENERAL, "forwardMomentum", 0.015, FORWARD_MOTION_COMMENT);
+        Property backMotionProp = config.get(Configuration.CATEGORY_GENERAL, "backMomentum", 0.008, BACK_MOTION_COMMENT);
+        Property leftMotionProp = config.get(Configuration.CATEGORY_GENERAL, "rotationMomentum", 0.2, ROTATION_MOMENTUM_COMMENT);
+        Property slideMotionProp = config.get(Configuration.CATEGORY_GENERAL, "slideMomentum", 0.005, SLIDE_MOTION_COMMENT);
 
-        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, trailsComment);
-        Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, burnVolumeComment, 0.0, 1.0);
-        Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, noHUDComment);
-        Property altitudeProp = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, altitudeMSLComment);
+        Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, TRAILS_COMMENT);
+        Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, BURN_VOLUME_COMMENT, 0.0, 1.0);
+        Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, NO_HUD_COMMENT);
+        Property altitudeProp = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, ALTITUDE_MSL_COMMENT);
 
-        Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, lavaThermalComment);
-        Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, minLavaDistanceComment, 2.0, 10.0);
-        Property maxLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, maxLavaDistanceComment, 10.0, 100.0);
-        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", false, lavaDisablesComment);
+        Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, LAVA_THERMAL_COMMENT);
+        Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, MIN_LAVA_DISTANCE_COMMENT, 2.0, 10.0);
+        Property maxLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "maxLavaDistance", 48.0, MAX_LAVA_DISTANCE_COMMENT, 10.0, 100.0);
+        Property lavaDisablesThermalProp = config.get(Configuration.CATEGORY_GENERAL, "lavaDisablesThermals", false, LAVA_DISABLES_COMMENT);
 
-        Property weatherAffectsDriftProp = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, weatherComment);
-        Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, turbulenceComment);
+        Property weatherAffectsDriftProp = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, WEATHER_COMMENT);
+        Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, TURBULENCE_COMMENT);
 
-        Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment);
-        Property aadAltitudeProp = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, aadAltitudeComment, 5.0, 100.0);
-        Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, minFallDistanceComment, 3.0, 10.0);
-        Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, aadImmedComment);
+        Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "aadActive", false, IS_AAD_ACTIVE_COMMENT);
+        Property aadAltitudeProp = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, AAD_ALTITUDE_COMMENT, 5.0, 100.0);
+        Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, MIN_FALL_DISTANCE_COMMENT, 3.0, 10.0);
+        Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, AAD_IMMED_COMMENT);
 
         Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black");
-        chuteColorProp.setComment(colorComment);
-        chuteColorProp.setValidValues(colorValues);
+        chuteColorProp.setComment(COLOR_COMMENT);
+        chuteColorProp.setValidValues(COLOR_VALUES);
 
         Property hudPositionProp = config.get(Configuration.CATEGORY_GENERAL, "hudPosition", "right");
-        hudPositionProp.setComment(hudPositionComment);
+        hudPositionProp.setComment(HUD_POSITION_COMMENT);
         hudPositionProp.setValidValues(HUD_POSITIONS);
 
         List<String> propertyOrder = new ArrayList<>();
@@ -207,7 +215,7 @@ public class ConfigHandler {
         propertyOrder.add(weatherAffectsDriftProp.getName());
         propertyOrder.add(constantTurbulenceProp.getName());
         propertyOrder.add(chuteColorProp.getName());
-        propertyOrder.add(steerBySightProp.getName());
+        propertyOrder.add(steeringControlProp.getName());
         propertyOrder.add(forwardMotionProp.getName());
         propertyOrder.add(backMotionProp.getName());
         propertyOrder.add(leftMotionProp.getName());
@@ -226,7 +234,7 @@ public class ConfigHandler {
             constantTurbulence = constantTurbulenceProp.getBoolean(false);
             showContrails = showContrailsProp.getBoolean(true);
             dismountInWater = dismountInWaterProp.getBoolean(false);
-            isAADActive = isAADActiveProp.getBoolean(false);
+            aadActive = isAADActiveProp.getBoolean(false);
             aadAltitude = aadAltitudeProp.getDouble(10.0);
             minFallDistance = minFallDistanceProp.getDouble(5.0);
             aadImmediate = aadImmediateProp.getBoolean(false);
@@ -238,7 +246,7 @@ public class ConfigHandler {
             noHUD = noHUDProp.getBoolean(false);
             hudPosition = hudPositionProp.getString();
             altitudeMSL = altitudeProp.getBoolean();
-            steerBySight = steerBySightProp.getBoolean();
+            ConfigHandler.steeringControl = steeringControlProp.getString();
         }
 
         // if lava thermals are allowed check allow/disallow space bar thermals
@@ -255,7 +263,7 @@ public class ConfigHandler {
         constantTurbulenceProp.set(constantTurbulence);
         showContrailsProp.set(showContrails);
         dismountInWaterProp.set(dismountInWater);
-        isAADActiveProp.set(isAADActive);
+        isAADActiveProp.set(aadActive);
         aadAltitudeProp.set(aadAltitude);
         minFallDistanceProp.set(minFallDistance);
         aadImmediateProp.set(aadImmediate);
@@ -267,7 +275,7 @@ public class ConfigHandler {
         noHUDProp.set(noHUD);
         hudPositionProp.set(hudPosition);
         altitudeProp.set(altitudeMSL);
-        steerBySightProp.set(steerBySight);
+        steeringControlProp.set(steeringControl);
 
         if (config.hasChanged()) {
             config.save();
@@ -286,7 +294,7 @@ public class ConfigHandler {
                 ClientConfiguration.setBurnVolume(burnVolume);
                 ClientConfiguration.setHudPosition(hudPosition);
                 ClientConfiguration.setAltitudeMSL(altitudeMSL);
-                ClientConfiguration.setSteerBySight(steerBySight);
+                ClientConfiguration.setSteeringControl(steeringControl);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }
@@ -314,7 +322,7 @@ public class ConfigHandler {
 
     @SuppressWarnings("unused")
     public static void setChuteColor(String color) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black", colorComment);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black", COLOR_COMMENT);
         prop.set(color);
         config.save();
         chuteColor = color;
@@ -344,15 +352,15 @@ public class ConfigHandler {
         return showContrails;
     }
 
-    public static boolean getIsAADActive() {
-        return isAADActive;
+    public static boolean getAadActive() {
+        return aadActive;
     }
 
     public static void setAADState(boolean state) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "isAADActive", false, isAADActiveComment);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "aadActive", false, IS_AAD_ACTIVE_COMMENT);
         prop.set(state);
         config.save();
-        isAADActive = state;
+        aadActive = state;
     }
 
     public static double getAADAltitude() {
@@ -394,7 +402,6 @@ public class ConfigHandler {
         return slideMomentum;
     }
 
-
     public static boolean getNoHUD() {
         return noHUD;
     }
@@ -407,8 +414,8 @@ public class ConfigHandler {
         return altitudeMSL;
     }
 
-    public static boolean getSteerBySight() {
-        return steerBySight;
+    public static String getSteeringControl() {
+        return steeringControl;
     }
 
 }

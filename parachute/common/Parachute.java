@@ -52,16 +52,16 @@ import org.apache.logging.log4j.Logger;
 public class Parachute {
 
     private static final Logger logger = LogManager.getLogger(Parachute.MODID);
-    public static final String parachuteName = "parachute";
-    public static final String packName = "pack";
+    public static final String PARACHUTE_NAME = "parachute";
+    public static final String PACK_NAME = "pack";
 
     public static SoundEvent OPENCHUTE;
     public static SoundEvent LIFTCHUTE;
 
-    public static final Item PARACHUTE_ITEM = new ItemParachute(Parachute.parachuteName);
+    public static final Item PARACHUTE_ITEM = new ItemParachute(Parachute.PARACHUTE_NAME);
     public static final EntityEquipmentSlot ARMOR_TYPE = EntityEquipmentSlot.CHEST;
     static final int RENDER_INDEX = 1; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
-    public static final Item ITEM_PARACHUTE_PACK = new ItemParachutePack(ArmorMaterial.LEATHER, RENDER_INDEX, ARMOR_TYPE, Parachute.packName);
+    public static final Item ITEM_PARACHUTE_PACK = new ItemParachutePack(ArmorMaterial.LEATHER, RENDER_INDEX, ARMOR_TYPE, Parachute.PACK_NAME);
 
     public static final String MODID = "parachutemod";
     public static final String MODVERSION = "1.7.4";
@@ -93,7 +93,7 @@ public class Parachute {
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.preInit(event);
         int entityID = 1;
-        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, parachuteName), EntityParachute.class, parachuteName, entityID, Parachute.instance, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, PARACHUTE_NAME), EntityParachute.class, PARACHUTE_NAME, entityID, Parachute.instance, 80, 3, true);
         GameRegistry.findRegistry(Item.class).registerAll(ITEM_PARACHUTE_PACK, PARACHUTE_ITEM);
         PacketHandler.init();
         proxy.preInit();
