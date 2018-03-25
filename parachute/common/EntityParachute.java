@@ -65,6 +65,7 @@ public class EntityParachute extends Entity {
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ascend
     private final static double OFFSET = 2.5; // player Y offset from parachute
+    private final static float HEAD_TURN_ANGLE = 120.0f;
 
     private static boolean ascendMode;
 
@@ -270,9 +271,6 @@ public class EntityParachute extends Entity {
             return;
         }
 
-        // initial forward velocity for this update
-        double initialVelocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
-
         if (showContrails && skyDiver != null) {
             generateContrails(ascendMode);
         }
@@ -280,7 +278,6 @@ public class EntityParachute extends Entity {
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;
-
 
         super.onUpdate();
 
@@ -472,7 +469,7 @@ public class EntityParachute extends Entity {
     protected void applyYawToEntity(Entity entityToUpdate) {
         entityToUpdate.setRenderYawOffset(rotationYaw);
         float yaw = MathHelper.wrapDegrees(entityToUpdate.rotationYaw - rotationYaw);
-        float yawClamp = MathHelper.clamp(yaw, -105.0F, 105.0F);
+        float yawClamp = MathHelper.clamp(yaw, -HEAD_TURN_ANGLE, HEAD_TURN_ANGLE);
         entityToUpdate.prevRotationYaw += yawClamp - yaw;
         entityToUpdate.rotationYaw += yawClamp - yaw;
         entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
