@@ -31,7 +31,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
-//import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
@@ -77,17 +76,6 @@ public class Parachute {
     @Mod.Instance(MODID)
     public static Parachute instance;
 
-//    @SuppressWarnings("unused")
-//    @Mod.EventHandler
-//    public void Construct(FMLConstructionEvent event) {
-//        int buildVersion = ForgeVersion.getBuildVersion();
-//        int minimumForgeBuildVersion = 2555;
-//        if (buildVersion < minimumForgeBuildVersion) {
-//            error(String.format("This mod requires Forge Mod Loader build version of %d or higher", minimumForgeBuildVersion));
-//            error(String.format("You are running Forge Mod Loader build version %d", buildVersion));
-//        }
-//    }
-
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -127,10 +115,6 @@ public class Parachute {
     public void info(String s) {
         logger.info(s);
     }
-
-//    public void error(String s) {
-//        logger.error(s);
-//    }
 
     public static boolean getAutoActivateAltitude(EntityPlayer player) {
         boolean altitudeReached = false;

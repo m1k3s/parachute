@@ -246,7 +246,7 @@ public class EntityParachute extends Entity {
                 rotationYaw += deltaRotation;
             } else {
                 Entity skyDiver = getControllingPassenger();
-                if (skyDiver != null && skyDiver instanceof EntityLivingBase) {
+                if (skyDiver instanceof EntityLivingBase) {
                     EntityLivingBase pilot = (EntityLivingBase) skyDiver;
                     rotationYaw = (float) (pilot.rotationYaw + -pilot.moveStrafing * 90.0);
                 }
@@ -435,8 +435,8 @@ public class EntityParachute extends Entity {
     // like, you can think of the trails as chemtrails.
     private void generateContrails(boolean ascending) {
         double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
-        double cosYaw = 2.0 * Math.cos(Math.toRadians(90.0 + rotationYaw));
-        double sinYaw = 2.0 * Math.sin(Math.toRadians(90.0 + rotationYaw));
+        double cosYaw = 2.25 * Math.cos(Math.toRadians(90.0 + rotationYaw));
+        double sinYaw = 2.25 * Math.sin(Math.toRadians(90.0 + rotationYaw));
 
         for (int k = 0; (double) k < 1.0 + velocity; k++) {
             double sign = (rand.nextInt(2) * 2 - 1) * 0.7;

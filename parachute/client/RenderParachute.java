@@ -50,21 +50,22 @@ public class RenderParachute extends Render<EntityParachute> {
         shadowSize = 0.0F;
     }
 
+    @Override
     public void doRender(@Nonnull EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float partialTicks) {
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate((float) x, (float) y, (float) z);
-        GlStateManager.rotate(90.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
+        GlStateManager.translate(x, y, z);
+        GlStateManager.rotate(90.0f - rotationYaw, 0.0f, 1.0f, 0.0f);
+        bindEntityTexture(entityparachute);
 
-        if (!bindEntityTexture(entityparachute)) {
-            return;
-        }
+        // scale the parachute slightly
+        GlStateManager.scale(1.0, 1.0, 1.0);
+
         modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
         if (entityparachute.getControllingPassenger() != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
             EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
             renderParachuteCords(rider);
         }
-        GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 
         GlStateManager.popMatrix();
         super.doRender(entityparachute, x, y, z, rotationYaw, partialTicks);
@@ -73,9 +74,30 @@ public class RenderParachute extends Render<EntityParachute> {
     public void renderParachuteCords(EntityPlayer rider) {
         final float b = rider.getBrightness();
 
-        final float lx[] = {-8f, 0f, -8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f};
-        final float ly[] = {0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f, 0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f};
-        final float lz[] = {-23.5f, -3f, -23.5f, -3f, -8f, -3f, -8f, -3f, 23.5f, 3f, 23.5f, 3f, 8f, 3f, 8f, 3f};
+        // three section parachute
+//        final float lx[] = {-8f, 0f, -8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f};
+//        final float ly[] = {0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f, 0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f};
+//        final float lz[] = {-23.5f, -3f, -23.5f, -3f, -8f, -3f, -8f, -3f, 23.5f, 3f, 23.5f, 3f, 8f, 3f, 8f, 3f};
+
+        // four/six section parachute
+        final float x[] = { // front/back
+                -8f, 0f, 8f, 0f, -8f, 0f,
+                 8f, 0f, -8f, 0f, 8f, 0f,
+                -8f, 0f, 8f, 0f, -8f, 0f,
+                 8f, 0f, -8f, 0f, 8f, 0f
+        };
+        final float y[] = { // up/down
+                0.52f, 1.5f, 0.52f, 1.5f, 0.2f, 1.5f,
+                0.2f, 1.5f, 0.52f, 1.5f, 0.52f, 1.5f,
+                0.2f, 1.5f, 0.2f, 1.5f, 0.05f, 1.5f,
+                0.05f, 1.5f, 0.05f, 1.5f, 0.05f, 1.5f
+        };
+        final float z[] = { // left/right
+                -34f, -3f, -34f, -3f, -20f, -3f,
+                -20f, -3f, 34f, 3f, 34f, 3f,
+                 20f, 3f, 20f, 3f, -8f, -3f,
+                 -8f, -3f, 8f, 3f, 8f, 3f
+        };
 
         GlStateManager.pushMatrix();
 
@@ -85,12 +107,16 @@ public class RenderParachute extends Render<EntityParachute> {
         GlStateManager.scale(0.0625F, -1.0F, 0.0625F);
 
         GlStateManager.glBegin(GL11.GL_LINES);
-        GlStateManager.color(b * 0.5F, b * 0.5F, b * 0.65F); // slightly blue
-        for (int k = 0; k < 16; k++) {
-            if (k > 7) {
-                GlStateManager.color(b * 0.65F, b * 0.5F, b * 0.5F); // slightly red
-            }
-            GlStateManager.glVertex3f(lx[k], ly[k], lz[k]);
+        GlStateManager.color(b * 0.5F, b * 0.5F, b * 0.65F);
+        for (int k = 0; k < 24; k++) {
+//            if (k > 7 && k < 16) {
+//                GlStateManager.color(b * 0.65F, b * 0.5F, b * 0.5F); // slightly red, right side
+//            }
+//            if (k > 15) {
+//                GlStateManager.color(b * 0.5F, b * 0.65F, b * 0.5F); // slightly green, center
+//            }
+
+            GlStateManager.glVertex3f(x[k], y[k], z[k]);
         }
         GlStateManager.glEnd();
 
@@ -154,6 +180,11 @@ public class RenderParachute extends Render<EntityParachute> {
         };
 
         return colors[rand.nextInt(16)];
+    }
+
+    @Override
+    public boolean isMultipass() {
+        return false;
     }
 
     // return the string 'custom' and append a random digit
