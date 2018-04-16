@@ -74,12 +74,7 @@ public class RenderParachute extends Render<EntityParachute> {
     public void renderParachuteCords(EntityPlayer rider) {
         final float b = rider.getBrightness();
 
-        // three section parachute
-//        final float lx[] = {-8f, 0f, -8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f, -8f, 0f, 8f, 0f};
-//        final float ly[] = {0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f, 0.25f, 1.5f, 0.25f, 1.5f, 0f, 1.5f, 0f, 1.5f};
-//        final float lz[] = {-23.5f, -3f, -23.5f, -3f, -8f, -3f, -8f, -3f, 23.5f, 3f, 23.5f, 3f, 8f, 3f, 8f, 3f};
-
-        // four/six section parachute
+        // six section parachute
         final float x[] = { // front/back
                 -8f, 0f, 8f, 0f, -8f, 0f,
                  8f, 0f, -8f, 0f, 8f, 0f,
@@ -107,15 +102,8 @@ public class RenderParachute extends Render<EntityParachute> {
         GlStateManager.scale(0.0625F, -1.0F, 0.0625F);
 
         GlStateManager.glBegin(GL11.GL_LINES);
-        GlStateManager.color(b * 0.5F, b * 0.5F, b * 0.65F);
+        GlStateManager.color(b * 0.5F, b * 0.5F, b * 0.65F); // blue-ish
         for (int k = 0; k < 24; k++) {
-//            if (k > 7 && k < 16) {
-//                GlStateManager.color(b * 0.65F, b * 0.5F, b * 0.5F); // slightly red, right side
-//            }
-//            if (k > 15) {
-//                GlStateManager.color(b * 0.5F, b * 0.65F, b * 0.5F); // slightly green, center
-//            }
-
             GlStateManager.glVertex3f(x[k], y[k], z[k]);
         }
         GlStateManager.glEnd();

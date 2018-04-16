@@ -81,7 +81,7 @@ public class Parachute {
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.preInit(event);
         int entityID = 1;
-        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, PARACHUTE_NAME), EntityParachute.class, PARACHUTE_NAME, entityID, Parachute.instance, 80, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, PARACHUTE_NAME), EntityParachute.class, PARACHUTE_NAME, entityID, Parachute.instance, 80, 5, true);
         GameRegistry.findRegistry(Item.class).registerAll(ITEM_PARACHUTE_PACK, PARACHUTE_ITEM);
         PacketHandler.init();
         proxy.preInit();

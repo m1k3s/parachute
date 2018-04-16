@@ -34,20 +34,8 @@ public class ModelParachute extends ModelBase {
     public ModelParachute() {
         sections[0] = new ModelRenderer(this,0, 0);
         int x = 16; // front/back
-        int y = 1;  // up/down
+        int y = 2;  // up/down
         int z = 16; // left/right
-//        sections[0].addBox(-8F, 0F, -8, width, height, depth);
-//
-//        sections[1] = new ModelRenderer(this, 0, 0);
-//        sections[1].addBox(-8F, 0F, -16F, width, height, depth);
-//        sections[1].setRotationPoint(0F, 0F, -8F);
-//        sections[1].rotateAngleX = -0.2617993877991494F;
-//
-//        sections[2] = new ModelRenderer(this, 0, 0);
-//        sections[2].addBox(-8F, 0F, 0F, width, height, depth);
-//        sections[2].setRotationPoint(0F, 0F, 8F);
-//        sections[2].rotateAngleX = 0.2617993877991494F;
-
         final float d2r = (float)Math.toRadians(1.0);
 
         sections[0] = new ModelRenderer(this);
