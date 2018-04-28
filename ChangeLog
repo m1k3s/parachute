@@ -1,3 +1,83 @@
+commit b1ee7567a98e76b2b4f6fbc927998fc2f307586f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Apr 16 07:51:28 2018 -0400
+
+    tweaking the new parachute, six sectios, thicker
+    changed the tracking update interval to 5
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 3370625939efbcc9f939f5c7094a6b1a02ee2e9f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Apr 9 14:50:18 2018 -0400
+
+    larger canopy, six sections
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 877b91a4d7aa1eb371628358a1d5ff8b960edcaa
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Mar 25 11:00:39 2018 -0400
+
+    remove unused initialVelocity variable, merge residual
+    code clean up
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 0801273f4be73f0ce96138606683e188d0730849
+Merge: 7e458de 7251527
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Mar 18 11:57:34 2018 -0400
+
+    Merge branch 'master' into 1.12.2
+
+    # Conflicts:
+    #       parachute/client/ParachuteInputEvent.java
+    #       parachute/common/ConfigHandler.java
+    #       parachute/common/EntityParachute.java
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 72515271ee93414e17cff5ad000159bf7c6d9503
+Merge: b3261a5 2c3c2f2
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Mar 18 11:45:12 2018 -0400
+
+    Merge branch 'newhud'
+
+commit 2c3c2f28244238cf72d87e6b559bc3b003d6b65b
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Mar 18 11:44:52 2018 -0400
+
+    made all finals uppercase
+    changed some field names to better reflect their purpose
+    reworked the steer by sight option as a toggle.
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit b3261a5abe4342c5d63569bd063d937f647cac08
+Merge: a26c111 887c275
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 13 15:52:08 2018 -0400
+
+    Merge branch 'newhud'
+
+commit 887c275a0a3896d0e81b16cd9febdb6217630bbe
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Mar 13 15:51:44 2018 -0400
+
+    steerBySight is now a local variable in EntityParachute.java
+    commented out version checking in Parachute.java
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit a26c111239047babf630f33334d1de24e5c5df7d
+Merge: d796967 bc3cfb7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Mar 12 18:19:50 2018 -0400
+
+    Merge branch 'newhud'
+
 commit bc3cfb7103d1e60d3c1a5823477b043c7eaa70c3
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Mar 12 18:19:27 2018 -0400
@@ -8,6 +88,13 @@ Date:   Mon Mar 12 18:19:27 2018 -0400
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit d796967c318971652269f877a4e40602707806f1
+Merge: 2b92a5a e56c52a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Mar 10 07:34:54 2018 -0500
+
+    Merge branch 'newhud'
+
 commit e56c52a890ae6d00c2cdb8b159a619ad17ad9a57
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sat Mar 10 07:34:33 2018 -0500
@@ -15,6 +102,13 @@ Date:   Sat Mar 10 07:34:33 2018 -0500
     update ChangeLog
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 2b92a5a7f057619ad5ab020354ee449465b84537
+Merge: 73db97f c478400
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Mar 3 10:20:57 2018 -0500
+
+    Merge branch 'newhud'
 
 commit c478400e523150ae69b148250a824f0274952ad7
 Author: m1k3s <pbrane0@gmail.com>
@@ -26,6 +120,13 @@ Date:   Sat Mar 3 10:20:38 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit 73db97fde5fd25dedf23eb85e1e3bb853faa21f0
+Merge: 766a310 12cd17d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Mar 1 13:04:26 2018 -0500
+
+    Merge branch 'newhud'
+
 commit 12cd17d46280f0a7365d09c38bb4fc06f1c4033f
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Thu Mar 1 13:04:10 2018 -0500
@@ -34,6 +135,13 @@ Date:   Thu Mar 1 13:04:10 2018 -0500
     added logic to not display armorbar when on parachutepack is worn
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 766a310e7599ebbb2a363a8d85e7dfb648a7f18f
+Merge: f2865bc 4fcebea
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Feb 27 08:10:51 2018 -0500
+
+    Merge branch 'newhud'
 
 commit 4fcebea22f94c35e2c69fba80c77c6f72e3bb087
 Author: m1k3s <pbrane0@gmail.com>
@@ -57,6 +165,13 @@ Date:   Fri Feb 23 20:38:26 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit f2865bc0b49f4882416ad0e11359e33033c62eae
+Merge: fa933d6 ef4ea7f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 18 11:02:39 2018 -0500
+
+    Merge branch 'newhud'
+
 commit ef4ea7f1b279db9676db001a4ea7c44574ab1c73
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Feb 18 11:02:21 2018 -0500
@@ -65,6 +180,13 @@ Date:   Sun Feb 18 11:02:21 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit fa933d6d3f36b77c74059c5fbaefabbe7ea264a1
+Merge: 6afe131 092a1de
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Feb 12 10:49:17 2018 -0500
+
+    Merge branch 'newhud'
+
 commit 092a1de7bbd68d2ffb5cd1ea2679ce085591102c
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Feb 12 10:48:54 2018 -0500
@@ -72,6 +194,13 @@ Date:   Mon Feb 12 10:48:54 2018 -0500
     removed commented code no longer used
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 6afe13101af0ed905e33059a5f0772527fb0f056
+Merge: 6367528 c1315c0
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 11 07:56:06 2018 -0500
+
+    Merge branch 'newhud'
 
 commit c1315c069e57d1d6a1550e887a24bfd31d29f879
 Author: m1k3s <pbrane0@gmail.com>
@@ -83,6 +212,13 @@ Date:   Sun Feb 11 07:55:47 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit 63675283b123d325153c8e09288505b74d2ffc9b
+Merge: 4d75314 447a3d8
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Feb 8 08:32:08 2018 -0500
+
+    Merge branch 'newhud'
+
 commit 447a3d86753739c8d85d506bbfee7d55a5c6add2
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Thu Feb 8 08:31:38 2018 -0500
@@ -93,6 +229,13 @@ Date:   Thu Feb 8 08:31:38 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit 4d753146b6f16a0c2edd998943d0ceb7e22f6ccb
+Merge: 2f8cf85 731c82d
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Feb 4 11:24:07 2018 -0500
+
+    Merge branch 'newhud'
+
 commit 731c82dd66e921fe56417908601aac2074618efd
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Feb 4 11:23:46 2018 -0500
@@ -100,6 +243,13 @@ Date:   Sun Feb 4 11:23:46 2018 -0500
     removed digital clock code/textures - created seperate mod for clock
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 2f8cf85d099a6614dce0176af787802542679955
+Merge: 38a208a b943ec8
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Feb 1 16:45:01 2018 -0500
+
+    Merge branch 'newhud'
 
 commit b943ec8aa7cc3b8626874e093a1ecf24a0e8d928
 Author: m1k3s <pbrane0@gmail.com>
@@ -111,6 +261,13 @@ Date:   Thu Feb 1 16:44:38 2018 -0500
     the proof-of-concept digital clock drawing uses drawTextureFixed
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 38a208a295541f3d855599e806927c4b58c5182f
+Merge: 3ce68c6 4813466
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Feb 1 12:30:48 2018 -0500
+
+    Merge branch 'newhud'
 
 commit 481346664cf82ba510a6d1e0e42dd4d3d318b53a
 Author: m1k3s <pbrane0@gmail.com>
@@ -128,6 +285,13 @@ Date:   Thu Feb 1 12:29:40 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit 3ce68c6733a50ea746cd882a1e1bed7a6d0b253b
+Merge: c36ccf9 100e9e0
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 31 13:05:39 2018 -0500
+
+    Merge branch 'newhud'
+
 commit 100e9e0c83edaf994b28285f9fb707b254e992bb
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Jan 31 13:05:12 2018 -0500
@@ -136,6 +300,13 @@ Date:   Wed Jan 31 13:05:12 2018 -0500
     fixed the right-click not updating the AAD on first click
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit c36ccf953bba5e997e4cd163c15157771e6eb6d3
+Merge: 4d2c8c3 4206825
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 29 18:15:07 2018 -0500
+
+    Merge branch 'newhud'
 
 commit 420682592b07001a53bd155ba8a64be5d8cfa487
 Author: m1k3s <pbrane0@gmail.com>
@@ -147,6 +318,13 @@ Date:   Mon Jan 29 18:14:42 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit 4d2c8c35344d2cf7a22bdb9b09380ac059ae120a
+Merge: 3b9427f 7cdae73
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 27 14:45:35 2018 -0500
+
+    Merge branch 'newhud'
+
 commit 7cdae7371afc7756d38aa532956f81483206f94d
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sat Jan 27 14:45:09 2018 -0500
@@ -155,6 +333,13 @@ Date:   Sat Jan 27 14:45:09 2018 -0500
     tweaked the bubble and reticule textures
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 3b9427f0065d9013b9afcd1cf1d7cfcccb4e09d6
+Merge: 93db419 030de5a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 27 11:02:31 2018 -0500
+
+    Merge branch 'newhud'
 
 commit 030de5aa8ce3bcee5254df1a78e05e48c1a5353a
 Author: m1k3s <pbrane0@gmail.com>
@@ -174,6 +359,13 @@ Date:   Fri Jan 26 16:33:12 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit 93db419f6524c92c08736c097ed4376634fd0a0b
+Merge: 9d751ed 6aff8d9
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 26 08:45:04 2018 -0500
+
+    Merge branch 'newhud'
+
 commit 6aff8d94ffdb1142b1e6f33aade874a21c4d2d05
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Fri Jan 26 08:44:10 2018 -0500
@@ -183,6 +375,14 @@ Date:   Fri Jan 26 08:44:10 2018 -0500
     moved the GIMP xcf file to the base directory
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 9d751ed12efea3126d9f2ccd20d895b7393920d0
+Merge: 59076f9 f4da6f1
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 25 15:30:52 2018 -0500
+
+    Merge branch 'newhud'
+    Now the defacto HUD
 
 commit f4da6f139cef533561fb8c7ebeab00055b2cd799
 Author: m1k3s <pbrane0@gmail.com>
@@ -202,6 +402,13 @@ Date:   Thu Jan 25 10:01:08 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit 59076f9c39e6479290b4c5cf50e342c3410db3f0
+Merge: acddf0c 93c425f
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu Jan 25 08:04:45 2018 -0500
+
+    Merge branch '1.12.2-iproxy'
+
 commit 93c425ffad6a8882883163ebc75c8943eb7d5c4c
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Thu Jan 25 08:03:56 2018 -0500
@@ -217,6 +424,13 @@ Date:   Wed Jan 24 20:16:05 2018 -0500
 
     updated Changelog
 
+commit acddf0cb10b3c83e48d8ce9320ceca993c692598
+Merge: a4147b9 24c1f1a
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 20:14:39 2018 -0500
+
+    Merge branch '1.12.2-iproxy'
+
 commit 24c1f1a2f665b6adac33e5fa4d861de0b20037fa
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Jan 24 20:14:01 2018 -0500
@@ -228,6 +442,13 @@ Date:   Wed Jan 24 20:14:01 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit a4147b9bcca06aa6f99eaeb99b8d5aa62176cd84
+Merge: c6a5260 fae282c
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 12:54:04 2018 -0500
+
+    Merge branch '1.12.2-iproxy'
+
 commit fae282c262fcb6e53f31aa044ee1bad48334949d
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Jan 24 12:48:59 2018 -0500
@@ -235,6 +456,13 @@ Date:   Wed Jan 24 12:48:59 2018 -0500
     removed autoDismount feature, doesn't work at all
        LSHIFT is the prefered way to dismount in minecraft
     some more minor code cleanup
+
+commit c6a5260bb8f1afd37ad47d8b2d1092ada8e98b64
+Merge: a6e8687 75dd7e5
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Wed Jan 24 10:52:50 2018 -0500
+
+    Merge branch '1.12.2-iproxy'
 
 commit 75dd7e5852f9e263ca68a0f0eaa768cf122507d3
 Author: m1k3s <pbrane0@gmail.com>
@@ -254,6 +482,13 @@ Date:   Wed Jan 24 09:54:34 2018 -0500
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
 
+commit a6e86873efc32ec999f5490a33e6727842bb19b6
+Merge: 9579652 42d3ac6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 22 17:50:53 2018 -0500
+
+    Merge branch '1.12.2-iproxy'
+
 commit 42d3ac66fce53f10ddb8f194c8ed87bc97361cca
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Jan 22 17:50:32 2018 -0500
@@ -264,6 +499,13 @@ Date:   Mon Jan 22 17:50:32 2018 -0500
     suddenly realized the ConfigEventHandler is client-side (doh)
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 9579652f37e0788df66169ad5bccb00d9c21a1af
+Merge: 6434f45 6ebab97
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 22 16:30:12 2018 -0500
+
+    Merge branch '1.12.2-iproxy'
 
 commit 6ebab9722dd0f709e452b6548f1bcb565f7e1404
 Author: m1k3s <pbrane0@gmail.com>
@@ -276,6 +518,13 @@ Date:   Mon Jan 22 16:29:34 2018 -0500
     client config variables don't update in multiplayer - WIP
 
     Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit 6434f455bdc70070b9bafdedf55cf4fa084da3ef
+Merge: b1e06af b717b32
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 22 11:17:32 2018 -0500
+
+    Merge branch '1.12.2-iproxy'
 
 commit b717b32bf6856ba74a881a6c14d805a745bb45f9
 Author: m1k3s <pbrane0@gmail.com>
@@ -296,6 +545,13 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Jan 21 20:36:16 2018 -0500
 
     added a default value to the chute color on the client side.
+
+commit b1e06af995e3cd7946941f0aa4931129f110539c
+Merge: 613fd64 7543fed
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Jan 21 13:02:40 2018 -0500
+
+    Merge branch '1.12.2-iproxy'
 
 commit 7543fed682e82e1a3d90d702415a2e8ebec2a6c1
 Author: m1k3s <pbrane0@gmail.com>
@@ -425,6 +681,12 @@ Date:   Mon Jan 8 14:06:59 2018 -0500
 
     fix the player/parachute heading indicator.
 
+commit 7e458dec913728a2b98f98bcc3a20b0c784e0e55
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jan 8 11:39:36 2018 -0500
+
+    changed ascend contrails to large smoke
+
 commit 2949a87f68c1ddfc9da07d979524afad6f6dbd65
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Jan 8 10:18:04 2018 -0500
@@ -458,12 +720,35 @@ Date:   Sat Jan 6 09:19:49 2018 -0500
 
     still working on new steering control. sucks so far.
 
+commit fad0c8d3aa0eb6cc4a3d8f91962e108238bf2fe6
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Jan 6 07:53:55 2018 -0500
+
+    removed powered flight, KeyBindingHandler commented out.
+
+commit a7bc31a8cc5fd61eb1a1cd46a96cbc7478954d7e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Fri Jan 5 14:12:53 2018 -0500
+
+    remove powered flight option. it was a fun experiment, not really
+    a parachute
+    if it's powered. sure you can argue that the thermal control isn't
+    realistic
+    but hey, it's my mod.
+
 commit 837e533370427cd35afa90204d7b33c6b3e2dff5
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Fri Jan 5 13:53:42 2018 -0500
 
     playing with the new boat steering method. It doesn't seem good fo the
     parachute. too hard to steer.
+
+commit 613fd6423c3eb8952dd04b8fc66be88893fe9ca6
+Merge: b729896 135961e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Dec 30 08:31:43 2017 -0500
+
+    Merge branch '1.12.2'
 
 commit 135961e0773cf682007a68c9e2be4bdc1485647b
 Author: m1k3s <pbrane0@gmail.com>
@@ -473,6 +758,13 @@ Date:   Sat Dec 30 08:27:18 2017 -0500
     uncontrolled flight. disables the forward/steering control. can be
     used in
     conjunction with turbulence
+
+commit b729896db4f08153a0385408a5d312302560ab0c
+Merge: cf626dc 3af6d19
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Nov 21 08:05:25 2017 -0500
+
+    Merge branch '1.12.2'
 
 commit 3af6d1997ef73b1cbe39d92411a16458e1f185d0
 Author: m1k3s <pbrane0@gmail.com>
@@ -499,6 +791,13 @@ Date:   Sun Aug 20 16:30:28 2017 -0400
     added timer to powered state. lasts about 10 seconds, takes about 10
     seconds to recharge.
 
+commit cf626dcfababbc36040c6aa602c6add91b5b34d8
+Merge: 34f840a 61cd91e
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sun Aug 20 09:31:39 2017 -0400
+
+    Merge branch '1.12.1'
+
 commit 60ef2bb234beaa3a74f80b9c2150a0cebca4e523
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Sun Aug 20 09:14:29 2017 -0400
@@ -518,6 +817,13 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Wed Jul 19 17:36:14 2017 -0400
 
     working on config stuff
+
+commit 34f840a9597221d5880913d2eadca84188ced16a
+Merge: 487e4d5 16282f7
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jul 3 17:42:21 2017 -0400
+
+    Merge branch '1.12'
 
 commit 16282f7b6aa0d3b0a80b31668e733a7d70081466
 Author: m1k3s <pbrane0@gmail.com>
@@ -607,11 +913,25 @@ Date:   Sun Jun 11 08:24:32 2017 -0400
 
     updated class for latest forge 1.11.2
 
+commit 487e4d525cf531167b3465f3b6a4a6fe08d54964
+Merge: 04ef866 b84c961
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Apr 4 11:38:47 2017 -0400
+
+    Merge branch '1.11.2'
+
 commit b84c9612dc0dceb1ef07e32c41eb4719369dca91
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Tue Apr 4 11:37:51 2017 -0400
 
     removed homepoint code and files
+
+commit 04ef866467c06665942627c8099c15414ccebd84
+Merge: d874b57 4ff62b2
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Tue Apr 4 11:31:16 2017 -0400
+
+    Merge branch 'master' of github.com:m1k3s/parachute
 
 commit d874b571c39e391264eed115fd82d24bfb86c23d
 Author: m1k3s <pbrane0@gmail.com>
@@ -633,6 +953,12 @@ Author: m1k3s <pbrane0@gmail.com>
 Date:   Tue Mar 28 21:38:46 2017 -0400
 
     updated LICENSE file to GPLv3
+
+commit 4ff62b2c24edc7daefeca64c9f863bdb2ff457ab
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Tue Mar 28 20:32:13 2017 -0400
+
+    Delete LICENSE
 
 commit 5146fca72f687f6aa51401e8262b4081f0851478
 Author: m1k3s <pbrane0@gmail.com>

@@ -66,6 +66,7 @@ public class EntityParachute extends Entity {
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ascend
     private final static double OFFSET = 2.5; // player Y offset from parachute
     private final static float HEAD_TURN_ANGLE = 120.0f;
+    private final static double DECAY_MOMENTUM = 0.97;
 
     private static boolean ascendMode;
 
@@ -88,7 +89,7 @@ public class EntityParachute extends Entity {
         curLavaDistance = lavaDistance;
         this.world = world;
         preventEntitySpawning = true;
-        setSize(1.5f, 0.0625f);
+        setSize(3.25f, 0.0625f);
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);
@@ -130,6 +131,7 @@ public class EntityParachute extends Entity {
     protected void entityInit() {
     }
 
+    // Fixme: use setEntityBoundingBox to set the collisionBox size
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
         if (entity != getControllingPassenger() && entity.getRidingEntity() != this) {
@@ -284,11 +286,11 @@ public class EntityParachute extends Entity {
         if (allowThermals && ascendMode && skyDiver != null) { // play the lift sound. kinda like a hot air balloon's burners effect
             skyDiver.playSound(Parachute.LIFTCHUTE, ClientConfiguration.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
         }
-        
-        // apply momentum
-        motionX *= 0.97;
+
+        // apply momentum/decay
+        motionX *= DECAY_MOMENTUM;
         motionY *= (motionY < 0.0 ? 0.96 : 0.98); // rises faster than falls
-        motionZ *= 0.97;
+        motionZ *= DECAY_MOMENTUM;
         deltaRotation *= 0.9;
         // move the parachute with the motion equations applied
         move(MoverType.SELF, motionX, motionY, motionZ);
@@ -461,7 +463,7 @@ public class EntityParachute extends Entity {
             Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
             passenger.setPosition(posX + vec3d.x, posY + (double) offset, posZ + vec3d.z);
             passenger.rotationYaw += deltaRotation;
-            passenger.setRotationYawHead(passenger.getRotationYawHead() + (float)deltaRotation);
+            passenger.setRotationYawHead(passenger.getRotationYawHead() + (float) deltaRotation);
             applyYawToEntity(passenger);
         }
     }
@@ -482,9 +484,11 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {}
+    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {
+    }
 
     @Override
-    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {}
+    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {
+    }
 
 }
