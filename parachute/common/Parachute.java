@@ -68,7 +68,8 @@ public class Parachute {
     public static final String NAME = "Parachute Mod NG";
     public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
     public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
-    public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance", new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
+    public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance",
+            new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
 
     @SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
     public static IProxy proxy;
@@ -81,7 +82,9 @@ public class Parachute {
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.preInit(event);
         int entityID = 1;
-        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, PARACHUTE_NAME), EntityParachute.class, PARACHUTE_NAME, entityID, Parachute.instance, 80, 5, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, PARACHUTE_NAME),
+                EntityParachute.class, PARACHUTE_NAME, entityID, Parachute.instance, 80, 5, true);
+
         GameRegistry.findRegistry(Item.class).registerAll(ITEM_PARACHUTE_PACK, PARACHUTE_ITEM);
         PacketHandler.init();
         proxy.preInit();

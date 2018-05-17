@@ -127,22 +127,24 @@ public class HudCompassRenderer extends Gui {
 
                 // 1. draw the background
                 if (isNightTime()) {
-                    drawTextureFixed(NIGHT_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
+                    drawTextureFixed(NIGHT_TEXTURE, hudX);
                 }
-                drawTextureFixed(BACKGROUND_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
+                drawTextureFixed(BACKGROUND_TEXTURE, hudX);
 
                 // 2. draw the compass ring
-                drawTextureWithRotation((float) -compassHeading, COMPASS_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
+                drawTextureWithRotation((float) -compassHeading, COMPASS_TEXTURE, hudX);
 
                 // 3. draw the home direction ring
-                drawTextureWithRotation((float) homeDir, HOME_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
+                drawTextureWithRotation((float) homeDir, HOME_TEXTURE, hudX);
 
                 // 4. draw the "where the hell is the front of the parachute"  bubble
-                float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
-                drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
+                if (ConfigHandler.getFrontBubble()) {
+                    float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
+                    drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
+                }
 
                 // 5. draw the reticule on top
-                drawTextureFixed(RETICULE_TEXTURE, hudX, PADDING, HUD_WIDTH, HUD_HEIGHT);
+                drawTextureFixed(RETICULE_TEXTURE, hudX);
 
                 // damp the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
@@ -187,28 +189,28 @@ public class HudCompassRenderer extends Gui {
     }
 
     // draw a fixed texture
-    private void drawTextureFixed(ResourceLocation texture, int screenX, int screenY, int w, int h) {
+    private void drawTextureFixed(ResourceLocation texture, int screenX) {
         GlStateManager.pushMatrix();
 
         MINECRAFT.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(screenX, screenY, 0, 0, w, h);
+        drawTexturedModalRect(screenX, HudCompassRenderer.PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
 
         GlStateManager.popMatrix();
     }
 
     // draw a rotating texture
-    private void drawTextureWithRotation(float degrees, ResourceLocation texture, int screenX, int screenY, int w, int h) {
+    private void drawTextureWithRotation(float degrees, ResourceLocation texture, int screenX) {
         GlStateManager.pushMatrix();
 
-        float tx = screenX + (w / 2);
-        float ty = screenY + (h / 2);
+        float tx = screenX + (HudCompassRenderer.HUD_WIDTH / 2);
+        float ty = HudCompassRenderer.PADDING + (HudCompassRenderer.HUD_HEIGHT / 2);
         // translate to center and rotate
         GlStateManager.translate(tx, ty, 0);
         GlStateManager.rotate(degrees, 0, 0, 1);
         GlStateManager.translate(-tx, -ty, 0);
 
         MINECRAFT.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(screenX, screenY, 0, 0, w, h);
+        drawTexturedModalRect(screenX, HudCompassRenderer.PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
 
         GlStateManager.popMatrix();
     }
@@ -248,7 +250,7 @@ public class HudCompassRenderer extends Gui {
     }
 
     private int colorAltitude() {
-        return altitude <= 10.0 ? COLOR_RED : altitude <= 15.0 && altitude > 10.0 ? COLOR_YELLOW : COLOR_GREEN;
+        return altitude <= 10.0 ? COLOR_RED : altitude <= 15.0 ? COLOR_YELLOW : COLOR_GREEN;
     }
 
     // calculate altitude in meters above ground. starting at the entity

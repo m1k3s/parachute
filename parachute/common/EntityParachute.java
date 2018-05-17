@@ -131,7 +131,6 @@ public class EntityParachute extends Entity {
     protected void entityInit() {
     }
 
-    // Fixme: use setEntityBoundingBox to set the collisionBox size
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
         if (entity != getControllingPassenger() && entity.getRidingEntity() != this) {

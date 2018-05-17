@@ -56,6 +56,7 @@ public class ConfigHandler {
     private static String hudPosition;
     private static boolean altitudeMSL;
     private static String steeringControl;
+    private static boolean frontBubble;
 
     private static double forwardMomentum;
     private static double backMomentum;
@@ -88,6 +89,7 @@ public class ConfigHandler {
     private static final String HUD_POSITION_COMMENT = "The HUD can be positioned in the upper left, upper center, or upper right";
     private static final String ALTITUDE_MSL_COMMENT = "Show altitude in MSL, Mean Sea Level";
     private static final String STEERING_CONTROL_COMMENT = "set to true to steer by player look direction, else WASD steering";
+    private static final String FRONT_BUBBLE = "Toggle visiblity of the player front facing bubble";
     private static final String[] COLOR_VALUES = {
             "random",
             "black",
@@ -186,6 +188,8 @@ public class ConfigHandler {
         Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, MIN_FALL_DISTANCE_COMMENT, 3.0, 10.0);
         Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, AAD_IMMED_COMMENT);
 
+        Property frontBubbleProp = config.get(Configuration.CATEGORY_GENERAL, "frontBubble", true, FRONT_BUBBLE);
+
         Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black");
         chuteColorProp.setComment(COLOR_COMMENT);
         chuteColorProp.setValidValues(COLOR_VALUES);
@@ -216,6 +220,7 @@ public class ConfigHandler {
         propertyOrder.add(constantTurbulenceProp.getName());
         propertyOrder.add(chuteColorProp.getName());
         propertyOrder.add(steeringControlProp.getName());
+        propertyOrder.add(frontBubbleProp.getName());
         propertyOrder.add(forwardMotionProp.getName());
         propertyOrder.add(backMotionProp.getName());
         propertyOrder.add(leftMotionProp.getName());
@@ -246,6 +251,7 @@ public class ConfigHandler {
             noHUD = noHUDProp.getBoolean(false);
             hudPosition = hudPositionProp.getString();
             altitudeMSL = altitudeProp.getBoolean();
+            frontBubble = frontBubbleProp.getBoolean();
             ConfigHandler.steeringControl = steeringControlProp.getString();
         }
 
@@ -275,6 +281,7 @@ public class ConfigHandler {
         noHUDProp.set(noHUD);
         hudPositionProp.set(hudPosition);
         altitudeProp.set(altitudeMSL);
+        frontBubbleProp.set(frontBubble);
         steeringControlProp.set(steeringControl);
 
         if (config.hasChanged()) {
@@ -295,6 +302,7 @@ public class ConfigHandler {
                 ClientConfiguration.setHudPosition(hudPosition);
                 ClientConfiguration.setAltitudeMSL(altitudeMSL);
                 ClientConfiguration.setSteeringControl(steeringControl);
+                ClientConfiguration.setFrontBubble(frontBubble);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }
@@ -416,6 +424,10 @@ public class ConfigHandler {
 
     public static String getSteeringControl() {
         return steeringControl;
+    }
+
+    public static boolean getFrontBubble() {
+        return frontBubble;
     }
 
 }

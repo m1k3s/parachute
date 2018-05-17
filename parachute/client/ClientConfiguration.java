@@ -22,10 +22,10 @@
 package com.parachute.client;
 
 
-
 // The ClientConfiguration class contains all the client
 // controlled options. The other config options are
-// server side options. This is a WIP.
+// server side options.
+@SuppressWarnings("unused")
 public class ClientConfiguration {
     private static String chuteColor;
     private static boolean noHUD;
@@ -33,6 +33,7 @@ public class ClientConfiguration {
     private static String hudPosition;
     private static boolean altitudeMSL;
     private static String steeringControl;
+    private static boolean frontBubble;
 
     public ClientConfiguration() {}
 
@@ -60,6 +61,8 @@ public class ClientConfiguration {
         steeringControl = value;
     }
 
+    public static void setFrontBubble(boolean value) { frontBubble = value; }
+
     public static String getChuteColor() {
         return chuteColor;
     }
@@ -83,5 +86,7 @@ public class ClientConfiguration {
     public static String getSteeringControl() {
         return steeringControl;
     }
+
+    public static boolean getFrontBubble() { return frontBubble; }
 
 }

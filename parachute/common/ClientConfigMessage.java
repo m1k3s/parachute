@@ -37,17 +37,21 @@ public class ClientConfigMessage implements IMessage {
     private String hudPosition;
     private boolean altitudeMSL;
     private String steeringControl;
+    private boolean frontBubble;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
-    public ClientConfigMessage(String chuteColor, boolean noHUD, double burnVolume, String hudPosition, boolean altitudeMSL, String steeringControl) {
+    public ClientConfigMessage(
+            String chuteColor, boolean noHUD, double burnVolume, String hudPosition,
+            boolean altitudeMSL, String steeringControl, boolean frontBubble) {
         this.chuteColor = chuteColor;
         this.noHUD = noHUD;
         this.burnVolume = burnVolume;
         this.hudPosition = hudPosition;
         this.altitudeMSL = altitudeMSL;
         this.steeringControl = steeringControl;
+        this.frontBubble = frontBubble;
     }
 
     @Override
@@ -58,6 +62,7 @@ public class ClientConfigMessage implements IMessage {
         hudPosition = ByteBufUtils.readUTF8String(byteBuf);
         altitudeMSL = byteBuf.readBoolean();
         steeringControl = ByteBufUtils.readUTF8String(byteBuf);
+        frontBubble = byteBuf.readBoolean();
     }
 
     @Override
@@ -68,6 +73,7 @@ public class ClientConfigMessage implements IMessage {
         ByteBufUtils.writeUTF8String(byteBuf, hudPosition);
         byteBuf.writeBoolean(altitudeMSL);
         ByteBufUtils.writeUTF8String(byteBuf, steeringControl);
+        byteBuf.writeBoolean(frontBubble);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -81,6 +87,7 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setHudPosition(msg.hudPosition);
                 ClientConfiguration.setAltitudeMSL(msg.altitudeMSL);
                 ClientConfiguration.setSteeringControl(msg.steeringControl);
+                ClientConfiguration.setFrontBubble(msg.frontBubble);
                 RenderParachute.setParachuteColor(msg.chuteColor);
             });
             return null;
