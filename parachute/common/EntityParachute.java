@@ -89,7 +89,8 @@ public class EntityParachute extends Entity {
         curLavaDistance = lavaDistance;
         this.world = world;
         preventEntitySpawning = true;
-        setSize(3.25f, 0.0625f);
+        float SCALE = 1.0f / 16.0f;
+        setSize(3.25f, SCALE);
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);

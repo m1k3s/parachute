@@ -44,6 +44,7 @@ public class RenderParachute extends Render<EntityParachute> {
     protected static ModelBase modelParachute = new ModelParachute();
     private static ResourceLocation parachuteTexture = null;
     private static final Random rand = new Random(System.currentTimeMillis());
+    private final float SCALE = 1.0f / 16.0f;
 
     public RenderParachute(RenderManager rm) {
         super(rm);
@@ -59,9 +60,9 @@ public class RenderParachute extends Render<EntityParachute> {
         bindEntityTexture(entityparachute);
 
         // scale the parachute slightly
-        GlStateManager.scale(1.0, 1.0, 1.0);
+//        GlStateManager.scale(1.0, 1.0, 1.0);
 
-        modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+        modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, SCALE);
         if (entityparachute.getControllingPassenger() != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
             EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
             renderParachuteCords(rider);
@@ -99,7 +100,7 @@ public class RenderParachute extends Render<EntityParachute> {
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
 
-        GlStateManager.scale(0.0625F, -1.0F, 0.0625F);
+        GlStateManager.scale(0.0625F, -1.0F, SCALE);
 
         GlStateManager.glBegin(GL11.GL_LINES);
         GlStateManager.color(b * 0.5F, b * 0.5F, b * 0.65F); // blue-ish

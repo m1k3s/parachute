@@ -140,7 +140,10 @@ public class HudCompassRenderer extends Gui {
                 // 4. draw the "where the hell is the front of the parachute"  bubble
                 if (ConfigHandler.getFrontBubble()) {
                     float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
-                    drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
+//                    System.out.println("playerLook: " + playerLook);
+                    if (playerLook >= -10.0 && playerLook <= 10.0) {
+                        drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
+                    }
                 }
 
                 // 5. draw the reticule on top
