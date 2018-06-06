@@ -44,6 +44,7 @@ public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation HOME_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
     protected static final ResourceLocation BUBBLE_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-bubble.png");
     protected static final ResourceLocation RETICULE_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule.png");
+    protected static final ResourceLocation RETICULE2_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule2.png");
     protected static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-background.png");
     protected static final ResourceLocation NIGHT_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-night.png");
 
@@ -141,13 +142,19 @@ public class HudCompassRenderer extends Gui {
                 if (ConfigHandler.getFrontBubble()) {
                     float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
 //                    System.out.println("playerLook: " + playerLook);
-                    if (playerLook >= -10.0 && playerLook <= 10.0) {
+//                    if (playerLook >= -10.0 && playerLook <= 10.0) {
                         drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
-                    }
+//                    }
+
+
+                    // 5. draw the reticule on top
+                    drawTextureFixed(RETICULE_TEXTURE, hudX);
+                } else {
+                    drawTextureFixed(RETICULE2_TEXTURE, hudX);
                 }
 
                 // 5. draw the reticule on top
-                drawTextureFixed(RETICULE_TEXTURE, hudX);
+//                drawTextureFixed(RETICULE_TEXTURE, hudX);
 
                 // damp the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
