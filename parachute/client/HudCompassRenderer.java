@@ -212,8 +212,8 @@ public class HudCompassRenderer extends Gui {
     private void drawTextureWithRotation(float degrees, ResourceLocation texture, int screenX) {
         GlStateManager.pushMatrix();
 
-        float tx = screenX + (HudCompassRenderer.HUD_WIDTH / 2);
-        float ty = HudCompassRenderer.PADDING + (HudCompassRenderer.HUD_HEIGHT / 2);
+        float tx = screenX + (HudCompassRenderer.HUD_WIDTH / 2.0f);
+        float ty = HudCompassRenderer.PADDING + (HudCompassRenderer.HUD_HEIGHT / 2.0f);
         // translate to center and rotate
         GlStateManager.translate(tx, ty, 0);
         GlStateManager.rotate(degrees, 0, 0, 1);
@@ -274,7 +274,7 @@ public class HudCompassRenderer extends Gui {
                 blockPos = blockPos.down();
             }
             // calculate the entity's current altitude above the ground
-            return entityPos.getY() - blockPos.getY();
+            return (entityPos.getY() - 2.5) - blockPos.getY();
         }
         return 1000.0 * MINECRAFT.world.rand.nextGaussian();
     }

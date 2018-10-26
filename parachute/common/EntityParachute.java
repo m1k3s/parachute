@@ -119,6 +119,11 @@ public class EntityParachute extends Entity {
     }
 
     @Override
+    protected boolean makeFlySound() {
+        return true;
+    }
+
+    @Override
     public boolean canRiderInteract() {
         return true;
     }
