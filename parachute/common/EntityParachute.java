@@ -95,7 +95,6 @@ public class EntityParachute extends Entity {
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);
-        PlayerFallEvent.isDismounting = false;
     }
 
     public EntityParachute(World world, double x, double y, double z) {
@@ -109,14 +108,6 @@ public class EntityParachute extends Entity {
         prevPosX = x;
         prevPosY = y;
         prevPosZ = z;
-    }
-
-    void dismountParachute() {
-        Entity skyDiver = getControllingPassenger();
-        if (!world.isRemote && skyDiver != null) {
-            PlayerFallEvent.isDismounting = true;
-            setDead();
-        }
     }
 
     @Override
@@ -270,7 +261,6 @@ public class EntityParachute extends Entity {
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && !world.isRemote) { // server side
-            PlayerFallEvent.isDismounting = true;
             setDead();
             return;
         }
@@ -299,7 +289,6 @@ public class EntityParachute extends Entity {
 
         // something bad happened, somehow the skydiver was killed.
         if (!world.isRemote && skyDiver != null && skyDiver.isDead) { // server side
-            PlayerFallEvent.isDismounting = true;
             setDead();
         }
 
@@ -475,18 +464,21 @@ public class EntityParachute extends Entity {
                     if (ConfigHandler.getDismountInWater()) {
                         passenger.dismountRidingEntity();
                     } else {
-                        return;
+                        BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
+                        bp.down(Math.round((float) bb.minY));
+                        if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                            return;
+                        }
                     }
                 } else if (world.isMaterialInBB(bb, Material.LEAVES)) {
                     return;
                 } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
                     BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
-                    bp.down(Math.round((float)bb.minY));
+                    bp.down(Math.round((float) bb.minY));
                     if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
                         return;
                     }
                 }
-                PlayerFallEvent.isDismounting = true;
                 passenger.dismountRidingEntity();
             }
         }
