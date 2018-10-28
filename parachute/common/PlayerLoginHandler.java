@@ -26,6 +26,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
+import java.util.function.Predicate;
+
 public class PlayerLoginHandler {
 
     public PlayerLoginHandler() {
@@ -33,6 +35,9 @@ public class PlayerLoginHandler {
 
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        PlayerManager.getInstance().Players.add(new PlayerInfo(event.player.getDisplayNameString())); // add player name
+
+        // send the client controlled config variables
         String color = ConfigHandler.getChuteColor();
         boolean noHUD = ConfigHandler.getNoHUD();
         double burnVolume = ConfigHandler.getBurnVolume();
@@ -47,10 +52,7 @@ public class PlayerLoginHandler {
 
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        for (int i = 0; i < PlayerManager.getInstance().Players.size(); i++) {
-            if (PlayerManager.getInstance().Players.get(i).getName().equals(event.player.getDisplayNameString())) {
-                PlayerManager.getInstance().Players.remove(i);
-            }
-        }
+        Predicate<PlayerInfo> player = p -> event.player.getDisplayNameString().equals(p.getName());
+        PlayerManager.getInstance().Players.removeIf(player);
     }
 }

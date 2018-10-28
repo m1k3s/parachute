@@ -23,6 +23,7 @@
 package com.parachute.common;
 
 import com.parachute.client.ClientConfiguration;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -94,7 +95,6 @@ public class EntityParachute extends Entity {
         ascendMode = false;
         updateBlocked = false;
         setSilent(false);
-        PlayerFallEvent.isDismounting = false;
     }
 
     public EntityParachute(World world, double x, double y, double z) {
@@ -108,14 +108,6 @@ public class EntityParachute extends Entity {
         prevPosX = x;
         prevPosY = y;
         prevPosZ = z;
-    }
-
-    void dismountParachute() {
-        Entity skyDiver = getControllingPassenger();
-        if (!world.isRemote && skyDiver != null) {
-            PlayerFallEvent.isDismounting = true;
-            setDead();
-        }
     }
 
     @Override
@@ -464,12 +456,36 @@ public class EntityParachute extends Entity {
     public void updatePassenger(@Nonnull Entity passenger) {
         if (isPassenger(passenger)) {
             float offset = (float) ((isDead ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
-
             Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
             passenger.setPosition(posX + vec3d.x, posY + (double) offset, posZ + vec3d.z);
             passenger.rotationYaw += deltaRotation;
             passenger.setRotationYawHead(passenger.getRotationYawHead() + (float) deltaRotation);
             applyYawToEntity(passenger);
+
+            // check for player colliding with blocks. dismounting if the blocks are not air, water, or grass/vines
+            AxisAlignedBB bb = passenger.getEntityBoundingBox();
+            if (!world.isRemote && world.checkBlockCollision(bb)) {
+                if (world.isMaterialInBB(bb, Material.WATER)) {
+                    if (ConfigHandler.getDismountInWater()) {
+                        passenger.dismountRidingEntity();
+                    } else {
+                        BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
+                        bp.down(Math.round((float) bb.minY));
+                        if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                            return;
+                        }
+                    }
+                } else if (world.isMaterialInBB(bb, Material.LEAVES)) {
+                    return;
+                } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
+                    BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
+                    bp.down(Math.round((float) bb.minY));
+                    if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                        return;
+                    }
+                }
+                passenger.dismountRidingEntity();
+            }
         }
     }
 
