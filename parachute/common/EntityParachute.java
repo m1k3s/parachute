@@ -23,6 +23,7 @@
 package com.parachute.common;
 
 import com.parachute.client.ClientConfiguration;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -269,6 +270,7 @@ public class EntityParachute extends Entity {
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && !world.isRemote) { // server side
+            PlayerFallEvent.isDismounting = true;
             setDead();
             return;
         }
@@ -297,6 +299,7 @@ public class EntityParachute extends Entity {
 
         // something bad happened, somehow the skydiver was killed.
         if (!world.isRemote && skyDiver != null && skyDiver.isDead) { // server side
+            PlayerFallEvent.isDismounting = true;
             setDead();
         }
 
@@ -459,12 +462,33 @@ public class EntityParachute extends Entity {
     public void updatePassenger(@Nonnull Entity passenger) {
         if (isPassenger(passenger)) {
             float offset = (float) ((isDead ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
-
             Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
             passenger.setPosition(posX + vec3d.x, posY + (double) offset, posZ + vec3d.z);
             passenger.rotationYaw += deltaRotation;
             passenger.setRotationYawHead(passenger.getRotationYawHead() + (float) deltaRotation);
             applyYawToEntity(passenger);
+
+            // check for player colliding with blocks. dismounting if the blocks are not air, water, or grass/vines
+            AxisAlignedBB bb = passenger.getEntityBoundingBox();
+            if (!world.isRemote && world.checkBlockCollision(bb)) {
+                if (world.isMaterialInBB(bb, Material.WATER)) {
+                    if (ConfigHandler.getDismountInWater()) {
+                        passenger.dismountRidingEntity();
+                    } else {
+                        return;
+                    }
+                } else if (world.isMaterialInBB(bb, Material.LEAVES)) {
+                    return;
+                } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
+                    BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
+                    bp.down(Math.round((float)bb.minY));
+                    if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                        return;
+                    }
+                }
+                PlayerFallEvent.isDismounting = true;
+                passenger.dismountRidingEntity();
+            }
         }
     }
 

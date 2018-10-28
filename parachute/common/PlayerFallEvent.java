@@ -36,12 +36,13 @@ public class PlayerFallEvent {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onFallEvent(LivingFallEvent event) {
-        if (event.getEntityLiving() instanceof EntityPlayer && isDismounting) { //ConfigHandler.isDismounting()) {
+        if (event.getEntityLiving() instanceof EntityPlayer && isDismounting) {
 			event.setCanceled(true);
-			event.setDistance(0.0f);
-			event.setDamageMultiplier(0.0f);
-//            ConfigHandler.setIsDismounting(false);
-            isDismounting = false;
+			event.setDistance(1.0f);
+			event.setDamageMultiplier(1.0f);
+			if (event.getEntityLiving().onGround) {
+                isDismounting = false;
+            }
         }
     }
 }
