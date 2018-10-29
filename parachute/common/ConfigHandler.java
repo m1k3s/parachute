@@ -48,9 +48,6 @@ public class ConfigHandler {
     private static boolean showContrails;
     private static boolean dismountInWater;
     private static boolean aadActive;
-    private static double aadAltitude;
-    private static double minFallDistance;
-    private static boolean aadImmediate;
     private static double burnVolume;
     private static boolean noHUD;
     private static String hudPosition;
@@ -76,9 +73,6 @@ public class ConfigHandler {
     private static final String DISMOUNT_COMMENT = "true to dismount in water"; // false
     private static final String LAVA_DISABLES_COMMENT = "normal thermals are disabled by lava thermals"; // true
     private static final String IS_AAD_ACTIVE_COMMENT = "whether or not the AAD starts active"; // false
-    private static final String AAD_ALTITUDE_COMMENT = "altitude (in meters) at which auto deploy occurs"; // 10 meters
-    private static final String AAD_IMMED_COMMENT = "AAD deploys immediately after the player falls more than minFallDistance"; // > minFalldistance meters
-    private static final String MIN_FALL_DISTANCE_COMMENT = "minimum distance to fall before the AAD deploys"; // 5 meters
     private static final String BURN_VOLUME_COMMENT = "set the burn sound volume (0.0 to 1.0)";
     private static final String COLOR_COMMENT = "Select a parachute color, random, or custom[0-9]";
     private static final String FORWARD_MOTION_COMMENT = "delta forward momentum value";
@@ -184,9 +178,6 @@ public class ConfigHandler {
         Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, TURBULENCE_COMMENT);
 
         Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "aadActive", true, IS_AAD_ACTIVE_COMMENT);
-        Property aadAltitudeProp = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, AAD_ALTITUDE_COMMENT, 5.0, 100.0);
-        Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, MIN_FALL_DISTANCE_COMMENT, 3.0, 10.0);
-        Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, AAD_IMMED_COMMENT);
 
         Property frontBubbleProp = config.get(Configuration.CATEGORY_GENERAL, "frontBubble", true, FRONT_BUBBLE);
 
@@ -213,9 +204,6 @@ public class ConfigHandler {
         propertyOrder.add(maxLavaDistanceProp.getName());
         propertyOrder.add(lavaDisablesThermalProp.getName());
         propertyOrder.add(isAADActiveProp.getName());
-        propertyOrder.add(aadImmediateProp.getName());
-        propertyOrder.add(minFallDistanceProp.getName());
-        propertyOrder.add(aadAltitudeProp.getName());
         propertyOrder.add(weatherAffectsDriftProp.getName());
         propertyOrder.add(constantTurbulenceProp.getName());
         propertyOrder.add(chuteColorProp.getName());
@@ -240,9 +228,6 @@ public class ConfigHandler {
             showContrails = showContrailsProp.getBoolean(true);
             dismountInWater = dismountInWaterProp.getBoolean(false);
             aadActive = isAADActiveProp.getBoolean(true);
-            aadAltitude = aadAltitudeProp.getDouble(10.0);
-            minFallDistance = minFallDistanceProp.getDouble(5.0);
-            aadImmediate = aadImmediateProp.getBoolean(false);
             burnVolume = burnVolumeProp.getDouble(1.0);
             forwardMomentum = forwardMotionProp.getDouble(0.015);
             backMomentum = backMotionProp.getDouble(0.008);
@@ -270,9 +255,6 @@ public class ConfigHandler {
         showContrailsProp.set(showContrails);
         dismountInWaterProp.set(dismountInWater);
         isAADActiveProp.set(aadActive);
-        aadAltitudeProp.set(aadAltitude);
-        minFallDistanceProp.set(minFallDistance);
-        aadImmediateProp.set(aadImmediate);
         burnVolumeProp.set(burnVolume);
         forwardMotionProp.set(forwardMomentum);
         backMotionProp.set(backMomentum);
@@ -372,14 +354,6 @@ public class ConfigHandler {
         aadActive = state;
     }
 
-    public static double getAADAltitude() {
-        return aadAltitude;
-    }
-
-    public static double getMinFallDistance() {
-        return minFallDistance;
-    }
-
     public static float getBurnVolume() {
         return (float) burnVolume;
     }
@@ -389,10 +363,6 @@ public class ConfigHandler {
             return Parachute.PARACHUTE_ITEM.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
         }
         return 1;
-    }
-
-    public static boolean getAADImmediate() {
-        return aadImmediate;
     }
 
     public static double getForwardMomentum() {
