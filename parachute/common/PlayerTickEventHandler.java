@@ -21,6 +21,7 @@
  */
 package com.parachute.common;
 
+import com.parachute.client.ClientConfiguration;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.EnumHand;
@@ -84,7 +85,7 @@ public class PlayerTickEventHandler {
     // altitude, if autoAltitude has been reached, deploy. If the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
-        if (ConfigHandler.getAadActive() && !(player.getRidingEntity() instanceof EntityParachute)) {
+        if (ConfigHandler.getAADState() && !(player.getRidingEntity() instanceof EntityParachute)) {
             ItemStack heldItem = null;
             Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {

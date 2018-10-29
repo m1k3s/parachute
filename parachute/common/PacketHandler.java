@@ -32,5 +32,6 @@ public class PacketHandler {
 
     public static void init() {
         NETWORK.registerMessage(ClientConfigMessage.Handler.class, ClientConfigMessage.class, PACKET_ID, Side.CLIENT);
+        NETWORK.registerMessage(ClientAADStateMessage.Handler.class, ClientAADStateMessage.class, PACKET_ID + 1, Side.CLIENT);
     }
 }

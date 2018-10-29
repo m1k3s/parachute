@@ -34,6 +34,7 @@ public class ClientConfiguration {
     private static boolean altitudeMSL;
     private static String steeringControl;
     private static boolean frontBubble;
+    private static boolean aadState;
 
     public ClientConfiguration() {}
 
@@ -63,6 +64,9 @@ public class ClientConfiguration {
 
     public static void setFrontBubble(boolean value) { frontBubble = value; }
 
+    public static void setAADState(boolean value) { aadState = value; }
+
+
     public static String getChuteColor() {
         return chuteColor;
     }
@@ -88,5 +92,7 @@ public class ClientConfiguration {
     }
 
     public static boolean getFrontBubble() { return frontBubble; }
+
+    public static boolean getAADState() { return aadState; }
 
 }

@@ -45,8 +45,9 @@ public class PlayerLoginHandler {
         boolean altitudeMSL = ConfigHandler.getAltitudeMSL();
         String steeringControl = ConfigHandler.getSteeringControl();
         boolean frontBubble = ConfigHandler.getFrontBubble();
+        boolean aadState = ConfigHandler.getAADState();
         PacketHandler.NETWORK.sendTo(
-                new ClientConfigMessage(color, noHUD, burnVolume, hudPosition, altitudeMSL, steeringControl, frontBubble),
+                new ClientConfigMessage(color, noHUD, burnVolume, hudPosition, altitudeMSL, steeringControl, frontBubble, aadState),
                 (EntityPlayerMP)event.player);
     }
 

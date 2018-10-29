@@ -38,13 +38,14 @@ public class ClientConfigMessage implements IMessage {
     private boolean altitudeMSL;
     private String steeringControl;
     private boolean frontBubble;
+    private boolean aadState;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
     public ClientConfigMessage(
             String chuteColor, boolean noHUD, double burnVolume, String hudPosition,
-            boolean altitudeMSL, String steeringControl, boolean frontBubble) {
+            boolean altitudeMSL, String steeringControl, boolean frontBubble, boolean aadState) {
         this.chuteColor = chuteColor;
         this.noHUD = noHUD;
         this.burnVolume = burnVolume;
@@ -52,6 +53,7 @@ public class ClientConfigMessage implements IMessage {
         this.altitudeMSL = altitudeMSL;
         this.steeringControl = steeringControl;
         this.frontBubble = frontBubble;
+        this.aadState = aadState;
     }
 
     @Override
@@ -63,6 +65,7 @@ public class ClientConfigMessage implements IMessage {
         altitudeMSL = byteBuf.readBoolean();
         steeringControl = ByteBufUtils.readUTF8String(byteBuf);
         frontBubble = byteBuf.readBoolean();
+        aadState = byteBuf.readBoolean();
     }
 
     @Override
@@ -74,6 +77,7 @@ public class ClientConfigMessage implements IMessage {
         byteBuf.writeBoolean(altitudeMSL);
         ByteBufUtils.writeUTF8String(byteBuf, steeringControl);
         byteBuf.writeBoolean(frontBubble);
+        byteBuf.writeBoolean(aadState);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -88,6 +92,7 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setAltitudeMSL(msg.altitudeMSL);
                 ClientConfiguration.setSteeringControl(msg.steeringControl);
                 ClientConfiguration.setFrontBubble(msg.frontBubble);
+                ClientConfiguration.setAADState(msg.aadState);
                 RenderParachute.setParachuteColor(msg.chuteColor);
             });
             return null;

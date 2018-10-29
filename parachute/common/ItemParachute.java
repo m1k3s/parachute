@@ -27,6 +27,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -95,12 +96,13 @@ public class ItemParachute extends Item {
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        boolean active = ConfigHandler.getAadActive();
         if (entityplayer != null) {
+            boolean active = ConfigHandler.getAADState();
             if (!world.isRemote) { // server side
                 active = !active;
-                itemstack.setStackDisplayName(active ? "Parachute|AUTO" : "Parachute");
                 ConfigHandler.setAADState(active);
+                itemstack.setStackDisplayName(active ? "Parachute|AUTO" : "Parachute");
+                PacketHandler.NETWORK.sendTo(new ClientAADStateMessage(active),  (EntityPlayerMP)entityplayer);
             } else { // client side
                 world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
             }

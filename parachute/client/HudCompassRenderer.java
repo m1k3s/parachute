@@ -116,7 +116,7 @@ public class HudCompassRenderer extends Gui {
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 compassHeading = calcCompassHeading(chute.rotationYaw);
-                boolean aadActive = ConfigHandler.getAadActive();
+                boolean aadActive = ClientConfiguration.getAADState();
 
                 GlStateManager.pushMatrix();
 
@@ -141,10 +141,7 @@ public class HudCompassRenderer extends Gui {
                 // 4. draw the "where the hell is the front of the parachute"  bubble
                 if (ConfigHandler.getFrontBubble()) {
                     float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
-//                    System.out.println("playerLook: " + playerLook);
-//                    if (playerLook >= -10.0 && playerLook <= 10.0) {
-                        drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
-//                    }
+                    drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
 
 
                     // 5. draw the reticule on top
@@ -152,9 +149,6 @@ public class HudCompassRenderer extends Gui {
                 } else {
                     drawTextureFixed(RETICULE2_TEXTURE, hudX);
                 }
-
-                // 5. draw the reticule on top
-//                drawTextureFixed(RETICULE_TEXTURE, hudX);
 
                 // damp the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
@@ -212,8 +206,8 @@ public class HudCompassRenderer extends Gui {
     private void drawTextureWithRotation(float degrees, ResourceLocation texture, int screenX) {
         GlStateManager.pushMatrix();
 
-        float tx = screenX + (HudCompassRenderer.HUD_WIDTH / 2);
-        float ty = HudCompassRenderer.PADDING + (HudCompassRenderer.HUD_HEIGHT / 2);
+        float tx = screenX + (HudCompassRenderer.HUD_WIDTH / 2.0f);
+        float ty = HudCompassRenderer.PADDING + (HudCompassRenderer.HUD_HEIGHT / 2.0f);
         // translate to center and rotate
         GlStateManager.translate(tx, ty, 0);
         GlStateManager.rotate(degrees, 0, 0, 1);

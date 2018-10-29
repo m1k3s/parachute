@@ -183,7 +183,7 @@ public class ConfigHandler {
         Property weatherAffectsDriftProp = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, WEATHER_COMMENT);
         Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, TURBULENCE_COMMENT);
 
-        Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "aadActive", false, IS_AAD_ACTIVE_COMMENT);
+        Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "aadActive", true, IS_AAD_ACTIVE_COMMENT);
         Property aadAltitudeProp = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, AAD_ALTITUDE_COMMENT, 5.0, 100.0);
         Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, MIN_FALL_DISTANCE_COMMENT, 3.0, 10.0);
         Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, AAD_IMMED_COMMENT);
@@ -239,7 +239,7 @@ public class ConfigHandler {
             constantTurbulence = constantTurbulenceProp.getBoolean(false);
             showContrails = showContrailsProp.getBoolean(true);
             dismountInWater = dismountInWaterProp.getBoolean(false);
-            aadActive = isAADActiveProp.getBoolean(false);
+            aadActive = isAADActiveProp.getBoolean(true);
             aadAltitude = aadAltitudeProp.getDouble(10.0);
             minFallDistance = minFallDistanceProp.getDouble(5.0);
             aadImmediate = aadImmediateProp.getBoolean(false);
@@ -303,6 +303,7 @@ public class ConfigHandler {
                 ClientConfiguration.setAltitudeMSL(altitudeMSL);
                 ClientConfiguration.setSteeringControl(steeringControl);
                 ClientConfiguration.setFrontBubble(frontBubble);
+                ClientConfiguration.setAADState(aadActive);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }
@@ -330,7 +331,7 @@ public class ConfigHandler {
 
     @SuppressWarnings("unused")
     public static void setChuteColor(String color) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black", COLOR_COMMENT);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", chuteColor);
         prop.set(color);
         config.save();
         chuteColor = color;
@@ -360,12 +361,12 @@ public class ConfigHandler {
         return showContrails;
     }
 
-    public static boolean getAadActive() {
+    public static boolean getAADState() {
         return aadActive;
     }
 
     public static void setAADState(boolean state) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "aadActive", false, IS_AAD_ACTIVE_COMMENT);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "aadActive", aadActive);
         prop.set(state);
         config.save();
         aadActive = state;
