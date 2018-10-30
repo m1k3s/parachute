@@ -49,7 +49,6 @@ public class ConfigHandler {
     private static boolean dismountInWater;
     private static boolean aadActive;
     private static double burnVolume;
-    private static boolean noHUD;
     private static String hudPosition;
     private static boolean altitudeMSL;
     private static String steeringControl;
@@ -79,7 +78,6 @@ public class ConfigHandler {
     private static final String BACK_MOTION_COMMENT = "delta back momentum value";
     private static final String ROTATION_MOMENTUM_COMMENT = "delta rotation momentum value";
     private static final String SLIDE_MOTION_COMMENT = "delta slide momentum value";
-    private static final String NO_HUD_COMMENT = "Disable the HUD";
     private static final String HUD_POSITION_COMMENT = "The HUD can be positioned in the upper left, upper center, or upper right";
     private static final String ALTITUDE_MSL_COMMENT = "Show altitude in MSL, Mean Sea Level";
     private static final String STEERING_CONTROL_COMMENT = "set to true to steer by player look direction, else WASD steering";
@@ -166,7 +164,6 @@ public class ConfigHandler {
 
         Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, TRAILS_COMMENT);
         Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, BURN_VOLUME_COMMENT, 0.0, 1.0);
-        Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, NO_HUD_COMMENT);
         Property altitudeProp = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, ALTITUDE_MSL_COMMENT);
 
         Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, LAVA_THERMAL_COMMENT);
@@ -197,7 +194,6 @@ public class ConfigHandler {
         propertyOrder.add(showContrailsProp.getName());
         propertyOrder.add(burnVolumeProp.getName());
         propertyOrder.add(hudPositionProp.getName());
-        propertyOrder.add(noHUDProp.getName());
         propertyOrder.add(altitudeProp.getName());
         propertyOrder.add(lavaThermalsProp.getName());
         propertyOrder.add(minLavaDistanceProp.getName());
@@ -233,7 +229,6 @@ public class ConfigHandler {
             backMomentum = backMotionProp.getDouble(0.008);
             rotationMomentum = leftMotionProp.getDouble(0.2);
             slideMomentum = slideMotionProp.getDouble(0.005);
-            noHUD = noHUDProp.getBoolean(false);
             hudPosition = hudPositionProp.getString();
             altitudeMSL = altitudeProp.getBoolean();
             frontBubble = frontBubbleProp.getBoolean();
@@ -260,7 +255,6 @@ public class ConfigHandler {
         backMotionProp.set(backMomentum);
         leftMotionProp.set(rotationMomentum);
         slideMotionProp.set(slideMomentum);
-        noHUDProp.set(noHUD);
         hudPositionProp.set(hudPosition);
         altitudeProp.set(altitudeMSL);
         frontBubbleProp.set(frontBubble);
@@ -279,7 +273,6 @@ public class ConfigHandler {
                 ConfigHandler.updateConfigFromGUI();
                 // update the client side options
                 ClientConfiguration.setChuteColor(chuteColor);
-                ClientConfiguration.setNoHUD(noHUD);
                 ClientConfiguration.setBurnVolume(burnVolume);
                 ClientConfiguration.setHudPosition(hudPosition);
                 ClientConfiguration.setAltitudeMSL(altitudeMSL);
@@ -379,10 +372,6 @@ public class ConfigHandler {
 
     public static double getSlideMomentum() {
         return slideMomentum;
-    }
-
-    public static boolean getNoHUD() {
-        return noHUD;
     }
 
     public static String getHudPosition() {
