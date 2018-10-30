@@ -21,7 +21,7 @@
 
 package com.parachute.client;
 
-import com.parachute.common.ConfigHandler;
+//import com.parachute.common.ConfigHandler;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
@@ -42,8 +42,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation COMPASS_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
     protected static final ResourceLocation HOME_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
-    protected static final ResourceLocation BUBBLE_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-bubble.png");
-    protected static final ResourceLocation RETICULE_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule.png");
     protected static final ResourceLocation RETICULE2_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule2.png");
     protected static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-background.png");
     protected static final ResourceLocation NIGHT_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-night.png");
@@ -111,11 +109,8 @@ public class HudCompassRenderer extends Gui {
                 fontRenderer.setUnicodeFlag(true);
 
                 BlockPos entityPos = new BlockPos(MINECRAFT.player.posX, MINECRAFT.player.getEntityBoundingBox().minY, MINECRAFT.player.posZ);
-                if (ConfigHandler.getAltitudeMSL()) {
-                    altitude = getCurrentAltitudeMSL(entityPos);
-                } else {
-                    altitude = getCurrentAltitude(entityPos);
-                }
+
+                altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 compassHeading = calcCompassHeading(chute.rotationYaw);
@@ -142,16 +137,16 @@ public class HudCompassRenderer extends Gui {
                 drawTextureWithRotation((float) homeDir, HOME_TEXTURE, hudX);
 
                 // 4. draw the "where the hell is the front of the parachute"  bubble
-                if (ConfigHandler.getFrontBubble()) {
-                    float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
-                    drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
-
-
-                    // 5. draw the reticule on top
-                    drawTextureFixed(RETICULE_TEXTURE, hudX);
-                } else {
+//                if (ConfigHandler.getFrontBubble()) {
+//                    float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
+//                    drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
+//
+//
+//                    // 5. draw the reticule on top
+//                    drawTextureFixed(RETICULE_TEXTURE, hudX);
+//                } else {
                     drawTextureFixed(RETICULE2_TEXTURE, hudX);
-                }
+//                }
 
                 // damp the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
@@ -276,15 +271,7 @@ public class HudCompassRenderer extends Gui {
         return 1000.0 * MINECRAFT.world.rand.nextGaussian();
     }
 
-    private double getCurrentAltitudeMSL(BlockPos entityPos) {
-        if (MINECRAFT.world.provider.isSurfaceWorld()) {
-            int seaLevel = MINECRAFT.world.getSeaLevel();
-            return entityPos.getY() - seaLevel;
-        }
-        return 1000.0 * MINECRAFT.world.rand.nextGaussian();
-    }
-
-    // toggles HUD visibilty using a user defined key, 'H' is default
+   // toggles HUD visibilty using a user defined key, 'H' is default
     public static void toggleHUDVisibility() {
         isVisible = !isVisible;
     }

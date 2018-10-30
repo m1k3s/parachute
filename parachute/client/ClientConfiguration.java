@@ -30,9 +30,7 @@ public class ClientConfiguration {
     private static String chuteColor;
     private static double burnVolume;
     private static String hudPosition;
-    private static boolean altitudeMSL;
     private static String steeringControl;
-    private static boolean frontBubble;
     private static boolean aadState;
 
     public ClientConfiguration() {}
@@ -49,15 +47,9 @@ public class ClientConfiguration {
         hudPosition = value;
     }
 
-    public static void setAltitudeMSL(boolean value) {
-        altitudeMSL = value;
-    }
-
     public static void setSteeringControl(String value) {
         steeringControl = value;
     }
-
-    public static void setFrontBubble(boolean value) { frontBubble = value; }
 
     public static void setAADState(boolean value) { aadState = value; }
 
@@ -74,15 +66,9 @@ public class ClientConfiguration {
         return hudPosition;
     }
 
-    public static boolean getAltitdeMSL() {
-        return altitudeMSL;
-    }
-
     public static String getSteeringControl() {
         return steeringControl;
     }
-
-    public static boolean getFrontBubble() { return frontBubble; }
 
     public static boolean getAADState() { return aadState; }
 
