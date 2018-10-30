@@ -32,48 +32,48 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ClientConfigMessage implements IMessage {
     private String chuteColor;
-    private boolean noHUD;
     private double burnVolume;
     private String hudPosition;
     private boolean altitudeMSL;
     private String steeringControl;
     private boolean frontBubble;
+    private boolean aadState;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
     public ClientConfigMessage(
-            String chuteColor, boolean noHUD, double burnVolume, String hudPosition,
-            boolean altitudeMSL, String steeringControl, boolean frontBubble) {
+            String chuteColor, double burnVolume, String hudPosition,
+            boolean altitudeMSL, String steeringControl, boolean frontBubble, boolean aadState) {
         this.chuteColor = chuteColor;
-        this.noHUD = noHUD;
         this.burnVolume = burnVolume;
         this.hudPosition = hudPosition;
         this.altitudeMSL = altitudeMSL;
         this.steeringControl = steeringControl;
         this.frontBubble = frontBubble;
+        this.aadState = aadState;
     }
 
     @Override
     public void fromBytes(ByteBuf byteBuf) {  // server ==> client
         chuteColor = ByteBufUtils.readUTF8String(byteBuf);
-        noHUD = byteBuf.readBoolean();
         burnVolume = byteBuf.readDouble();
         hudPosition = ByteBufUtils.readUTF8String(byteBuf);
         altitudeMSL = byteBuf.readBoolean();
         steeringControl = ByteBufUtils.readUTF8String(byteBuf);
         frontBubble = byteBuf.readBoolean();
+        aadState = byteBuf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf byteBuf) { // client ==> server - not used
         ByteBufUtils.writeUTF8String(byteBuf, chuteColor);
-        byteBuf.writeBoolean(noHUD);
         byteBuf.writeDouble(burnVolume);
         ByteBufUtils.writeUTF8String(byteBuf, hudPosition);
         byteBuf.writeBoolean(altitudeMSL);
         ByteBufUtils.writeUTF8String(byteBuf, steeringControl);
         byteBuf.writeBoolean(frontBubble);
+        byteBuf.writeBoolean(aadState);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -82,12 +82,12 @@ public class ClientConfigMessage implements IMessage {
             Minecraft client = Minecraft.getMinecraft();
             client.addScheduledTask(() -> {
                 ClientConfiguration.setChuteColor(msg.chuteColor);
-                ClientConfiguration.setNoHUD(msg.noHUD);
                 ClientConfiguration.setBurnVolume(msg.burnVolume);
                 ClientConfiguration.setHudPosition(msg.hudPosition);
                 ClientConfiguration.setAltitudeMSL(msg.altitudeMSL);
                 ClientConfiguration.setSteeringControl(msg.steeringControl);
                 ClientConfiguration.setFrontBubble(msg.frontBubble);
+                ClientConfiguration.setAADState(msg.aadState);
                 RenderParachute.setParachuteColor(msg.chuteColor);
             });
             return null;

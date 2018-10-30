@@ -29,7 +29,6 @@ import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -114,24 +113,6 @@ public class Parachute {
 
     public void info(String s) {
         logger.info(s);
-    }
-
-    public static boolean getAutoActivateAltitude(EntityPlayer player) {
-        boolean altitudeReached = false;
-        double altitude = ConfigHandler.getAADAltitude();
-        double minFallDistance = ConfigHandler.getMinFallDistance();
-
-        BlockPos blockPos = new BlockPos(player.posX, player.posY - altitude, player.posZ);
-
-        if (!player.world.isAirBlock(blockPos) && player.fallDistance > minFallDistance) {
-            altitudeReached = true;
-        }
-        return altitudeReached;
-    }
-
-    public static boolean canActivateAADImmediate(EntityPlayer player) {
-        double minFallDistance = ConfigHandler.getMinFallDistance();
-        return player.fallDistance > minFallDistance;
     }
 
     public static boolean isFalling(EntityPlayer player) {

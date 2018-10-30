@@ -479,6 +479,9 @@ public class EntityParachute extends Entity {
                     return;
                 } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
                     BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
+//                    if (!world.getBlockState(bp).getBlock().getUnlocalizedName().matches("tile.vine")) { // maybe account for vines on trees?
+//                        return;
+//                    }
                     bp.down(Math.round((float) bb.minY));
                     if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
                         return;

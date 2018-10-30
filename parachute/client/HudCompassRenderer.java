@@ -60,12 +60,15 @@ public class HudCompassRenderer extends Gui {
     private static FontRenderer fontRenderer = MINECRAFT.fontRenderer;
 
     public static double altitude;
+    private static boolean isVisible = true;
 
     private static int count = 0;
 
     private static final int HUD_WIDTH = 256;
     private static final int HUD_HEIGHT = 256;
-    private static final int PADDING = 20;
+    // fixme: find a way to detect icons in upper right and adjust Y_PADDING
+    private static final int Y_PADDING = 120;
+    private static final int X_PADDING = 20;
 
     double compassHeading;
 
@@ -80,7 +83,7 @@ public class HudCompassRenderer extends Gui {
         if (event.isCancelable() || MINECRAFT.gameSettings.showDebugInfo || MINECRAFT.player.onGround) {
             return;
         }
-        if (ClientConfiguration.getNoHUD() || !MINECRAFT.gameSettings.fullScreen) {
+        if (!isVisible || !MINECRAFT.gameSettings.fullScreen) {
             return;
         }
         if (MINECRAFT.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
@@ -93,10 +96,10 @@ public class HudCompassRenderer extends Gui {
             }
 
             // initialize hudX based on user selected position, 'left', 'center', or 'right'
-            int hudX = position.equals("left") ? PADDING : position.equals("center") ? (width - HUD_WIDTH) / 2 : (width - HUD_WIDTH) - PADDING;
+            int hudX = position.equals("left") ? X_PADDING : position.equals("center") ? (width - HUD_WIDTH) / 2 : (width - HUD_WIDTH) - X_PADDING;
 
             int textX = hudX + (HUD_WIDTH / 2);
-            int textY = PADDING + (HUD_HEIGHT / 2);
+            int textY = Y_PADDING + (HUD_HEIGHT / 2);
 
             if (MINECRAFT.player.getRidingEntity() instanceof EntityParachute) {
                 EntityParachute chute = (EntityParachute) MINECRAFT.player.getRidingEntity();
@@ -116,7 +119,7 @@ public class HudCompassRenderer extends Gui {
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 compassHeading = calcCompassHeading(chute.rotationYaw);
-                boolean aadActive = ConfigHandler.getAadActive();
+                boolean aadActive = ClientConfiguration.getAADState();
 
                 GlStateManager.pushMatrix();
 
@@ -141,10 +144,7 @@ public class HudCompassRenderer extends Gui {
                 // 4. draw the "where the hell is the front of the parachute"  bubble
                 if (ConfigHandler.getFrontBubble()) {
                     float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
-//                    System.out.println("playerLook: " + playerLook);
-//                    if (playerLook >= -10.0 && playerLook <= 10.0) {
-                        drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
-//                    }
+                    drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
 
 
                     // 5. draw the reticule on top
@@ -152,9 +152,6 @@ public class HudCompassRenderer extends Gui {
                 } else {
                     drawTextureFixed(RETICULE2_TEXTURE, hudX);
                 }
-
-                // 5. draw the reticule on top
-//                drawTextureFixed(RETICULE_TEXTURE, hudX);
 
                 // damp the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
@@ -203,7 +200,7 @@ public class HudCompassRenderer extends Gui {
         GlStateManager.pushMatrix();
 
         MINECRAFT.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(screenX, HudCompassRenderer.PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
+        drawTexturedModalRect(screenX, HudCompassRenderer.Y_PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
 
         GlStateManager.popMatrix();
     }
@@ -213,14 +210,14 @@ public class HudCompassRenderer extends Gui {
         GlStateManager.pushMatrix();
 
         float tx = screenX + (HudCompassRenderer.HUD_WIDTH / 2.0f);
-        float ty = HudCompassRenderer.PADDING + (HudCompassRenderer.HUD_HEIGHT / 2.0f);
+        float ty = HudCompassRenderer.Y_PADDING + (HudCompassRenderer.HUD_HEIGHT / 2.0f);
         // translate to center and rotate
         GlStateManager.translate(tx, ty, 0);
         GlStateManager.rotate(degrees, 0, 0, 1);
         GlStateManager.translate(-tx, -ty, 0);
 
         MINECRAFT.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(screenX, HudCompassRenderer.PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
+        drawTexturedModalRect(screenX, HudCompassRenderer.Y_PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
 
         GlStateManager.popMatrix();
     }
@@ -285,5 +282,10 @@ public class HudCompassRenderer extends Gui {
             return entityPos.getY() - seaLevel;
         }
         return 1000.0 * MINECRAFT.world.rand.nextGaussian();
+    }
+
+    // toggles HUD visibilty using a user defined key, 'H' is default
+    public static void toggleHUDVisibility() {
+        isVisible = !isVisible;
     }
 }

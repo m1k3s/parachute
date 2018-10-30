@@ -28,21 +28,17 @@ package com.parachute.client;
 @SuppressWarnings("unused")
 public class ClientConfiguration {
     private static String chuteColor;
-    private static boolean noHUD;
     private static double burnVolume;
     private static String hudPosition;
     private static boolean altitudeMSL;
     private static String steeringControl;
     private static boolean frontBubble;
+    private static boolean aadState;
 
     public ClientConfiguration() {}
 
     public static void setChuteColor(String color) {
         chuteColor = color;
-    }
-
-    public static void setNoHUD(boolean value) {
-        noHUD = value;
     }
 
     public static void setBurnVolume(double value) {
@@ -63,12 +59,11 @@ public class ClientConfiguration {
 
     public static void setFrontBubble(boolean value) { frontBubble = value; }
 
+    public static void setAADState(boolean value) { aadState = value; }
+
+
     public static String getChuteColor() {
         return chuteColor;
-    }
-
-    public static boolean getNoHUD() {
-        return noHUD;
     }
 
     public static float getBurnVolume() {
@@ -88,5 +83,7 @@ public class ClientConfiguration {
     }
 
     public static boolean getFrontBubble() { return frontBubble; }
+
+    public static boolean getAADState() { return aadState; }
 
 }

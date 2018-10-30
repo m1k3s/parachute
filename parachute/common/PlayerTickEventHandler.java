@@ -21,6 +21,7 @@
  */
 package com.parachute.common;
 
+import com.parachute.client.ClientConfiguration;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.EnumHand;
@@ -84,7 +85,14 @@ public class PlayerTickEventHandler {
     // altitude, if autoAltitude has been reached, deploy. If the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
-        if (ConfigHandler.getAadActive() && !(player.getRidingEntity() instanceof EntityParachute)) {
+        boolean aadState;
+        if (player.world.isRemote) { // client
+            aadState = ClientConfiguration.getAADState();
+        } else {
+            aadState = ConfigHandler.getAADState();
+        }
+
+        if (aadState && !(player.getRidingEntity() instanceof EntityParachute)) {
             ItemStack heldItem = null;
             Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {
@@ -92,16 +100,10 @@ public class PlayerTickEventHandler {
                     heldItem = itemStack;
                 }
             }
-            if (ConfigHandler.getAADImmediate() && Parachute.canActivateAADImmediate(player)) {
+            double AAD_FALL_DISTANCE = 5.0;
+            if (player.fallDistance > AAD_FALL_DISTANCE) {
                 if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
                     ((ItemParachute) heldItem.getItem()).deployParachute(player.world, player);
-                }
-            } else {
-                boolean autoAltitudeReached = Parachute.getAutoActivateAltitude(player);
-                if (autoAltitudeReached && Parachute.isFalling(player)) {
-                    if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
-                        ((ItemParachute) heldItem.getItem()).deployParachute(player.world, player);
-                    }
                 }
             }
         }

@@ -48,11 +48,7 @@ public class ConfigHandler {
     private static boolean showContrails;
     private static boolean dismountInWater;
     private static boolean aadActive;
-    private static double aadAltitude;
-    private static double minFallDistance;
-    private static boolean aadImmediate;
     private static double burnVolume;
-    private static boolean noHUD;
     private static String hudPosition;
     private static boolean altitudeMSL;
     private static String steeringControl;
@@ -76,16 +72,12 @@ public class ConfigHandler {
     private static final String DISMOUNT_COMMENT = "true to dismount in water"; // false
     private static final String LAVA_DISABLES_COMMENT = "normal thermals are disabled by lava thermals"; // true
     private static final String IS_AAD_ACTIVE_COMMENT = "whether or not the AAD starts active"; // false
-    private static final String AAD_ALTITUDE_COMMENT = "altitude (in meters) at which auto deploy occurs"; // 10 meters
-    private static final String AAD_IMMED_COMMENT = "AAD deploys immediately after the player falls more than minFallDistance"; // > minFalldistance meters
-    private static final String MIN_FALL_DISTANCE_COMMENT = "minimum distance to fall before the AAD deploys"; // 5 meters
     private static final String BURN_VOLUME_COMMENT = "set the burn sound volume (0.0 to 1.0)";
     private static final String COLOR_COMMENT = "Select a parachute color, random, or custom[0-9]";
     private static final String FORWARD_MOTION_COMMENT = "delta forward momentum value";
     private static final String BACK_MOTION_COMMENT = "delta back momentum value";
     private static final String ROTATION_MOMENTUM_COMMENT = "delta rotation momentum value";
     private static final String SLIDE_MOTION_COMMENT = "delta slide momentum value";
-    private static final String NO_HUD_COMMENT = "Disable the HUD";
     private static final String HUD_POSITION_COMMENT = "The HUD can be positioned in the upper left, upper center, or upper right";
     private static final String ALTITUDE_MSL_COMMENT = "Show altitude in MSL, Mean Sea Level";
     private static final String STEERING_CONTROL_COMMENT = "set to true to steer by player look direction, else WASD steering";
@@ -172,7 +164,6 @@ public class ConfigHandler {
 
         Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, TRAILS_COMMENT);
         Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, BURN_VOLUME_COMMENT, 0.0, 1.0);
-        Property noHUDProp = config.get(Configuration.CATEGORY_GENERAL, "noHUD", false, NO_HUD_COMMENT);
         Property altitudeProp = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, ALTITUDE_MSL_COMMENT);
 
         Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, LAVA_THERMAL_COMMENT);
@@ -183,10 +174,7 @@ public class ConfigHandler {
         Property weatherAffectsDriftProp = config.get(Configuration.CATEGORY_GENERAL, "weatherAffectsDrift", true, WEATHER_COMMENT);
         Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, TURBULENCE_COMMENT);
 
-        Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "aadActive", false, IS_AAD_ACTIVE_COMMENT);
-        Property aadAltitudeProp = config.get(Configuration.CATEGORY_GENERAL, "aadAltitude", 10.0, AAD_ALTITUDE_COMMENT, 5.0, 100.0);
-        Property minFallDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minFallDistance", 5.0, MIN_FALL_DISTANCE_COMMENT, 3.0, 10.0);
-        Property aadImmediateProp = config.get(Configuration.CATEGORY_GENERAL, "aadImmediate", false, AAD_IMMED_COMMENT);
+        Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "aadActive", true, IS_AAD_ACTIVE_COMMENT);
 
         Property frontBubbleProp = config.get(Configuration.CATEGORY_GENERAL, "frontBubble", true, FRONT_BUBBLE);
 
@@ -206,16 +194,12 @@ public class ConfigHandler {
         propertyOrder.add(showContrailsProp.getName());
         propertyOrder.add(burnVolumeProp.getName());
         propertyOrder.add(hudPositionProp.getName());
-        propertyOrder.add(noHUDProp.getName());
         propertyOrder.add(altitudeProp.getName());
         propertyOrder.add(lavaThermalsProp.getName());
         propertyOrder.add(minLavaDistanceProp.getName());
         propertyOrder.add(maxLavaDistanceProp.getName());
         propertyOrder.add(lavaDisablesThermalProp.getName());
         propertyOrder.add(isAADActiveProp.getName());
-        propertyOrder.add(aadImmediateProp.getName());
-        propertyOrder.add(minFallDistanceProp.getName());
-        propertyOrder.add(aadAltitudeProp.getName());
         propertyOrder.add(weatherAffectsDriftProp.getName());
         propertyOrder.add(constantTurbulenceProp.getName());
         propertyOrder.add(chuteColorProp.getName());
@@ -239,16 +223,12 @@ public class ConfigHandler {
             constantTurbulence = constantTurbulenceProp.getBoolean(false);
             showContrails = showContrailsProp.getBoolean(true);
             dismountInWater = dismountInWaterProp.getBoolean(false);
-            aadActive = isAADActiveProp.getBoolean(false);
-            aadAltitude = aadAltitudeProp.getDouble(10.0);
-            minFallDistance = minFallDistanceProp.getDouble(5.0);
-            aadImmediate = aadImmediateProp.getBoolean(false);
+            aadActive = isAADActiveProp.getBoolean(true);
             burnVolume = burnVolumeProp.getDouble(1.0);
             forwardMomentum = forwardMotionProp.getDouble(0.015);
             backMomentum = backMotionProp.getDouble(0.008);
             rotationMomentum = leftMotionProp.getDouble(0.2);
             slideMomentum = slideMotionProp.getDouble(0.005);
-            noHUD = noHUDProp.getBoolean(false);
             hudPosition = hudPositionProp.getString();
             altitudeMSL = altitudeProp.getBoolean();
             frontBubble = frontBubbleProp.getBoolean();
@@ -270,15 +250,11 @@ public class ConfigHandler {
         showContrailsProp.set(showContrails);
         dismountInWaterProp.set(dismountInWater);
         isAADActiveProp.set(aadActive);
-        aadAltitudeProp.set(aadAltitude);
-        minFallDistanceProp.set(minFallDistance);
-        aadImmediateProp.set(aadImmediate);
         burnVolumeProp.set(burnVolume);
         forwardMotionProp.set(forwardMomentum);
         backMotionProp.set(backMomentum);
         leftMotionProp.set(rotationMomentum);
         slideMotionProp.set(slideMomentum);
-        noHUDProp.set(noHUD);
         hudPositionProp.set(hudPosition);
         altitudeProp.set(altitudeMSL);
         frontBubbleProp.set(frontBubble);
@@ -297,12 +273,12 @@ public class ConfigHandler {
                 ConfigHandler.updateConfigFromGUI();
                 // update the client side options
                 ClientConfiguration.setChuteColor(chuteColor);
-                ClientConfiguration.setNoHUD(noHUD);
                 ClientConfiguration.setBurnVolume(burnVolume);
                 ClientConfiguration.setHudPosition(hudPosition);
                 ClientConfiguration.setAltitudeMSL(altitudeMSL);
                 ClientConfiguration.setSteeringControl(steeringControl);
                 ClientConfiguration.setFrontBubble(frontBubble);
+                ClientConfiguration.setAADState(aadActive);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }
@@ -330,7 +306,7 @@ public class ConfigHandler {
 
     @SuppressWarnings("unused")
     public static void setChuteColor(String color) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black", COLOR_COMMENT);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", chuteColor);
         prop.set(color);
         config.save();
         chuteColor = color;
@@ -360,23 +336,15 @@ public class ConfigHandler {
         return showContrails;
     }
 
-    public static boolean getAadActive() {
+    public static boolean getAADState() {
         return aadActive;
     }
 
     public static void setAADState(boolean state) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "aadActive", false, IS_AAD_ACTIVE_COMMENT);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "aadActive", aadActive);
         prop.set(state);
         config.save();
         aadActive = state;
-    }
-
-    public static double getAADAltitude() {
-        return aadAltitude;
-    }
-
-    public static double getMinFallDistance() {
-        return minFallDistance;
     }
 
     public static float getBurnVolume() {
@@ -388,10 +356,6 @@ public class ConfigHandler {
             return Parachute.PARACHUTE_ITEM.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
         }
         return 1;
-    }
-
-    public static boolean getAADImmediate() {
-        return aadImmediate;
     }
 
     public static double getForwardMomentum() {
@@ -408,10 +372,6 @@ public class ConfigHandler {
 
     public static double getSlideMomentum() {
         return slideMomentum;
-    }
-
-    public static boolean getNoHUD() {
-        return noHUD;
     }
 
     public static String getHudPosition() {

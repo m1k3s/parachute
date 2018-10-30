@@ -39,14 +39,14 @@ public class PlayerLoginHandler {
 
         // send the client controlled config variables
         String color = ConfigHandler.getChuteColor();
-        boolean noHUD = ConfigHandler.getNoHUD();
         double burnVolume = ConfigHandler.getBurnVolume();
         String hudPosition = ConfigHandler.getHudPosition();
         boolean altitudeMSL = ConfigHandler.getAltitudeMSL();
         String steeringControl = ConfigHandler.getSteeringControl();
         boolean frontBubble = ConfigHandler.getFrontBubble();
+        boolean aadState = ConfigHandler.getAADState();
         PacketHandler.NETWORK.sendTo(
-                new ClientConfigMessage(color, noHUD, burnVolume, hudPosition, altitudeMSL, steeringControl, frontBubble),
+                new ClientConfigMessage(color, burnVolume, hudPosition, altitudeMSL, steeringControl, frontBubble, aadState),
                 (EntityPlayerMP)event.player);
     }
 
