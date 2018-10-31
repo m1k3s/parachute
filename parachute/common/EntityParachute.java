@@ -301,6 +301,7 @@ public class EntityParachute extends Entity {
                 ((EntityPlayer) skyDiver).addStat(Parachute.parachuteDistance, distance);
             }
         }
+        doBlockCollisions();
     }
 
     // check for bad weather, if the biome can rain or snow check to see
@@ -495,6 +496,18 @@ public class EntityParachute extends Entity {
         entityToUpdate.rotationYaw += yawClamp - yaw;
         entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
     }
+
+//    @Override
+//    public void applyEntityCollision(@Nonnull Entity entity) {
+//        if (entity instanceof EntityParachute) {
+//            if (entity.getEntityBoundingBox().minY < getEntityBoundingBox().maxY) {
+//                super.applyEntityCollision(entity);
+//            }
+//        } else if (entity.getEntityBoundingBox().minY <= getEntityBoundingBox().minY) {
+//            super.applyEntityCollision(entity);
+//        }
+//    }
+
 
     @SideOnly(Side.CLIENT)
     @Override

@@ -94,6 +94,7 @@ public class Parachute {
     public void Init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
