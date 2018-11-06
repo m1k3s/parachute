@@ -30,10 +30,9 @@ public class ClientConfiguration {
     private static String chuteColor;
     private static double burnVolume;
     private static String hudPosition;
-    private static boolean altitudeMSL;
     private static String steeringControl;
-    private static boolean frontBubble;
     private static boolean aadState;
+    private static boolean useFlyingSound;
 
     public ClientConfiguration() {}
 
@@ -49,17 +48,13 @@ public class ClientConfiguration {
         hudPosition = value;
     }
 
-    public static void setAltitudeMSL(boolean value) {
-        altitudeMSL = value;
-    }
-
     public static void setSteeringControl(String value) {
         steeringControl = value;
     }
 
-    public static void setFrontBubble(boolean value) { frontBubble = value; }
-
     public static void setAADState(boolean value) { aadState = value; }
+
+    public static void setUseFlyingSound(boolean value) { useFlyingSound = value; }
 
 
     public static String getChuteColor() {
@@ -74,16 +69,12 @@ public class ClientConfiguration {
         return hudPosition;
     }
 
-    public static boolean getAltitdeMSL() {
-        return altitudeMSL;
-    }
-
     public static String getSteeringControl() {
         return steeringControl;
     }
 
-    public static boolean getFrontBubble() { return frontBubble; }
-
     public static boolean getAADState() { return aadState; }
+
+    public static boolean getUseFlyingSoud() { return useFlyingSound; }
 
 }

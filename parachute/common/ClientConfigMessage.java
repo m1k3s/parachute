@@ -34,24 +34,20 @@ public class ClientConfigMessage implements IMessage {
     private String chuteColor;
     private double burnVolume;
     private String hudPosition;
-    private boolean altitudeMSL;
     private String steeringControl;
-    private boolean frontBubble;
     private boolean aadState;
+    private boolean useFlyingSound;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
-    public ClientConfigMessage(
-            String chuteColor, double burnVolume, String hudPosition,
-            boolean altitudeMSL, String steeringControl, boolean frontBubble, boolean aadState) {
+    public ClientConfigMessage(String chuteColor, double burnVolume, String hudPosition, String steeringControl, boolean aadState, boolean useFlyingSound) {
         this.chuteColor = chuteColor;
         this.burnVolume = burnVolume;
         this.hudPosition = hudPosition;
-        this.altitudeMSL = altitudeMSL;
         this.steeringControl = steeringControl;
-        this.frontBubble = frontBubble;
         this.aadState = aadState;
+        this.useFlyingSound = useFlyingSound;
     }
 
     @Override
@@ -59,10 +55,9 @@ public class ClientConfigMessage implements IMessage {
         chuteColor = ByteBufUtils.readUTF8String(byteBuf);
         burnVolume = byteBuf.readDouble();
         hudPosition = ByteBufUtils.readUTF8String(byteBuf);
-        altitudeMSL = byteBuf.readBoolean();
         steeringControl = ByteBufUtils.readUTF8String(byteBuf);
-        frontBubble = byteBuf.readBoolean();
         aadState = byteBuf.readBoolean();
+        useFlyingSound = byteBuf.readBoolean();
     }
 
     @Override
@@ -70,10 +65,9 @@ public class ClientConfigMessage implements IMessage {
         ByteBufUtils.writeUTF8String(byteBuf, chuteColor);
         byteBuf.writeDouble(burnVolume);
         ByteBufUtils.writeUTF8String(byteBuf, hudPosition);
-        byteBuf.writeBoolean(altitudeMSL);
         ByteBufUtils.writeUTF8String(byteBuf, steeringControl);
-        byteBuf.writeBoolean(frontBubble);
         byteBuf.writeBoolean(aadState);
+        byteBuf.writeBoolean(useFlyingSound);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -84,10 +78,9 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setChuteColor(msg.chuteColor);
                 ClientConfiguration.setBurnVolume(msg.burnVolume);
                 ClientConfiguration.setHudPosition(msg.hudPosition);
-                ClientConfiguration.setAltitudeMSL(msg.altitudeMSL);
                 ClientConfiguration.setSteeringControl(msg.steeringControl);
-                ClientConfiguration.setFrontBubble(msg.frontBubble);
                 ClientConfiguration.setAADState(msg.aadState);
+                ClientConfiguration.setUseFlyingSound(msg.useFlyingSound);
                 RenderParachute.setParachuteColor(msg.chuteColor);
             });
             return null;

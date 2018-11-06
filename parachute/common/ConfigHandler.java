@@ -50,9 +50,8 @@ public class ConfigHandler {
     private static boolean aadActive;
     private static double burnVolume;
     private static String hudPosition;
-    private static boolean altitudeMSL;
     private static String steeringControl;
-    private static boolean frontBubble;
+    private static boolean useFlyingSound;
 
     private static double forwardMomentum;
     private static double backMomentum;
@@ -79,9 +78,8 @@ public class ConfigHandler {
     private static final String ROTATION_MOMENTUM_COMMENT = "delta rotation momentum value";
     private static final String SLIDE_MOTION_COMMENT = "delta slide momentum value";
     private static final String HUD_POSITION_COMMENT = "The HUD can be positioned in the upper left, upper center, or upper right";
-    private static final String ALTITUDE_MSL_COMMENT = "Show altitude in MSL, Mean Sea Level";
     private static final String STEERING_CONTROL_COMMENT = "set to true to steer by player look direction, else WASD steering";
-    private static final String FRONT_BUBBLE = "Toggle visiblity of the player front facing bubble";
+    private static final String USE_FLYING_SOUND = "set to true to hear the wind while flying";
     private static final String[] COLOR_VALUES = {
             "random",
             "black",
@@ -164,7 +162,7 @@ public class ConfigHandler {
 
         Property showContrailsProp = config.get(Configuration.CATEGORY_GENERAL, "showContrails", true, TRAILS_COMMENT);
         Property burnVolumeProp = config.get(Configuration.CATEGORY_GENERAL, "burnVolume", 1.0, BURN_VOLUME_COMMENT, 0.0, 1.0);
-        Property altitudeProp = config.get(Configuration.CATEGORY_GENERAL, "altitudeMSL", false, ALTITUDE_MSL_COMMENT);
+        Property useFlyingSoundProp = config.get(Configuration.CATEGORY_GENERAL, "useFlyingSound", true, USE_FLYING_SOUND);
 
         Property lavaThermalsProp = config.get(Configuration.CATEGORY_GENERAL, "lavaThermals", true, LAVA_THERMAL_COMMENT);
         Property minLavaDistanceProp = config.get(Configuration.CATEGORY_GENERAL, "minLavaDistance", 3.0, MIN_LAVA_DISTANCE_COMMENT, 2.0, 10.0);
@@ -175,8 +173,6 @@ public class ConfigHandler {
         Property constantTurbulenceProp = config.get(Configuration.CATEGORY_GENERAL, "constantTurbulence", false, TURBULENCE_COMMENT);
 
         Property isAADActiveProp = config.get(Configuration.CATEGORY_GENERAL, "aadActive", true, IS_AAD_ACTIVE_COMMENT);
-
-        Property frontBubbleProp = config.get(Configuration.CATEGORY_GENERAL, "frontBubble", true, FRONT_BUBBLE);
 
         Property chuteColorProp = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", "black");
         chuteColorProp.setComment(COLOR_COMMENT);
@@ -193,8 +189,8 @@ public class ConfigHandler {
         propertyOrder.add(dismountInWaterProp.getName());
         propertyOrder.add(showContrailsProp.getName());
         propertyOrder.add(burnVolumeProp.getName());
+        propertyOrder.add(useFlyingSoundProp.getName());
         propertyOrder.add(hudPositionProp.getName());
-        propertyOrder.add(altitudeProp.getName());
         propertyOrder.add(lavaThermalsProp.getName());
         propertyOrder.add(minLavaDistanceProp.getName());
         propertyOrder.add(maxLavaDistanceProp.getName());
@@ -204,7 +200,6 @@ public class ConfigHandler {
         propertyOrder.add(constantTurbulenceProp.getName());
         propertyOrder.add(chuteColorProp.getName());
         propertyOrder.add(steeringControlProp.getName());
-        propertyOrder.add(frontBubbleProp.getName());
         propertyOrder.add(forwardMotionProp.getName());
         propertyOrder.add(backMotionProp.getName());
         propertyOrder.add(leftMotionProp.getName());
@@ -225,13 +220,12 @@ public class ConfigHandler {
             dismountInWater = dismountInWaterProp.getBoolean(false);
             aadActive = isAADActiveProp.getBoolean(true);
             burnVolume = burnVolumeProp.getDouble(1.0);
+            useFlyingSound = useFlyingSoundProp.getBoolean(true);
             forwardMomentum = forwardMotionProp.getDouble(0.015);
             backMomentum = backMotionProp.getDouble(0.008);
             rotationMomentum = leftMotionProp.getDouble(0.2);
             slideMomentum = slideMotionProp.getDouble(0.005);
             hudPosition = hudPositionProp.getString();
-            altitudeMSL = altitudeProp.getBoolean();
-            frontBubble = frontBubbleProp.getBoolean();
             ConfigHandler.steeringControl = steeringControlProp.getString();
         }
 
@@ -251,13 +245,12 @@ public class ConfigHandler {
         dismountInWaterProp.set(dismountInWater);
         isAADActiveProp.set(aadActive);
         burnVolumeProp.set(burnVolume);
+        useFlyingSoundProp.set(useFlyingSound);
         forwardMotionProp.set(forwardMomentum);
         backMotionProp.set(backMomentum);
         leftMotionProp.set(rotationMomentum);
         slideMotionProp.set(slideMomentum);
         hudPositionProp.set(hudPosition);
-        altitudeProp.set(altitudeMSL);
-        frontBubbleProp.set(frontBubble);
         steeringControlProp.set(steeringControl);
 
         if (config.hasChanged()) {
@@ -274,10 +267,9 @@ public class ConfigHandler {
                 // update the client side options
                 ClientConfiguration.setChuteColor(chuteColor);
                 ClientConfiguration.setBurnVolume(burnVolume);
+                ClientConfiguration.setUseFlyingSound(useFlyingSound);
                 ClientConfiguration.setHudPosition(hudPosition);
-                ClientConfiguration.setAltitudeMSL(altitudeMSL);
                 ClientConfiguration.setSteeringControl(steeringControl);
-                ClientConfiguration.setFrontBubble(frontBubble);
                 ClientConfiguration.setAADState(aadActive);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
@@ -306,7 +298,7 @@ public class ConfigHandler {
 
     @SuppressWarnings("unused")
     public static void setChuteColor(String color) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", chuteColor);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "chuteColor", chuteColor, COLOR_COMMENT);
         prop.set(color);
         config.save();
         chuteColor = color;
@@ -341,7 +333,7 @@ public class ConfigHandler {
     }
 
     public static void setAADState(boolean state) {
-        Property prop = config.get(Configuration.CATEGORY_GENERAL, "aadActive", aadActive);
+        Property prop = config.get(Configuration.CATEGORY_GENERAL, "aadActive", aadActive, IS_AAD_ACTIVE_COMMENT);
         prop.set(state);
         config.save();
         aadActive = state;
@@ -353,7 +345,7 @@ public class ConfigHandler {
 
     public static int getParachuteDamageAmount(ItemStack itemStack) {
         if (singleUse) {
-            return Parachute.PARACHUTE_ITEM.getMaxDamage(itemStack) + 1; //.getMaxDamage() + 1;
+            return Parachute.PARACHUTE_ITEM.getMaxDamage(itemStack) + 1;
         }
         return 1;
     }
@@ -378,16 +370,11 @@ public class ConfigHandler {
         return hudPosition;
     }
 
-    public static boolean getAltitudeMSL() {
-        return altitudeMSL;
-    }
-
     public static String getSteeringControl() {
         return steeringControl;
     }
 
-    public static boolean getFrontBubble() {
-        return frontBubble;
-    }
+    public static boolean getUseFlyingSound() { return useFlyingSound; }
 
+//    public static void setUseFlyingSound(boolean value) { useFlyingSound = value; }
 }

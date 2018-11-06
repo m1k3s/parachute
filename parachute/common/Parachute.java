@@ -36,7 +36,6 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(
@@ -49,7 +48,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Parachute {
 
-    private static final Logger logger = LogManager.getLogger(Parachute.MODID);
+    private static Logger logger;// = LogManager.getLogger(Parachute.MODID);
     public static final String PARACHUTE_NAME = "parachute";
     public static final String PACK_NAME = "pack";
 
@@ -71,7 +70,7 @@ public class Parachute {
             new TextComponentTranslation("stat.parachuteDistance"), StatBase.distanceStatType);
 
     @SidedProxy(clientSide = "com.parachute.client.ParachuteClientProxy", serverSide = "com.parachute.common.ParachuteServerProxy")
-    public static IProxy proxy;
+    public static IProxy clientProxy;
 
     @Mod.Instance(MODID)
     public static Parachute instance;
@@ -79,6 +78,7 @@ public class Parachute {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        logger = event.getModLog();
         ConfigHandler.preInit(event);
         int entityID = 1;
         EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, PARACHUTE_NAME),
@@ -86,7 +86,7 @@ public class Parachute {
 
         GameRegistry.findRegistry(Item.class).registerAll(ITEM_PARACHUTE_PACK, PARACHUTE_ITEM);
         PacketHandler.init();
-        proxy.preInit();
+        clientProxy.preInit();
     }
 
     @SuppressWarnings("unused")
@@ -94,17 +94,18 @@ public class Parachute {
     public void Init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
 
         // add the parachute statistics
         Parachute.parachuteDeployed.registerStat();
         Parachute.parachuteDistance.initIndependentStat().registerStat();
-        proxy.Init();
+        clientProxy.Init();
     }
 
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit();
+        clientProxy.postInit();
     }
 
     public String getVersion() {
@@ -117,6 +118,11 @@ public class Parachute {
 
     public static boolean isFalling(EntityPlayer player) {
         return (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder());
+    }
+
+    @SuppressWarnings("unused")
+    public static Logger getLogger() {
+        return logger;
     }
 
 }
