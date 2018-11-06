@@ -9,13 +9,6 @@
 		]
 	},
 	
-	"burn": {
-		"category": "neutral",
-		"sounds": [
-			"parachutemod:burn1"
-		]
-	},
-
 	"lift": {
 		"category": "neutral",
 		"sounds": [

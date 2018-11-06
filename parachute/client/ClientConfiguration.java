@@ -32,6 +32,7 @@ public class ClientConfiguration {
     private static String hudPosition;
     private static String steeringControl;
     private static boolean aadState;
+    private static boolean useFlyingSound;
 
     public ClientConfiguration() {}
 
@@ -53,6 +54,8 @@ public class ClientConfiguration {
 
     public static void setAADState(boolean value) { aadState = value; }
 
+    public static void setUseFlyingSound(boolean value) { useFlyingSound = value; }
+
 
     public static String getChuteColor() {
         return chuteColor;
@@ -71,5 +74,7 @@ public class ClientConfiguration {
     }
 
     public static boolean getAADState() { return aadState; }
+
+    public static boolean getUseFlyingSoud() { return useFlyingSound; }
 
 }

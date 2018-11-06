@@ -44,9 +44,6 @@ import java.util.List;
 
 public class EntityParachute extends Entity {
 
-    private double velocityX;
-    private double velocityY;
-    private double velocityZ;
     private double maxAltitude;
     private boolean allowThermals;
     private boolean lavaThermals;
@@ -62,6 +59,13 @@ public class EntityParachute extends Entity {
     private double backMomentum;
     private double rotationMomentum;
     private double slideMomentum;
+
+    @SideOnly(Side.CLIENT)
+    private double velocityX;
+    @SideOnly(Side.CLIENT)
+    private double velocityY;
+    @SideOnly(Side.CLIENT)
+    private double velocityZ;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ascend
@@ -200,11 +204,16 @@ public class EntityParachute extends Entity {
         motionZ = velocityZ;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void setVelocity(double x, double y, double z) {
-        velocityX = motionX = x;
-        velocityY = motionY = y;
-        velocityZ = motionZ = z;
+        motionX = x;
+        motionY = y;
+        motionZ = z;
+
+        velocityX = motionX;
+        velocityY = motionY;
+        velocityZ = motionZ;
     }
 
     // updateInputs is called by ParachuteInputEvent class
@@ -289,7 +298,7 @@ public class EntityParachute extends Entity {
 
         // something bad happened, somehow the skydiver was killed.
         if (!world.isRemote && skyDiver != null && skyDiver.isDead) { // server side
-            setDead();
+            skyDiver.dismountRidingEntity();
         }
 
         // update distance for parachute statistics
@@ -475,9 +484,6 @@ public class EntityParachute extends Entity {
                     return;
                 } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
                     BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
-//                    if (!world.getBlockState(bp).getBlock().getUnlocalizedName().matches("tile.vine")) { // maybe account for vines on trees?
-//                        return;
-//                    }
                     bp.down(Math.round((float) bb.minY));
                     if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
                         return;
@@ -496,18 +502,6 @@ public class EntityParachute extends Entity {
         entityToUpdate.rotationYaw += yawClamp - yaw;
         entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
     }
-
-//    @Override
-//    public void applyEntityCollision(@Nonnull Entity entity) {
-//        if (entity instanceof EntityParachute) {
-//            if (entity.getEntityBoundingBox().minY < getEntityBoundingBox().maxY) {
-//                super.applyEntityCollision(entity);
-//            }
-//        } else if (entity.getEntityBoundingBox().minY <= getEntityBoundingBox().minY) {
-//            super.applyEntityCollision(entity);
-//        }
-//    }
-
 
     @SideOnly(Side.CLIENT)
     @Override

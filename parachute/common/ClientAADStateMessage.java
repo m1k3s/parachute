@@ -50,7 +50,7 @@ public class ClientAADStateMessage implements IMessage {
 
     public static class Handler implements IMessageHandler<ClientAADStateMessage, IMessage> {
         @Override
-        public IMessage onMessage(final ClientAADStateMessage msg, final MessageContext cts) {
+        public IMessage onMessage(final ClientAADStateMessage msg, final MessageContext ctx) {
             Minecraft client = Minecraft.getMinecraft();
             client.addScheduledTask(() -> ClientConfiguration.setAADState(msg.aadState));
             return null;

@@ -27,12 +27,14 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nonnull;
+
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber
 public class ParachuteSoundsRegistration {
 
     @SubscribeEvent
-    public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
+    public static void registerSoundEvents(@Nonnull RegistryEvent.Register<SoundEvent> event) {
         SoundEvent open = new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen");
         SoundEvent lift = new SoundEvent(new ResourceLocation(Parachute.MODID + ":lift")).setRegistryName("lift");
 

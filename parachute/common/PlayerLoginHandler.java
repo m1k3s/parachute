@@ -43,7 +43,9 @@ public class PlayerLoginHandler {
         String hudPosition = ConfigHandler.getHudPosition();
         String steeringControl = ConfigHandler.getSteeringControl();
         boolean aadState = ConfigHandler.getAADState();
-        PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, burnVolume, hudPosition, steeringControl, aadState), (EntityPlayerMP)event.player);
+        boolean useFlyingSound = ConfigHandler.getUseFlyingSound();
+        PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, burnVolume, hudPosition, steeringControl, aadState, useFlyingSound),
+                (EntityPlayerMP)event.player);
     }
 
     @SubscribeEvent

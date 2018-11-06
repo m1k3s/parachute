@@ -36,16 +36,18 @@ public class ClientConfigMessage implements IMessage {
     private String hudPosition;
     private String steeringControl;
     private boolean aadState;
+    private boolean useFlyingSound;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
-    public ClientConfigMessage(String chuteColor, double burnVolume, String hudPosition, String steeringControl, boolean aadState) {
+    public ClientConfigMessage(String chuteColor, double burnVolume, String hudPosition, String steeringControl, boolean aadState, boolean useFlyingSound) {
         this.chuteColor = chuteColor;
         this.burnVolume = burnVolume;
         this.hudPosition = hudPosition;
         this.steeringControl = steeringControl;
         this.aadState = aadState;
+        this.useFlyingSound = useFlyingSound;
     }
 
     @Override
@@ -55,6 +57,7 @@ public class ClientConfigMessage implements IMessage {
         hudPosition = ByteBufUtils.readUTF8String(byteBuf);
         steeringControl = ByteBufUtils.readUTF8String(byteBuf);
         aadState = byteBuf.readBoolean();
+        useFlyingSound = byteBuf.readBoolean();
     }
 
     @Override
@@ -64,6 +67,7 @@ public class ClientConfigMessage implements IMessage {
         ByteBufUtils.writeUTF8String(byteBuf, hudPosition);
         ByteBufUtils.writeUTF8String(byteBuf, steeringControl);
         byteBuf.writeBoolean(aadState);
+        byteBuf.writeBoolean(useFlyingSound);
     }
 
     public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
@@ -76,6 +80,7 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setHudPosition(msg.hudPosition);
                 ClientConfiguration.setSteeringControl(msg.steeringControl);
                 ClientConfiguration.setAADState(msg.aadState);
+                ClientConfiguration.setUseFlyingSound(msg.useFlyingSound);
                 RenderParachute.setParachuteColor(msg.chuteColor);
             });
             return null;

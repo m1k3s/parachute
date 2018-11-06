@@ -22,7 +22,9 @@
 package com.parachute.common;
 
 import com.parachute.client.ClientConfiguration;
+import com.parachute.client.ParachuteFlyingSound;
 import com.parachute.client.RenderParachute;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -35,6 +37,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
@@ -71,6 +75,7 @@ public class ItemParachute extends Item {
 
         if (world.isRemote) { // client side
             RenderParachute.setParachuteColor(ClientConfiguration.getChuteColor());
+            playFlyingSound(entityplayer);
         } else { // server side
             world.spawnEntity(chute);
         }
@@ -91,7 +96,6 @@ public class ItemParachute extends Item {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
             }
         }
-
     }
 
     // this function toggles the AAD state but does not update the saved config.
@@ -117,6 +121,13 @@ public class ItemParachute extends Item {
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return Items.STRING == repair.getItem();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playFlyingSound(EntityPlayer entityplayer) {
+        if (ClientConfiguration.getUseFlyingSoud()) {
+            Minecraft.getMinecraft().getSoundHandler().playSound(new ParachuteFlyingSound(entityplayer));
+        }
     }
 
 }
