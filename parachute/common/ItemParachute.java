@@ -73,7 +73,7 @@ public class ItemParachute extends Item {
         float volume = 1.0F;
         chute.playSound(Parachute.OPENCHUTE, volume, pitch());
 
-        if (world.isRemote) { // client side
+        if (Parachute.isClientSide(world)) { // client side
             RenderParachute.setParachuteColor(ClientConfiguration.getChuteColor());
             playFlyingSound(entityplayer);
         } else { // server side
@@ -103,7 +103,7 @@ public class ItemParachute extends Item {
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (entityplayer != null) {
             boolean active = ConfigHandler.getAADState();
-            if (!world.isRemote) { // server side
+            if (Parachute.isServerSide(world)) { // server side
                 active = !active;
                 ConfigHandler.setAADState(active);
                 itemstack.setStackDisplayName(active ? "Parachute|AUTO" : "Parachute");

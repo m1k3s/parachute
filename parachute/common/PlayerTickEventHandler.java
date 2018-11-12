@@ -74,7 +74,7 @@ public class PlayerTickEventHandler {
                     displayArmorBar = !(player.getItemStackFromSlot(slot).getItem() instanceof ItemParachutePack);
                 }
             }
-            if (player.world.isRemote) {
+            if (Parachute.isClientSide(player.world)) {
                 GuiIngameForge.renderArmor = displayArmorBar;
             }
         }
@@ -86,7 +86,7 @@ public class PlayerTickEventHandler {
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
         boolean aadState;
-        if (player.world.isRemote) { // client
+        if (Parachute.isClientSide(player.world)) { // client
             aadState = ClientConfiguration.getAADState();
         } else {
             aadState = ConfigHandler.getAADState();

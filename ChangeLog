@@ -1,3 +1,123 @@
+commit 529f0487d1ef1185be1b18df0f58808a991cf2ce
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Tue Nov 6 09:03:41 2018 -0500
+
+    Added a flying sound, like the elytra
+    added an option to toggle the flying sound
+    changed logger instantiation to event.getModLog()
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit 06565aa752e562b1bac21addeb344bcace3a7b00
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Wed Oct 31 15:50:22 2018 -0400
+
+    added PlayerHurtEvent back in
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit eead69a808d3d49f6066ea598d2e0a3253c7fbdd
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Tue Oct 30 18:15:17 2018 -0400
+
+    removed hud-bubble option
+    removed altitudeMSL option
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit dbecb42a28edc6521a45ab7ca09bd5f17faec355
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Tue Oct 30 16:32:32 2018 -0400
+
+    comment out test for vines
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit bc1f77b5848a4cb2f23490db487663fab0fa0d55
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Tue Oct 30 11:47:52 2018 -0400
+
+    added keybinding to toggle HUD visibility
+    removed noHUD config option and all associated code
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit 178f930d81977bad0deb212fbf520848c338fb06
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Mon Oct 29 19:06:33 2018 -0400
+
+    fixed client/server aadActive state
+    removed aad altitude and immediate options
+    * aad is now immediate only, 5.0 block minimum fall distance
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit bad1a3230b51cd351a327f87384d936c19e068a2
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Mon Oct 29 13:04:06 2018 -0400
+
+    added network packet for AAD state between client/server
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit 2399dbaa80c6b52c0d1022bbac17b976e1d43042
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Sun Oct 28 17:19:01 2018 -0400
+
+    removed playerfallevent, playerhurtevent, and playermountevent
+    and associated
+    code in entityparachute
+    removed event registering code in main mod class
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit 8a9f067916fb0115e98e2530fa761fa6bbb2203a
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Sun Oct 28 16:12:59 2018 -0400
+
+    fixed player not colliding with ground or other objects
+    fixed PlayerLoginHandler not adding player to list
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit 4bbbfc540a2662a8f6441ede242c6923de3623b8
+Author: Michael Sheppard <pbrane0@gmail.com>
+Date:   Wed Jun 6 16:41:29 2018 -0400
+
+    changed reticule for no bubble case.
+
+    Signed-off-by: Michael Sheppard <pbrane0@gmail.com>
+
+commit f76cd36a7e84927872eb35de323e420a39a6ccbe
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Mon Jun 4 08:30:51 2018 -0400
+
+    modified HUD image, now user can hide bubble
+    added final SCALE variable
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit a5074e8380ccf9c3aa2491f768fb93d25d2dddb3
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Thu May 17 10:27:29 2018 -0400
+
+    cleaned up some code, reformatted
+    added config option to disable display of the player front facing
+    bubble on the HUD
+    removed args from methods in HUD renderer, made those args class
+    fields
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
+commit b457368227bf351e494993755bb39189910494df
+Author: m1k3s <pbrane0@gmail.com>
+Date:   Sat Apr 28 15:36:13 2018 -0400
+
+    adjusted setSize to correct dimensions
+    updated ChangeLog
+
+    Signed-off-by: m1k3s <pbrane0@gmail.com>
+
 commit b1ee7567a98e76b2b4f6fbc927998fc2f307586f
 Author: m1k3s <pbrane0@gmail.com>
 Date:   Mon Apr 16 07:51:28 2018 -0400

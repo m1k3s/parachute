@@ -56,7 +56,7 @@ public class ItemParachutePack extends ItemArmor {
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (stack.getItem() instanceof ItemParachutePack) {
-            if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
+            if (Parachute.isServerSide(worldIn) && entityIn instanceof EntityPlayer) {
                 if (Parachute.ARMOR_TYPE.getIndex() != itemSlot) {
                     ((EntityPlayer) entityIn).inventory.deleteStack(stack);
                 }

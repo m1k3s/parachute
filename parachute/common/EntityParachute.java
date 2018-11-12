@@ -218,7 +218,7 @@ public class EntityParachute extends Entity {
 
     // updateInputs is called by ParachuteInputEvent class
     public void updateInputs(MovementInput input) {
-        if (isBeingRidden() && world.isRemote) {
+        if (isBeingRidden() && Parachute.isClientSide(world)) {
             double motionFactor = 0.0f;
             String steeringControl = ConfigHandler.getSteeringControl();
 
@@ -269,7 +269,7 @@ public class EntityParachute extends Entity {
         Entity skyDiver = getControllingPassenger();
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
-        if (skyDiver == null && !world.isRemote) { // server side
+        if (skyDiver == null && Parachute.isServerSide(world)) { // server side
             setDead();
             return;
         }
@@ -297,7 +297,7 @@ public class EntityParachute extends Entity {
         move(MoverType.SELF, motionX, motionY, motionZ);
 
         // something bad happened, somehow the skydiver was killed.
-        if (!world.isRemote && skyDiver != null && skyDiver.isDead) { // server side
+        if (Parachute.isServerSide(world) && skyDiver != null && skyDiver.isDead) { // server side
             skyDiver.dismountRidingEntity();
         }
 
@@ -469,7 +469,7 @@ public class EntityParachute extends Entity {
 
             // check for player colliding with blocks. dismounting if the blocks are not air, water, or grass/vines
             AxisAlignedBB bb = passenger.getEntityBoundingBox();
-            if (!world.isRemote && world.checkBlockCollision(bb)) {
+            if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
                 if (world.isMaterialInBB(bb, Material.WATER)) {
                     if (ConfigHandler.getDismountInWater()) {
                         passenger.dismountRidingEntity();
@@ -480,7 +480,7 @@ public class EntityParachute extends Entity {
                             return;
                         }
                     }
-                } else if (world.isMaterialInBB(bb, Material.LEAVES)) {
+                } else if (world.isMaterialInBB(bb, Material.LEAVES)) { // pass through leaves
                     return;
                 } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
                     BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);

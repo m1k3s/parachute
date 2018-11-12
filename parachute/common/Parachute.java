@@ -30,6 +30,7 @@ import net.minecraft.stats.StatBasic;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
@@ -48,7 +49,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Parachute {
 
-    private static Logger logger;// = LogManager.getLogger(Parachute.MODID);
+    private static Logger logger;
     public static final String PARACHUTE_NAME = "parachute";
     public static final String PACK_NAME = "pack";
 
@@ -123,6 +124,15 @@ public class Parachute {
     @SuppressWarnings("unused")
     public static Logger getLogger() {
         return logger;
+    }
+
+    // convienience methods
+    public static boolean isClientSide(World w) {
+        return w.isRemote;
+    }
+
+    public static boolean isServerSide(World w) {
+        return !w.isRemote;
     }
 
 }

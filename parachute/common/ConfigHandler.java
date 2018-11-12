@@ -58,7 +58,7 @@ public class ConfigHandler {
     private static double rotationMomentum;
     private static double slideMomentum;
 
-    private static final String ABOUT_COMMENTS = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
+    private static final String GERNERAL_COMMENTS = String.format("%s Config - Michael Sheppard (crackedEgg) [Minecraft Version %s]", Parachute.NAME, Parachute.MCVERSION);
     private static final String USAGE_COMMENT = "set to true for parachute single use"; // false
     private static final String HEIGHT_COMMENT = "0 (zero) disables altitude limiting"; // 256
     private static final String THERMAL_COMMENT = "enable thermal rise by pressing the space bar"; // true
@@ -144,13 +144,13 @@ public class ConfigHandler {
             config.load();
         }
 
-        config.setCategoryComment(Configuration.CATEGORY_GENERAL, ABOUT_COMMENTS);
+        config.setCategoryComment(Configuration.CATEGORY_GENERAL, GERNERAL_COMMENTS);
 
         Property singleUseProp = config.get(Configuration.CATEGORY_GENERAL, "singleUse", false, USAGE_COMMENT);
         Property heightLimitProp = config.get(Configuration.CATEGORY_GENERAL, "heightLimit", 256, HEIGHT_COMMENT, 100, 256);
         Property thermalsProp = config.get(Configuration.CATEGORY_GENERAL, "allowThermals", true, THERMAL_COMMENT);
         Property dismountInWaterProp = config.get(Configuration.CATEGORY_GENERAL, "dismountInWater", false, DISMOUNT_COMMENT);
-        
+
         Property steeringControlProp = config.get(Configuration.CATEGORY_GENERAL, "steeringControl", "WASD");
         steeringControlProp.setComment(STEERING_CONTROL_COMMENT);
         steeringControlProp.setValidValues(STEERING_CONTROL);
@@ -182,29 +182,29 @@ public class ConfigHandler {
         hudPositionProp.setComment(HUD_POSITION_COMMENT);
         hudPositionProp.setValidValues(HUD_POSITIONS);
 
-        List<String> propertyOrder = new ArrayList<>();
-        propertyOrder.add(singleUseProp.getName());
-        propertyOrder.add(heightLimitProp.getName());
-        propertyOrder.add(thermalsProp.getName());
-        propertyOrder.add(dismountInWaterProp.getName());
-        propertyOrder.add(showContrailsProp.getName());
-        propertyOrder.add(burnVolumeProp.getName());
-        propertyOrder.add(useFlyingSoundProp.getName());
-        propertyOrder.add(hudPositionProp.getName());
-        propertyOrder.add(lavaThermalsProp.getName());
-        propertyOrder.add(minLavaDistanceProp.getName());
-        propertyOrder.add(maxLavaDistanceProp.getName());
-        propertyOrder.add(lavaDisablesThermalProp.getName());
-        propertyOrder.add(isAADActiveProp.getName());
-        propertyOrder.add(weatherAffectsDriftProp.getName());
-        propertyOrder.add(constantTurbulenceProp.getName());
-        propertyOrder.add(chuteColorProp.getName());
-        propertyOrder.add(steeringControlProp.getName());
-        propertyOrder.add(forwardMotionProp.getName());
-        propertyOrder.add(backMotionProp.getName());
-        propertyOrder.add(leftMotionProp.getName());
-        propertyOrder.add(slideMotionProp.getName());
-        config.setCategoryPropertyOrder(Configuration.CATEGORY_GENERAL, propertyOrder);
+        List<String> generalPropOrder = new ArrayList<>();
+        generalPropOrder.add(singleUseProp.getName());
+        generalPropOrder.add(heightLimitProp.getName());
+        generalPropOrder.add(thermalsProp.getName());
+        generalPropOrder.add(dismountInWaterProp.getName());
+        generalPropOrder.add(showContrailsProp.getName());
+        generalPropOrder.add(burnVolumeProp.getName());
+        generalPropOrder.add(useFlyingSoundProp.getName());
+        generalPropOrder.add(hudPositionProp.getName());
+        generalPropOrder.add(lavaThermalsProp.getName());
+        generalPropOrder.add(minLavaDistanceProp.getName());
+        generalPropOrder.add(maxLavaDistanceProp.getName());
+        generalPropOrder.add(lavaDisablesThermalProp.getName());
+        generalPropOrder.add(isAADActiveProp.getName());
+        generalPropOrder.add(weatherAffectsDriftProp.getName());
+        generalPropOrder.add(constantTurbulenceProp.getName());
+        generalPropOrder.add(chuteColorProp.getName());
+        generalPropOrder.add(steeringControlProp.getName());
+        generalPropOrder.add(forwardMotionProp.getName());
+        generalPropOrder.add(backMotionProp.getName());
+        generalPropOrder.add(leftMotionProp.getName());
+        generalPropOrder.add(slideMotionProp.getName());
+        config.setCategoryPropertyOrder(Configuration.CATEGORY_GENERAL, generalPropOrder);
 
         if (fromFields) {
             singleUse = singleUseProp.getBoolean(false);
