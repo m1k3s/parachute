@@ -27,12 +27,12 @@ import net.minecraft.entity.Entity;
 
 public class ModelParachute extends ModelBase {
 
-    private final int nSections = 6;
+    //private final int nSections = 6;
 
-    public ModelRenderer[] sections = new ModelRenderer[nSections];
+    public ModelRenderer[] sections = new ModelRenderer[6];
 
     public ModelParachute() {
-        sections[0] = new ModelRenderer(this,0, 0);
+        sections[0] = new ModelRenderer(this, 0, 0);
         int x = 16; // front/back
         int y = 2;  // up/down
         int z = 16; // left/right

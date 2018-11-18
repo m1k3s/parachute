@@ -267,10 +267,10 @@ public class ConfigHandler {
                 // update the client side options
                 ClientConfiguration.setChuteColor(chuteColor);
                 ClientConfiguration.setBurnVolume(burnVolume);
-                ClientConfiguration.setUseFlyingSound(useFlyingSound);
                 ClientConfiguration.setHudPosition(hudPosition);
                 ClientConfiguration.setSteeringControl(steeringControl);
                 ClientConfiguration.setAADState(aadActive);
+                ClientConfiguration.setUseFlyingSound(useFlyingSound);
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }

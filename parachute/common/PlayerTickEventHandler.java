@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerTickEventHandler {
 
-    private boolean displayArmorBar;
+    private static boolean displayArmorBar;
 
     @SuppressWarnings("unused")
     @SubscribeEvent

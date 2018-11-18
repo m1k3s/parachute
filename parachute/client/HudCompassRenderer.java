@@ -21,7 +21,6 @@
 
 package com.parachute.client;
 
-//import com.parachute.common.ConfigHandler;
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
@@ -29,6 +28,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -36,7 +36,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 
 @SideOnly(Side.CLIENT)
 public class HudCompassRenderer extends Gui {
@@ -65,10 +64,8 @@ public class HudCompassRenderer extends Gui {
     private static final int HUD_WIDTH = 256;
     private static final int HUD_HEIGHT = 256;
     // fixme: find a way to detect icons in upper right and adjust Y_PADDING
-    private static final int Y_PADDING = 120;
+    private static int Y_PADDING = 20;
     private static final int X_PADDING = 20;
-
-    double compassHeading;
 
     private String alt, compass, dist;
 
@@ -84,6 +81,7 @@ public class HudCompassRenderer extends Gui {
         if (!isVisible || !MINECRAFT.gameSettings.fullScreen) {
             return;
         }
+
         if (MINECRAFT.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             ScaledResolution sr = new ScaledResolution(MINECRAFT);
             int width = sr.getScaledWidth() * sr.getScaleFactor();
@@ -91,6 +89,13 @@ public class HudCompassRenderer extends Gui {
             String position = ClientConfiguration.getHudPosition();
             if (position == null) {
                 return;
+            }
+
+            // attempt to relocate HUD position bsed on effects icons in upper right corner
+            if (position.equals("right") && isRenderingEffectsIcons()) {
+                Y_PADDING = 120;
+            } else {
+                Y_PADDING = 20;
             }
 
             // initialize hudX based on user selected position, 'left', 'center', or 'right'
@@ -113,7 +118,7 @@ public class HudCompassRenderer extends Gui {
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
-                compassHeading = calcCompassHeading(chute.rotationYaw);
+                double compassHeading = calcCompassHeading(chute.rotationYaw);
                 boolean aadActive = ClientConfiguration.getAADState();
 
                 GlStateManager.pushMatrix();
@@ -274,5 +279,13 @@ public class HudCompassRenderer extends Gui {
    // toggles HUD visibilty using a user defined key, 'H' is default
     public static void toggleHUDVisibility() {
         isVisible = !isVisible;
+    }
+
+    // icons rendering in upper right corner
+    private boolean isRenderingEffectsIcons() {
+        return (MINECRAFT.player.isPotionActive(MobEffects.ABSORPTION) ||
+                MINECRAFT.player.isPotionActive(MobEffects.FIRE_RESISTANCE) ||
+                MINECRAFT.player.isPotionActive(MobEffects.REGENERATION) ||
+                MINECRAFT.player.isPotionActive(MobEffects.RESISTANCE));
     }
 }

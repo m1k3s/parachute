@@ -34,6 +34,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
@@ -60,6 +61,10 @@ public class ItemParachute extends Item {
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (Parachute.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
+            AxisAlignedBB bb = entityplayer.getEntityBoundingBox();
+            if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
+                return new ActionResult(EnumActionResult.PASS, itemstack);
+            }
             deployParachute(world, entityplayer);
         } else { // toggle the AAD state
             toggleAAD(itemstack, world, entityplayer);
