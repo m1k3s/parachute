@@ -34,7 +34,6 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
@@ -61,20 +60,23 @@ public class ItemParachute extends Item {
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (Parachute.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
-            AxisAlignedBB bb = entityplayer.getEntityBoundingBox();
-            if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
-                return new ActionResult(EnumActionResult.PASS, itemstack);
-            }
-            deployParachute(world, entityplayer);
+            boolean result = deployParachute(world, entityplayer);
+            return new ActionResult(result ? EnumActionResult.SUCCESS : EnumActionResult.FAIL, itemstack); // unchecked
         } else { // toggle the AAD state
             toggleAAD(itemstack, world, entityplayer);
+            return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
         }
-        return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
     }
 
-    public void deployParachute(World world, EntityPlayer entityplayer) {
+    @SuppressWarnings("unchecked")
+    public boolean deployParachute(World world, EntityPlayer entityplayer) {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
+
+        if (!world.getCollisionBoxes(entityplayer, entityplayer.getEntityBoundingBox().grow(-0.1D)).isEmpty()) {
+            return false;
+        }
+
         float volume = 1.0F;
         chute.playSound(Parachute.OPENCHUTE, volume, pitch());
 
@@ -101,6 +103,7 @@ public class ItemParachute extends Item {
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
             }
         }
+        return true;
     }
 
     // this function toggles the AAD state but does not update the saved config.
