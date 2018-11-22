@@ -41,7 +41,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation COMPASS_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
     protected static final ResourceLocation HOME_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
-    protected static final ResourceLocation RETICULE2_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule2.png");
+    protected static final ResourceLocation RETICULE_RED_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule_red.png");
+    protected static final ResourceLocation RETICULE_GREEN_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule_green.png");
+    protected static final ResourceLocation RETICULE_YELLOW_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule_yellow.png");
     protected static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-background.png");
     protected static final ResourceLocation NIGHT_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-night.png");
 
@@ -141,17 +143,22 @@ public class HudCompassRenderer extends Gui {
                 // 3. draw the home direction ring
                 drawTextureWithRotation((float) homeDir, HOME_TEXTURE, hudX);
 
-                // 4. draw the "where the hell is the front of the parachute"  bubble
+                // 4. draw the "where the hell is the front of the parachute" color-coded reticule
+                //    red = not front facing, yellow =  +/-10 degrees, green = +/-2 desgrees
 //                if (ConfigHandler.getFrontBubble()) {
-//                    float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
+                    float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
 //                    drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
 //
 //
 //                    // 5. draw the reticule on top
 //                    drawTextureFixed(RETICULE_TEXTURE, hudX);
-//                } else {
-                    drawTextureFixed(RETICULE2_TEXTURE, hudX);
-//                }
+                if (playerLook <= 2.5 && playerLook >= -2.5) {
+                    drawTextureFixed(RETICULE_GREEN_TEXTURE, hudX);
+                }else if (playerLook <= 15.0 && playerLook >= -15.0) {
+                    drawTextureFixed(RETICULE_YELLOW_TEXTURE, hudX);
+                } else {
+                    drawTextureFixed(RETICULE_RED_TEXTURE, hudX);
+                }
 
                 // damp the update (20 ticks/second modulo 10 is about 1/2 second updates)
                 if (count % 10 == 0) {
