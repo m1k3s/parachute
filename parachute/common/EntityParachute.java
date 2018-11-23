@@ -467,30 +467,44 @@ public class EntityParachute extends Entity {
             passenger.setRotationYawHead(passenger.getRotationYawHead() + (float) deltaRotation);
             applyYawToEntity(passenger);
 
-            // check for player colliding with blocks. dismounting if the blocks are not air, water, or grass/vines
-            AxisAlignedBB bb = passenger.getEntityBoundingBox();
-            if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
-                if (world.isMaterialInBB(bb, Material.WATER)) {
-                    if (ConfigHandler.getDismountInWater()) {
-                        passenger.dismountRidingEntity();
-                    } else {
-                        BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
-                        bp.down(Math.round((float) bb.minY));
-                        if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
-                            return;
-                        }
-                    }
-                } else if (world.isMaterialInBB(bb, Material.LEAVES)) { // pass through leaves
-                    return;
-                } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
+            // check for passenger collisions
+            checkForPlayerCollisions(passenger);
+        }
+    }
+
+    // check for player colliding with blocks. dismounting if the blocks are not air, water,
+    // grass/vines, or snow/snow layers
+    private void checkForPlayerCollisions(Entity passenger) {
+        AxisAlignedBB bb = passenger.getEntityBoundingBox();
+        if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
+            // if in water check dismount-in-water flag, check for solid block below water
+            if (world.isMaterialInBB(bb, Material.WATER)) {
+                if (ConfigHandler.getDismountInWater()) {
+                    passenger.dismountRidingEntity();
+                } else {
                     BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                     bp.down(Math.round((float) bb.minY));
                     if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
                         return;
                     }
                 }
-                passenger.dismountRidingEntity();
+            } else if (world.isMaterialInBB(bb, Material.SNOW)) { // check for snow/snow layer, dismount if solid block below
+                BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
+                bp.down(Math.round((float) bb.minY));
+                if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                    return;
+                }
+            } else if (world.isMaterialInBB(bb, Material.LEAVES)) { // pass through leaves
+                return;
+            } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
+                // check for tallgrass, only dismount when reaching solid block below
+                BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
+                bp.down(Math.round((float) bb.minY));
+                if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                    return;
+                }
             }
+            passenger.dismountRidingEntity();
         }
     }
 
