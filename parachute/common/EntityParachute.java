@@ -30,6 +30,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.*;
@@ -504,6 +505,7 @@ public class EntityParachute extends Entity {
                     return;
                 }
             }
+            //passenger.attackEntityFrom(DamageSource.FALL, 1);
             passenger.dismountRidingEntity();
         }
     }

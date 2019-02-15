@@ -24,7 +24,7 @@ package com.parachute.common;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.ResourceLocation;
@@ -59,7 +59,7 @@ public class Parachute {
     public static final Item PARACHUTE_ITEM = new ItemParachute(Parachute.PARACHUTE_NAME);
     public static final EntityEquipmentSlot ARMOR_TYPE = EntityEquipmentSlot.CHEST;
     static final int RENDER_INDEX = 1; // 0 is cloth, 1 is chain, 2 is iron, 3 is diamond and 4 is gold
-    public static final Item ITEM_PARACHUTE_PACK = new ItemParachutePack(ArmorMaterial.LEATHER, RENDER_INDEX, ARMOR_TYPE, Parachute.PACK_NAME);
+    public static final Item ITEM_PARACHUTE_PACK = new ItemParachutePack(ItemArmor.ArmorMaterial.LEATHER, RENDER_INDEX, ARMOR_TYPE, Parachute.PACK_NAME);
 
     public static final String MODID = "parachutemod";
     public static final String MODVERSION = "1.7.4";

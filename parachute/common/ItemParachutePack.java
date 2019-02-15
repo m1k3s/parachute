@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 // on the player when the parachute item is selected in the hot bar.
 public class ItemParachutePack extends ItemArmor {
 
-    public ItemParachutePack(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType, String itemName) {
+    public ItemParachutePack(ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType, String itemName) {
         super(armorMaterial, renderIndex, armorType);
         setMaxDamage(armorMaterial.getDurability(armorType));
         setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
