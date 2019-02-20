@@ -23,58 +23,58 @@ package com.parachute.common;
 
 import com.parachute.client.ClientConfiguration;
 import com.parachute.client.RenderParachute;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class ClientConfigMessage implements IMessage {
-    private String chuteColor;
-    private double burnVolume;
-    private String hudPosition;
-    private String steeringControl;
-    private boolean aadState;
-    private boolean useFlyingSound;
+import java.util.function.Supplier;
+
+public class ClientConfigMessage { //} implements IMessage {
+    private static String chuteColor;
+    private static double burnVolume;
+    private static String hudPosition;
+    private static String steeringControl;
+    private static boolean aadState;
+    private static boolean useFlyingSound;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
     public ClientConfigMessage(String chuteColor, double burnVolume, String hudPosition, String steeringControl, boolean aadState, boolean useFlyingSound) {
-        this.chuteColor = chuteColor;
-        this.burnVolume = burnVolume;
-        this.hudPosition = hudPosition;
-        this.steeringControl = steeringControl;
-        this.aadState = aadState;
-        this.useFlyingSound = useFlyingSound;
+        ClientConfigMessage.chuteColor = chuteColor;
+        ClientConfigMessage.burnVolume = burnVolume;
+        ClientConfigMessage.hudPosition = hudPosition;
+        ClientConfigMessage.steeringControl = steeringControl;
+        ClientConfigMessage.aadState = aadState;
+        ClientConfigMessage.useFlyingSound = useFlyingSound;
     }
 
-    @Override
-    public void fromBytes(ByteBuf byteBuf) {  // server ==> client
-        chuteColor = ByteBufUtils.readUTF8String(byteBuf);
-        burnVolume = byteBuf.readDouble();
-        hudPosition = ByteBufUtils.readUTF8String(byteBuf);
-        steeringControl = ByteBufUtils.readUTF8String(byteBuf);
-        aadState = byteBuf.readBoolean();
-        useFlyingSound = byteBuf.readBoolean();
+    public static void decode (ClientConfigMessage pkt, PacketBuffer buffer) {  // server ==> client
+        chuteColor = buffer.readUTF8String(buffer);
+        burnVolume = buffer.readDouble();
+        hudPosition = ByteBufUtils.readUTF8String(buffer);
+        steeringControl = ByteBufUtils.readUTF8String(buffer);
+        aadState = buffer.readBoolean();
+        useFlyingSound = buffer.readBoolean();
     }
 
-    @Override
-    public void toBytes(ByteBuf byteBuf) { // client ==> server - not used
-        ByteBufUtils.writeUTF8String(byteBuf, chuteColor);
-        byteBuf.writeDouble(burnVolume);
-        ByteBufUtils.writeUTF8String(byteBuf, hudPosition);
-        ByteBufUtils.writeUTF8String(byteBuf, steeringControl);
-        byteBuf.writeBoolean(aadState);
-        byteBuf.writeBoolean(useFlyingSound);
+    public static void encode(PacketBuffer buffer) { // client ==> server - not used
+        ByteBufUtils.writeUTF8String(buffer, chuteColor);
+        buffer.writeDouble(burnVolume);
+        ByteBufUtils.writeUTF8String(buffer, hudPosition);
+        ByteBufUtils.writeUTF8String(buffer, steeringControl);
+        buffer.writeBoolean(aadState);
+        buffer.writeBoolean(useFlyingSound);
     }
 
-    public static class Handler implements IMessageHandler<ClientConfigMessage, IMessage> {
-        @Override
-        public IMessage onMessage(final ClientConfigMessage msg, final MessageContext ctx) {
-            Minecraft client = Minecraft.getMinecraft();
-            client.addScheduledTask(() -> {
+    public static class Handler {
+        public static void handle(final ClientConfigMessage pkt, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+
+//        @Override
+//        public IMessage onMessage(final ClientConfigMessage msg, final MessageContext ctx) {
+//            Minecraft client = Minecraft.getMinecraft();
+//            client.addScheduledTask(() -> {
                 ClientConfiguration.setChuteColor(msg.chuteColor);
                 ClientConfiguration.setBurnVolume(msg.burnVolume);
                 ClientConfiguration.setHudPosition(msg.hudPosition);
@@ -83,7 +83,7 @@ public class ClientConfigMessage implements IMessage {
                 ClientConfiguration.setUseFlyingSound(msg.useFlyingSound);
                 RenderParachute.setParachuteColor(msg.chuteColor);
             });
-            return null;
+//            return null;
         }
     }
 }

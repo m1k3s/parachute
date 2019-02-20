@@ -22,13 +22,12 @@
 package com.parachute.client;
 
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.input.Keyboard;
+import org.lwjgl.glfw.GLFW;
 
 public class ModKeyBinding {
     private static final String CATEGORY = "key.category.parachutemod:general";
-    public static final KeyBinding TOGGLE_HUD_VISIBILITY = new KeyBinding("key.parachutemod:toggle_hud", KeyConflictContext.IN_GAME, Keyboard.KEY_H, CATEGORY);
+    public static final KeyBinding TOGGLE_HUD_VISIBILITY = new KeyBinding("key.parachutemod:toggle_hud", GLFW.GLFW_KEY_H, CATEGORY);
 
     public static void registerKeyBinding() {
         ClientRegistry.registerKeyBinding(TOGGLE_HUD_VISIBILITY);

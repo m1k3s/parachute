@@ -21,9 +21,9 @@
  */
 package com.parachute.common;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
@@ -35,18 +35,12 @@ import net.minecraft.world.World;
 // on the player when the parachute item is selected in the hot bar.
 public class ItemParachutePack extends ItemArmor {
 
-    public ItemParachutePack(ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType, String itemName) {
-        super(armorMaterial, renderIndex, armorType);
-        setMaxDamage(armorMaterial.getDurability(armorType));
+    public ItemParachutePack(ArmorMaterial armorMaterial, EntityEquipmentSlot entityEquipmentSlot, Properties props, String itemName) {
+        super(armorMaterial, entityEquipmentSlot, props);
+        props.defaultMaxDamage(armorMaterial.getDurability(armorType));
+        props.maxStackSize(1);
         setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
-        setUnlocalizedName(Parachute.MODID + ":" + itemName);
-        maxStackSize = 1;
-    }
-
-    // don't display the pack item in the CreativeTab inventory
-    @Override
-    public CreativeTabs getCreativeTab() {
-        return null;
+//        setUnlocalizedName(Parachute.MODID + ":" + itemName);
     }
 
     // if the player has tried to move the parachute pack item to another inventory slot
@@ -54,7 +48,7 @@ public class ItemParachutePack extends ItemArmor {
     // if the pack item is dropped getEntityLifespan takes care of that.
     // Todo: ideally it would be better if the pack item was not selectable at all.
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (stack.getItem() instanceof ItemParachutePack) {
             if (Parachute.isServerSide(worldIn) && entityIn instanceof EntityPlayer) {
                 if (Parachute.ARMOR_TYPE.getIndex() != itemSlot) {

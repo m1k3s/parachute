@@ -1,0 +1,22 @@
+modLoader="javafml" #mandatory
+loaderVersion="[25,)" #mandatory (24 is current forge version)
+authors="crackedEgg, Michael Sheppard" #optional
+[[mods]] #mandatory
+modId="parachutemod" #mandatory
+version="${file.jarVersion}" #mandatory
+displayName="Parachute Mod NG" #mandatory
+description='''
+Adds a Parachute to the game. Jump off cliffs! Base Jumping!! Soar to new heights!
+'''
+[[dependencies.parachutemod]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[25,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.parachutemod]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13]"
+    ordering="NONE"
+    side="BOTH"

@@ -27,10 +27,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ParachuteFlyingSound extends MovingSound {
     private final EntityPlayer player;
     private int time;
@@ -45,10 +45,10 @@ public class ParachuteFlyingSound extends MovingSound {
     }
 
     @Override
-    public void update() {
+    public void tick() {
         ++time;
         
-        if (!player.isDead && (time <= 20 || (player.isRiding() && player.getRidingEntity() instanceof EntityParachute))) {
+        if (player.isAlive() && (time <= 20 || (player.isPassenger() && player.getRidingEntity() instanceof EntityParachute))) {
             double dx = player.posX - player.prevPosX;
             double dz = player.posZ - player.prevPosZ;
             double dy = player.posY - player.prevPosY;

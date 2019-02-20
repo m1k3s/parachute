@@ -23,6 +23,7 @@
 package com.parachute.common;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -35,7 +36,7 @@ public class PlayerLoginHandler {
 
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        PlayerManager.getInstance().Players.add(new PlayerInfo(event.player.getDisplayNameString())); // add player name
+        PlayerManager.getInstance().Players.add(new PlayerInfo(event.getPlayer().getDisplayName().getString())); // add player name
 
         // send the client controlled config variables
         String color = ConfigHandler.getChuteColor();
@@ -45,12 +46,12 @@ public class PlayerLoginHandler {
         boolean aadState = ConfigHandler.getAADState();
         boolean useFlyingSound = ConfigHandler.getUseFlyingSound();
         PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, burnVolume, hudPosition, steeringControl, aadState, useFlyingSound),
-                (EntityPlayerMP)event.player);
+                (EntityPlayerMP)event.getPlayer());
     }
 
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        Predicate<PlayerInfo> player = p -> event.player.getDisplayNameString().equals(p.getName());
+        Predicate<PlayerInfo> player = p -> event.getPlayer().getDisplayName().getString().equals(p.getName());
         PlayerManager.getInstance().Players.removeIf(player);
     }
 }

@@ -23,13 +23,13 @@
 package com.parachute.common;
 
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class PlayerHurtEvent {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void SkydiverHurtEvent(LivingHurtEvent event) {
-        if (event.getEntityLiving().isRiding() && event.getEntityLiving().getRidingEntity() instanceof EntityParachute) {
+        if (event.getEntityLiving().isPassenger() && event.getEntityLiving().getRidingEntity() instanceof EntityParachute) {
             event.setCanceled(true);
             event.setAmount(0.0f);
         }

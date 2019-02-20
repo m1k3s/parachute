@@ -28,6 +28,7 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +122,7 @@ public class ConfigHandler {
             "Sight"
     };
 
-    public static void preInit(FMLPreInitializationEvent event) {
+    public static void preInit(FMLCommonSetupEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         updateConfigFromFile();
     }

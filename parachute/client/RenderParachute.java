@@ -25,19 +25,18 @@ import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
 import java.util.Random;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.model.ModelBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderParachute extends Render<EntityParachute> {
 
     private static String curColor;
@@ -55,15 +54,15 @@ public class RenderParachute extends Render<EntityParachute> {
     public void doRender(@Nonnull EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float partialTicks) {
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x, y, z);
-        GlStateManager.rotate(90.0f - rotationYaw, 0.0f, 1.0f, 0.0f);
+        GlStateManager.translated(x, y, z);
+        GlStateManager.rotatef(90.0f - rotationYaw, 0.0f, 1.0f, 0.0f);
         bindEntityTexture(entityparachute);
 
         // scale the parachute slightly
 //        GlStateManager.scale(1.0, 1.0, 1.0);
 
         modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, SCALE);
-        if (entityparachute.getControllingPassenger() != null && Minecraft.getMinecraft().gameSettings.thirdPersonView > 0) {
+        if (entityparachute.getControllingPassenger() != null && Minecraft.getInstance().gameSettings.thirdPersonView > 0) {
             EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
             renderParachuteCords(rider);
         }
@@ -100,12 +99,12 @@ public class RenderParachute extends Render<EntityParachute> {
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
 
-        GlStateManager.scale(0.0625F, -1.0F, SCALE);
+        GlStateManager.scalef(0.0625F, -1.0F, SCALE);
 
         GlStateManager.glBegin(GL11.GL_LINES);
-        GlStateManager.color(b * 0.5F, b * 0.5F, b * 0.65F); // blue-ish
+        GlStateManager.color3f(b * 0.5F, b * 0.5F, b * 0.65F); // blue-ish
         for (int k = 0; k < 24; k++) {
-            GlStateManager.glVertex3f(x[k], y[k], z[k]);
+            GlStateManager.verertex3f(x[k], y[k], z[k]);
         }
         GlStateManager.glEnd();
 

@@ -26,18 +26,17 @@ import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class HudCompassRenderer extends Gui {
     protected static final ResourceLocation COMPASS_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
     protected static final ResourceLocation HOME_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
@@ -55,7 +54,7 @@ public class HudCompassRenderer extends Gui {
     private static final int COLOR_GREEN = 0xff00ff00;
     private static final int COLOR_YELLOW = 0xffffff00;
 
-    private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
+    private static final Minecraft MINECRAFT = Minecraft.getInstance();
     private static FontRenderer fontRenderer = MINECRAFT.fontRenderer;
 
     public static double altitude;
@@ -75,6 +74,7 @@ public class HudCompassRenderer extends Gui {
         super();
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void drawCompassHUD(RenderGameOverlayEvent.Post event) {
         if (event.isCancelable() || MINECRAFT.gameSettings.showDebugInfo || MINECRAFT.player.onGround) {
@@ -84,9 +84,8 @@ public class HudCompassRenderer extends Gui {
             return;
         }
 
-        if (MINECRAFT.inGameHasFocus && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            ScaledResolution sr = new ScaledResolution(MINECRAFT);
-            int width = sr.getScaledWidth() * sr.getScaleFactor();
+        if (MINECRAFT.isGameFocused() && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            int width = MINECRAFT.mainWindow.getScaledWidth();
 
             String position = ClientConfiguration.getHudPosition();
             if (position == null) {
@@ -111,11 +110,8 @@ public class HudCompassRenderer extends Gui {
                 if (chute == null) {
                     return;
                 }
-                // attempt to use unicode for the HUD font
-                boolean unicodeFlag = fontRenderer.getUnicodeFlag();
-                fontRenderer.setUnicodeFlag(true);
 
-                BlockPos entityPos = new BlockPos(MINECRAFT.player.posX, MINECRAFT.player.getEntityBoundingBox().minY, MINECRAFT.player.posZ);
+                BlockPos entityPos = new BlockPos(MINECRAFT.player.posX, MINECRAFT.player.getBoundingBox().minY, MINECRAFT.player.posZ);
 
                 altitude = getCurrentAltitude(entityPos);
                 double homeDir = getHomeDirection(chute.rotationYaw);
@@ -129,7 +125,7 @@ public class HudCompassRenderer extends Gui {
                 GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-                GlStateManager.scale(0.25, 0.25, 0.25);
+                GlStateManager.scaled(0.25, 0.25, 0.25);
 
                 // 1. draw the background
                 if (isNightTime()) {
@@ -169,7 +165,7 @@ public class HudCompassRenderer extends Gui {
                 count++;
 
                 // scale text up to 50%
-                GlStateManager.scale(2.0, 2.0, 2.0);
+                GlStateManager.scaled(2.0, 2.0, 2.0);
                 // scale the text coords as well
                 textX /= 2;
                 textY /= 2;
@@ -191,14 +187,12 @@ public class HudCompassRenderer extends Gui {
                 GlStateManager.disableBlend();
 
                 GlStateManager.popMatrix();
-                // reset the unicode font flag
-                fontRenderer.setUnicodeFlag(unicodeFlag);
             }
         }
     }
 
     private boolean isNightTime() {
-        long ticks = MINECRAFT.world.getWorldTime() % MAX_TICKS;
+        long ticks = MINECRAFT.world.getDayTime() % MAX_TICKS;
         return ticks > MOON_RISE && ticks < SUN_RISE;
     }
 
@@ -219,9 +213,9 @@ public class HudCompassRenderer extends Gui {
         float tx = screenX + (HudCompassRenderer.HUD_WIDTH / 2.0f);
         float ty = HudCompassRenderer.Y_PADDING + (HudCompassRenderer.HUD_HEIGHT / 2.0f);
         // translate to center and rotate
-        GlStateManager.translate(tx, ty, 0);
-        GlStateManager.rotate(degrees, 0, 0, 1);
-        GlStateManager.translate(-tx, -ty, 0);
+        GlStateManager.translated(tx, ty, 0);
+        GlStateManager.rotatef(degrees, 0, 0, 1);
+        GlStateManager.translated(-tx, -ty, 0);
 
         MINECRAFT.getTextureManager().bindTexture(texture);
         drawTexturedModalRect(screenX, HudCompassRenderer.Y_PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
@@ -272,7 +266,7 @@ public class HudCompassRenderer extends Gui {
     // only allow altitude calculations in the surface world
     // return a weirdly random number if in nether or end.
     private double getCurrentAltitude(BlockPos entityPos) {
-        if (MINECRAFT.world.provider.isSurfaceWorld()) {
+        if (MINECRAFT.world.dimension.isSurfaceWorld()) {
             BlockPos blockPos = new BlockPos(entityPos.getX(), entityPos.getY(), entityPos.getZ());
             while (MINECRAFT.world.isAirBlock(blockPos.down())) {
                 blockPos = blockPos.down();

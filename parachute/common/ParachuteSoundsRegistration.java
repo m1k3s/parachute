@@ -24,8 +24,8 @@ package com.parachute.common;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 
@@ -35,22 +35,22 @@ public class ParachuteSoundsRegistration {
 
     @SubscribeEvent
     public static void registerSoundEvents(@Nonnull RegistryEvent.Register<SoundEvent> event) {
-        SoundEvent open = new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen");
-        SoundEvent lift = new SoundEvent(new ResourceLocation(Parachute.MODID + ":lift")).setRegistryName("lift");
+        Parachute.OPENCHUTE = new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen");
+        Parachute.LIFTCHUTE = new SoundEvent(new ResourceLocation(Parachute.MODID + ":lift")).setRegistryName("lift");
 
-        event.getRegistry().registerAll(open, lift);
+        event.getRegistry().registerAll(Parachute.OPENCHUTE, Parachute.LIFTCHUTE);
 
-        Parachute.OPENCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":chuteopen");
-        Parachute.LIFTCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":lift");
+//        Parachute.OPENCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":chuteopen");
+//        Parachute.LIFTCHUTE = getRegisteredSoundEvent(Parachute.MODID + ":lift");
     }
 
-    private static SoundEvent getRegisteredSoundEvent(String id) {
-        SoundEvent soundevent = SoundEvent.REGISTRY.getObject(new ResourceLocation(id));
-        if (soundevent == null) {
-            throw new IllegalStateException("Invalid Sound requested: " + id);
-        } else {
-            return soundevent;
-        }
-    }
+//    private static SoundEvent getRegisteredSoundEvent(String id) {
+//        SoundEvent soundevent = SoundEvent.registerSounds().REGISTRY.getObject(new ResourceLocation(id));
+//        if (soundevent == null) {
+//            throw new IllegalStateException("Invalid Sound requested: " + id);
+//        } else {
+//            return soundevent;
+//        }
+//    }
 
 }

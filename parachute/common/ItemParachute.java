@@ -25,20 +25,18 @@ import com.parachute.client.ClientConfiguration;
 import com.parachute.client.ParachuteFlyingSound;
 import com.parachute.client.RenderParachute;
 import net.minecraft.client.Minecraft;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
@@ -46,13 +44,11 @@ public class ItemParachute extends Item {
 
     private static final double OFFSET = 2.5;
 
-    public ItemParachute(String itemName) {
-        super();
-        setMaxDamage(ToolMaterial.IRON.getMaxUses());
-        maxStackSize = 4;
-        setCreativeTab(CreativeTabs.TRANSPORTATION); // place in the transportation tab in creative mode
+    public ItemParachute(ItemTier itemTier, Properties props, String itemName) {
+        super(props);
+        props.defaultMaxDamage(itemTier.getMaxUses());
+        getCreativeTabs().add(ItemGroup.TRANSPORTATION);
         setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
-        setUnlocalizedName(Parachute.MODID + ":" + itemName);
     }
 
     @Nonnull
@@ -73,7 +69,8 @@ public class ItemParachute extends Item {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
 
-        if (!world.getCollisionBoxes(entityplayer, entityplayer.getEntityBoundingBox().grow(-0.1D)).isEmpty()) {
+        // check for block collisions
+        if (world.checkBlockCollision(entityplayer.getBoundingBox().grow(-0.1D))) {
             return false;
         }
 
@@ -87,7 +84,7 @@ public class ItemParachute extends Item {
             world.spawnEntity(chute);
         }
         entityplayer.startRiding(chute);
-        entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
+//        entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
 
         ItemStack itemstack = null;
         Iterable<ItemStack> heldEquipment = entityplayer.getHeldEquipment();
@@ -97,11 +94,11 @@ public class ItemParachute extends Item {
             }
         }
         if (itemstack != null) {
-            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
-            if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
+//            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
+//            if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
                 // the method getParachuteDamageAmount checks for singleUse option
                 itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
-            }
+//            }
         }
         return true;
     }
@@ -114,8 +111,8 @@ public class ItemParachute extends Item {
             if (Parachute.isServerSide(world)) { // server side
                 active = !active;
                 ConfigHandler.setAADState(active);
-                itemstack.setStackDisplayName(active ? "Parachute|AUTO" : "Parachute");
-                PacketHandler.NETWORK.sendTo(new ClientAADStateMessage(active),  (EntityPlayerMP)entityplayer);
+                itemstack.setDisplayName(new TextComponentString(active ? "Parachute|AUTO" : "Parachute"));
+//                PacketHandler.NETWORK.sendTo(new ClientAADStateMessage(active), (EntityPlayerMP)entityplayer);
             } else { // client side
                 world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
             }
@@ -123,7 +120,7 @@ public class ItemParachute extends Item {
     }
 
     private float pitch() {
-        return 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F);
+        return 1.0F / (random.nextFloat() * 0.4F + 0.8F);
     }
 
     @Override
@@ -131,10 +128,9 @@ public class ItemParachute extends Item {
         return Items.STRING == repair.getItem();
     }
 
-    @SideOnly(Side.CLIENT)
     private void playFlyingSound(EntityPlayer entityplayer) {
         if (ClientConfiguration.getUseFlyingSoud()) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(new ParachuteFlyingSound(entityplayer));
+            Minecraft.getInstance().getSoundHandler().play(new ParachuteFlyingSound(entityplayer));
         }
     }
 

@@ -26,19 +26,18 @@ import com.parachute.client.ClientConfiguration;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.*;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -61,11 +60,11 @@ public class EntityParachute extends Entity {
     private double rotationMomentum;
     private double slideMomentum;
 
-    @SideOnly(Side.CLIENT)
+//    @SideOnly(Side.CLIENT)
     private double velocityX;
-    @SideOnly(Side.CLIENT)
+//    @SideOnly(Side.CLIENT)
     private double velocityY;
-    @SideOnly(Side.CLIENT)
+//    @SideOnly(Side.CLIENT)
     private double velocityZ;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
@@ -77,7 +76,7 @@ public class EntityParachute extends Entity {
     private static boolean ascendMode;
 
     public EntityParachute(World world) {
-        super(world);
+        super(Parachute.PARACHUTE, world);
         allowTurbulence = ConfigHandler.getAllowturbulence();
         showContrails = ConfigHandler.getShowContrails();
         lavaDistance = ConfigHandler.getMinLavaDistance();
@@ -98,7 +97,7 @@ public class EntityParachute extends Entity {
         float SCALE = 1.0f / 16.0f;
         setSize(3.25f, SCALE);
         ascendMode = false;
-        updateBlocked = false;
+//        updateBlocked = false;
         setSilent(false);
     }
 
@@ -125,21 +124,21 @@ public class EntityParachute extends Entity {
         return false;
     }
 
-    @Override
-    protected void entityInit() {
-    }
+//    @Override
+//    protected void entityInit() {
+//    }
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
         if (entity != getControllingPassenger() && entity.getRidingEntity() != this) {
-            return entity.getEntityBoundingBox();
+            return entity.getBoundingBox();
         }
         return null;
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox() {
-        return getEntityBoundingBox();
+        return getBoundingBox();
     }
 
     // skydiver should hang when on the parachute and then
@@ -149,7 +148,7 @@ public class EntityParachute extends Entity {
         Entity skyDiver = getControllingPassenger();
         boolean sitting = false;
         if (skyDiver != null) {
-            BlockPos bp = new BlockPos(skyDiver.posX, skyDiver.getEntityBoundingBox().minY - 3.0, skyDiver.posZ);
+            BlockPos bp = new BlockPos(skyDiver.posX, skyDiver.getBoundingBox().minY - 3.0, skyDiver.posZ);
             sitting = (world.getBlockState(bp).getBlock() != Blocks.AIR);
         }
         return sitting;
@@ -184,10 +183,21 @@ public class EntityParachute extends Entity {
 
     @Override
     public boolean canBeCollidedWith() {
-        return !isDead;
+        return isAlive();
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+    protected void readAdditional(NBTTagCompound compound) {
+
+    }
+
+    @Override
+    protected void writeAdditional(NBTTagCompound compound) {
+
+    }
+
+//    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int inc, boolean teleport) {
         double deltaX = x - posX;
@@ -205,7 +215,8 @@ public class EntityParachute extends Entity {
         motionZ = velocityZ;
     }
 
-    @SideOnly(Side.CLIENT)
+//    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void setVelocity(double x, double y, double z) {
         motionX = x;
@@ -266,12 +277,17 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    public void onUpdate() {
+    protected void registerData() {
+
+    }
+
+    @Override
+    public void tick() {
         Entity skyDiver = getControllingPassenger();
         // the player has pressed LSHIFT or been killed,
         // this is necessary for LSHIFT to kill the parachute
         if (skyDiver == null && Parachute.isServerSide(world)) { // server side
-            setDead();
+            remove();
             return;
         }
 
@@ -283,7 +299,7 @@ public class EntityParachute extends Entity {
         prevPosY = posY;
         prevPosZ = posZ;
 
-        super.onUpdate();
+        super.tick();
 
         if (allowThermals && ascendMode && skyDiver != null) { // play the lift sound. kinda like a hot air balloon's burners effect
             skyDiver.playSound(Parachute.LIFTCHUTE, ClientConfiguration.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
@@ -298,8 +314,9 @@ public class EntityParachute extends Entity {
         move(MoverType.SELF, motionX, motionY, motionZ);
 
         // something bad happened, somehow the skydiver was killed.
-        if (Parachute.isServerSide(world) && skyDiver != null && skyDiver.isDead) { // server side
-            skyDiver.dismountRidingEntity();
+        if (Parachute.isServerSide(world) && skyDiver != null && !skyDiver.isAlive()) { // server side
+//            skyDiver.dismountRidingEntity();
+            skyDiver.stopRiding();
         }
 
         // update distance for parachute statistics
@@ -307,9 +324,9 @@ public class EntityParachute extends Entity {
             double dX = posX - prevPosX;
             double dZ = posZ - prevPosZ;
             int distance = Math.round(MathHelper.sqrt(dX * dX + dZ * dZ) * 100.0F);
-            if (skyDiver instanceof EntityPlayer) {
-                ((EntityPlayer) skyDiver).addStat(Parachute.parachuteDistance, distance);
-            }
+//            if (skyDiver instanceof EntityPlayer) {
+//                ((EntityPlayer) skyDiver).addStat(Parachute.parachuteDistance, distance);
+//            }
         }
         doBlockCollisions();
     }
@@ -318,9 +335,9 @@ public class EntityParachute extends Entity {
     // if it is raining (or snowing) or thundering.
     private boolean isBadWeather() {
         BlockPos bp = new BlockPos(posX, posY, posZ);
-        Chunk chunk = world.getChunkFromBlockCoords(bp);
-        boolean canSnow = chunk.getBiome(bp, world.provider.getBiomeProvider()).getEnableSnow();
-        boolean canRain = chunk.getBiome(bp, world.provider.getBiomeProvider()).getRainfall() > 0;
+        Chunk chunk = world.getChunk(bp);
+        boolean canSnow = chunk.getBiome(bp).doesSnowGenerate(world, bp);
+        boolean canRain = chunk.getBiome(bp).getDownfall() > 0;
         return (canRain || canSnow) && (world.isRaining() || world.isThundering());
     }
 
@@ -369,8 +386,8 @@ public class EntityParachute extends Entity {
     private boolean isHeatSourceInRange(BlockPos bp) {
         Vec3d v1 = new Vec3d(posX, posY, posZ);
         Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
-        RayTraceResult mop = world.rayTraceBlocks(v1, v2, true);
-        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
+        RayTraceResult mop = world.rayTraceBlocks(v1, v2, RayTraceFluidMode.ALWAYS);
+        if (mop != null && mop.type == RayTraceResult.Type.BLOCK) {
             BlockPos blockpos = mop.getBlockPos();
             return isHeatSource(blockpos);
         }
@@ -450,10 +467,10 @@ public class EntityParachute extends Entity {
             double z = posZ + (posZ - prevPosZ) + sinYaw * -0.45 - cosYaw * sign;
 
             if (ascending) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, x, y, z, motionX, motionY, motionZ);
+                world.spawnParticle(Particles.LARGE_SMOKE, x, y, z, motionX, motionY, motionZ);
             }
             if (!ascending && velocity > 0.01) {
-                world.spawnParticle(EnumParticleTypes.CLOUD, x, y, z, motionX, motionY, motionZ);
+                world.spawnParticle(Particles.CLOUD, x, y, z, motionX, motionY, motionZ);
             }
         }
     }
@@ -461,7 +478,7 @@ public class EntityParachute extends Entity {
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
         if (isPassenger(passenger)) {
-            float offset = (float) ((isDead ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
+            float offset = (float) ((!isAlive() ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
             Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
             passenger.setPosition(posX + vec3d.x, posY + (double) offset, posZ + vec3d.z);
             passenger.rotationYaw += deltaRotation;
@@ -476,23 +493,23 @@ public class EntityParachute extends Entity {
     // check for player colliding with blocks. dismounting if the blocks are not air, water,
     // grass/vines, or snow/snow layers
     private void checkForPlayerCollisions(Entity passenger) {
-        AxisAlignedBB bb = passenger.getEntityBoundingBox();
+        AxisAlignedBB bb = passenger.getBoundingBox();
         if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
             // if in water check dismount-in-water flag, check for solid block below water
             if (world.isMaterialInBB(bb, Material.WATER)) {
                 if (ConfigHandler.getDismountInWater()) {
-                    passenger.dismountRidingEntity();
+                    passenger.stopRiding();
                 } else {
                     BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                     bp.down(Math.round((float) bb.minY));
-                    if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                    if (!world.getBlockState(bp).isTopSolid()) {
                         return;
                     }
                 }
             } else if (world.isMaterialInBB(bb, Material.SNOW)) { // check for snow/snow layer, dismount if solid block below
                 BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                 bp.down(Math.round((float) bb.minY));
-                if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                if (!world.getBlockState(bp).isTopSolid()) {
                     return;
                 }
             } else if (world.isMaterialInBB(bb, Material.LEAVES)) { // pass through leaves
@@ -501,12 +518,12 @@ public class EntityParachute extends Entity {
                 // check for tallgrass, only dismount when reaching solid block below
                 BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                 bp.down(Math.round((float) bb.minY));
-                if (!world.getBlockState(bp).isSideSolid(world, bp, EnumFacing.UP)) {
+                if (!world.getBlockState(bp).isTopSolid()) {
                     return;
                 }
             }
             //passenger.attackEntityFrom(DamageSource.FALL, 1);
-            passenger.dismountRidingEntity();
+            passenger.stopRiding();
         }
     }
 
@@ -519,18 +536,19 @@ public class EntityParachute extends Entity {
         entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
     }
 
-    @SideOnly(Side.CLIENT)
+//    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void applyOrientationToEntity(Entity entityToUpdate) {
         applyYawToEntity(entityToUpdate);
     }
 
-    @Override
-    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {
-    }
+//    @Override
+//    public void writeEntityToNBT(@Nonnull NBTTagCompound nbt) {
+//    }
 
-    @Override
-    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {
-    }
+//    @Override
+//    public void readEntityFromNBT(@Nonnull NBTTagCompound nbt) {
+//    }
 
 }

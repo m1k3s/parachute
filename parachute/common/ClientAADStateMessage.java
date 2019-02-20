@@ -22,38 +22,32 @@
 package com.parachute.common;
 
 import com.parachute.client.ClientConfiguration;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class ClientAADStateMessage implements IMessage {
-    private boolean aadState;
+import java.util.function.Supplier;
+
+public class ClientAADStateMessage {
+    private final boolean aadState;
 
     @SuppressWarnings("unused")
-    public ClientAADStateMessage() {}
-
-    public ClientAADStateMessage(boolean aadState) {
-        this.aadState = aadState;
+    public ClientAADStateMessage(boolean value) {
+        aadState = value;
     }
 
-    @Override
-    public void fromBytes(ByteBuf byteBuf) {
-        aadState = byteBuf.readBoolean();
+    public static ClientAADStateMessage decode(PacketBuffer buffer) {
+        return new ClientAADStateMessage(buffer.readBoolean());
     }
 
-    @Override
-    public void toBytes(ByteBuf byteBuf) {
-        byteBuf.writeBoolean(aadState);
+    public static void encode(ClientAADStateMessage msg, PacketBuffer buffer) {
+        buffer.writeBoolean(msg.aadState);
     }
 
-    public static class Handler implements IMessageHandler<ClientAADStateMessage, IMessage> {
-        @Override
-        public IMessage onMessage(final ClientAADStateMessage msg, final MessageContext ctx) {
-            Minecraft client = Minecraft.getMinecraft();
-            client.addScheduledTask(() -> ClientConfiguration.setAADState(msg.aadState));
-            return null;
+    public static class Handler {
+        public static void handle(final ClientAADStateMessage pkt, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                ClientConfiguration.setAADState(pkt.aadState);
+            });
         }
     }
 }

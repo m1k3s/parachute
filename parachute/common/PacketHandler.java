@@ -21,17 +21,25 @@
  */
 package com.parachute.common;
 
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class PacketHandler {
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-    public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Parachute.MODID);
+public final class PacketHandler {
+
     private static final int PACKET_ID = 0;
 
+    private static final String PROTOCOL_VERSION = Integer.toString(1);
+    private static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
+            .named(new ResourceLocation(Parachute.MODID, "main_channel"))
+            .clientAcceptedVersions(PROTOCOL_VERSION::equals)
+            .serverAcceptedVersions(PROTOCOL_VERSION::equals)
+            .networkProtocolVersion(() -> PROTOCOL_VERSION)
+            .simpleChannel();
+
     public static void init() {
-        NETWORK.registerMessage(ClientConfigMessage.Handler.class, ClientConfigMessage.class, PACKET_ID, Side.CLIENT);
-        NETWORK.registerMessage(ClientAADStateMessage.Handler.class, ClientAADStateMessage.class, PACKET_ID + 1, Side.CLIENT);
+        HANDLER.registerMessage(PACKET_ID, ClientConfigMessage.Handler.class, ClientConfigMessage::encode, ClientConfigMessage::decode, ClientConfigMessage.Handler::handle);
+        HANDLER.registerMessage(PACKET_ID + 1, ClientAADStateMessage.Handler.class, ClientAADStateMessage::encode, ClientAADStateMessage::decode, ClientAADStateMessage.Handler::handle);
     }
 }
