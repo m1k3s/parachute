@@ -39,7 +39,7 @@ public final class PacketHandler {
             .simpleChannel();
 
     public static void init() {
-        HANDLER.registerMessage(PACKET_ID, ClientConfigMessage.Handler.class, ClientConfigMessage::encode, ClientConfigMessage::decode, ClientConfigMessage.Handler::handle);
-        HANDLER.registerMessage(PACKET_ID + 1, ClientAADStateMessage.Handler.class, ClientAADStateMessage::encode, ClientAADStateMessage::decode, ClientAADStateMessage.Handler::handle);
+//        HANDLER.registerMessage(PACKET_ID, ClientConfigMessage.Handler.class, ClientConfigMessage::encode, ClientConfigMessage::decode, ClientConfigMessage.Handler::handle);
+//        HANDLER.registerMessage(PACKET_ID + 1, ClientAADStateMessage.Handler.class, ClientAADStateMessage::encode, ClientAADStateMessage::decode, ClientAADStateMessage.Handler::handle);
     }
 }

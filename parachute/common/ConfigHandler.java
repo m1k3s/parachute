@@ -23,11 +23,7 @@ package com.parachute.common;
 
 import com.parachute.client.ClientConfiguration;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.ArrayList;
@@ -35,7 +31,7 @@ import java.util.List;
 
 public class ConfigHandler {
 
-    private static Configuration config = null;
+   /* private static Configuration config = null;
 
     private static boolean singleUse;
     private static int heightLimit;
@@ -275,9 +271,9 @@ public class ConfigHandler {
                 Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
             }
         }
-    }
+    }*/
 
-    public static Configuration getConfig() {
+    /*public static Configuration getConfig() {
         return config;
     }
 
@@ -377,5 +373,5 @@ public class ConfigHandler {
 
     public static boolean getUseFlyingSound() { return useFlyingSound; }
 
-//    public static void setUseFlyingSound(boolean value) { useFlyingSound = value; }
+//    public static void setUseFlyingSound(boolean value) { useFlyingSound = value; }*/
 }

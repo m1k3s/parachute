@@ -24,7 +24,6 @@ package com.parachute.common;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.function.Predicate;

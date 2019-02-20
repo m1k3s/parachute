@@ -21,17 +21,17 @@
  */
 package com.parachute.client;
 
-import com.parachute.common.ConfigHandler;
-import com.parachute.common.Parachute;
-import net.minecraft.client.gui.GuiScreen;
+//import com.parachute.common.ConfigHandler;
+//import com.parachute.common.Parachute;
+//import net.minecraft.client.gui.GuiScreen;
 
-public class ParachuteConfigGUI extends GuiConfig {
-
-    public ParachuteConfigGUI(GuiScreen parentScreen) {
-        super(parentScreen,
-              new ConfigElement(ConfigHandler.getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
-              Parachute.MODID, false, false, GuiConfig.getAbridgedConfigPath(ConfigHandler.getConfig().toString()));
-
-    }
-
-}
+//public class ParachuteConfigGUI extends GuiConfig {
+//
+//    public ParachuteConfigGUI(GuiScreen parentScreen) {
+//        super(parentScreen,
+//              new ConfigElement(ConfigHandler.getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
+//              Parachute.MODID, false, false, GuiConfig.getAbridgedConfigPath(ConfigHandler.getConfig().toString()));
+//
+//    }
+//
+//}

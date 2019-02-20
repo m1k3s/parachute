@@ -33,6 +33,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 
@@ -101,12 +102,15 @@ public class RenderParachute extends Render<EntityParachute> {
 
         GlStateManager.scalef(0.0625F, -1.0F, SCALE);
 
-        GlStateManager.glBegin(GL11.GL_LINES);
+//        GlStateManager.glBegin(GL11.GL_LINES);
+        GL11.glBegin(GL11.GL_LINES);
         GlStateManager.color3f(b * 0.5F, b * 0.5F, b * 0.65F); // blue-ish
         for (int k = 0; k < 24; k++) {
-            GlStateManager.verertex3f(x[k], y[k], z[k]);
+//            GlStateManager.verertex3f(x[k], y[k], z[k]);
+            GL11.glVertex3f(x[k], y[k], z[k]);
         }
-        GlStateManager.glEnd();
+        GL11.glEnd();
+//        GlStateManager.glEnd();
 
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();

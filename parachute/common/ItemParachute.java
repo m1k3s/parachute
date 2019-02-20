@@ -26,7 +26,6 @@ import com.parachute.client.ParachuteFlyingSound;
 import com.parachute.client.RenderParachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemGroup;
@@ -97,7 +96,7 @@ public class ItemParachute extends Item {
 //            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
 //            if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
                 // the method getParachuteDamageAmount checks for singleUse option
-                itemstack.damageItem(ConfigHandler.getParachuteDamageAmount(itemstack), entityplayer);
+                itemstack.damageItem(1 /*ConfigHandler.getParachuteDamageAmount(itemstack)*/, entityplayer);
 //            }
         }
         return true;
@@ -107,10 +106,10 @@ public class ItemParachute extends Item {
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (entityplayer != null) {
-            boolean active = ConfigHandler.getAADState();
+            boolean active = true;//ConfigHandler.getAADState();
             if (Parachute.isServerSide(world)) { // server side
                 active = !active;
-                ConfigHandler.setAADState(active);
+                //ConfigHandler.setAADState(active);
                 itemstack.setDisplayName(new TextComponentString(active ? "Parachute|AUTO" : "Parachute"));
 //                PacketHandler.NETWORK.sendTo(new ClientAADStateMessage(active), (EntityPlayerMP)entityplayer);
             } else { // client side

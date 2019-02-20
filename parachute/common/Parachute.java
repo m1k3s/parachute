@@ -91,7 +91,7 @@ public class Parachute {
 
     private void setup(final FMLCommonSetupEvent event) {
         // some preinit code
-        ConfigHandler.preInit(event);
+//        ConfigHandler.preInit(event);
         int entityID = 1;
 //        EntityRegistry.registerModEntity(new ResourceLocation(Parachute.MODID, PARACHUTE_NAME),
 //                EntityParachute.class, PARACHUTE_NAME, entityID, Parachute.instance, 80, 5, true);
@@ -109,7 +109,7 @@ public class Parachute {
 //        ModelLoader.setCustomModelResourceLocation(Parachute.ITEM_PARACHUTE_PACK, 0, packResource);
         ModKeyBinding.registerKeyBinding();
 
-        MinecraftForge.EVENT_BUS.register(new ConfigHandler.ConfigEventHandler());
+//        MinecraftForge.EVENT_BUS.register(new ConfigHandler.ConfigEventHandler());
         MinecraftForge.EVENT_BUS.register(new ParachuteInputEvent());
         MinecraftForge.EVENT_BUS.register(new HudCompassRenderer());
     }

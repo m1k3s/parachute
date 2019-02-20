@@ -26,7 +26,6 @@ import com.parachute.client.ClientConfiguration;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Particles;
@@ -60,11 +59,11 @@ public class EntityParachute extends Entity {
     private double rotationMomentum;
     private double slideMomentum;
 
-//    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private double velocityX;
-//    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private double velocityY;
-//    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private double velocityZ;
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
@@ -77,19 +76,19 @@ public class EntityParachute extends Entity {
 
     public EntityParachute(World world) {
         super(Parachute.PARACHUTE, world);
-        allowTurbulence = ConfigHandler.getAllowturbulence();
-        showContrails = ConfigHandler.getShowContrails();
-        lavaDistance = ConfigHandler.getMinLavaDistance();
-        allowThermals = ConfigHandler.getAllowThermals();
-        maxAltitude = ConfigHandler.getMaxAltitude();
-        lavaThermals = ConfigHandler.getAllowLavaThermals();
-        dismountInWater = ConfigHandler.getDismountInWater();
-        maxLavaDistance = ConfigHandler.getMaxLavaDistance();
+        allowTurbulence = true;//ConfigHandler.getAllowturbulence();
+        showContrails = true;//ConfigHandler.getShowContrails();
+        lavaDistance = 5;//ConfigHandler.getMinLavaDistance();
+        allowThermals = true;//ConfigHandler.getAllowThermals();
+        maxAltitude = 256;//ConfigHandler.getMaxAltitude();
+        lavaThermals = true;//ConfigHandler.getAllowLavaThermals();
+        dismountInWater = false;//ConfigHandler.getDismountInWater();
+        maxLavaDistance = 48.0;//ConfigHandler.getMaxLavaDistance();
 
-        forwardMomentum = ConfigHandler.getForwardMomentum();
-        backMomentum = ConfigHandler.getBackMomentum();
-        rotationMomentum = ConfigHandler.getRotationMomentum();
-        slideMomentum = ConfigHandler.getSlideMomentum();
+        forwardMomentum = 0.015;//ConfigHandler.getForwardMomentum();
+        backMomentum = 0.008;//ConfigHandler.getBackMomentum();
+        rotationMomentum = 0.2;//ConfigHandler.getRotationMomentum();
+        slideMomentum = 0.005;//ConfigHandler.getSlideMomentum();
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -171,10 +170,10 @@ public class EntityParachute extends Entity {
         return list.isEmpty() ? null : list.get(0);
     }
 
-    @Override
-    public boolean shouldDismountInWater(Entity pilot) {
-        return dismountInWater;
-    }
+//    @Override
+//    public boolean shouldDismountInWater(Entity pilot) {
+//        return dismountInWater;
+//    }
 
     @Override
     public double getMountedYOffset() {
@@ -232,7 +231,7 @@ public class EntityParachute extends Entity {
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && Parachute.isClientSide(world)) {
             double motionFactor = 0.0f;
-            String steeringControl = ConfigHandler.getSteeringControl();
+            String steeringControl = "WASD";//ConfigHandler.getSteeringControl();
 
             if (input.forwardKeyDown) {
                 motionFactor += forwardMomentum;
@@ -270,7 +269,8 @@ public class EntityParachute extends Entity {
             motionX += MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor;
             motionZ += MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor;
 
-            if (((ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
+//            if (((ConfigHandler.getWeatherAffectsDrift() && isBadWeather()) || allowTurbulence) && rand.nextBoolean()) {
+            if ((isBadWeather() || allowTurbulence) && rand.nextBoolean()) {
                 applyTurbulence(world.isThundering());
             }
         }
@@ -347,7 +347,7 @@ public class EntityParachute extends Entity {
     private double currentDescentRate() {
         double descentRate = DRIFT; // defaults to DRIFT
 
-        if (ConfigHandler.getWeatherAffectsDrift()) {
+//        if (ConfigHandler.getWeatherAffectsDrift()) {
             if (world.isRaining()) {  // rain makes you fall faster
                 descentRate += 0.002;
             }
@@ -355,7 +355,7 @@ public class EntityParachute extends Entity {
             if (world.isThundering()) {  // more rain really makes you fall faster
                 descentRate += 0.004;
             }
-        }
+//        }
 
         if (lavaThermals) {
             descentRate = doHeatSourceThermals();
@@ -497,15 +497,15 @@ public class EntityParachute extends Entity {
         if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
             // if in water check dismount-in-water flag, check for solid block below water
             if (world.isMaterialInBB(bb, Material.WATER)) {
-                if (ConfigHandler.getDismountInWater()) {
-                    passenger.stopRiding();
-                } else {
+//                if (ConfigHandler.getDismountInWater()) {
+//                    passenger.stopRiding();
+//                } else {
                     BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                     bp.down(Math.round((float) bb.minY));
                     if (!world.getBlockState(bp).isTopSolid()) {
                         return;
                     }
-                }
+//                }
             } else if (world.isMaterialInBB(bb, Material.SNOW)) { // check for snow/snow layer, dismount if solid block below
                 BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                 bp.down(Math.round((float) bb.minY));
