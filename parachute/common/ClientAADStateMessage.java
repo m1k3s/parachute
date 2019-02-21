@@ -28,15 +28,16 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class ClientAADStateMessage {
-    private final boolean aadState;
+    private boolean aadState;
 
     @SuppressWarnings("unused")
     public ClientAADStateMessage(boolean value) {
         aadState = value;
     }
 
-    public static ClientAADStateMessage decode(PacketBuffer buffer) {
-        return new ClientAADStateMessage(buffer.readBoolean());
+//    public static Function<PacketBuffer, ClientAADStateMessage> decode = (buffer, msg) -> msg.aadState = buffer.readBoolean();
+    public static void decode(PacketBuffer buffer, ClientAADStateMessage msg) {
+        msg.aadState =  buffer.readBoolean();
     }
 
     public static void encode(ClientAADStateMessage msg, PacketBuffer buffer) {

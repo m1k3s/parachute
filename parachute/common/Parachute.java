@@ -81,15 +81,15 @@ public class Parachute {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public Parachute() {
+        LOGGER.info("calling Parachute::CTOR");
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
-        // Register ourselves for server, registry and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        LOGGER.info("calling Parachute::setup");
         // some preinit code
 //        ConfigHandler.preInit(event);
         int entityID = 1;
@@ -98,10 +98,13 @@ public class Parachute {
 
 //        GameRegistry.findRegistry(Item.class).registerAll(ITEM_PARACHUTE_PACK, PARACHUTE_ITEM);
         PacketHandler.init();
-//        clientProxy.preInit();
+        MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
+        LOGGER.info("calling Parachute::doClientStuff");
         ModelResourceLocation parachuteResource = new ModelResourceLocation(Parachute.MODID + ":" + Parachute.PARACHUTE_NAME);
         ModelResourceLocation packResource = new ModelResourceLocation(Parachute.MODID + ":" + Parachute.PACK_NAME);
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
@@ -120,11 +123,14 @@ public class Parachute {
     public static class RegistryEvents {
         @SubscribeEvent
         public void onEntityRegistry(final RegistryEvent.Register<EntityType<?>> event) {
+            LOGGER.info("calling Parachute::RegistryEvents::onEntityRegistry");
             PARACHUTE = EntityType.Builder.create(EntityParachute.class, EntityParachute::new).tracker(80, 5, true).build(MODID);
             event.getRegistry().register(PARACHUTE);
         }
+
         @SubscribeEvent
         public  void onItemRegistry(final RegistryEvent<Item> event) {
+            LOGGER.info("calling Parachute::RegistryEvents::onItemRegistry");
             Item.Properties props = new Item.Properties();
             props.maxStackSize(4);
             PARACHUTE_ITEM = new ItemParachute(ItemTier.IRON, props, Parachute.PARACHUTE_NAME);

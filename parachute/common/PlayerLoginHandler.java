@@ -38,14 +38,14 @@ public class PlayerLoginHandler {
         PlayerManager.getInstance().Players.add(new PlayerInfo(event.getPlayer().getDisplayName().getString())); // add player name
 
         // send the client controlled config variables
-        String color = ConfigHandler.getChuteColor();
-        double burnVolume = ConfigHandler.getBurnVolume();
-        String hudPosition = ConfigHandler.getHudPosition();
-        String steeringControl = ConfigHandler.getSteeringControl();
-        boolean aadState = ConfigHandler.getAADState();
-        boolean useFlyingSound = ConfigHandler.getUseFlyingSound();
-        PacketHandler.NETWORK.sendTo(new ClientConfigMessage(color, burnVolume, hudPosition, steeringControl, aadState, useFlyingSound),
-                (EntityPlayerMP)event.getPlayer());
+        String color = "black";//ConfigHandler.getChuteColor();
+        double burnVolume = 0.5;//ConfigHandler.getBurnVolume();
+        String hudPosition = "right";//ConfigHandler.getHudPosition();
+        String steeringControl = "wasd";//ConfigHandler.getSteeringControl();
+        boolean aadState = true;//ConfigHandler.getAADState();
+        boolean useFlyingSound = true;//ConfigHandler.getUseFlyingSound();
+//        PacketHandler.HANDLER.sendTo(new ClientConfigMessage(color, burnVolume, hudPosition, steeringControl, aadState, useFlyingSound),
+//                (EntityPlayerMP)event.getPlayer());
     }
 
     @SubscribeEvent

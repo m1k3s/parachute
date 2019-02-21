@@ -108,7 +108,7 @@ public class ItemParachute extends Item {
         if (entityplayer != null) {
             boolean active = true;//ConfigHandler.getAADState();
             if (Parachute.isServerSide(world)) { // server side
-                active = !active;
+//                active = !active;
                 //ConfigHandler.setAADState(active);
                 itemstack.setDisplayName(new TextComponentString(active ? "Parachute|AUTO" : "Parachute"));
 //                PacketHandler.NETWORK.sendTo(new ClientAADStateMessage(active), (EntityPlayerMP)entityplayer);

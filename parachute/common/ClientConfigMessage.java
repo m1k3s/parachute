@@ -24,66 +24,60 @@ package com.parachute.common;
 import com.parachute.client.ClientConfiguration;
 import com.parachute.client.RenderParachute;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.function.Supplier;
 
-public class ClientConfigMessage { //} implements IMessage {
-    private static String chuteColor;
-    private static double burnVolume;
-    private static String hudPosition;
-    private static String steeringControl;
-    private static boolean aadState;
-    private static boolean useFlyingSound;
+public class ClientConfigMessage extends SimpleChannel.MessageBuilder<ClientConfigMessage> {
+    private String chuteColor;
+    private double burnVolume;
+    private String hudPosition;
+    private String steeringControl;
+    private boolean aadState;
+    private boolean useFlyingSound;
 
     @SuppressWarnings("unused")
     public ClientConfigMessage() {}
 
     public ClientConfigMessage(String chuteColor, double burnVolume, String hudPosition, String steeringControl, boolean aadState, boolean useFlyingSound) {
-        ClientConfigMessage.chuteColor = chuteColor;
-        ClientConfigMessage.burnVolume = burnVolume;
-        ClientConfigMessage.hudPosition = hudPosition;
-        ClientConfigMessage.steeringControl = steeringControl;
-        ClientConfigMessage.aadState = aadState;
-        ClientConfigMessage.useFlyingSound = useFlyingSound;
+        this.chuteColor = chuteColor;
+        this.burnVolume = burnVolume;
+        this.hudPosition = hudPosition;
+        this.steeringControl = steeringControl;
+        this.aadState = aadState;
+        this.useFlyingSound = useFlyingSound;
     }
 
-    public static void decode (ClientConfigMessage pkt, PacketBuffer buffer) {  // server ==> client
-        chuteColor = buffer.readUTF8String(buffer);
-        burnVolume = buffer.readDouble();
-        hudPosition = ByteBufUtils.readUTF8String(buffer);
-        steeringControl = ByteBufUtils.readUTF8String(buffer);
-        aadState = buffer.readBoolean();
-        useFlyingSound = buffer.readBoolean();
+    public static void decode(PacketBuffer buffer, ClientConfigMessage msg) {  // server ==> client
+//        chuteColor = buffer.readUTF8String(buffer);
+        msg.burnVolume = buffer.readDouble();
+//        hudPosition = ByteBufUtils.readUTF8String(buffer);
+//        steeringControl = ByteBufUtils.readUTF8String(buffer);
+        msg.aadState = buffer.readBoolean();
+        msg.useFlyingSound = buffer.readBoolean();
     }
 
-    public static void encode(PacketBuffer buffer) { // client ==> server - not used
-        ByteBufUtils.writeUTF8String(buffer, chuteColor);
-        buffer.writeDouble(burnVolume);
-        ByteBufUtils.writeUTF8String(buffer, hudPosition);
-        ByteBufUtils.writeUTF8String(buffer, steeringControl);
-        buffer.writeBoolean(aadState);
-        buffer.writeBoolean(useFlyingSound);
+    public static void encode(ClientConfigMessage msg, PacketBuffer buffer) { // client ==> server - not used
+//        ByteBufUtils.writeUTF8String(buffer, chuteColor);
+        buffer.writeDouble(msg.burnVolume);
+//        ByteBufUtils.writeUTF8String(buffer, hudPosition);
+//        ByteBufUtils.writeUTF8String(buffer, steeringControl);
+        buffer.writeBoolean(msg.aadState);
+        buffer.writeBoolean(msg.useFlyingSound);
     }
 
     public static class Handler {
         public static void handle(final ClientConfigMessage pkt, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
-
-//        @Override
-//        public IMessage onMessage(final ClientConfigMessage msg, final MessageContext ctx) {
-//            Minecraft client = Minecraft.getMinecraft();
-//            client.addScheduledTask(() -> {
-                ClientConfiguration.setChuteColor(msg.chuteColor);
-                ClientConfiguration.setBurnVolume(msg.burnVolume);
-                ClientConfiguration.setHudPosition(msg.hudPosition);
-                ClientConfiguration.setSteeringControl(msg.steeringControl);
-                ClientConfiguration.setAADState(msg.aadState);
-                ClientConfiguration.setUseFlyingSound(msg.useFlyingSound);
-                RenderParachute.setParachuteColor(msg.chuteColor);
+                ClientConfiguration.setChuteColor(pkt.chuteColor);
+                ClientConfiguration.setBurnVolume(pkt.burnVolume);
+                ClientConfiguration.setHudPosition(pkt.hudPosition);
+                ClientConfiguration.setSteeringControl(pkt.steeringControl);
+                ClientConfiguration.setAADState(pkt.aadState);
+                ClientConfiguration.setUseFlyingSound(pkt.useFlyingSound);
+                RenderParachute.setParachuteColor(pkt.chuteColor);
             });
-//            return null;
         }
     }
 }

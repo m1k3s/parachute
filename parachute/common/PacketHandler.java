@@ -31,7 +31,7 @@ public final class PacketHandler {
     private static final int PACKET_ID = 0;
 
     private static final String PROTOCOL_VERSION = Integer.toString(1);
-    private static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
+    public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
             .named(new ResourceLocation(Parachute.MODID, "main_channel"))
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)
