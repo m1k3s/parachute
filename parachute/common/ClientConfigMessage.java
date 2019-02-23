@@ -49,20 +49,15 @@ public class ClientConfigMessage extends SimpleChannel.MessageBuilder<ClientConf
         this.useFlyingSound = useFlyingSound;
     }
 
-    public static void decode(PacketBuffer buffer, ClientConfigMessage msg) {  // server ==> client
-//        chuteColor = buffer.readUTF8String(buffer);
-        msg.burnVolume = buffer.readDouble();
-//        hudPosition = ByteBufUtils.readUTF8String(buffer);
-//        steeringControl = ByteBufUtils.readUTF8String(buffer);
-        msg.aadState = buffer.readBoolean();
-        msg.useFlyingSound = buffer.readBoolean();
+    public static ClientConfigMessage decode(PacketBuffer buffer) {
+        return new ClientConfigMessage(buffer.readString(8), buffer.readDouble(), buffer.readString(8), buffer.readString(8), buffer.readBoolean(), buffer.readBoolean());
     }
 
-    public static void encode(ClientConfigMessage msg, PacketBuffer buffer) { // client ==> server - not used
-//        ByteBufUtils.writeUTF8String(buffer, chuteColor);
+    public static void encode(ClientConfigMessage msg, PacketBuffer buffer) {
+        buffer.writeString(msg.chuteColor);
         buffer.writeDouble(msg.burnVolume);
-//        ByteBufUtils.writeUTF8String(buffer, hudPosition);
-//        ByteBufUtils.writeUTF8String(buffer, steeringControl);
+        buffer.writeString(msg.hudPosition);
+        buffer.writeString(msg.steeringControl);
         buffer.writeBoolean(msg.aadState);
         buffer.writeBoolean(msg.useFlyingSound);
     }
@@ -78,6 +73,7 @@ public class ClientConfigMessage extends SimpleChannel.MessageBuilder<ClientConf
                 ClientConfiguration.setUseFlyingSound(pkt.useFlyingSound);
                 RenderParachute.setParachuteColor(pkt.chuteColor);
             });
+            ctx.get().setPacketHandled(true);
         }
     }
 }

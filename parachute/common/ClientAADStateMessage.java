@@ -35,9 +35,8 @@ public class ClientAADStateMessage {
         aadState = value;
     }
 
-//    public static Function<PacketBuffer, ClientAADStateMessage> decode = (buffer, msg) -> msg.aadState = buffer.readBoolean();
-    public static void decode(PacketBuffer buffer, ClientAADStateMessage msg) {
-        msg.aadState =  buffer.readBoolean();
+    public static ClientAADStateMessage decode(PacketBuffer buffer) {
+        return new ClientAADStateMessage(buffer.readBoolean());
     }
 
     public static void encode(ClientAADStateMessage msg, PacketBuffer buffer) {
@@ -47,6 +46,7 @@ public class ClientAADStateMessage {
     public static class Handler {
         public static void handle(final ClientAADStateMessage pkt, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> ClientConfiguration.setAADState(pkt.aadState));
+            ctx.get().setPacketHandled(true);
         }
     }
 }

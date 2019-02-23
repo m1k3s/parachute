@@ -21,15 +21,87 @@
  */
 package com.parachute.common;
 
-import com.parachute.client.ClientConfiguration;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ConfigHandler {
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    public static final General GENERAL = new General(BUILDER);
+    public static final ForgeConfigSpec spec = BUILDER.build();
+
+    public static class General {
+        public final ForgeConfigSpec.ConfigValue<Boolean> modEnabled;
+        public final ForgeConfigSpec.ConfigValue<Boolean> singleUse;
+        public final ForgeConfigSpec.ConfigValue<Integer> heightLimit;
+        public final ForgeConfigSpec.ConfigValue<Boolean> thermals;
+        public final ForgeConfigSpec.ConfigValue<Boolean> weatherAffectsDrift;
+        public final ForgeConfigSpec.ConfigValue<Boolean> lavaThermals;
+        public final ForgeConfigSpec.ConfigValue<Double> minLavaDistance;
+        public final ForgeConfigSpec.ConfigValue<Double> maxLavaDistance;
+        public final ForgeConfigSpec.ConfigValue<Boolean> constantTurbulence;
+        public final ForgeConfigSpec.ConfigValue<Boolean> showContrails;
+
+        public General(ForgeConfigSpec.Builder builder) {
+            builder.push("General");
+            modEnabled = builder
+                    .comment("Enables/Disables the whole Mod [false/true|default:true]")
+                    .translation("enable.parachutemod.config")
+                    .define("enableMod", true);
+
+            singleUse = builder
+                    .comment("set to true for parachute single use [false/true|default:false]")
+                    .translation("singleUse.parachutemod.config")
+                    .define("singleUse", false);
+
+            heightLimit = builder
+                    .comment("0 (zero) disables altitude limiting [0-255|default:255]")
+                    .translation("heightLimit.parachutemod.config")
+                    .defineInRange("heightLimit", 255, 0, 255);
+
+            thermals = builder
+                    .comment("enable thermal rise by pressing the space bar [false/true|default:true]")
+                    .translation("thermals.parachutemod.config")
+                    .define("thermals", true);
+
+            weatherAffectsDrift = builder
+                    .comment("set to false if you don't want the drift rate to be affected by bad weather [false/true|default:true]")
+                    .translation("weatherAffectsDrift.parachutemod.config")
+                    .define("weatherAffectsDrift", true);
+
+            lavaThermals = builder
+                    .comment("use lava heat to get thermals to rise up, optionally disables space bar thermals [false/true|default:false]")
+                    .translation("thermals.parachutemod.config")
+                    .define("thermals", false);
+
+            minLavaDistance = builder
+                    .comment("minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava! [2.0-10.0|default:3.0]")
+                    .translation("minLavaDistance.parachutemod.config")
+                    .defineInRange("minLavaDistance", 3.0, 2.0, 10.0);
+
+            maxLavaDistance = builder
+                    .comment("maximum distance to rise from lava thermals [10.0-100.0|default:48.0]")
+                    .translation("maxLavaDistance.parachutemod.config")
+                    .defineInRange("maxLavaDistance", 48.0, 10.0, 100.0);
+
+            constantTurbulence = builder
+                    .comment("set to true to always feel the turbulent world of Minecraft [false/true|default:false]")
+                    .translation("constantTurbulence.parachutemod.config")
+                    .define("constantTurbulence", false);
+
+            showContrails = builder
+                    .comment("set to true to show contrails from parachute [false/true|default:true]")
+                    .translation("showContrails.parachutemod.config")
+                    .define("showContrails", true);
+
+            builder.pop();
+        }
+
+        public boolean getShowContrails() {
+            return showContrails.get();
+        }
+    }
+
+//public class ConfigHandler {
 
    /* private static Configuration config = null;
 
@@ -260,20 +332,20 @@ public class ConfigHandler {
         @SubscribeEvent
         public void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(Parachute.MODID)) {
-                ConfigHandler.updateConfigFromGUI();
+//                ConfigHandler.updateConfigFromGUI();
                 // update the client side options
-                ClientConfiguration.setChuteColor(chuteColor);
-                ClientConfiguration.setBurnVolume(burnVolume);
-                ClientConfiguration.setHudPosition(hudPosition);
-                ClientConfiguration.setSteeringControl(steeringControl);
-                ClientConfiguration.setAADState(aadActive);
-                ClientConfiguration.setUseFlyingSound(useFlyingSound);
-                Parachute.instance.info(String.format("Configuration changes have been updated for the %s client", Parachute.NAME));
+//                ClientConfiguration.setChuteColor(chuteColor);
+//                ClientConfiguration.setBurnVolume(burnVolume);
+//                ClientConfiguration.setHudPosition(hudPosition);
+//                ClientConfiguration.setSteeringControl(steeringControl);
+//                ClientConfiguration.setAADState(aadActive);
+//                ClientConfiguration.setUseFlyingSound(useFlyingSound);
+                Parachute.getLogger().info(String.format("Configuration changes have been updated for the %s client", Parachute.MODID));
             }
         }
-    }*/
+    }
 
-    /*public static Configuration getConfig() {
+    public static Configuration getConfig() {
         return config;
     }
 
@@ -321,7 +393,7 @@ public class ConfigHandler {
         return constantTurbulence;
     }
 
-    public static boolean getShowContrails() {
+    public boolean getShowContrails() {ss
         return showContrails;
     }
 

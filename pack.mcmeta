@@ -1,6 +1,7 @@
 {
     "pack": {
+    	"description": "Parachute Mod Resources",
         "pack_format": 4,
-        "description": "Parachute Mod"
+        "_comment": "Parachute Mod for Minecraft"
     }
 }

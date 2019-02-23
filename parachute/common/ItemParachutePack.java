@@ -51,7 +51,7 @@ public class ItemParachutePack extends ItemArmor {
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (stack.getItem() instanceof ItemParachutePack) {
             if (Parachute.isServerSide(worldIn) && entityIn instanceof EntityPlayer) {
-                if (Parachute.ARMOR_TYPE.getIndex() != itemSlot) {
+                if (EntityEquipmentSlot.CHEST.getIndex() != itemSlot) {
                     ((EntityPlayer) entityIn).inventory.deleteStack(stack);
                 }
             }

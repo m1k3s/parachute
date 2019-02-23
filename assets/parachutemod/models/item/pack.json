@@ -1,7 +1,7 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "parachutemod:items/pack"
+        "layer0": "parachutemod:item/pack"
     }
 }
 

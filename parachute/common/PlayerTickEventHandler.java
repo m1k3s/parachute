@@ -52,15 +52,15 @@ public class PlayerTickEventHandler {
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(EntityPlayer player) {
         if (player != null) {
-            ItemStack armor = player.getItemStackFromSlot(Parachute.ARMOR_TYPE);
+            ItemStack armor = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
             ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(EnumHand.OFF_HAND);
             boolean deployed = player.getRidingEntity() instanceof EntityParachute;
 
             if (!deployed && armor.getItem() instanceof ItemParachutePack && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemParachute))) {
-                player.inventory.armorInventory.set(Parachute.ARMOR_TYPE.getIndex(), ItemStack.EMPTY);
+                player.inventory.armorInventory.set(EntityEquipmentSlot.CHEST.getIndex(), ItemStack.EMPTY);
             } else if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
-                player.inventory.armorInventory.set(Parachute.ARMOR_TYPE.getIndex(), new ItemStack(Parachute.ITEM_PARACHUTE_PACK));
+                player.inventory.armorInventory.set(EntityEquipmentSlot.CHEST.getIndex(), new ItemStack(Parachute.ITEM_PARACHUTE_PACK));
             }
         }
     }

@@ -378,7 +378,7 @@ public class EntityParachute extends Entity {
     }
 
     // the following three methods detect lava|fire below the player
-    // at up to 'maxLavaDistance' blocks.
+    // at up to 'maxLavaDistance' block.
     private boolean isHeatSource(BlockPos bp) {
         return world.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
     }
@@ -453,7 +453,7 @@ public class EntityParachute extends Entity {
     // generate condensation trails at the trailing edge
     // of the parachute. Yes, I know that most parachutes
     // don't generate contrails (no engines), but most worlds
-    // aren't made of blocks with cubic cows either. If you
+    // aren't made of block with cubic cows either. If you
     // like, you can think of the trails as chemtrails.
     private void generateContrails(boolean ascending) {
         double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
@@ -490,7 +490,7 @@ public class EntityParachute extends Entity {
         }
     }
 
-    // check for player colliding with blocks. dismounting if the blocks are not air, water,
+    // check for player colliding with block. dismounting if the block are not air, water,
     // grass/vines, or snow/snow layers
     private void checkForPlayerCollisions(Entity passenger) {
         AxisAlignedBB bb = passenger.getBoundingBox();

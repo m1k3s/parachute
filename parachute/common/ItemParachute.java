@@ -26,6 +26,7 @@ import com.parachute.client.ParachuteFlyingSound;
 import com.parachute.client.RenderParachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemGroup;
@@ -36,6 +37,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.network.NetworkDirection;
 
 import javax.annotation.Nonnull;
 
@@ -111,7 +113,7 @@ public class ItemParachute extends Item {
 //                active = !active;
                 //ConfigHandler.setAADState(active);
                 itemstack.setDisplayName(new TextComponentString(active ? "Parachute|AUTO" : "Parachute"));
-//                PacketHandler.NETWORK.sendTo(new ClientAADStateMessage(active), (EntityPlayerMP)entityplayer);
+                PacketHandler.HANDLER.sendTo(new ClientAADStateMessage(active), ((EntityPlayerMP)entityplayer).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
             } else { // client side
                 world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
             }

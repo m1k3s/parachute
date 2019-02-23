@@ -27,10 +27,8 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public final class PacketHandler {
-
-    private static final int PACKET_ID = 0;
-
     private static final String PROTOCOL_VERSION = Integer.toString(1);
+
     public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
             .named(new ResourceLocation(Parachute.MODID, "main_channel"))
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
@@ -38,8 +36,9 @@ public final class PacketHandler {
             .networkProtocolVersion(() -> PROTOCOL_VERSION)
             .simpleChannel();
 
-    public static void init() {
-//        HANDLER.registerMessage(PACKET_ID, ClientConfigMessage.Handler.class, ClientConfigMessage::encode, ClientConfigMessage::decode, ClientConfigMessage.Handler::handle);
-//        HANDLER.registerMessage(PACKET_ID + 1, ClientAADStateMessage.Handler.class, ClientAADStateMessage::encode, ClientAADStateMessage::decode, ClientAADStateMessage.Handler::handle);
+    public static void register() {
+        int packet_id = 0;
+        HANDLER.registerMessage(packet_id++, ClientConfigMessage.class, ClientConfigMessage::encode, ClientConfigMessage::decode, ClientConfigMessage.Handler::handle);
+        HANDLER.registerMessage(packet_id, ClientAADStateMessage.class, ClientAADStateMessage::encode, ClientAADStateMessage::decode, ClientAADStateMessage.Handler::handle);
     }
 }
