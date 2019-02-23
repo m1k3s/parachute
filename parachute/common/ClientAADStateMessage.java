@@ -21,7 +21,7 @@
 
 package com.parachute.common;
 
-import com.parachute.client.ClientConfiguration;
+//import com.parachute.client.ClientConfiguration;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -45,7 +45,7 @@ public class ClientAADStateMessage {
 
     public static class Handler {
         public static void handle(final ClientAADStateMessage pkt, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> ClientConfiguration.setAADState(pkt.aadState));
+//            ctx.get().enqueueWork(() -> ClientConfiguration.setAADState(pkt.aadState));
             ctx.get().setPacketHandled(true);
         }
     }

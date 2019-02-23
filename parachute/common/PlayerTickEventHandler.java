@@ -21,7 +21,6 @@
  */
 package com.parachute.common;
 
-import com.parachute.client.ClientConfiguration;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.EnumHand;
@@ -60,7 +59,7 @@ public class PlayerTickEventHandler {
             if (!deployed && armor.getItem() instanceof ItemParachutePack && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemParachute))) {
                 player.inventory.armorInventory.set(EntityEquipmentSlot.CHEST.getIndex(), ItemStack.EMPTY);
             } else if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
-                player.inventory.armorInventory.set(EntityEquipmentSlot.CHEST.getIndex(), new ItemStack(Parachute.ITEM_PARACHUTE_PACK));
+                player.inventory.armorInventory.set(EntityEquipmentSlot.CHEST.getIndex(), new ItemStack(Parachute.RegistryEvents.ITEM_PARACHUTE_PACK));
             }
         }
     }
@@ -85,14 +84,14 @@ public class PlayerTickEventHandler {
     // altitude, if autoAltitude has been reached, deploy. If the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
-        boolean aadState;
+//        boolean aadState = true;
 //        if (Parachute.isClientSide(player.world)) { // client
-            aadState = ClientConfiguration.getAADState();
+//            aadState = ClientConfiguration.getAADState();
 //        } else {
-//            aadState = ConfigHandler.getAADState();
+//            aadState = ConfigHandler.General.getAADState();
 //        }
 
-        if (aadState && !(player.getRidingEntity() instanceof EntityParachute)) {
+        if (/*aadState && */!(player.getRidingEntity() instanceof EntityParachute)) {
             ItemStack heldItem = null;
             Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {

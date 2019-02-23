@@ -21,7 +21,7 @@
  */
 package com.parachute.common;
 
-import com.parachute.client.ClientConfiguration;
+//import com.parachute.client.ClientConfiguration;
 import com.parachute.client.ParachuteFlyingSound;
 import com.parachute.client.RenderParachute;
 import net.minecraft.client.Minecraft;
@@ -31,7 +31,6 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTier;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -44,12 +43,13 @@ import javax.annotation.Nonnull;
 public class ItemParachute extends Item {
 
     private static final double OFFSET = 2.5;
+    private static boolean aadState = true; //ConfigHandler.General.getAADState();
 
-    public ItemParachute(ItemTier itemTier, Properties props, String itemName) {
+    public ItemParachute(Properties props) {
         super(props);
-        props.defaultMaxDamage(itemTier.getMaxUses());
-        getCreativeTabs().add(ItemGroup.TRANSPORTATION);
-        setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
+//        props.defaultMaxDamage(ItemTier.IRON.getMaxUses());
+//        props.maxStackSize(4);
+        props.group(ItemGroup.TRANSPORTATION);
     }
 
     @Nonnull
@@ -76,10 +76,10 @@ public class ItemParachute extends Item {
         }
 
         float volume = 1.0F;
-        chute.playSound(Parachute.OPENCHUTE, volume, pitch());
+        chute.playSound(Parachute.RegistryEvents.OPENCHUTE, volume, pitch());
 
         if (Parachute.isClientSide(world)) { // client side
-            RenderParachute.setParachuteColor(ClientConfiguration.getChuteColor());
+            RenderParachute.setParachuteColor("black");//ClientConfiguration.getChuteColor());
             playFlyingSound(entityplayer);
         } else { // server side
             world.spawnEntity(chute);
@@ -108,12 +108,12 @@ public class ItemParachute extends Item {
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (entityplayer != null) {
-            boolean active = true;//ConfigHandler.getAADState();
+//            boolean active = ConfigHandler.General.getAADState();
             if (Parachute.isServerSide(world)) { // server side
-//                active = !active;
+                aadState = !aadState;
                 //ConfigHandler.setAADState(active);
-                itemstack.setDisplayName(new TextComponentString(active ? "Parachute|AUTO" : "Parachute"));
-                PacketHandler.HANDLER.sendTo(new ClientAADStateMessage(active), ((EntityPlayerMP)entityplayer).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+                itemstack.setDisplayName(new TextComponentString(aadState ? "Parachute|AUTO" : "Parachute"));
+                PacketHandler.HANDLER.sendTo(new ClientAADStateMessage(aadState), ((EntityPlayerMP)entityplayer).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
             } else { // client side
                 world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
             }
@@ -130,9 +130,9 @@ public class ItemParachute extends Item {
     }
 
     private void playFlyingSound(EntityPlayer entityplayer) {
-        if (ClientConfiguration.getUseFlyingSoud()) {
+//        if (ClientConfiguration.getUseFlyingSoud()) {
             Minecraft.getInstance().getSoundHandler().play(new ParachuteFlyingSound(entityplayer));
-        }
+//        }
     }
 
 }

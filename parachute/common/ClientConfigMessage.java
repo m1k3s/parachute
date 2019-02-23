@@ -21,7 +21,7 @@
 
 package com.parachute.common;
 
-import com.parachute.client.ClientConfiguration;
+//import com.parachute.client.ClientConfiguration;
 import com.parachute.client.RenderParachute;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -65,12 +65,12 @@ public class ClientConfigMessage extends SimpleChannel.MessageBuilder<ClientConf
     public static class Handler {
         public static void handle(final ClientConfigMessage pkt, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
-                ClientConfiguration.setChuteColor(pkt.chuteColor);
-                ClientConfiguration.setBurnVolume(pkt.burnVolume);
-                ClientConfiguration.setHudPosition(pkt.hudPosition);
-                ClientConfiguration.setSteeringControl(pkt.steeringControl);
-                ClientConfiguration.setAADState(pkt.aadState);
-                ClientConfiguration.setUseFlyingSound(pkt.useFlyingSound);
+//                ClientConfiguration.setChuteColor(pkt.chuteColor);
+//                ClientConfiguration.setBurnVolume(pkt.burnVolume);
+//                ClientConfiguration.setHudPosition(pkt.hudPosition);
+//                ClientConfiguration.setSteeringControl(pkt.steeringControl);
+//                ClientConfiguration.setAADState(pkt.aadState);
+//                ClientConfiguration.setUseFlyingSound(pkt.useFlyingSound);
                 RenderParachute.setParachuteColor(pkt.chuteColor);
             });
             ctx.get().setPacketHandled(true);

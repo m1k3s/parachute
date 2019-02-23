@@ -22,12 +22,11 @@
 
 package com.parachute.common;
 
-import com.parachute.client.ClientConfiguration;
+//import com.parachute.client.ClientConfiguration;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -75,14 +74,15 @@ public class EntityParachute extends Entity {
     private static boolean ascendMode;
 
     public EntityParachute(World world) {
-        super(Parachute.PARACHUTE, world);
+        super(Parachute.RegistryEvents.PARACHUTE, world);
+
         allowTurbulence = true;//ConfigHandler.getAllowturbulence();
-        showContrails = true;//ConfigHandler.getShowContrails();
+        showContrails = true;//ConfigHandler.General.getShowContrails();
         lavaDistance = 5;//ConfigHandler.getMinLavaDistance();
-        allowThermals = true;//ConfigHandler.getAllowThermals();
+        allowThermals = true; //ConfigHandler.General.getAllowThermals();
         maxAltitude = 256;//ConfigHandler.getMaxAltitude();
         lavaThermals = true;//ConfigHandler.getAllowLavaThermals();
-        dismountInWater = false;//ConfigHandler.getDismountInWater();
+        dismountInWater = false; //ConfigHandler.General.getDismountInWater();
         maxLavaDistance = 48.0;//ConfigHandler.getMaxLavaDistance();
 
         forwardMomentum = 0.015;//ConfigHandler.getForwardMomentum();
@@ -96,7 +96,6 @@ public class EntityParachute extends Entity {
         float SCALE = 1.0f / 16.0f;
         setSize(3.25f, SCALE);
         ascendMode = false;
-//        updateBlocked = false;
         setSilent(false);
     }
 
@@ -123,10 +122,6 @@ public class EntityParachute extends Entity {
         return false;
     }
 
-//    @Override
-//    protected void entityInit() {
-//    }
-
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
         if (entity != getControllingPassenger() && entity.getRidingEntity() != this) {
@@ -148,7 +143,7 @@ public class EntityParachute extends Entity {
         boolean sitting = false;
         if (skyDiver != null) {
             BlockPos bp = new BlockPos(skyDiver.posX, skyDiver.getBoundingBox().minY - 3.0, skyDiver.posZ);
-            sitting = (world.getBlockState(bp).getBlock() != Blocks.AIR);
+            sitting = !world.getBlockState(bp).isAir(world, bp);
         }
         return sitting;
     }
@@ -170,10 +165,10 @@ public class EntityParachute extends Entity {
         return list.isEmpty() ? null : list.get(0);
     }
 
-//    @Override
-//    public boolean shouldDismountInWater(Entity pilot) {
-//        return dismountInWater;
-//    }
+    @Override
+    public boolean canBeRiddenInWater(Entity pilot) {
+        return dismountInWater;
+    }
 
     @Override
     public double getMountedYOffset() {
@@ -186,12 +181,12 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    protected void readAdditional(NBTTagCompound compound) {
+    protected void readAdditional(@Nonnull NBTTagCompound compound) {
 
     }
 
     @Override
-    protected void writeAdditional(NBTTagCompound compound) {
+    protected void writeAdditional(@Nonnull NBTTagCompound compound) {
 
     }
 
@@ -231,7 +226,7 @@ public class EntityParachute extends Entity {
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && Parachute.isClientSide(world)) {
             double motionFactor = 0.0f;
-            String steeringControl = "WASD";//ConfigHandler.getSteeringControl();
+            boolean WASDSteering = true;//ConfigHandler.General.getSteeringControl();
 
             if (input.forwardKeyDown) {
                 motionFactor += forwardMomentum;
@@ -239,7 +234,7 @@ public class EntityParachute extends Entity {
             if (input.backKeyDown) {
                 motionFactor -= backMomentum;
             }
-            if (steeringControl.equals("WASD")) {
+            if (WASDSteering) {
                 if (input.leftKeyDown) {
                     deltaRotation += -(rotationMomentum);
                 }
@@ -256,7 +251,7 @@ public class EntityParachute extends Entity {
             ascendMode = input.jump;
 
             motionY -= currentDescentRate();
-            if (steeringControl.equals("WASD")) {
+            if (WASDSteering) {
                 rotationYaw += deltaRotation;
             } else {
                 Entity skyDiver = getControllingPassenger();
@@ -302,7 +297,7 @@ public class EntityParachute extends Entity {
         super.tick();
 
         if (allowThermals && ascendMode && skyDiver != null) { // play the lift sound. kinda like a hot air balloon's burners effect
-            skyDiver.playSound(Parachute.LIFTCHUTE, ClientConfiguration.getBurnVolume(), 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+            skyDiver.playSound(Parachute.RegistryEvents.LIFTCHUTE, /*ClientConfiguration.getBurnVolume()*/0.5f, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
         }
 
         // apply momentum/decay
@@ -320,14 +315,14 @@ public class EntityParachute extends Entity {
         }
 
         // update distance for parachute statistics
-        if (skyDiver != null) {
-            double dX = posX - prevPosX;
-            double dZ = posZ - prevPosZ;
-            int distance = Math.round(MathHelper.sqrt(dX * dX + dZ * dZ) * 100.0F);
+//        if (skyDiver != null) {
+//            double dX = posX - prevPosX;
+//            double dZ = posZ - prevPosZ;
+//            int distance = Math.round(MathHelper.sqrt(dX * dX + dZ * dZ) * 100.0F);
 //            if (skyDiver instanceof EntityPlayer) {
 //                ((EntityPlayer) skyDiver).addStat(Parachute.parachuteDistance, distance);
 //            }
-        }
+//        }
         doBlockCollisions();
     }
 

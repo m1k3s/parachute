@@ -1,7 +1,7 @@
 /*
  * Parachute.java
  *
- * Copyright (c) 2017 Michael Sheppard
+ * Copyright (c) 2019 Michael Sheppard
  *
  *  =====GPL=============================================================
  * $program is free software: you can redistribute it and/or modify
@@ -27,10 +27,8 @@ import com.parachute.client.ParachuteInputEvent;
 import com.parachute.client.RenderParachute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.ItemTier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -60,13 +58,6 @@ public class Parachute {
     public static final String PARACHUTE_NAME = "parachute";
     public static final String PACK_NAME = "pack";
 
-    public static SoundEvent OPENCHUTE;
-    public static SoundEvent LIFTCHUTE;
-
-    public static EntityType<EntityParachute> PARACHUTE;
-    public static Item PARACHUTE_ITEM;
-    public static Item ITEM_PARACHUTE_PACK;
-
 //    public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
 //    public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
 //    public static StatBasic parachuteDistance = new StatBasic("stat.parachuteDistance",
@@ -85,8 +76,7 @@ public class Parachute {
     @SuppressWarnings("unused")
     private void setup(final FMLCommonSetupEvent event) {
         LOGGER.info("calling Parachute::setup");
-//        ConfigHandler.preInit(event);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.spec);
+//        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.spec);
         PacketHandler.register();
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
@@ -105,7 +95,7 @@ public class Parachute {
 
     @SuppressWarnings("unused")
     private void enqueueIMC(final InterModEnqueueEvent event) {
-        InterModComms.sendTo("forge", Parachute.MODID, () -> {
+        InterModComms.sendTo("forge", "Parachute Mod calling forge", () -> {
             LOGGER.info("Parachute Mod calling forge");
             return Parachute.MODID;
         });
@@ -119,24 +109,36 @@ public class Parachute {
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD event bus
     @SuppressWarnings("unchecked, unused")
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
+        public static EntityType<EntityParachute> PARACHUTE;
+        public static Item PARACHUTE_ITEM;
+        public static Item ITEM_PARACHUTE_PACK;
+        public static SoundEvent OPENCHUTE;
+        public static SoundEvent LIFTCHUTE;
+
         @SubscribeEvent
-        public void onEntityRegistry(final RegistryEvent.Register<EntityType<?>> event) {
+        public static void onEntityRegistry(final RegistryEvent.Register<EntityType<?>> event) {
             LOGGER.info("calling Parachute::RegistryEvents::onEntityRegistry");
             PARACHUTE = EntityType.Builder.create(EntityParachute.class, EntityParachute::new).tracker(80, 5, true).build(MODID);
-            PARACHUTE.setRegistryName(Parachute.PARACHUTE_NAME);
+            PARACHUTE.setRegistryName(new ResourceLocation(Parachute.MODID, Parachute.PARACHUTE_NAME));
             event.getRegistry().register(PARACHUTE);
         }
 
         @SubscribeEvent
-        public  void onItemRegistry(final RegistryEvent<Item> event) {
+        public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
             LOGGER.info("calling Parachute::RegistryEvents::onItemRegistry");
-            Item.Properties props = new Item.Properties();
-            props.maxStackSize(4);
-            PARACHUTE_ITEM = new ItemParachute(ItemTier.IRON, props, Parachute.PARACHUTE_NAME);
-            props.maxStackSize(0);
-            ITEM_PARACHUTE_PACK = new ItemParachutePack(ArmorMaterial.LEATHER, EntityEquipmentSlot.CHEST, props, Parachute.PACK_NAME);
+            PARACHUTE_ITEM = new ItemParachute(new Item.Properties().maxStackSize(4)).setRegistryName(new ResourceLocation(Parachute.MODID, Parachute.PARACHUTE_NAME));
+            ITEM_PARACHUTE_PACK = new ItemParachutePack(new Item.Properties().maxStackSize(1)).setRegistryName(new ResourceLocation(Parachute.MODID, Parachute.PACK_NAME));
+            event.getRegistry().registerAll(PARACHUTE_ITEM, ITEM_PARACHUTE_PACK);
+        }
+
+        @SubscribeEvent
+        public static void onSoundRegistry(final RegistryEvent.Register<SoundEvent> event) {
+            LOGGER.info("Calling Parachute::RegistryEvents::onSoundRegistry");
+            OPENCHUTE = new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen");
+            LIFTCHUTE = new SoundEvent(new ResourceLocation(Parachute.MODID + ":lift")).setRegistryName("lift");
+            event.getRegistry().registerAll(OPENCHUTE, LIFTCHUTE);
         }
     }
 

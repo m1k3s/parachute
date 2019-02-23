@@ -55,7 +55,7 @@ public class HudCompassRenderer extends Gui {
     private static final int COLOR_YELLOW = 0xffffff00;
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
-    private static FontRenderer fontRenderer = MINECRAFT.fontRenderer;
+    private static final FontRenderer fontRenderer = MINECRAFT.fontRenderer;
 
     public static double altitude;
     private static boolean isVisible = true;
@@ -87,20 +87,20 @@ public class HudCompassRenderer extends Gui {
         if (MINECRAFT.isGameFocused() && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             int width = MINECRAFT.mainWindow.getScaledWidth();
 
-            String position = ClientConfiguration.getHudPosition();
-            if (position == null) {
-                return;
-            }
+            String position = "right";//ClientConfiguration.getHudPosition();
+//            if (position == null) {
+//                return;
+//            }
 
             // attempt to relocate HUD position bsed on effects icons in upper right corner
-            if (position.equals("right") && isRenderingEffectsIcons()) {
+            if (/*position.equals("right") && */isRenderingEffectsIcons()) {
                 Y_PADDING = 120;
             } else {
                 Y_PADDING = 20;
             }
 
             // initialize hudX based on user selected position, 'left', 'center', or 'right'
-            int hudX = position.equals("left") ? X_PADDING : position.equals("center") ? (width - HUD_WIDTH) / 2 : (width - HUD_WIDTH) - X_PADDING;
+            int hudX = /*position.equals("left") ? X_PADDING : position.equals("center") ? (width - HUD_WIDTH) / 2 : */(width - HUD_WIDTH) - X_PADDING;
 
             int textX = hudX + (HUD_WIDTH / 2);
             int textY = Y_PADDING + (HUD_HEIGHT / 2);
@@ -117,7 +117,7 @@ public class HudCompassRenderer extends Gui {
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 double compassHeading = calcCompassHeading(chute.rotationYaw);
-                boolean aadActive = ClientConfiguration.getAADState();
+                boolean aadActive = true;//ClientConfiguration.getAADState();
 
                 GlStateManager.pushMatrix();
 
@@ -181,7 +181,7 @@ public class HudCompassRenderer extends Gui {
                 drawCenteredString(fontRenderer, dist, textX, textY + 2, COLOR_GREEN);
 
                 // 4. AAD active indicator
-                drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, aadActive ? COLOR_GREEN : COLOR_RED);
+                drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, /*aadActive ? */COLOR_GREEN/* : COLOR_RED*/);
 
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();

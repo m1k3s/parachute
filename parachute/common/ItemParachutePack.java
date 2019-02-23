@@ -27,7 +27,6 @@ import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 
@@ -35,11 +34,10 @@ import net.minecraft.world.World;
 // on the player when the parachute item is selected in the hot bar.
 public class ItemParachutePack extends ItemArmor {
 
-    public ItemParachutePack(ArmorMaterial armorMaterial, EntityEquipmentSlot entityEquipmentSlot, Properties props, String itemName) {
-        super(armorMaterial, entityEquipmentSlot, props);
-        props.defaultMaxDamage(armorMaterial.getDurability(armorType));
-        props.maxStackSize(1);
-        setRegistryName(new ResourceLocation(Parachute.MODID, itemName));
+    public ItemParachutePack(Properties props) {
+        super(ArmorMaterial.LEATHER, EntityEquipmentSlot.CHEST, props);
+//        props.defaultMaxDamage(ArmorMaterial.LEATHER.getDurability(armorType));
+//        props.maxStackSize(0);
 //        setUnlocalizedName(Parachute.MODID + ":" + itemName);
     }
 
@@ -60,7 +58,7 @@ public class ItemParachutePack extends ItemArmor {
 
     @Override
     public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (itemstack.getItem() == Parachute.ITEM_PARACHUTE_PACK) {
+        if (itemstack.getItem() == Parachute.RegistryEvents.ITEM_PARACHUTE_PACK) {
             return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
         }
         return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";

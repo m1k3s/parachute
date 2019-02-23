@@ -22,84 +22,113 @@
 package com.parachute.common;
 
 
-import net.minecraftforge.common.ForgeConfigSpec;
-
-public class ConfigHandler {
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    public static final General GENERAL = new General(BUILDER);
-    public static final ForgeConfigSpec spec = BUILDER.build();
-
-    public static class General {
-        public final ForgeConfigSpec.ConfigValue<Boolean> modEnabled;
-        public final ForgeConfigSpec.ConfigValue<Boolean> singleUse;
-        public final ForgeConfigSpec.ConfigValue<Integer> heightLimit;
-        public final ForgeConfigSpec.ConfigValue<Boolean> thermals;
-        public final ForgeConfigSpec.ConfigValue<Boolean> weatherAffectsDrift;
-        public final ForgeConfigSpec.ConfigValue<Boolean> lavaThermals;
-        public final ForgeConfigSpec.ConfigValue<Double> minLavaDistance;
-        public final ForgeConfigSpec.ConfigValue<Double> maxLavaDistance;
-        public final ForgeConfigSpec.ConfigValue<Boolean> constantTurbulence;
-        public final ForgeConfigSpec.ConfigValue<Boolean> showContrails;
-
-        public General(ForgeConfigSpec.Builder builder) {
-            builder.push("General");
-            modEnabled = builder
-                    .comment("Enables/Disables the whole Mod [false/true|default:true]")
-                    .translation("enable.parachutemod.config")
-                    .define("enableMod", true);
-
-            singleUse = builder
-                    .comment("set to true for parachute single use [false/true|default:false]")
-                    .translation("singleUse.parachutemod.config")
-                    .define("singleUse", false);
-
-            heightLimit = builder
-                    .comment("0 (zero) disables altitude limiting [0-255|default:255]")
-                    .translation("heightLimit.parachutemod.config")
-                    .defineInRange("heightLimit", 255, 0, 255);
-
-            thermals = builder
-                    .comment("enable thermal rise by pressing the space bar [false/true|default:true]")
-                    .translation("thermals.parachutemod.config")
-                    .define("thermals", true);
-
-            weatherAffectsDrift = builder
-                    .comment("set to false if you don't want the drift rate to be affected by bad weather [false/true|default:true]")
-                    .translation("weatherAffectsDrift.parachutemod.config")
-                    .define("weatherAffectsDrift", true);
-
-            lavaThermals = builder
-                    .comment("use lava heat to get thermals to rise up, optionally disables space bar thermals [false/true|default:false]")
-                    .translation("thermals.parachutemod.config")
-                    .define("thermals", false);
-
-            minLavaDistance = builder
-                    .comment("minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava! [2.0-10.0|default:3.0]")
-                    .translation("minLavaDistance.parachutemod.config")
-                    .defineInRange("minLavaDistance", 3.0, 2.0, 10.0);
-
-            maxLavaDistance = builder
-                    .comment("maximum distance to rise from lava thermals [10.0-100.0|default:48.0]")
-                    .translation("maxLavaDistance.parachutemod.config")
-                    .defineInRange("maxLavaDistance", 48.0, 10.0, 100.0);
-
-            constantTurbulence = builder
-                    .comment("set to true to always feel the turbulent world of Minecraft [false/true|default:false]")
-                    .translation("constantTurbulence.parachutemod.config")
-                    .define("constantTurbulence", false);
-
-            showContrails = builder
-                    .comment("set to true to show contrails from parachute [false/true|default:true]")
-                    .translation("showContrails.parachutemod.config")
-                    .define("showContrails", true);
-
-            builder.pop();
-        }
-
-        public boolean getShowContrails() {
-            return showContrails.get();
-        }
-    }
+//import net.minecraftforge.common.ForgeConfigSpec;
+//
+//
+//public class ConfigHandler {
+//    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+////    public static final General GENERAL = new General(BUILDER);
+//    public static final ForgeConfigSpec spec = BUILDER.build();
+//
+//    public static class General {
+//        public static ForgeConfigSpec.BooleanValue modEnabled;
+//        public static ForgeConfigSpec.BooleanValue singleUse;
+//        public static ForgeConfigSpec.IntValue heightLimit;
+//        public static ForgeConfigSpec.BooleanValue thermals;
+//        public static ForgeConfigSpec.BooleanValue weatherAffectsDrift;
+//        public static ForgeConfigSpec.BooleanValue lavaThermals;
+//        public static ForgeConfigSpec.DoubleValue minLavaDistance;
+//        public static ForgeConfigSpec.DoubleValue maxLavaDistance;
+//        public static ForgeConfigSpec.BooleanValue constantTurbulence;
+//        public static ForgeConfigSpec.BooleanValue showContrails;
+//        public static ForgeConfigSpec.BooleanValue WASDControl;
+//        public static ForgeConfigSpec.BooleanValue aadActive;
+//        public static ForgeConfigSpec.BooleanValue dismountInWater;
+//
+//        public General(ForgeConfigSpec.Builder builder) {
+//            Parachute.getLogger().info("Loading ConfigHandler");
+//            builder.push("General");
+//
+//            modEnabled = builder
+//                    .comment("Enables/Disables the whole Mod [false/true|default:true]")
+//                    .translation("enable.parachutemod.config")
+//                    .define("enableMod", true);
+//
+//            singleUse = builder
+//                    .comment("set to true for parachute single use [false/true|default:false]")
+//                    .translation("singleUse.parachutemod.config")
+//                    .define("singleUse", false);
+//
+//            heightLimit = builder
+//                    .comment("0 (zero) disables altitude limiting [0-255|default:255]")
+//                    .translation("heightLimit.parachutemod.config")
+//                    .defineInRange("heightLimit", 255, 0, 255);
+//
+//            thermals = builder
+//                    .comment("enable thermal rise by pressing the space bar [false/true|default:true]")
+//                    .translation("thermals.parachutemod.config")
+//                    .define("thermals", true);
+//
+//            weatherAffectsDrift = builder
+//                    .comment("set to false if you don't want the drift rate to be affected by bad weather [false/true|default:true]")
+//                    .translation("weatherAffectsDrift.parachutemod.config")
+//                    .define("weatherAffectsDrift", true);
+//
+//            lavaThermals = builder
+//                    .comment("use lava heat to get thermals to rise up, optionally disables space bar thermals [false/true|default:false]")
+//                    .translation("thermals.parachutemod.config")
+//                    .define("thermals", false);
+//
+//            minLavaDistance = builder
+//                    .comment("minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava! [2.0-10.0|default:3.0]")
+//                    .translation("minLavaDistance.parachutemod.config")
+//                    .defineInRange("minLavaDistance", 3.0, 2.0, 10.0);
+//
+//            maxLavaDistance = builder
+//                    .comment("maximum distance to rise from lava thermals [10.0-100.0|default:48.0]")
+//                    .translation("maxLavaDistance.parachutemod.config")
+//                    .defineInRange("maxLavaDistance", 48.0, 10.0, 100.0);
+//
+//            constantTurbulence = builder
+//                    .comment("set to true to always feel the turbulent world of Minecraft [false/true|default:false]")
+//                    .translation("constantTurbulence.parachutemod.config")
+//                    .define("constantTurbulence", false);
+//
+//            showContrails = builder
+//                    .comment("set to true to show contrails from parachute [false/true|default:true]")
+//                    .translation("showContrails.parachutemod.config")
+//                    .define("showContrails", true);
+//
+//            WASDControl = builder
+//                    .comment("if true steering is 'WASD', otherwise steering is by sight")
+//                    .translation("steeringControl.parachutemod.config")
+//                    .define("WASDControl", true);
+//
+//            aadActive = builder
+//                    .comment("if true auto activate is on, otherwise off")
+//                    .translation("aadActive.parachutemod.config")
+//                    .define("aadActive", false);
+//
+//            dismountInWater = builder
+//                    .comment("if true, dismount in water")
+//                    .translation("dismountInWater.parachutemod.config")
+//                    .define("dismountInWater", false);
+//
+//            builder.pop();
+//        }
+//
+//        public static boolean getShowContrails() {
+//            return showContrails.get();
+//        }
+//        public static boolean getSteeringControl() {
+//            return WASDControl.get();
+//        }
+//        public static boolean getAADState() { return aadActive.get(); }
+//        public static boolean getDismountInWater() { return dismountInWater.get(); }
+//        public static boolean getAllowThermals() {
+//            return thermals.get();
+//        }
+//    }
 
 //public class ConfigHandler {
 
@@ -446,4 +475,4 @@ public class ConfigHandler {
     public static boolean getUseFlyingSound() { return useFlyingSound; }
 
 //    public static void setUseFlyingSound(boolean value) { useFlyingSound = value; }*/
-}
+//}

@@ -121,14 +121,14 @@ public class RenderParachute extends Render<EntityParachute> {
     public static void setParachuteColor(String color) {
         if (color.equalsIgnoreCase("random")) {
             if (rand.nextBoolean()) {
-                parachuteTexture = new ResourceLocation("textures/block/wool_colored_" + getRandomColor() + ".png");
+                parachuteTexture = new ResourceLocation("textures/block/" + getRandomColor() + "_wool" + ".png");
             } else {
                 parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/block/" + getRandomCustomColor() + ".png");
             }
         } else if (color.toLowerCase().startsWith("custom")) {
             parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/block/" + color + ".png");
         } else {
-            parachuteTexture = new ResourceLocation("textures/block/wool_colored_" + color + ".png");
+            parachuteTexture = new ResourceLocation("textures/block/" + color + "_wool" + ".png");
         }
         curColor = color;
     }
@@ -137,14 +137,14 @@ public class RenderParachute extends Render<EntityParachute> {
         if (parachuteTexture == null) {
             if (color.equalsIgnoreCase("random")) {
                 if (rand.nextBoolean()) {
-                    parachuteTexture = new ResourceLocation("textures/block/wool_colored_" + getRandomColor() + ".png");
+                    parachuteTexture = new ResourceLocation("textures/block/" + getRandomColor() + "_wool" + ".png");
                 } else {
                     parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/block/" + getRandomCustomColor() + ".png");
                 }
             } else if (color.toLowerCase().startsWith("custom")) {
                 parachuteTexture = new ResourceLocation(Parachute.MODID + ":textures/block/" + color + ".png");
             } else {
-                parachuteTexture = new ResourceLocation("textures/block/wool_colored_" + color + ".png");
+                parachuteTexture = new ResourceLocation("textures/block/" + color + "_wool" + ".png");
             }
             curColor = color;
         }

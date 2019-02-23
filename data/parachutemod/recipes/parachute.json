@@ -11,18 +11,16 @@
   ],
   "key": {
     "#": {
-      "item": "#ANY_WOOL"
+      "tag": "minecraft:wool"
     },
     "X": {
       "item": "minecraft:string"
     },
     "L": {
-      "item": "#ANY_LEATHER"
+      "item": "minecraft:leather"
     }
   },
   "result": {
-    "item": "parachutemod:parachute",
-    "data": 0,
-    "count": 1
+    "item": "parachutemod:parachute"
   }
 }
