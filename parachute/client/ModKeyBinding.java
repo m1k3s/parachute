@@ -1,7 +1,7 @@
 /*
  * ModKeyBinding.java
  *
- *  Copyright (c) 2018 Michael Sheppard
+ *  Copyright (c) 2019 Michael Sheppard
  *
  * =====GPL=============================================================
  * This program is free software: you can redistribute it and/or modify

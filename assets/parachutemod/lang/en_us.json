@@ -20,5 +20,5 @@
     "key.category.parachutemod.general": "Parachute Keys",
     "key.parachutemod.toggle_hud": "Toggle HUD Visibility",
 
-    "parachutemod.config.singleUse": "singleUse",
+    "config.parachutemod.singleUse": "singleUse"
 }

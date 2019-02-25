@@ -1,10 +1,10 @@
 /*
  * ConfigHandler.java
  *
- * Copyright (c) 2017 Michael Sheppard
+ *  Copyright (c) 2019 Michael Sheppard
  *
- *  =====GPL=============================================================
- * $program is free software: you can redistribute it and/or modify
+ * =====GPL=============================================================
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses.
  * =====================================================================
- *
  */
 package com.parachute.common;
 
@@ -53,52 +52,52 @@ public class ConfigHandler {
 
             singleUse = builder
                     .comment("set to true for parachute single use")
-                    .translation("parachutemod.config.singleUse")
+                    .translation("config.parachutemod.singleUse")
                     .define("singleUse", false);
 
             heightLimit = builder
                     .comment("0 (zero) disables altitude limiting")
-                    .translation("parachutemod.config.heightLimit")
+                    .translation("config.parachutemod.heightLimit")
                     .defineInRange("heightLimit", 255, 0, 255);
 
             thermals = builder
                     .comment("enable thermal rise by pressing the space bar")
-                    .translation("parachutemod.config.thermals")
+                    .translation("config.parachutemod.thermals")
                     .define("thermals", true);
 
             weatherAffectsDrift = builder
                     .comment("set to false if you don't want the drift rate to be affected by bad weather")
-                    .translation("parachutemod.config.weatherAffectsDrift")
+                    .translation("config.parachutemod.weatherAffectsDrift")
                     .define("weatherAffectsDrift", true);
 
             lavaThermals = builder
                     .comment("use lava heat to get thermals to rise up, optionally disables space bar thermals")
-                    .translation("parachutemod.config.thermals")
+                    .translation("config.parachutemod.thermals")
                     .define("thermals", false);
 
             minLavaDistance = builder
                     .comment("minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava!")
-                    .translation("parachutemod.config.minLavaDistance")
+                    .translation("config.parachutemod.minLavaDistance")
                     .defineInRange("minLavaDistance", 3.0, 2.0, 10.0);
 
             maxLavaDistance = builder
                     .comment("maximum distance to rise from lava thermals")
-                    .translation("parachutemod.config.maxLavaDistance")
+                    .translation("config.parachutemod.maxLavaDistance")
                     .defineInRange("maxLavaDistance", 48.0, 10.0, 100.0);
 
             constantTurbulence = builder
                     .comment("set to true to always feel the turbulent world of Minecraft")
-                    .translation("parachutemod.config.constantTurbulence")
+                    .translation("config.parachutemod.constantTurbulence")
                     .define("constantTurbulence", false);
 
             showContrails = builder
                     .comment("set to true to show contrails from parachute")
-                    .translation("parachutemod.config.showContrails")
+                    .translation("config.parachutemod.showContrails")
                     .define("showContrails", true);
 
             dismountInWater = builder
                     .comment("if true, dismount in water")
-                    .translation("parachutemod.config.dismountInWater")
+                    .translation("config.parachutemod.dismountInWater")
                     .define("dismountInWater", false);
 
             builder.pop();
@@ -130,22 +129,22 @@ public class ConfigHandler {
 
             WASDControl = builder
                     .comment("if true steering is 'WASD', otherwise steering is by sight  [false/true|default:true]")
-                    .translation("parachutemod.config.steeringControl")
+                    .translation("config.parachutemod.steeringControl")
                     .defineInRange("WASDControl", 0, 0, 1);
 
             aadState = builder
                     .comment("if true autoactivate is on [false/true|default:true]")
-                    .translation("parachutemod.config.aadState")
+                    .translation("config.parachutemod.aadState")
                     .define("aadState", true);
 
             hudPosition = builder
                     .comment("HUD position is one of left|center|right [left/center/right|default:right]")
-                    .translation("parachutemod.config.hudPosition")
+                    .translation("config.parachutemod.hudPosition")
                     .defineInRange("hudPosition", 2, 0, 2);
 
             chuteColor = builder
                     .comment("Parachute color, can be a minecraft color, random, or custom")
-                    .translation("parachutemod.config.chuteColor")
+                    .translation("config.parachutemod.chuteColor")
                     .defineInRange("chuteColor", 0, 0, 26);
 
             builder.pop();

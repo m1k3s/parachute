@@ -1,10 +1,10 @@
 /*
  * RenderParachute.java
  *
- * Copyright (c) 2017 Michael Sheppard
+ *  Copyright (c) 2019 Michael Sheppard
  *
- *  =====GPL=============================================================
- * $program is free software: you can redistribute it and/or modify
+ * =====GPL=============================================================
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses.
  * =====================================================================
- *
  */
 package com.parachute.client;
 
@@ -31,7 +30,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.model.ModelBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -100,15 +98,12 @@ public class RenderParachute extends Render<EntityParachute> {
 
         GlStateManager.scalef(0.0625F, -1.0F, SCALE);
 
-//        GlStateManager.glBegin(GL11.GL_LINES);
         GL11.glBegin(GL11.GL_LINES);
         GlStateManager.color3f(b * 0.5F, b * 0.5F, b * 0.65F); // blue-ish
         for (int k = 0; k < 24; k++) {
-//            GlStateManager.verertex3f(x[k], y[k], z[k]);
             GL11.glVertex3f(x[k], y[k], z[k]);
         }
         GL11.glEnd();
-//        GlStateManager.glEnd();
 
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
