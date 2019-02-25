@@ -29,8 +29,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -43,13 +43,11 @@ import javax.annotation.Nonnull;
 public class ItemParachute extends Item {
 
     private static final double OFFSET = 2.5;
-    private static boolean aadState = true; //ConfigHandler.General.getAADState();
+    private static boolean aadState = true; //ConfigHandler.Common.getAADState();
+    private static boolean singleUse = false; // ConfigHandler.Common.getSingleUse()
 
     public ItemParachute(Properties props) {
         super(props);
-//        props.defaultMaxDamage(ItemTier.IRON.getMaxUses());
-//        props.maxStackSize(4);
-        props.group(ItemGroup.TRANSPORTATION);
     }
 
     @Nonnull
@@ -65,10 +63,9 @@ public class ItemParachute extends Item {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public boolean deployParachute(World world, EntityPlayer entityplayer) {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
-        chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
+        chute.rotationYaw = entityplayer.rotationYawHead; // set parachute facing player direction
 
         // check for block collisions
         if (world.checkBlockCollision(entityplayer.getBoundingBox().grow(-0.1D))) {
@@ -79,13 +76,13 @@ public class ItemParachute extends Item {
         chute.playSound(Parachute.RegistryEvents.OPENCHUTE, volume, pitch());
 
         if (Parachute.isClientSide(world)) { // client side
-            RenderParachute.setParachuteColor("black");//ClientConfiguration.getChuteColor());
+            RenderParachute.setParachuteColor("random");//ConfigHandler.Client.getChuteColor());
             playFlyingSound(entityplayer);
         } else { // server side
             world.spawnEntity(chute);
         }
         entityplayer.startRiding(chute);
-//        entityplayer.addStat(Parachute.parachuteDeployed, 1); // update parachute deployed statistics
+        entityplayer.addStat(StatList.ITEM_USED.get(this)); // update parachute deployed statistics
 
         ItemStack itemstack = null;
         Iterable<ItemStack> heldEquipment = entityplayer.getHeldEquipment();
@@ -96,10 +93,13 @@ public class ItemParachute extends Item {
         }
         if (itemstack != null) {
 //            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
-//            if (!entityplayer.capabilities.isCreativeMode || !enchanted) {
-                // the method getParachuteDamageAmount checks for singleUse option
-                itemstack.damageItem(1 /*ConfigHandler.getParachuteDamageAmount(itemstack)*/, entityplayer);
-//            }
+            if (!entityplayer.abilities.isCreativeMode/* || !enchanted*/) {
+                if (singleUse) {
+                    itemstack.shrink(1);
+                } else {
+                    itemstack.damageItem(1, entityplayer);
+                }
+            }
         }
         return true;
     }
@@ -108,7 +108,7 @@ public class ItemParachute extends Item {
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (entityplayer != null) {
-//            boolean active = ConfigHandler.General.getAADState();
+//            boolean aadState = ConfigHandler.Client.getAADState();
             if (Parachute.isServerSide(world)) { // server side
                 aadState = !aadState;
                 //ConfigHandler.setAADState(active);

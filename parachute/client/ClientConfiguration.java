@@ -28,53 +28,20 @@ package com.parachute.client;
 //@SuppressWarnings("unused")
 //public class ClientConfiguration {
 //    private static String chuteColor;
-//    private static double burnVolume;
 //    private static String hudPosition;
-//    private static String steeringControl;
 //    private static boolean aadState;
-//    private static boolean useFlyingSound;
 //
 //    public ClientConfiguration() {}
 //
-//    public static void setChuteColor(String color) {
-//        chuteColor = color;
-//    }
+//    public static void setChuteColor(String color) { chuteColor = color; }
 //
-//    public static void setBurnVolume(double value) {
-//        burnVolume = value;
-//    }
-//
-//    public static void setHudPosition(String value) {
-//        hudPosition = value;
-//    }
-//
-//    public static void setSteeringControl(String value) {
-//        steeringControl = value;
-//    }
+//    public static void setHudPosition(String value) { hudPosition = value; }
 //
 //    public static void setAADState(boolean value) { aadState = value; }
 //
-//    public static void setUseFlyingSound(boolean value) { useFlyingSound = value; }
+//    public static String getChuteColor() { return chuteColor; }
 //
-//
-//    public static String getChuteColor() {
-//        return chuteColor;
-//    }
-//
-//    public static float getBurnVolume() {
-//        return (float)burnVolume;
-//    }
-//
-//    public static String getHudPosition() {
-//        return hudPosition;
-//    }
-//
-//    public static String getSteeringControl() {
-//        return steeringControl;
-//    }
+//    public static String getHudPosition() { return hudPosition; }
 //
 //    public static boolean getAADState() { return aadState; }
-//
-//    public static boolean getUseFlyingSoud() { return useFlyingSound; }
-//
 //}

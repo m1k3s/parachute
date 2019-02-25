@@ -36,9 +36,6 @@ public class ItemParachutePack extends ItemArmor {
 
     public ItemParachutePack(Properties props) {
         super(ArmorMaterial.LEATHER, EntityEquipmentSlot.CHEST, props);
-//        props.defaultMaxDamage(ArmorMaterial.LEATHER.getDurability(armorType));
-//        props.maxStackSize(0);
-//        setUnlocalizedName(Parachute.MODID + ":" + itemName);
     }
 
     // if the player has tried to move the parachute pack item to another inventory slot

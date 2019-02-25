@@ -26,8 +26,8 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
 public class ModKeyBinding {
-    private static final String CATEGORY = "key.category.parachutemod:general";
-    public static final KeyBinding TOGGLE_HUD_VISIBILITY = new KeyBinding("key.parachutemod:toggle_hud", GLFW.GLFW_KEY_H, CATEGORY);
+    private static final String CATEGORY = "key.category.parachutemod.general";
+    public static final KeyBinding TOGGLE_HUD_VISIBILITY = new KeyBinding("key.parachutemod.toggle_hud", GLFW.GLFW_KEY_H, CATEGORY);
 
     public static void registerKeyBinding() {
         ClientRegistry.registerKeyBinding(TOGGLE_HUD_VISIBILITY);

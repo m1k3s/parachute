@@ -55,7 +55,6 @@ public class HudCompassRenderer extends Gui {
     private static final int COLOR_YELLOW = 0xffffff00;
 
     private static final Minecraft MINECRAFT = Minecraft.getInstance();
-    private static final FontRenderer fontRenderer = MINECRAFT.fontRenderer;
 
     public static double altitude;
     private static boolean isVisible = true;
@@ -85,14 +84,15 @@ public class HudCompassRenderer extends Gui {
         }
 
         if (MINECRAFT.isGameFocused() && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            FontRenderer fontRenderer = MINECRAFT.fontRenderer;
             int width = MINECRAFT.mainWindow.getScaledWidth();
 
-            String position = "right";//ClientConfiguration.getHudPosition();
+            String position = "right";//ConfigHandler.Client.getHUDPosition();
 //            if (position == null) {
 //                return;
 //            }
 
-            // attempt to relocate HUD position bsed on effects icons in upper right corner
+            // attempt to relocate HUD position based on effects icons in upper right corner
             if (/*position.equals("right") && */isRenderingEffectsIcons()) {
                 Y_PADDING = 120;
             } else {
@@ -100,7 +100,8 @@ public class HudCompassRenderer extends Gui {
             }
 
             // initialize hudX based on user selected position, 'left', 'center', or 'right'
-            int hudX = /*position.equals("left") ? X_PADDING : position.equals("center") ? (width - HUD_WIDTH) / 2 : */(width - HUD_WIDTH) - X_PADDING;
+            int rwidth = MINECRAFT.mainWindow.getWidth();
+            int hudX = /*position.equals("left") ? X_PADDING : position.equals("center") ? (rwidth - HUD_WIDTH) / 2 :*/ (rwidth - HUD_WIDTH) - X_PADDING;
 
             int textX = hudX + (HUD_WIDTH / 2);
             int textY = Y_PADDING + (HUD_HEIGHT / 2);

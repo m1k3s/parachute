@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.model.ModelBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -59,10 +60,7 @@ public class RenderParachute extends Render<EntityParachute> {
         GlStateManager.rotatef(90.0f - rotationYaw, 0.0f, 1.0f, 0.0f);
         bindEntityTexture(entityparachute);
 
-        // scale the parachute slightly
-//        GlStateManager.scale(1.0, 1.0, 1.0);
-
-        modelParachute.render(entityparachute, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, SCALE);
+        modelParachute.render(entityparachute, partialTicks, 0.0F, 0.0F, 0.0F, 0.0F, SCALE);
         if (entityparachute.getControllingPassenger() != null && Minecraft.getInstance().gameSettings.thirdPersonView > 0) {
             EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
             renderParachuteCords(rider);

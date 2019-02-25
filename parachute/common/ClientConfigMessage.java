@@ -21,7 +21,6 @@
 
 package com.parachute.common;
 
-//import com.parachute.client.ClientConfiguration;
 import com.parachute.client.RenderParachute;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
