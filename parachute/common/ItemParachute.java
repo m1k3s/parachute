@@ -42,8 +42,8 @@ import javax.annotation.Nonnull;
 public class ItemParachute extends Item {
 
     private static final double OFFSET = 2.5;
-    public static boolean aadState = true; //ConfigHandler.Common.getAADState();
-    private static boolean singleUse = false; // ConfigHandler.Common.getSingleUse()
+    private static boolean aadState = true; //ConfigHandler.CommonConfig.getAADState();
+    private static boolean singleUse = false; // ConfigHandler.CommonConfig.getSingleUse()
 
     public ItemParachute(Properties props) {
         super(props);
@@ -64,7 +64,7 @@ public class ItemParachute extends Item {
 
     public boolean deployParachute(World world, EntityPlayer entityplayer) {
         EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
-        chute.rotationYaw = entityplayer.rotationYawHead; // set parachute facing player direction
+        chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
 
         // check for block collisions
         if (world.checkBlockCollision(entityplayer.getBoundingBox().grow(-0.1D))) {
@@ -75,7 +75,7 @@ public class ItemParachute extends Item {
         chute.playSound(Parachute.RegistryEvents.OPENCHUTE, volume, pitch());
 
         if (Parachute.isClientSide(world)) { // client side
-            RenderParachute.setParachuteColor("random");//ConfigHandler.Client.getChuteColor());
+            RenderParachute.setParachuteColor("random");//ConfigHandler.ClientConfig.getChuteColor());
             playFlyingSound(entityplayer);
         } else { // server side
             world.spawnEntity(chute);
@@ -107,7 +107,7 @@ public class ItemParachute extends Item {
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (entityplayer != null) {
-//            boolean aadState = ConfigHandler.Client.getAADState();
+//            boolean aadState = ConfigHandler.ClientConfig.getAADState();
             if (Parachute.isServerSide(world)) { // server side
                 aadState = !aadState;
                 //ConfigHandler.setAADState(active);
@@ -133,5 +133,7 @@ public class ItemParachute extends Item {
             Minecraft.getInstance().getSoundHandler().play(new ParachuteFlyingSound(entityplayer));
 //        }
     }
+
+    public static boolean getAADState() { return aadState; }
 
 }

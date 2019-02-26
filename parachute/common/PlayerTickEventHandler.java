@@ -89,7 +89,7 @@ public class PlayerTickEventHandler {
 //        } else {
 //            aadState = ConfigHandler.General.getAADState();
 //        }
-        boolean aadState = ItemParachute.aadState;
+        boolean aadState = ItemParachute.getAADState();
 
         if (aadState && !(player.getRidingEntity() instanceof EntityParachute)) {
             ItemStack heldItem = null;

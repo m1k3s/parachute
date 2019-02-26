@@ -216,7 +216,7 @@ public class EntityParachute extends Entity {
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && Parachute.isClientSide(world)) {
             double motionFactor = 0.0f;
-            //String WASDSteering = ConfigHandler.Client.getSteeringControl();
+            //String WASDSteering = ConfigHandler.ClientConfig.getSteeringControl();
 
             if (input.forwardKeyDown) {
                 motionFactor += FORWARD_MOMENTUM;

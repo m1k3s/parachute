@@ -77,6 +77,7 @@ public class Parachute {
     private void setup(final FMLCommonSetupEvent event) {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.commonSpec);
         MinecraftForge.EVENT_BUS.register(new ConfigHandler());
+        ConfigHandler.loadConfig();
         PacketHandler.register();
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());

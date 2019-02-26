@@ -21,20 +21,24 @@
 package com.parachute.common;
 
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
+
+import java.nio.file.Paths;
 
 
 public class ConfigHandler {
 
-//    public static void loadConfig() {
-//        CommentedFileConfig.builder(Paths.get("config", Parachute.PARACHUTE_NAME, Parachute.MODID + ".toml")).build();
-//    }
+    public static void loadConfig() {
+        CommentedFileConfig.builder(Paths.get("config", Parachute.PARACHUTE_NAME, Parachute.MODID + ".toml")).build();
+    }
 
-    public static class Common {
+    public static class CommonConfig {
         public static ForgeConfigSpec.BooleanValue singleUse;
         public static ForgeConfigSpec.IntValue heightLimit;
         public static ForgeConfigSpec.BooleanValue thermals;
@@ -46,9 +50,9 @@ public class ConfigHandler {
         public static ForgeConfigSpec.BooleanValue showContrails;
         public static ForgeConfigSpec.BooleanValue dismountInWater;
 
-        public Common(ForgeConfigSpec.Builder builder) {
-            Parachute.getLogger().info("Loading ConfigHandler.Common");
-            builder.comment("Common Config").push("Common");
+        public CommonConfig(ForgeConfigSpec.Builder builder) {
+            Parachute.getLogger().info("Loading ConfigHandler.CommonConfig");
+            builder.comment("CommonConfig Config").push("CommonConfig");
 
             singleUse = builder
                     .comment("set to true for parachute single use")
@@ -110,7 +114,7 @@ public class ConfigHandler {
         public static boolean getAllowThermals() { return thermals.get(); }
     }
 
-    public static class Client {
+    public static class ClientConfig {
         public static ForgeConfigSpec.IntValue WASDControl;
         public static ForgeConfigSpec.IntValue chuteColor;
         public static ForgeConfigSpec.IntValue hudPosition;
@@ -123,9 +127,9 @@ public class ConfigHandler {
         private static final String[] STEERING_CONTROL = { "WASD", "Sight" };
 
 
-        public Client(ForgeConfigSpec.Builder builder) {
-            Parachute.getLogger().info("Loading ConfigHandler.Client");
-            builder.comment("Client Config").push("Client");
+        public ClientConfig(ForgeConfigSpec.Builder builder) {
+            Parachute.getLogger().info("Loading ConfigHandler.ClientConfig");
+            builder.comment("ClientConfig Config").push("ClientConfig");
 
             WASDControl = builder
                     .comment("if true steering is 'WASD', otherwise steering is by sight  [false/true|default:true]")
@@ -160,36 +164,55 @@ public class ConfigHandler {
     }
 
     static final ForgeConfigSpec clientSpec;
-    public static final Client CLIENT;
+    public static final ClientConfig CLIENT_CONFIG;
     static {
-        final Pair<ConfigHandler.Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
+        final Pair<ClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
         clientSpec = specPair.getRight();
-        CLIENT = specPair.getLeft();
+        CLIENT_CONFIG = specPair.getLeft();
     }
 
 
     static final ForgeConfigSpec commonSpec;
-    public static final Common SERVER;
+    public static final CommonConfig COMMON_CONFIG;
     static {
-        final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+        final Pair<CommonConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
         commonSpec = specPair.getRight();
-        SERVER = specPair.getLeft();
+        COMMON_CONFIG = specPair.getLeft();
     }
 
     @SubscribeEvent
     public static void onLoad(final ModConfig.Loading configEvent) {
-        LogManager.getLogger().info("Loaded Parachute config file {}", configEvent.getConfig().getFileName());
+        Parachute.getLogger().info("Loaded Parachute config file: {}", configEvent.getConfig().getFileName());
     }
 
     @SubscribeEvent
     public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
-        LogManager.getLogger().info("Parachute config: {} just got changed on the file system!", configEvent.getConfig().getFileName());
+        Parachute.getLogger().info("Parachute config: {} just got changed on the file system!", configEvent.getConfig().getFileName());
+    }
+
+    // only used on the client
+    @Mod.EventBusSubscriber(modid = Parachute.MODID)
+    private static class ConfigEventHandler {
+        @SubscribeEvent
+        public void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
+            if (event.getModID().equals(Parachute.MODID)) {
+//                ConfigHandler.updateConfigFromGUI();
+                // update the client side options
+//                ClientConfiguration.setChuteColor(chuteColor);
+//                ClientConfiguration.setBurnVolume(burnVolume);
+//                ClientConfiguration.setHudPosition(hudPosition);
+//                ClientConfiguration.setSteeringControl(steeringControl);
+//                ClientConfiguration.setAADState(aadActive);
+//                ClientConfiguration.setUseFlyingSound(useFlyingSound);
+                Parachute.getLogger().info("Configuration changes have been updated for the {} client", Parachute.MODID);
+            }
+        }
     }
 }
 
-//public class ConfigHandler {
+/*public class ConfigHandler {
 
-   /* private static Configuration config = null;
+    private static Configuration config = null;
 
     private static boolean singleUse;
     private static int heightLimit;

@@ -22,6 +22,7 @@
 package com.parachute.client;
 
 import com.parachute.common.EntityParachute;
+import com.parachute.common.ItemParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -87,7 +88,7 @@ public class HudCompassRenderer extends Gui {
             FontRenderer fontRenderer = MINECRAFT.fontRenderer;
             int width = MINECRAFT.mainWindow.getScaledWidth();
 
-            String position = "right";//ConfigHandler.Client.getHUDPosition();
+            String position = "right";//ConfigHandler.ClientConfig.getHUDPosition();
 //            if (position == null) {
 //                return;
 //            }
@@ -118,7 +119,7 @@ public class HudCompassRenderer extends Gui {
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 double compassHeading = calcCompassHeading(chute.rotationYaw);
-                boolean aadActive = true;//ClientConfiguration.getAADState();
+                boolean aadActive = ItemParachute.getAADState();//true;//ClientConfiguration.getAADState();
 
                 GlStateManager.pushMatrix();
 
@@ -182,7 +183,7 @@ public class HudCompassRenderer extends Gui {
                 drawCenteredString(fontRenderer, dist, textX, textY + 2, COLOR_GREEN);
 
                 // 4. AAD active indicator
-                drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, /*aadActive ? */COLOR_GREEN/* : COLOR_RED*/);
+                drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, aadActive ? COLOR_GREEN : COLOR_RED);
 
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableBlend();
