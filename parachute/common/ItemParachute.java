@@ -20,7 +20,6 @@
  */
 package com.parachute.common;
 
-//import com.parachute.client.ClientConfiguration;
 import com.parachute.client.ParachuteFlyingSound;
 import com.parachute.client.RenderParachute;
 import net.minecraft.client.Minecraft;
@@ -42,8 +41,6 @@ import javax.annotation.Nonnull;
 public class ItemParachute extends Item {
 
     private static final double OFFSET = 2.5;
-    private static boolean aadState = true; //ConfigHandler.CommonConfig.getAADState();
-    private static boolean singleUse = false; // ConfigHandler.CommonConfig.getSingleUse()
 
     public ItemParachute(Properties props) {
         super(props);
@@ -75,7 +72,7 @@ public class ItemParachute extends Item {
         chute.playSound(Parachute.RegistryEvents.OPENCHUTE, volume, pitch());
 
         if (Parachute.isClientSide(world)) { // client side
-            RenderParachute.setParachuteColor("random");//ConfigHandler.ClientConfig.getChuteColor());
+            RenderParachute.setParachuteColor(ConfigHandler.ClientConfig.getChuteColor());
             playFlyingSound(entityplayer);
         } else { // server side
             world.spawnEntity(chute);
@@ -93,7 +90,7 @@ public class ItemParachute extends Item {
         if (itemstack != null) {
 //            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
             if (!entityplayer.abilities.isCreativeMode/* || !enchanted*/) {
-                if (singleUse) {
+                if (ConfigHandler.CommonConfig.getSingleUse()) {
                     itemstack.shrink(1);
                 } else {
                     itemstack.damageItem(1, entityplayer);
@@ -107,7 +104,7 @@ public class ItemParachute extends Item {
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (entityplayer != null) {
-//            boolean aadState = ConfigHandler.ClientConfig.getAADState();
+            boolean aadState = ConfigHandler.ClientConfig.getAADState();
             if (Parachute.isServerSide(world)) { // server side
                 aadState = !aadState;
                 //ConfigHandler.setAADState(active);
@@ -129,11 +126,8 @@ public class ItemParachute extends Item {
     }
 
     private void playFlyingSound(EntityPlayer entityplayer) {
-//        if (ClientConfiguration.getUseFlyingSoud()) {
+        if (ConfigHandler.ClientConfig.getUseFlyingSound()) {
             Minecraft.getInstance().getSoundHandler().play(new ParachuteFlyingSound(entityplayer));
-//        }
+        }
     }
-
-    public static boolean getAADState() { return aadState; }
-
 }

@@ -21,8 +21,8 @@
 
 package com.parachute.client;
 
+import com.parachute.common.ConfigHandler;
 import com.parachute.common.EntityParachute;
-import com.parachute.common.ItemParachute;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -88,13 +88,13 @@ public class HudCompassRenderer extends Gui {
             FontRenderer fontRenderer = MINECRAFT.fontRenderer;
             int width = MINECRAFT.mainWindow.getScaledWidth();
 
-            String position = "right";//ConfigHandler.ClientConfig.getHUDPosition();
-//            if (position == null) {
-//                return;
-//            }
+            String position = ConfigHandler.ClientConfig.getHUDPosition();
+            if (position == null) {
+                return;
+            }
 
             // attempt to relocate HUD position based on effects icons in upper right corner
-            if (/*position.equals("right") && */isRenderingEffectsIcons()) {
+            if (position.equals("right") && isRenderingEffectsIcons()) {
                 Y_PADDING = 120;
             } else {
                 Y_PADDING = 20;
@@ -102,7 +102,7 @@ public class HudCompassRenderer extends Gui {
 
             // initialize hudX based on user selected position, 'left', 'center', or 'right'
             int rwidth = MINECRAFT.mainWindow.getWidth();
-            int hudX = /*position.equals("left") ? X_PADDING : position.equals("center") ? (rwidth - HUD_WIDTH) / 2 :*/ (rwidth - HUD_WIDTH) - X_PADDING;
+            int hudX = position.equals("left") ? X_PADDING : position.equals("center") ? (rwidth - HUD_WIDTH) / 2 : (rwidth - HUD_WIDTH) - X_PADDING;
 
             int textX = hudX + (HUD_WIDTH / 2);
             int textY = Y_PADDING + (HUD_HEIGHT / 2);
@@ -119,7 +119,7 @@ public class HudCompassRenderer extends Gui {
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 double compassHeading = calcCompassHeading(chute.rotationYaw);
-                boolean aadActive = ItemParachute.getAADState();//true;//ClientConfiguration.getAADState();
+                boolean aadActive = ConfigHandler.ClientConfig.getAADState();
 
                 GlStateManager.pushMatrix();
 

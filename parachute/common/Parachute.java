@@ -59,6 +59,8 @@ public class Parachute {
     public static final String PARACHUTE_NAME = "parachute";
     public static final String PACK_NAME = "pack";
 
+    public static boolean aadState;
+
 //    public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
 //    public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
 //    public static StatType parachuteDistance = new StatType("stat.parachuteDistance",
@@ -70,13 +72,13 @@ public class Parachute {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::initClient);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.commonSpec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHandler.clientSpec);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SuppressWarnings("unused")
     private void setup(final FMLCommonSetupEvent event) {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.commonSpec);
-        MinecraftForge.EVENT_BUS.register(new ConfigHandler());
         ConfigHandler.loadConfig();
         PacketHandler.register();
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
@@ -86,7 +88,7 @@ public class Parachute {
 
     @SuppressWarnings("unused")
     private void initClient(final FMLClientSetupEvent event) {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHandler.clientSpec);
+
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
         ModKeyBinding.registerKeyBinding();
 
@@ -152,6 +154,8 @@ public class Parachute {
     public static Logger getLogger() {
         return LOGGER;
     }
+
+    public static boolean getAADState() { return aadState; }
 
     // convienience methods
     public static boolean isClientSide(World w) {

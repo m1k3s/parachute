@@ -83,13 +83,7 @@ public class PlayerTickEventHandler {
     // altitude, if autoAltitude has been reached, deploy. If the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
-//        boolean aadState = true;
-//        if (Parachute.isClientSide(player.world)) { // client
-//            aadState = ClientConfiguration.getAADState();
-//        } else {
-//            aadState = ConfigHandler.General.getAADState();
-//        }
-        boolean aadState = ItemParachute.getAADState();
+        boolean aadState = ConfigHandler.ClientConfig.getAADState();
 
         if (aadState && !(player.getRidingEntity() instanceof EntityParachute)) {
             ItemStack heldItem = null;

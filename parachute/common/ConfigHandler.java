@@ -23,10 +23,6 @@ package com.parachute.common;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.nio.file.Paths;
@@ -49,6 +45,11 @@ public class ConfigHandler {
         public static ForgeConfigSpec.BooleanValue constantTurbulence;
         public static ForgeConfigSpec.BooleanValue showContrails;
         public static ForgeConfigSpec.BooleanValue dismountInWater;
+        public static ForgeConfigSpec.BooleanValue lavaDisablesThermals;
+        public static ForgeConfigSpec.DoubleValue forwardMomentum;
+        public static ForgeConfigSpec.DoubleValue backMomentum;
+        public static ForgeConfigSpec.DoubleValue rotationMomentum;
+        public static ForgeConfigSpec.DoubleValue slideMomentum;
 
         public CommonConfig(ForgeConfigSpec.Builder builder) {
             Parachute.getLogger().info("Loading ConfigHandler.CommonConfig");
@@ -62,7 +63,7 @@ public class ConfigHandler {
             heightLimit = builder
                     .comment("0 (zero) disables altitude limiting")
                     .translation("config.parachutemod.heightLimit")
-                    .defineInRange("heightLimit", 255, 0, 255);
+                    .defineInRange("heightLimit", 256, 0, 256);
 
             thermals = builder
                     .comment("enable thermal rise by pressing the space bar")
@@ -77,7 +78,7 @@ public class ConfigHandler {
             lavaThermals = builder
                     .comment("use lava heat to get thermals to rise up, optionally disables space bar thermals")
                     .translation("config.parachutemod.thermals")
-                    .define("thermals", false);
+                    .define("thermals", true);
 
             minLavaDistance = builder
                     .comment("minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava!")
@@ -104,6 +105,31 @@ public class ConfigHandler {
                     .translation("config.parachutemod.dismountInWater")
                     .define("dismountInWater", false);
 
+            lavaDisablesThermals = builder
+                    .comment("if true normal thermals are disabled by lava thermals")
+                    .translation("config.parachutemod.lavaDisablesThermals")
+                    .define("lavaDisablesThermals", false);
+
+            forwardMomentum = builder
+                    .comment("delta forward momentum value")
+                    .translation("config.parachutemod.forwardMomentum")
+                    .defineInRange("forwardMomentum", 0.015, 0.01, 0.02);
+
+            backMomentum = builder
+                    .comment("delta back momentum value")
+                    .translation("config.parachutemod.backMomentum")
+                    .defineInRange("backMomentum", 0.008, 0.005, 0.01);
+
+            rotationMomentum = builder
+                    .comment("delta rotation momentum value")
+                    .translation("config.parachutemod.rotationMomentum")
+                    .defineInRange("rotationMomentum", 0.2, 0.1, 0.3);
+
+            slideMomentum = builder
+                    .comment("delta slide momentum value")
+                    .translation("config.parachutemod.slideMomentum")
+                    .defineInRange("slideMomentum", 0.005, 0.004, 0.008);
+
             builder.pop();
         }
 
@@ -112,6 +138,31 @@ public class ConfigHandler {
         public static boolean getDismountInWater() { return dismountInWater.get(); }
 
         public static boolean getAllowThermals() { return thermals.get(); }
+
+        public static boolean getLavaThermals() { return lavaThermals.get(); }
+
+        public static boolean getLavaDisablesThermals() { return lavaDisablesThermals.get(); }
+
+        public static boolean getSingleUse() { return singleUse.get(); }
+
+        public static double getMinLavaDistance() {return minLavaDistance.get(); }
+
+        public static double getMaxLavaDistance() { return maxLavaDistance.get(); }
+
+        public static boolean getConstantTurbulence() { return constantTurbulence.get(); }
+
+        public static int getHeightLimit() { return heightLimit.get(); }
+
+        public static double getForwardMomentum() { return forwardMomentum.get(); }
+
+        public static double getBackMomentum() { return backMomentum.get(); }
+
+        public static double getRotationMomentum() { return rotationMomentum.get(); }
+
+        public static double getSlideMomentum() { return slideMomentum.get(); }
+
+        public static boolean getWeatherAffectsDrift() { return weatherAffectsDrift.get(); }
+
     }
 
     public static class ClientConfig {
@@ -119,6 +170,8 @@ public class ConfigHandler {
         public static ForgeConfigSpec.IntValue chuteColor;
         public static ForgeConfigSpec.IntValue hudPosition;
         public static ForgeConfigSpec.BooleanValue aadState;
+        public static ForgeConfigSpec.BooleanValue useFlyingSound;
+        public static ForgeConfigSpec.DoubleValue burnVolume;
         private static final String[] COLORVALUES = { "random", "black", "blue", "brown", "cyan", "gray", "green", "light_blue",
                 "lime", "magenta", "orange", "pink", "purple", "red", "silver", "white", "yellow",
                 "custom0", "custom1", "custom2", "custom3", "custom4", "custom5", "custom6", "custom7", "custom8", "custom9",
@@ -132,24 +185,34 @@ public class ConfigHandler {
             builder.comment("ClientConfig Config").push("ClientConfig");
 
             WASDControl = builder
-                    .comment("if true steering is 'WASD', otherwise steering is by sight  [false/true|default:true]")
+                    .comment("if true steering is 'WASD', otherwise steering is by sight  [index 0-1]")
                     .translation("config.parachutemod.steeringControl")
                     .defineInRange("WASDControl", 0, 0, 1);
 
             aadState = builder
-                    .comment("if true autoactivate is on [false/true|default:true]")
+                    .comment("if true autoactivate is on [false|true]")
                     .translation("config.parachutemod.aadState")
                     .define("aadState", true);
 
             hudPosition = builder
-                    .comment("HUD position is one of left|center|right [left/center/right|default:right]")
+                    .comment("HUD position is one of left|center|right [index 0-2]")
                     .translation("config.parachutemod.hudPosition")
                     .defineInRange("hudPosition", 2, 0, 2);
 
             chuteColor = builder
-                    .comment("Parachute color, can be a minecraft color, random, or custom")
+                    .comment("Parachute color, can be a minecraft color, random, or custom [index 0-26]")
                     .translation("config.parachutemod.chuteColor")
                     .defineInRange("chuteColor", 0, 0, 26);
+
+            burnVolume = builder
+                    .comment("set the burn sound volume (0.0 to 1.0)")
+                    .translation("config.parachutemod.burnVolume")
+                    .defineInRange("burnVolme", 0.5, 0.0, 1.0);
+
+            useFlyingSound = builder
+                    .comment("set to true to hear the wind while flying")
+                    .translation("config.parachutemod.useFlyingSound")
+                    .define("useFlyingSound", true);
 
             builder.pop();
         }
@@ -161,6 +224,10 @@ public class ConfigHandler {
         public static boolean getAADState() { return aadState.get(); }
 
         public static String getHUDPosition() { return HUDPOSVALUES[hudPosition.get()]; }
+
+        public static boolean getUseFlyingSound() { return useFlyingSound.get(); }
+
+        public static double getBurnVolume() { return burnVolume.get(); }
     }
 
     static final ForgeConfigSpec clientSpec;
@@ -178,35 +245,6 @@ public class ConfigHandler {
         final Pair<CommonConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
         commonSpec = specPair.getRight();
         COMMON_CONFIG = specPair.getLeft();
-    }
-
-    @SubscribeEvent
-    public static void onLoad(final ModConfig.Loading configEvent) {
-        Parachute.getLogger().info("Loaded Parachute config file: {}", configEvent.getConfig().getFileName());
-    }
-
-    @SubscribeEvent
-    public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
-        Parachute.getLogger().info("Parachute config: {} just got changed on the file system!", configEvent.getConfig().getFileName());
-    }
-
-    // only used on the client
-    @Mod.EventBusSubscriber(modid = Parachute.MODID)
-    private static class ConfigEventHandler {
-        @SubscribeEvent
-        public void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
-            if (event.getModID().equals(Parachute.MODID)) {
-//                ConfigHandler.updateConfigFromGUI();
-                // update the client side options
-//                ClientConfiguration.setChuteColor(chuteColor);
-//                ClientConfiguration.setBurnVolume(burnVolume);
-//                ClientConfiguration.setHudPosition(hudPosition);
-//                ClientConfiguration.setSteeringControl(steeringControl);
-//                ClientConfiguration.setAADState(aadActive);
-//                ClientConfiguration.setUseFlyingSound(useFlyingSound);
-                Parachute.getLogger().info("Configuration changes have been updated for the {} client", Parachute.MODID);
-            }
-        }
     }
 }
 

@@ -23,6 +23,7 @@ package com.parachute.common;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,7 +48,7 @@ public class EntityParachute extends Entity {
     private double curLavaDistance;
     private boolean constantTurbulence;
     private boolean showContrails;
-//    private boolean dismountInWater;
+    private boolean dismountInWater;
 
     private double deltaRotation;
 
@@ -63,24 +64,29 @@ public class EntityParachute extends Entity {
     private final static double OFFSET = 2.5; // player Y offset from parachute
     private final static float HEAD_TURN_ANGLE = 120.0f;
     private final static double DECAY_MOMENTUM = 0.97;
-    private final static double FORWARD_MOMENTUM = 0.015;
-    private final static double BACK_MOMENTUM = 0.008;
-    private final static double ROTATION_MOMENTUM = 0.2;
-    private final static double SLIDE_MOMENTUM = 0.005;
+    private double forwardMomentum;
+    private double backMomentum;
+    private double rotationMomentum;
+    private double slideMomentum;
 
     private static boolean ascendMode;
 
     public EntityParachute(World world) {
         super(Parachute.RegistryEvents.PARACHUTE, world);
 
-        constantTurbulence = false;//ConfigHandler.getAllowturbulence();
-        showContrails = true;//ConfigHandler.General.getShowContrails();
-        lavaDistance = 5;//ConfigHandler.getMinLavaDistance();
-        allowThermals = true; //ConfigHandler.General.getAllowThermals();
-        maxAltitude = 256;//ConfigHandler.getMaxAltitude();
-        lavaThermals = true;//ConfigHandler.getAllowLavaThermals();
-//        dismountInWater = false; //ConfigHandler.General.getDismountInWater();
-        maxLavaDistance = 48.0;//ConfigHandler.getMaxLavaDistance();
+        constantTurbulence = ConfigHandler.CommonConfig.getConstantTurbulence();
+        showContrails = ConfigHandler.CommonConfig.getShowContrails();
+        lavaDistance = ConfigHandler.CommonConfig.getMinLavaDistance();
+        allowThermals = ConfigHandler.CommonConfig.getAllowThermals();
+        maxAltitude = ConfigHandler.CommonConfig.getHeightLimit();
+        lavaThermals = ConfigHandler.CommonConfig.getLavaThermals() && !(allowThermals && ConfigHandler.CommonConfig.getLavaDisablesThermals());
+//        lavaThermals = lavaThermals && !(allowThermals && ConfigHandler.CommonConfig.getLavaDisablesThermals());
+        dismountInWater = ConfigHandler.CommonConfig.getDismountInWater();
+        maxLavaDistance = ConfigHandler.CommonConfig.getMaxLavaDistance();
+        forwardMomentum = ConfigHandler.CommonConfig.getForwardMomentum();
+        backMomentum = ConfigHandler.CommonConfig.getBackMomentum();
+        rotationMomentum = ConfigHandler.CommonConfig.getRotationMomentum();
+        slideMomentum = ConfigHandler.CommonConfig.getSlideMomentum();
 
         curLavaDistance = lavaDistance;
         this.world = world;
@@ -216,45 +222,45 @@ public class EntityParachute extends Entity {
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && Parachute.isClientSide(world)) {
             double motionFactor = 0.0f;
-            //String WASDSteering = ConfigHandler.ClientConfig.getSteeringControl();
+            String WASDSteering = ConfigHandler.ClientConfig.getSteeringControl();
 
             if (input.forwardKeyDown) {
-                motionFactor += FORWARD_MOMENTUM;
+                motionFactor += forwardMomentum;
             }
             if (input.backKeyDown) {
-                motionFactor -= BACK_MOMENTUM;
+                motionFactor -= backMomentum;
             }
-//            if (WASDSteering.equals("WASD")) {
+            if (WASDSteering.equals("WASD")) {
                 if (input.leftKeyDown) {
-                    deltaRotation += -(ROTATION_MOMENTUM);
+                    deltaRotation += -(rotationMomentum);
                 }
                 if (input.rightKeyDown) {
-                    deltaRotation += ROTATION_MOMENTUM;
+                    deltaRotation += rotationMomentum;
                 }
 
                 // slight forward momentum while turning
                 if (input.rightKeyDown != input.leftKeyDown && !input.forwardKeyDown && !input.backKeyDown) {
-                    motionFactor += SLIDE_MOMENTUM;
+                    motionFactor += slideMomentum;
                 }
-//            }
+            }
 
             ascendMode = input.jump;
 
             motionY -= currentDescentRate();
-//            if (WASDSteering.equals("WASD")) {
+            if (WASDSteering.equals("WASD")) {
                 rotationYaw += deltaRotation;
-//            } else {
-//                Entity skyDiver = getControllingPassenger();
-//                if (skyDiver instanceof EntityLivingBase) {
-//                    EntityLivingBase pilot = (EntityLivingBase) skyDiver;
-//                    rotationYaw = (float) (pilot.rotationYaw + -pilot.moveStrafing * 90.0);
-//                }
-//            }
+            } else {
+                Entity skyDiver = getControllingPassenger();
+                if (skyDiver instanceof EntityLivingBase) {
+                    EntityLivingBase pilot = (EntityLivingBase) skyDiver;
+                    rotationYaw = (float) (pilot.rotationYaw + -pilot.moveStrafing * 90.0);
+                }
+            }
 
             motionX += MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor;
             motionZ += MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor;
 
-            if (((/*ConfigHandler.getWeatherAffectsDrift() && */isBadWeather()) || constantTurbulence) && rand.nextBoolean()) {
+            if (((ConfigHandler.CommonConfig.getWeatherAffectsDrift() && isBadWeather()) || constantTurbulence) && rand.nextBoolean()) {
                 applyTurbulence(world.isThundering());
             }
         }
@@ -286,7 +292,8 @@ public class EntityParachute extends Entity {
         super.tick();
 
         if (allowThermals && ascendMode && skyDiver != null) { // play the lift sound. kinda like a hot air balloon's burners effect
-            skyDiver.playSound(Parachute.RegistryEvents.LIFTCHUTE, /*ClientConfiguration.getBurnVolume()*/0.5f, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+            float burnVolume = (float) ConfigHandler.ClientConfig.getBurnVolume();
+            skyDiver.playSound(Parachute.RegistryEvents.LIFTCHUTE, burnVolume, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
         }
 
         // apply momentum/decay
@@ -330,15 +337,15 @@ public class EntityParachute extends Entity {
     private double currentDescentRate() {
         double descentRate = DRIFT; // defaults to DRIFT
 
-//        if (ConfigHandler.getWeatherAffectsDrift()) {
-        if (world.isRaining()) {  // rain makes you fall faster
-            descentRate += 0.002;
-        }
+        if (ConfigHandler.CommonConfig.getWeatherAffectsDrift()) {
+            if (world.isRaining()) {  // rain makes you fall faster
+                descentRate += 0.002;
+            }
 
-        if (world.isThundering()) {  // more rain really makes you fall faster
-            descentRate += 0.004;
+            if (world.isThundering()) {  // more rain really makes you fall faster
+                descentRate += 0.004;
+            }
         }
-//        }
 
         if (lavaThermals) {
             descentRate = doHeatSourceThermals();
@@ -462,7 +469,7 @@ public class EntityParachute extends Entity {
     public void updatePassenger(@Nonnull Entity passenger) {
         if (isPassenger(passenger)) {
             float offset = (float) ((removed ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
-            Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * ((float)Math.PI / 180F) - ((float) Math.PI / 2F));
+            Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
             passenger.setPosition(posX + vec3d.x, posY + (double) offset, posZ + vec3d.z);
             passenger.rotationYaw += deltaRotation;
             passenger.setRotationYawHead(passenger.getRotationYawHead() + (float) deltaRotation);
@@ -480,15 +487,15 @@ public class EntityParachute extends Entity {
         if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
             // if in water check dismount-in-water flag, check for solid block below water
             if (world.isMaterialInBB(bb, Material.WATER)) {
-//                if (ConfigHandler.getDismountInWater()) {
-//                    passenger.stopRiding();
-//                } else {
-                BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
-                bp.down(Math.round((float) bb.minY));
-                if (!world.getBlockState(bp).isTopSolid()) {
-                    return;
+                if (dismountInWater) {
+                    passenger.stopRiding();
+                } else {
+                    BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
+                    bp.down(Math.round((float) bb.minY));
+                    if (!world.getBlockState(bp).isTopSolid()) {
+                        return;
+                    }
                 }
-//                }
             } else if (world.isMaterialInBB(bb, Material.SNOW)) { // check for snow/snow layer, dismount if solid block below
                 BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                 bp.down(Math.round((float) bb.minY));
@@ -505,7 +512,6 @@ public class EntityParachute extends Entity {
                     return;
                 }
             }
-            //passenger.attackEntityFrom(DamageSource.FALL, 1);
             passenger.stopRiding();
         }
     }

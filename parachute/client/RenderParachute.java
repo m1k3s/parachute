@@ -48,6 +48,7 @@ public class RenderParachute extends Render<EntityParachute> {
     public RenderParachute(RenderManager rm) {
         super(rm);
         shadowSize = 0.0F;
+        curColor = "random";
     }
 
     @Override
@@ -72,23 +73,23 @@ public class RenderParachute extends Render<EntityParachute> {
         final float b = rider.getBrightness();
 
         // six section parachute
-        final float x[] = { // front/back
-                -8f, 0f,  8f, 0f, -8f, 0f,
-                 8f, 0f, -8f, 0f,  8f, 0f,
-                -8f, 0f,  8f, 0f, -8f, 0f,
-                 8f, 0f, -8f, 0f,  8f, 0f
+        final float[] x = { // front/back
+                -8f, 0f, 8f, 0f, -8f, 0f,
+                8f, 0f, -8f, 0f, 8f, 0f,
+                -8f, 0f, 8f, 0f, -8f, 0f,
+                8f, 0f, -8f, 0f, 8f, 0f
         };
-        final float y[] = { // up/down
-                0.52f, 1.5f, 0.52f, 1.5f, 0.2f,  1.5f,
-                0.2f,  1.5f, 0.52f, 1.5f, 0.52f, 1.5f,
-                0.2f,  1.5f, 0.2f,  1.5f, 0.05f, 1.5f,
+        final float[] y = { // up/down
+                0.52f, 1.5f, 0.52f, 1.5f, 0.2f, 1.5f,
+                0.2f, 1.5f, 0.52f, 1.5f, 0.52f, 1.5f,
+                0.2f, 1.5f, 0.2f, 1.5f, 0.05f, 1.5f,
                 0.05f, 1.5f, 0.05f, 1.5f, 0.05f, 1.5f
         };
-        final float z[] = { // left/right
+        final float[] z = { // left/right
                 -34f, -3f, -34f, -3f, -20f, -3f,
-                -20f, -3f,  34f,  3f,  34f,  3f,
-                 20f,  3f,  20f,  3f, -8f,  -3f,
-                 -8f, -3f,   8f,  3f,  8f,   3f
+                -20f, -3f, 34f, 3f, 34f, 3f,
+                20f, 3f, 20f, 3f, -8f, -3f,
+                -8f, -3f, 8f, 3f, 8f, 3f
         };
 
         GlStateManager.pushMatrix();
