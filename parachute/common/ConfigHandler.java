@@ -169,7 +169,7 @@ public class ConfigHandler {
         public static ForgeConfigSpec.IntValue WASDControl;
         public static ForgeConfigSpec.IntValue chuteColor;
         public static ForgeConfigSpec.IntValue hudPosition;
-        public static ForgeConfigSpec.BooleanValue aadState;
+//        public static ForgeConfigSpec.BooleanValue aadState;
         public static ForgeConfigSpec.BooleanValue useFlyingSound;
         public static ForgeConfigSpec.DoubleValue burnVolume;
         private static final String[] COLORVALUES = { "random", "black", "blue", "brown", "cyan", "gray", "green", "light_blue",
@@ -189,10 +189,10 @@ public class ConfigHandler {
                     .translation("config.parachutemod.steeringControl")
                     .defineInRange("WASDControl", 0, 0, 1);
 
-            aadState = builder
-                    .comment("if true autoactivate is on [false|true]")
-                    .translation("config.parachutemod.aadState")
-                    .define("aadState", true);
+//            aadState = builder
+//                    .comment("if true autoactivate is on [false|true]")
+//                    .translation("config.parachutemod.aadState")
+//                    .define("aadState", true);
 
             hudPosition = builder
                     .comment("HUD position is one of left|center|right [index 0-2]")
@@ -221,7 +221,7 @@ public class ConfigHandler {
 
         public static String getChuteColor() { return COLORVALUES[chuteColor.get()]; }
 
-        public static boolean getAADState() { return aadState.get(); }
+//        public static boolean getAADState() { return aadState.get(); }
 
         public static String getHUDPosition() { return HUDPOSVALUES[hudPosition.get()]; }
 

@@ -59,7 +59,7 @@ public class Parachute {
     public static final String PARACHUTE_NAME = "parachute";
     public static final String PACK_NAME = "pack";
 
-    public static boolean aadState;
+    public static boolean aadState = true;
 
 //    public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
 //    public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
@@ -156,6 +156,7 @@ public class Parachute {
     }
 
     public static boolean getAADState() { return aadState; }
+    public static void setAadState(boolean state) {aadState = state; }
 
     // convienience methods
     public static boolean isClientSide(World w) {

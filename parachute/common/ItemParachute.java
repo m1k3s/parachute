@@ -104,10 +104,10 @@ public class ItemParachute extends Item {
     // the player can still enable/disable the AAD in the config GUI.
     private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (entityplayer != null) {
-            boolean aadState = ConfigHandler.ClientConfig.getAADState();
+            boolean aadState = Parachute.getAADState();
             if (Parachute.isServerSide(world)) { // server side
                 aadState = !aadState;
-                //ConfigHandler.setAADState(active);
+                Parachute.setAadState(aadState);
                 itemstack.setDisplayName(new TextComponentString(aadState ? "Parachute|AUTO" : "Parachute"));
                 PacketHandler.HANDLER.sendTo(new ClientAADStateMessage(aadState), ((EntityPlayerMP)entityplayer).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
             } else { // client side

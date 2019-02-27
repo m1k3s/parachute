@@ -80,7 +80,6 @@ public class EntityParachute extends Entity {
         allowThermals = ConfigHandler.CommonConfig.getAllowThermals();
         maxAltitude = ConfigHandler.CommonConfig.getHeightLimit();
         lavaThermals = ConfigHandler.CommonConfig.getLavaThermals() && !(allowThermals && ConfigHandler.CommonConfig.getLavaDisablesThermals());
-//        lavaThermals = lavaThermals && !(allowThermals && ConfigHandler.CommonConfig.getLavaDisablesThermals());
         dismountInWater = ConfigHandler.CommonConfig.getDismountInWater();
         maxLavaDistance = ConfigHandler.CommonConfig.getMaxLavaDistance();
         forwardMomentum = ConfigHandler.CommonConfig.getForwardMomentum();
@@ -267,9 +266,7 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    protected void registerData() {
-
-    }
+    protected void registerData() {}
 
     @Override
     public void tick() {
@@ -527,8 +524,6 @@ public class EntityParachute extends Entity {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void applyOrientationToEntity(Entity entityToUpdate) {
-        applyYawToEntity(entityToUpdate);
-    }
+    public void applyOrientationToEntity(Entity entityToUpdate) { applyYawToEntity(entityToUpdate); }
 
 }

@@ -119,7 +119,7 @@ public class HudCompassRenderer extends Gui {
                 double homeDir = getHomeDirection(chute.rotationYaw);
                 double distance = getHomeDistance();
                 double compassHeading = calcCompassHeading(chute.rotationYaw);
-                boolean aadActive = ConfigHandler.ClientConfig.getAADState();
+                boolean aadActive = Parachute.getAADState();
 
                 GlStateManager.pushMatrix();
 
