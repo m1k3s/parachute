@@ -49,6 +49,10 @@ public class EntityParachute extends Entity {
     private boolean constantTurbulence;
     private boolean showContrails;
     private boolean dismountInWater;
+    private double forwardMomentum;
+    private double backMomentum;
+    private double rotationMomentum;
+    private double slideMomentum;
 
     private double deltaRotation;
 
@@ -64,10 +68,6 @@ public class EntityParachute extends Entity {
     private final static double OFFSET = 2.5; // player Y offset from parachute
     private final static float HEAD_TURN_ANGLE = 120.0f;
     private final static double DECAY_MOMENTUM = 0.97;
-    private double forwardMomentum;
-    private double backMomentum;
-    private double rotationMomentum;
-    private double slideMomentum;
 
     private static boolean ascendMode;
 
@@ -164,7 +164,7 @@ public class EntityParachute extends Entity {
 
     @Override
     public boolean canBeRiddenInWater(Entity pilot) {
-        return true; //dismountInWater;
+        return dismountInWater;
     }
 
     @Override

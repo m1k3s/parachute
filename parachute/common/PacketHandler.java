@@ -37,7 +37,7 @@ public final class PacketHandler {
 
     public static void register() {
         int packet_id = 0;
-        HANDLER.registerMessage(packet_id++, ClientConfigMessage.class, ClientConfigMessage::encode, ClientConfigMessage::decode, ClientConfigMessage.Handler::handle);
+//        HANDLER.registerMessage(packet_id++, ClientConfigMessage.class, ClientConfigMessage::encode, ClientConfigMessage::decode, ClientConfigMessage.Handler::handle);
         HANDLER.registerMessage(packet_id, ClientAADStateMessage.class, ClientAADStateMessage::encode, ClientAADStateMessage::decode, ClientAADStateMessage.Handler::handle);
     }
 }

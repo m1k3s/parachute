@@ -88,8 +88,8 @@ public class ItemParachute extends Item {
             }
         }
         if (itemstack != null) {
-//            boolean enchanted = EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("unbreaking"), itemstack) > 0;
-            if (!entityplayer.abilities.isCreativeMode/* || !enchanted*/) {
+            boolean damageable = itemstack.isDamageable();
+            if (!entityplayer.abilities.isCreativeMode || damageable) {
                 if (ConfigHandler.CommonConfig.getSingleUse()) {
                     itemstack.shrink(1);
                 } else {
@@ -109,7 +109,7 @@ public class ItemParachute extends Item {
                 aadState = !aadState;
                 Parachute.setAadState(aadState);
                 itemstack.setDisplayName(new TextComponentString(aadState ? "Parachute|AUTO" : "Parachute"));
-                PacketHandler.HANDLER.sendTo(new ClientAADStateMessage(aadState), ((EntityPlayerMP)entityplayer).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+//                PacketHandler.HANDLER.sendTo(new ClientAADStateMessage(aadState), ((EntityPlayerMP)entityplayer).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
             } else { // client side
                 world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
             }

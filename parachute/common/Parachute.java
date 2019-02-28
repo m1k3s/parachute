@@ -107,7 +107,6 @@ public class Parachute {
                 collect(Collectors.toList()));
     }
 
-    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD event bus
     @SuppressWarnings("unused")
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
