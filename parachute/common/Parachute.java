@@ -34,21 +34,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.stream.Collectors;
 
 
 @Mod(Parachute.MODID)
@@ -61,16 +55,9 @@ public class Parachute {
 
     public static boolean aadState = true;
 
-//    public static final String GUIFACTORY = "com.parachute.client.ParachuteConfigGUIFactory";
-//    public static StatBasic parachuteDeployed = new StatBasic("stat.parachuteDeployed", new TextComponentTranslation("stat.parachuteDeployed"));
-//    public static StatType parachuteDistance = new StatType("stat.parachuteDistance",
-//            new TextComponentTranslation("stat.parachuteDistance"), StatType.distanceStatType);
-
 
     public Parachute() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::initClient);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.commonSpec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHandler.clientSpec);
@@ -97,22 +84,10 @@ public class Parachute {
     }
 
     @SuppressWarnings("unused")
-    private void enqueueIMC(final InterModEnqueueEvent event) {
-        InterModComms.sendTo("forge", "Parachute Mod calling forge", () -> Parachute.MODID);
-    }
-
-    private void processIMC(final InterModProcessEvent event) {
-        LOGGER.info(Parachute.MODID, event.getIMCStream().
-                map(m -> m.getMessageSupplier().get()).
-                collect(Collectors.toList()));
-    }
-
-    @SuppressWarnings("unused")
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
         public static EntityType<EntityParachute> PARACHUTE;
 
-        @ObjectHolder(MODID + ":" + PARACHUTE_NAME)
         public static Item PARACHUTE_ITEM;
 
         public static Item ITEM_PARACHUTE_PACK;

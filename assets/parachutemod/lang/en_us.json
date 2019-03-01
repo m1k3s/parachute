@@ -17,7 +17,7 @@
     "achievement.buildParachute": "Parachute crafted",
     "achievement.buildParachute.desc": "You have crafted a parachute!",
 
-    "key.category.parachutemod.general": "Parachute Keys",
+    "key.category.parachutemod.general": "Parachute",
     "key.parachutemod.toggle_hud": "Toggle HUD Visibility",
 
     "config.parachutemod.singleUse": "singleUse"
