@@ -278,7 +278,7 @@ public class EntityParachute extends Entity {
     public void tick() {
         Entity skyDiver = getControllingPassenger();
         // the player has pressed LSHIFT or been killed,
-        // this is necessary for LSHIFT to kill the parachute
+        // may be necessary for LSHIFT to kill the parachute
         if (skyDiver == null && Parachute.isServerSide(world)) { // server side
             remove();
             return;

@@ -227,7 +227,7 @@ public class ConfigHandler {
                     .comment("Parachute color, can be a minecraft color, random, or custom [index 0-26 default: 0 (random)]",
                             "Color indexes correspond to [0]random, [1]black, [2]blue, [3]brown, [4]cyan, [5]gray",
                             "[6]green, [7]light_blue, [8]lime, [9]magenta, [10]orange, [11]pink, [12]purple",
-                            "[13]red, [14]silver, [15]white, [16]yellow, 2[17]custom0 - [26]custom9"
+                            "[13]red, [14]silver, [15]white, [16]yellow, [17]custom0 - [26]custom9"
                     )
                     .translation("config.parachutemod.chuteColor")
                     .defineInRange("chuteColor", 0, 0, 26);

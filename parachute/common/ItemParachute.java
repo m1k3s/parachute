@@ -34,6 +34,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkDirection;
 
 import javax.annotation.Nonnull;
@@ -125,6 +127,7 @@ public class ItemParachute extends Item {
         return Items.STRING == repair.getItem();
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void playFlyingSound(EntityPlayer entityplayer) {
         if (ConfigHandler.ClientConfig.getUseFlyingSound()) {
             Minecraft.getInstance().getSoundHandler().play(new ParachuteFlyingSound(entityplayer));
