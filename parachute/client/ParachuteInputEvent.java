@@ -34,7 +34,7 @@ public class ParachuteInputEvent {
         Entity entity = event.getEntity();
         if (entity instanceof EntityPlayer) {
             if (entity.isPassenger() && (entity.getRidingEntity() instanceof EntityParachute)) {
-                ((EntityParachute)entity.getRidingEntity()).updateInputs(event.getMovementInput());
+                ((EntityParachute) entity.getRidingEntity()).updateInputs(event.getMovementInput());
             }
         }
     }

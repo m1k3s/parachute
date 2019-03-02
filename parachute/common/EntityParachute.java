@@ -226,7 +226,7 @@ public class EntityParachute extends Entity {
     public void updateInputs(MovementInput input) {
         if (isBeingRidden() && Parachute.isClientSide(world)) {
             double motionFactor = 0.0f;
-            String WASDSteering = ConfigHandler.ClientConfig.getSteeringControl();
+            boolean WASDSteering = ConfigHandler.ClientConfig.getSteeringControl();
 
             if (input.forwardKeyDown) {
                 motionFactor += forwardMomentum;
@@ -234,7 +234,7 @@ public class EntityParachute extends Entity {
             if (input.backKeyDown) {
                 motionFactor -= backMomentum;
             }
-            if (WASDSteering.equals("WASD")) {
+            if (WASDSteering) {
                 if (input.leftKeyDown) {
                     deltaRotation += -(rotationMomentum);
                 }
@@ -251,7 +251,7 @@ public class EntityParachute extends Entity {
             ascendMode = input.jump;
 
             motionY -= currentDescentRate();
-            if (WASDSteering.equals("WASD")) {
+            if (WASDSteering) {
                 rotationYaw += deltaRotation;
             } else {
                 Entity skyDiver = getControllingPassenger();

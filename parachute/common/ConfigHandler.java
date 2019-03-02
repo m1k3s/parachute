@@ -133,50 +133,79 @@ public class ConfigHandler {
             builder.pop();
         }
 
-        public static boolean getShowContrails() { return showContrails.get(); }
+        public static boolean getShowContrails() {
+            return showContrails.get();
+        }
 
-        public static boolean getDismountInWater() { return dismountInWater.get(); }
+        public static boolean getDismountInWater() {
+            return dismountInWater.get();
+        }
 
-        public static boolean getAllowThermals() { return thermals.get(); }
+        public static boolean getAllowThermals() {
+            return thermals.get();
+        }
 
-        public static boolean getLavaThermals() { return lavaThermals.get(); }
+        public static boolean getLavaThermals() {
+            return lavaThermals.get();
+        }
 
-        public static boolean getLavaDisablesThermals() { return lavaDisablesThermals.get(); }
+        public static boolean getLavaDisablesThermals() {
+            return lavaDisablesThermals.get();
+        }
 
-        public static boolean getSingleUse() { return singleUse.get(); }
+        public static boolean getSingleUse() {
+            return singleUse.get();
+        }
 
-        public static double getMinLavaDistance() {return minLavaDistance.get(); }
+        public static double getMinLavaDistance() {
+            return minLavaDistance.get();
+        }
 
-        public static double getMaxLavaDistance() { return maxLavaDistance.get(); }
+        public static double getMaxLavaDistance() {
+            return maxLavaDistance.get();
+        }
 
-        public static boolean getConstantTurbulence() { return constantTurbulence.get(); }
+        public static boolean getConstantTurbulence() {
+            return constantTurbulence.get();
+        }
 
-        public static int getHeightLimit() { return heightLimit.get(); }
+        public static int getHeightLimit() {
+            return heightLimit.get();
+        }
 
-        public static double getForwardMomentum() { return forwardMomentum.get(); }
+        public static double getForwardMomentum() {
+            return forwardMomentum.get();
+        }
 
-        public static double getBackMomentum() { return backMomentum.get(); }
+        public static double getBackMomentum() {
+            return backMomentum.get();
+        }
 
-        public static double getRotationMomentum() { return rotationMomentum.get(); }
+        public static double getRotationMomentum() {
+            return rotationMomentum.get();
+        }
 
-        public static double getSlideMomentum() { return slideMomentum.get(); }
+        public static double getSlideMomentum() {
+            return slideMomentum.get();
+        }
 
-        public static boolean getWeatherAffectsDrift() { return weatherAffectsDrift.get(); }
+        public static boolean getWeatherAffectsDrift() {
+            return weatherAffectsDrift.get();
+        }
 
     }
 
     public static class ClientConfig {
-        public static ForgeConfigSpec.IntValue WASDControl;
+        public static ForgeConfigSpec.BooleanValue WASDControl;
         public static ForgeConfigSpec.IntValue chuteColor;
         public static ForgeConfigSpec.IntValue hudPosition;
         public static ForgeConfigSpec.BooleanValue useFlyingSound;
         public static ForgeConfigSpec.DoubleValue burnVolume;
-        private static final String[] COLORVALUES = { "random", "black", "blue", "brown", "cyan", "gray", "green", "light_blue",
+        private static final String[] COLORVALUES = {"random", "black", "blue", "brown", "cyan", "gray", "green", "light_blue",
                 "lime", "magenta", "orange", "pink", "purple", "red", "silver", "white", "yellow",
                 "custom0", "custom1", "custom2", "custom3", "custom4", "custom5", "custom6", "custom7", "custom8", "custom9",
         };
-        private static final String[] HUDPOSVALUES= { "left", "center", "right" };
-        private static final String[] STEERING_CONTROL = { "WASD", "Sight" };
+        private static final String[] HUDPOSVALUES = {"left", "center", "right"};
 
         public ClientConfig(ForgeConfigSpec.Builder builder) {
             Parachute.getLogger().info("Loading ConfigHandler.ClientConfig");
@@ -184,9 +213,9 @@ public class ConfigHandler {
             builder.comment("ClientConfig Config").push("ClientConfig");
 
             WASDControl = builder
-                    .comment("if index is 0 (zero) steering is 'WASD', otherwise steering is by sight  [index 0-1]")
+                    .comment("if true steering is 'WASD', otherwise steering is by sight")
                     .translation("config.parachutemod.steeringControl")
-                    .defineInRange("WASDControl", 0, 0, 1);
+                    .define("WASDControl", true);
 
             hudPosition = builder
                     .comment("HUD position is one of left|center|right [index 0|1|2]")
@@ -195,9 +224,9 @@ public class ConfigHandler {
 
             chuteColor = builder
                     .comment("Parachute color, can be a minecraft color, random, or custom [index 0-26]",
-                            "Color indexes correspond to random, black, blue, brown, cyan, gray, green, light_blue",
-                            "lime, magenta, orange, pink, purple, red, silver, white, yellow",
-                            "custom0 through custom9"
+                            "Color indexes correspond to [0]random, [1]black, [2]blue, [3]brown, [4]cyan, [5]gray",
+                            "[6]green, [7]light_blue, [8]lime, [9]magenta, [10]orange, [11]pink, [12]purple",
+                            "[13]red, [14]silver, [15]white, [16]yellow, [17]custom0 - [26]custom9"
                     )
                     .translation("config.parachutemod.chuteColor")
                     .defineInRange("chuteColor", 0, 0, 26);
@@ -215,19 +244,30 @@ public class ConfigHandler {
             builder.pop();
         }
 
-        public static String getSteeringControl() { return STEERING_CONTROL[WASDControl.get()]; }
+        public static boolean getSteeringControl() {
+            return WASDControl.get();
+        }
 
-        public static String getChuteColor() { return COLORVALUES[chuteColor.get()]; }
+        public static String getChuteColor() {
+            return COLORVALUES[chuteColor.get()];
+        }
 
-        public static String getHUDPosition() { return HUDPOSVALUES[hudPosition.get()]; }
+        public static String getHUDPosition() {
+            return HUDPOSVALUES[hudPosition.get()];
+        }
 
-        public static boolean getUseFlyingSound() { return useFlyingSound.get(); }
+        public static boolean getUseFlyingSound() {
+            return useFlyingSound.get();
+        }
 
-        public static double getBurnVolume() { return burnVolume.get(); }
+        public static double getBurnVolume() {
+            return burnVolume.get();
+        }
     }
 
     static final ForgeConfigSpec clientSpec;
     public static final ClientConfig CLIENT_CONFIG;
+
     static {
         final Pair<ClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
         clientSpec = specPair.getRight();
@@ -237,6 +277,7 @@ public class ConfigHandler {
 
     static final ForgeConfigSpec commonSpec;
     public static final CommonConfig COMMON_CONFIG;
+
     static {
         final Pair<CommonConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
         commonSpec = specPair.getRight();

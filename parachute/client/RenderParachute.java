@@ -22,7 +22,9 @@ package com.parachute.client;
 
 import com.parachute.common.EntityParachute;
 import com.parachute.common.Parachute;
+
 import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -40,7 +42,7 @@ import javax.annotation.Nonnull;
 public class RenderParachute extends Render<EntityParachute> {
 
     private static String curColor;
-    protected static ModelBase modelParachute = new ModelParachute();
+    protected ModelBase modelParachute = new ModelParachute();
     private static ResourceLocation parachuteTexture = null;
     private static final Random rand = new Random(System.currentTimeMillis());
     private final float SCALE = 1.0f / 16.0f;
@@ -147,22 +149,22 @@ public class RenderParachute extends Render<EntityParachute> {
 
     protected static String getRandomColor() {
         String[] colors = {
-            "black",
-            "blue",
-            "brown",
-            "cyan",
-            "gray",
-            "green",
-            "light_blue",
-            "lime",
-            "magenta",
-            "orange",
-            "pink",
-            "purple",
-            "red",
-            "silver",
-            "white",
-            "yellow"
+                "black",
+                "blue",
+                "brown",
+                "cyan",
+                "gray",
+                "green",
+                "light_blue",
+                "lime",
+                "magenta",
+                "orange",
+                "pink",
+                "purple",
+                "red",
+                "silver",
+                "white",
+                "yellow"
         };
 
         return colors[rand.nextInt(16)];

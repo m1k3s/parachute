@@ -21,7 +21,6 @@
 
 package com.parachute.common;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -35,16 +34,6 @@ public class PlayerLoginHandler {
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerManager.getInstance().Players.add(new PlayerInfo(event.getPlayer().getDisplayName().getString())); // add player name
-
-        // send the client controlled config variables
-        String color = "black";//ConfigHandler.getChuteColor();
-        double burnVolume = 0.5;//ConfigHandler.getBurnVolume();
-        String hudPosition = "right";//ConfigHandler.getHudPosition();
-        String steeringControl = "wasd";//ConfigHandler.getSteeringControl();
-        boolean aadState = true;//ConfigHandler.getAADState();
-        boolean useFlyingSound = true;//ConfigHandler.getUseFlyingSound();
-//        PacketHandler.HANDLER.sendTo(new ClientConfigMessage(color, burnVolume, hudPosition, steeringControl, aadState, useFlyingSound),
-//                (EntityPlayerMP)event.getPlayer());
     }
 
     @SubscribeEvent

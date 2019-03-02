@@ -47,7 +47,7 @@ public class ParachuteFlyingSound extends MovingSound {
     @Override
     public void tick() {
         ++time;
-        
+
         if (player.isAlive() && (time <= 20 || (player.isPassenger() && player.getRidingEntity() instanceof EntityParachute))) {
             double dx = player.posX - player.prevPosX;
             double dz = player.posZ - player.prevPosZ;

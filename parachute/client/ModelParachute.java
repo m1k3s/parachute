@@ -29,34 +29,34 @@ public class ModelParachute extends ModelBase {
     public ModelRenderer[] sections = new ModelRenderer[6];
 
     public ModelParachute() {
-        sections[0] = new ModelRenderer(this, 0, 0);
+        sections[0] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
+        sections[1] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
+        sections[2] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
+        sections[3] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
+        sections[4] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
+        sections[5] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
+
         int x = 16; // front/back
         int y = 2;  // up/down
         int z = 16; // left/right
-        final float d2r = (float)Math.toRadians(1.0);
+        final float d2r = (float) Math.toRadians(1.0);
 
-        sections[0] = new ModelRenderer(this);
         sections[0].addBox(-8f, -8.25f, -5f, x, y, 4);
         sections[0].setRotationPoint(0F, 0F, -36F);
         sections[0].rotateAngleX = -45.0f * d2r;
 
-        sections[1] = new ModelRenderer(this);
         sections[1].addBox(-8F, 1.6F, -32F, x, y, z);
         sections[1].rotateAngleX = -15.0f * d2r;
 
-        sections[2] = new ModelRenderer(this);
         sections[2].addBox(-8F, -0.5F, -16F, x, y, z);
         sections[2].rotateAngleX = -7.5f * d2r;
 
-        sections[3] = new ModelRenderer(this);
         sections[3].addBox(-8F, -0.5F, 0F, x, y, z);
         sections[3].rotateAngleX = 7.5f * d2r;
 
-        sections[4] = new ModelRenderer(this);
         sections[4].addBox(-8F, 1.6F, 16F, x, y, z);
         sections[4].rotateAngleX = 15.0f * d2r;
 
-        sections[5] = new ModelRenderer(this);
         sections[5].addBox(-8f, -8.25f, 1f, x, y, 4);
         sections[5].setRotationPoint(0F, 0F, 36F);
         sections[5].rotateAngleX = 45.0f * d2r;

@@ -84,7 +84,7 @@ public class Parachute {
     }
 
     @SuppressWarnings("unused")
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
         public static EntityType<EntityParachute> PARACHUTE;
 
@@ -130,8 +130,13 @@ public class Parachute {
     }
 
     // AAD state is tracked here
-    public static boolean getAADState() { return aadState; }
-    public static void setAadState(boolean state) {aadState = state; }
+    public static boolean getAADState() {
+        return aadState;
+    }
+
+    public static void setAadState(boolean state) {
+        aadState = state;
+    }
 
     // convienience methods
     public static boolean isClientSide(World w) {
