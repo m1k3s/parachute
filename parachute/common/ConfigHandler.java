@@ -56,77 +56,78 @@ public class ConfigHandler {
             builder.comment("CommonConfig Config").push("CommonConfig");
 
             singleUse = builder
-                    .comment("set to true for parachute single use")
+                    .comment("set to true for parachute single use [default: false]")
                     .translation("config.parachutemod.singleUse")
                     .define("singleUse", false);
 
             heightLimit = builder
-                    .comment("0 (zero) disables altitude limiting")
+                    .comment("0 (zero) disables altitude limiting [default: 256]")
                     .translation("config.parachutemod.heightLimit")
                     .defineInRange("heightLimit", 256, 0, 256);
 
             thermals = builder
-                    .comment("enable thermal rise by pressing the space bar")
+                    .comment("enable thermal rise by pressing the space bar [default: true]")
                     .translation("config.parachutemod.thermals")
                     .define("thermals", true);
 
             weatherAffectsDrift = builder
-                    .comment("set to false if you don't want the drift rate to be affected by bad weather")
+                    .comment("set to false if you don't want the drift rate to be affected by bad weather [default: true]")
                     .translation("config.parachutemod.weatherAffectsDrift")
                     .define("weatherAffectsDrift", true);
 
             lavaThermals = builder
-                    .comment("use lava heat to get thermals to rise up, optionally disables space bar thermals")
+                    .comment("use lava heat to get thermals to rise up, optionally disables space bar thermals [default: true]")
                     .translation("config.parachutemod.thermals")
                     .define("thermals", true);
 
             minLavaDistance = builder
-                    .comment("minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava!")
+                    .comment("minimum distance from lava to grab thermals [default: 5.0]",
+                            "if you go less than 3.0 you will most likely dismount in the lava!")
                     .translation("config.parachutemod.minLavaDistance")
                     .defineInRange("minLavaDistance", 5.0, 2.0, 10.0);
 
             maxLavaDistance = builder
-                    .comment("maximum distance to rise from lava thermals")
+                    .comment("maximum distance to rise from lava thermals [default: 48.0]")
                     .translation("config.parachutemod.maxLavaDistance")
                     .defineInRange("maxLavaDistance", 48.0, 10.0, 100.0);
 
             constantTurbulence = builder
-                    .comment("set to true to always feel the turbulent world of Minecraft")
+                    .comment("set to true to always feel the turbulent world of Minecraft [default: false]")
                     .translation("config.parachutemod.constantTurbulence")
                     .define("constantTurbulence", false);
 
             showContrails = builder
-                    .comment("set to true to show contrails from parachute")
+                    .comment("set to true to show contrails from parachute [default: true]")
                     .translation("config.parachutemod.showContrails")
                     .define("showContrails", true);
 
             dismountInWater = builder
-                    .comment("if true, dismount in water")
+                    .comment("if true, dismount in water [default: false]")
                     .translation("config.parachutemod.dismountInWater")
                     .define("dismountInWater", false);
 
             lavaDisablesThermals = builder
-                    .comment("if true normal thermals are disabled by lava thermals")
+                    .comment("if true normal thermals are disabled by lava thermals [default: false]")
                     .translation("config.parachutemod.lavaDisablesThermals")
                     .define("lavaDisablesThermals", false);
 
             forwardMomentum = builder
-                    .comment("delta forward momentum value")
+                    .comment("delta forward momentum value [default: 0.015]")
                     .translation("config.parachutemod.forwardMomentum")
                     .defineInRange("forwardMomentum", 0.015, 0.01, 0.02);
 
             backMomentum = builder
-                    .comment("delta back momentum value")
+                    .comment("delta back momentum value [default: 0.008]")
                     .translation("config.parachutemod.backMomentum")
                     .defineInRange("backMomentum", 0.008, 0.005, 0.01);
 
             rotationMomentum = builder
-                    .comment("delta rotation momentum value")
+                    .comment("delta rotation momentum value [default: 0.2]")
                     .translation("config.parachutemod.rotationMomentum")
                     .defineInRange("rotationMomentum", 0.2, 0.1, 0.3);
 
             slideMomentum = builder
-                    .comment("delta slide momentum value")
+                    .comment("delta slide momentum value [default: 0.005]")
                     .translation("config.parachutemod.slideMomentum")
                     .defineInRange("slideMomentum", 0.005, 0.004, 0.008);
 
@@ -213,31 +214,31 @@ public class ConfigHandler {
             builder.comment("ClientConfig Config").push("ClientConfig");
 
             WASDControl = builder
-                    .comment("if true steering is 'WASD', otherwise steering is by sight")
+                    .comment("if true steering is 'WASD', otherwise steering is by sight [default: true]")
                     .translation("config.parachutemod.steeringControl")
                     .define("WASDControl", true);
 
             hudPosition = builder
-                    .comment("HUD position is one of left|center|right [index 0|1|2]")
+                    .comment("HUD position is one of left|center|right [index 0|1|2 default: 2]")
                     .translation("config.parachutemod.hudPosition")
                     .defineInRange("hudPosition", 2, 0, 2);
 
             chuteColor = builder
-                    .comment("Parachute color, can be a minecraft color, random, or custom [index 0-26]",
+                    .comment("Parachute color, can be a minecraft color, random, or custom [index 0-26 default: 0 (random)]",
                             "Color indexes correspond to [0]random, [1]black, [2]blue, [3]brown, [4]cyan, [5]gray",
                             "[6]green, [7]light_blue, [8]lime, [9]magenta, [10]orange, [11]pink, [12]purple",
-                            "[13]red, [14]silver, [15]white, [16]yellow, [17]custom0 - [26]custom9"
+                            "[13]red, [14]silver, [15]white, [16]yellow, 2[17]custom0 - [26]custom9"
                     )
                     .translation("config.parachutemod.chuteColor")
                     .defineInRange("chuteColor", 0, 0, 26);
 
             burnVolume = builder
-                    .comment("set the burn sound volume (0.0 to 1.0)")
+                    .comment("set the burn sound volume (0.0 to 1.0)  [default: 0.5]")
                     .translation("config.parachutemod.burnVolume")
                     .defineInRange("burnVolme", 0.5, 0.0, 1.0);
 
             useFlyingSound = builder
-                    .comment("set to true to hear the wind while flying")
+                    .comment("set to true to hear the wind while flying [default: true]")
                     .translation("config.parachutemod.useFlyingSound")
                     .define("useFlyingSound", true);
 

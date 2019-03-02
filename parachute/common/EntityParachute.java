@@ -304,6 +304,7 @@ public class EntityParachute extends Entity {
         motionY *= (motionY < 0.0 ? 0.96 : 0.98); // rises faster than falls
         motionZ *= DECAY_MOMENTUM;
         deltaRotation *= 0.9;
+
         // move the parachute with the motion equations applied
         move(MoverType.SELF, motionX, motionY, motionZ);
 
