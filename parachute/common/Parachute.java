@@ -129,6 +129,7 @@ public class Parachute {
         return LOGGER;
     }
 
+    // AAD state is tracked here
     public static boolean getAADState() { return aadState; }
     public static void setAadState(boolean state) {aadState = state; }
 

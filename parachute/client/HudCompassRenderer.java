@@ -129,30 +129,24 @@ public class HudCompassRenderer extends Gui {
 
                 GlStateManager.scaled(0.25, 0.25, 0.25);
 
-                // 1. draw the background
+                // draw the background
                 if (isNightTime()) {
                     drawTextureFixed(NIGHT_TEXTURE, hudX);
                 }
                 drawTextureFixed(BACKGROUND_TEXTURE, hudX);
 
-                // 2. draw the compass ring
+                // draw the compass ring
                 drawTextureWithRotation((float) -compassHeading, COMPASS_TEXTURE, hudX);
 
-                // 3. draw the home direction ring
+                // draw the home direction ring
                 drawTextureWithRotation((float) homeDir, HOME_TEXTURE, hudX);
 
-                // 4. draw the "where the hell is the front of the parachute" color-coded reticule
-                //    red = not front facing, yellow =  +/-10 degrees, green = +/-2 desgrees
-//                if (ConfigHandler.getFrontBubble()) {
-                    float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
-//                    drawTextureWithRotation(playerLook, BUBBLE_TEXTURE, hudX);
-//
-//
-//                    // 5. draw the reticule on top
-//                    drawTextureFixed(RETICULE_TEXTURE, hudX);
+                // draw the "where the hell is the front of the parachute" color-coded reticule
+                // red = not front facing, yellow =  +/-10 degrees, green = +/-2 desgrees
+                float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
                 if (playerLook <= 2.5 && playerLook >= -2.5) {
                     drawTextureFixed(RETICULE_GREEN_TEXTURE, hudX);
-                }else if (playerLook <= 15.0 && playerLook >= -15.0) {
+                } else if (playerLook <= 15.0 && playerLook >= -15.0) {
                     drawTextureFixed(RETICULE_YELLOW_TEXTURE, hudX);
                 } else {
                     drawTextureFixed(RETICULE_RED_TEXTURE, hudX);
@@ -173,16 +167,16 @@ public class HudCompassRenderer extends Gui {
                 textY /= 2;
 
                 int hFont = fontRenderer.FONT_HEIGHT;
-                // 1. draw the compass heading text
+                // draw the compass heading text
                 drawCenteredString(fontRenderer, compass, textX, textY - (hFont * 2) - 2, COLOR_GREEN);
 
-                // 2. draw the altitude text
+                // draw the altitude text
                 drawCenteredString(fontRenderer, alt, textX, textY - hFont, colorAltitude());
 
-                // 3. draw the distance to the home/spawn point text
+                // draw the distance to the home/spawn point text
                 drawCenteredString(fontRenderer, dist, textX, textY + 2, COLOR_GREEN);
 
-                // 4. AAD active indicator
+                // AAD active indicator
                 drawCenteredString(fontRenderer, "§lAUTO", textX, textY + hFont + 4, aadActive ? COLOR_GREEN : COLOR_RED);
 
                 GlStateManager.disableRescaleNormal();
@@ -279,7 +273,7 @@ public class HudCompassRenderer extends Gui {
         return 1000.0 * MINECRAFT.world.rand.nextGaussian();
     }
 
-   // toggles HUD visibilty using a user defined key, 'H' is default
+    // toggles HUD visibility using a user defined key, 'H' is default
     public static void toggleHUDVisibility() {
         isVisible = !isVisible;
     }

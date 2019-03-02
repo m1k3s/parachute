@@ -179,12 +179,17 @@ public class EntityParachute extends Entity {
 
     @Override
     protected void readAdditional(@Nonnull NBTTagCompound compound) {
-
     }
 
     @Override
     protected void writeAdditional(@Nonnull NBTTagCompound compound) {
+    }
 
+    @Override
+    protected void addPassenger(Entity passenger) {
+        super.addPassenger(passenger);
+        rotationYaw = passenger.rotationYaw;
+        rotationPitch = passenger.rotationPitch;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -266,7 +271,8 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    protected void registerData() {}
+    protected void registerData() {
+    }
 
     @Override
     public void tick() {
@@ -306,15 +312,6 @@ public class EntityParachute extends Entity {
             skyDiver.stopRiding();
         }
 
-        // update distance for parachute statistics
-//        if (skyDiver != null) {
-//            double dX = posX - prevPosX;
-//            double dZ = posZ - prevPosZ;
-//            int distance = Math.round(MathHelper.sqrt(dX * dX + dZ * dZ) * 100.0F);
-//            if (skyDiver instanceof EntityPlayer) {
-//                ((EntityPlayer) skyDiver).addStat(StatList.FLY_ONE_CM);
-//            }
-//        }
         doBlockCollisions();
     }
 
@@ -524,6 +521,8 @@ public class EntityParachute extends Entity {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void applyOrientationToEntity(Entity entityToUpdate) { applyYawToEntity(entityToUpdate); }
+    public void applyOrientationToEntity(Entity entityToUpdate) {
+        applyYawToEntity(entityToUpdate);
+    }
 
 }

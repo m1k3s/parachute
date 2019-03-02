@@ -24,7 +24,6 @@ import com.parachute.client.ParachuteFlyingSound;
 import com.parachute.client.RenderParachute;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -34,7 +33,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.network.NetworkDirection;
 
 import javax.annotation.Nonnull;
 

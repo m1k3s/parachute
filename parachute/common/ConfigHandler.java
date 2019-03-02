@@ -83,7 +83,7 @@ public class ConfigHandler {
             minLavaDistance = builder
                     .comment("minimum distance from lava to grab thermals, if you go less than 3.0 you will most likely dismount in the lava!")
                     .translation("config.parachutemod.minLavaDistance")
-                    .defineInRange("minLavaDistance", 3.0, 2.0, 10.0);
+                    .defineInRange("minLavaDistance", 5.0, 2.0, 10.0);
 
             maxLavaDistance = builder
                     .comment("maximum distance to rise from lava thermals")
@@ -178,23 +178,27 @@ public class ConfigHandler {
         private static final String[] HUDPOSVALUES= { "left", "center", "right" };
         private static final String[] STEERING_CONTROL = { "WASD", "Sight" };
 
-
         public ClientConfig(ForgeConfigSpec.Builder builder) {
             Parachute.getLogger().info("Loading ConfigHandler.ClientConfig");
+
             builder.comment("ClientConfig Config").push("ClientConfig");
 
             WASDControl = builder
-                    .comment("if true steering is 'WASD', otherwise steering is by sight  [index 0-1]")
+                    .comment("if index is 0 (zero) steering is 'WASD', otherwise steering is by sight  [index 0-1]")
                     .translation("config.parachutemod.steeringControl")
                     .defineInRange("WASDControl", 0, 0, 1);
 
             hudPosition = builder
-                    .comment("HUD position is one of left|center|right [index 0-2]")
+                    .comment("HUD position is one of left|center|right [index 0|1|2]")
                     .translation("config.parachutemod.hudPosition")
                     .defineInRange("hudPosition", 2, 0, 2);
 
             chuteColor = builder
-                    .comment("Parachute color, can be a minecraft color, random, or custom [index 0-26]")
+                    .comment("Parachute color, can be a minecraft color, random, or custom [index 0-26]",
+                            "Color indexes correspond to random, black, blue, brown, cyan, gray, green, light_blue",
+                            "lime, magenta, orange, pink, purple, red, silver, white, yellow",
+                            "custom0 through custom9"
+                    )
                     .translation("config.parachutemod.chuteColor")
                     .defineInRange("chuteColor", 0, 0, 26);
 
