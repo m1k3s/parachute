@@ -48,7 +48,7 @@ public class EntityParachute extends Entity {
     private double curLavaDistance;
     private boolean constantTurbulence;
     private boolean showContrails;
-    private boolean dismountInWater;
+    private boolean rideInWater;
     private double forwardMomentum;
     private double backMomentum;
     private double rotationMomentum;
@@ -80,7 +80,7 @@ public class EntityParachute extends Entity {
         allowThermals = ConfigHandler.CommonConfig.getAllowThermals();
         maxAltitude = ConfigHandler.CommonConfig.getHeightLimit();
         lavaThermals = ConfigHandler.CommonConfig.getLavaThermals() && !(allowThermals && ConfigHandler.CommonConfig.getLavaDisablesThermals());
-        dismountInWater = ConfigHandler.CommonConfig.getDismountInWater();
+        rideInWater = ConfigHandler.CommonConfig.getRideInWater();
         maxLavaDistance = ConfigHandler.CommonConfig.getMaxLavaDistance();
         forwardMomentum = ConfigHandler.CommonConfig.getForwardMomentum();
         backMomentum = ConfigHandler.CommonConfig.getBackMomentum();
@@ -164,7 +164,7 @@ public class EntityParachute extends Entity {
 
     @Override
     public boolean canBeRiddenInWater(Entity pilot) {
-        return dismountInWater;
+        return rideInWater;
     }
 
     @Override
@@ -475,14 +475,14 @@ public class EntityParachute extends Entity {
         }
     }
 
-    // check for player colliding with block. dismounting if the block are not air, water,
+    // check for player colliding with block. stop riding if block is not air, water,
     // grass/vines, or snow/snow layers
     private void checkForPlayerCollisions(Entity passenger) {
         AxisAlignedBB bb = passenger.getBoundingBox();
         if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
-            // if in water check dismount-in-water flag, check for solid block below water
+            // if in water check stop dismount-in-water flag, check for solid block below water
             if (world.isMaterialInBB(bb, Material.WATER)) {
-                if (dismountInWater) {
+                if (!rideInWater) {
                     passenger.stopRiding();
                 } else {
                     BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
@@ -491,7 +491,7 @@ public class EntityParachute extends Entity {
                         return;
                     }
                 }
-            } else if (world.isMaterialInBB(bb, Material.SNOW)) { // check for snow/snow layer, dismount if solid block below
+            } else if (world.isMaterialInBB(bb, Material.SNOW)) { // check for snow/snow layer, stop riding if solid block below
                 BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                 bp.down(Math.round((float) bb.minY));
                 if (!world.getBlockState(bp).isTopSolid()) {
@@ -500,7 +500,7 @@ public class EntityParachute extends Entity {
             } else if (world.isMaterialInBB(bb, Material.LEAVES)) { // pass through leaves
                 return;
             } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
-                // check for tallgrass, only dismount when reaching solid block below
+                // check for tallgrass, only stop riding when reaching solid block below
                 BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                 bp.down(Math.round((float) bb.minY));
                 if (!world.getBlockState(bp).isTopSolid()) {

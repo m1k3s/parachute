@@ -44,7 +44,7 @@ public class ConfigHandler {
         public static ForgeConfigSpec.DoubleValue maxLavaDistance;
         public static ForgeConfigSpec.BooleanValue constantTurbulence;
         public static ForgeConfigSpec.BooleanValue showContrails;
-        public static ForgeConfigSpec.BooleanValue dismountInWater;
+        public static ForgeConfigSpec.BooleanValue rideInWater;
         public static ForgeConfigSpec.BooleanValue lavaDisablesThermals;
         public static ForgeConfigSpec.DoubleValue forwardMomentum;
         public static ForgeConfigSpec.DoubleValue backMomentum;
@@ -101,10 +101,10 @@ public class ConfigHandler {
                     .translation("config.parachutemod.showContrails")
                     .define("showContrails", true);
 
-            dismountInWater = builder
-                    .comment("if true, dismount in water [default: false]")
-                    .translation("config.parachutemod.dismountInWater")
-                    .define("dismountInWater", false);
+            rideInWater = builder
+                    .comment("if true, allow riding in water [default: true]")
+                    .translation("config.parachutemod.rideInWater")
+                    .define("rideInWater", true);
 
             lavaDisablesThermals = builder
                     .comment("if true normal thermals are disabled by lava thermals [default: false]")
@@ -138,8 +138,8 @@ public class ConfigHandler {
             return showContrails.get();
         }
 
-        public static boolean getDismountInWater() {
-            return dismountInWater.get();
+        public static boolean getRideInWater() {
+            return rideInWater.get();
         }
 
         public static boolean getAllowThermals() {
