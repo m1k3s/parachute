@@ -79,8 +79,7 @@ public class PlayerTickEventHandler {
     }
 
     // Handles the Automatic Activation Device, if the AAD is active
-    // and the player is actually wearing the parachute, check the
-    // altitude, if autoAltitude has been reached, deploy. If the immediate
+    // and the player is actually wearing the parachute, and the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(EntityPlayer player) {
         boolean aadState = Parachute.getAADState();

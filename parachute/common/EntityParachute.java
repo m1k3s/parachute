@@ -27,6 +27,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.*;
@@ -178,12 +179,10 @@ public class EntityParachute extends Entity {
     }
 
     @Override
-    protected void readAdditional(@Nonnull NBTTagCompound compound) {
-    }
+    protected void readAdditional(@Nonnull NBTTagCompound compound) {}
 
     @Override
-    protected void writeAdditional(@Nonnull NBTTagCompound compound) {
-    }
+    protected void writeAdditional(@Nonnull NBTTagCompound compound) {}
 
     @Override
     protected void addPassenger(Entity passenger) {
@@ -363,7 +362,7 @@ public class EntityParachute extends Entity {
     }
 
     // the following three methods detect lava|fire below the player
-    // at up to 'maxLavaDistance' block.
+    // at up to 'maxLavaDistance' blocks.
     private boolean isHeatSource(BlockPos bp) {
         return world.isFlammableWithin(new AxisAlignedBB(bp).expand(0, 1, 0));
     }
@@ -524,6 +523,11 @@ public class EntityParachute extends Entity {
     @Override
     public void applyOrientationToEntity(Entity entityToUpdate) {
         applyYawToEntity(entityToUpdate);
+    }
+
+    @Override
+    protected boolean canFitPassenger(Entity passenger) {
+        return getPassengers().isEmpty();
     }
 
 }

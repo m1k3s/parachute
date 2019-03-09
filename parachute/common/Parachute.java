@@ -69,13 +69,11 @@ public class Parachute {
         ConfigHandler.loadConfig();
         PacketHandler.register();
         MinecraftForge.EVENT_BUS.register(new PlayerTickEventHandler());
-        MinecraftForge.EVENT_BUS.register(new PlayerLoginHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerHurtEvent());
     }
 
     @SuppressWarnings("unused")
     private void initClient(final FMLClientSetupEvent event) {
-
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
         ModKeyBinding.registerKeyBinding();
 
@@ -89,15 +87,16 @@ public class Parachute {
         public static EntityType<EntityParachute> PARACHUTE;
 
         public static Item PARACHUTE_ITEM;
-
         public static Item ITEM_PARACHUTE_PACK;
+
         public static SoundEvent OPENCHUTE;
         public static SoundEvent LIFTCHUTE;
 
         @SubscribeEvent
         public static void onEntityRegistry(final RegistryEvent.Register<EntityType<?>> event) {
             PARACHUTE = EntityType.Builder.create(EntityParachute.class, EntityParachute::new).tracker(80, 5, true).build(MODID);
-            PARACHUTE.setRegistryName(new ResourceLocation(Parachute.MODID, Parachute.PARACHUTE_NAME));
+            PARACHUTE.setRegistryName(new ResourceLocation(MODID, Parachute.PARACHUTE_NAME));
+
             event.getRegistry().register(PARACHUTE);
         }
 
@@ -116,6 +115,7 @@ public class Parachute {
         public static void onSoundRegistry(final RegistryEvent.Register<SoundEvent> event) {
             OPENCHUTE = new SoundEvent(new ResourceLocation(Parachute.MODID + ":chuteopen")).setRegistryName("chuteopen");
             LIFTCHUTE = new SoundEvent(new ResourceLocation(Parachute.MODID + ":lift")).setRegistryName("lift");
+
             event.getRegistry().registerAll(OPENCHUTE, LIFTCHUTE);
         }
     }
@@ -124,7 +124,6 @@ public class Parachute {
         return (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder());
     }
 
-    @SuppressWarnings("unused")
     public static Logger getLogger() {
         return LOGGER;
     }
