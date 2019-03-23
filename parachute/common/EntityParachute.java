@@ -307,7 +307,7 @@ public class EntityParachute extends Entity {
         move(MoverType.SELF, motionX, motionY, motionZ);
 
         // something bad happened, somehow the skydiver was killed.
-        if (Parachute.isServerSide(world) && skyDiver != null && skyDiver.removed) { // server side
+        if (Parachute.isServerSide(world) && skyDiver != null && !skyDiver.isAlive()) { // server side
             skyDiver.stopRiding();
         }
 
@@ -461,7 +461,7 @@ public class EntityParachute extends Entity {
     @Override
     public void updatePassenger(@Nonnull Entity passenger) {
         if (isPassenger(passenger)) {
-            float offset = (float) ((removed ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
+            float offset = (float)(/*removed ? 0.01f : */getMountedYOffset() + passenger.getYOffset());
             Vec3d vec3d = (new Vec3d(0.0, 0.0, 0.0)).rotateYaw(-rotationYaw * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
             passenger.setPosition(posX + vec3d.x, posY + (double) offset, posZ + vec3d.z);
             passenger.rotationYaw += deltaRotation;

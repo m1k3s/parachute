@@ -52,8 +52,9 @@ public class ConfigHandler {
         public static ForgeConfigSpec.DoubleValue slideMomentum;
 
         public CommonConfig(ForgeConfigSpec.Builder builder) {
-            Parachute.getLogger().info("Loading ConfigHandler.CommonConfig");
-            builder.comment("CommonConfig Config").push("CommonConfig");
+            //Parachute.getLogger().info("Loading ConfigHandler.CommonConfig");
+            builder.comment("CommonConfig Config")
+                   .push("CommonConfig");
 
             singleUse = builder
                     .comment("set to true for parachute single use [default: false]")
