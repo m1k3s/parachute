@@ -1,5 +1,5 @@
 /*
- * ItemParachute.java
+ * ParachuteItem.java
  *
  *  Copyright (c) 2019 Michael Sheppard
  *
@@ -21,17 +21,16 @@
 package com.parachute.common;
 
 import com.parachute.client.ParachuteFlyingSound;
-import com.parachute.client.RenderParachute;
+import com.parachute.client.ParachuteRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
@@ -40,29 +39,29 @@ import net.minecraftforge.fml.network.NetworkDirection;
 
 import javax.annotation.Nonnull;
 
-public class ItemParachute extends Item {
+public class ParachuteItem extends Item {
 
     private static final double OFFSET = 2.5;
 
-    public ItemParachute(Properties props) {
+    public ParachuteItem(Properties props) {
         super(props);
     }
 
     @Nonnull
     @SuppressWarnings("unchecked")
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, @Nonnull EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer, @Nonnull Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (Parachute.isFalling(entityplayer) && entityplayer.getRidingEntity() == null) {
             boolean result = deployParachute(world, entityplayer);
-            return new ActionResult(result ? EnumActionResult.SUCCESS : EnumActionResult.FAIL, itemstack); // unchecked
+            return new ActionResult(result ? ActionResultType.SUCCESS : ActionResultType.FAIL, itemstack); // unchecked
         } else { // toggle the AAD state
             toggleAAD(itemstack, world, entityplayer);
-            return new ActionResult(EnumActionResult.SUCCESS, itemstack); // unchecked
+            return new ActionResult(ActionResultType.SUCCESS, itemstack); // unchecked
         }
     }
 
-    public boolean deployParachute(World world, EntityPlayer entityplayer) {
-        EntityParachute chute = new EntityParachute(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
+    public boolean deployParachute(World world, PlayerEntity entityplayer) {
+        ParachuteEntity chute = new ParachuteEntity(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
         chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
 
         // check for block collisions
@@ -74,18 +73,18 @@ public class ItemParachute extends Item {
         chute.playSound(Parachute.RegistryEvents.OPENCHUTE, volume, pitch());
 
         if (Parachute.isClientSide(world)) { // client side
-            RenderParachute.setParachuteColor(ConfigHandler.ClientConfig.getChuteColor());
+            ParachuteRenderer.setParachuteColor(ConfigHandler.ClientConfig.getChuteColor());
             playFlyingSound(entityplayer);
         } else { // server side
-            world.spawnEntity(chute);
+            world.func_217376_c(chute);
         }
         entityplayer.startRiding(chute);
-        entityplayer.addStat(StatList.ITEM_USED.get(this)); // update parachute deployed statistics
+        entityplayer.addStat(Stats.ITEM_USED.get(this)); // update parachute deployed statistics
 
         ItemStack itemstack = null;
         Iterable<ItemStack> heldEquipment = entityplayer.getHeldEquipment();
         for (ItemStack itemStack : heldEquipment) {
-            if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
+            if (itemStack != null && itemStack.getItem() instanceof ParachuteItem) {
                 itemstack = itemStack;
             }
         }
@@ -95,7 +94,7 @@ public class ItemParachute extends Item {
                 if (ConfigHandler.CommonConfig.getSingleUse()) {
                     itemstack.shrink(1);
                 } else {
-                    itemstack.damageItem(1, entityplayer);
+                    itemstack.setDamage(1);
                 }
             }
         }
@@ -104,14 +103,14 @@ public class ItemParachute extends Item {
 
     // this function toggles the AAD state but does not update the saved config.
     // the player can still enable/disable the AAD in the config GUI.
-    private void toggleAAD(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    private void toggleAAD(ItemStack itemstack, World world, PlayerEntity entityplayer) {
         if (entityplayer != null) {
             boolean aadState = Parachute.getAADState();
             if (Parachute.isServerSide(world)) { // server side
                 aadState = !aadState;
                 Parachute.setAadState(aadState);
-                itemstack.setDisplayName(new TextComponentString(aadState ? "Parachute|AUTO" : "Parachute"));
-                PacketHandler.HANDLER.sendTo(new ClientAADStateMessage(aadState), ((EntityPlayerMP)entityplayer).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+                itemstack.setDisplayName(new StringTextComponent(aadState ? "Parachute|AUTO" : "Parachute"));
+                PacketHandler.HANDLER.sendTo(new ClientAADStateMessage(aadState), ((ServerPlayerEntity)entityplayer).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
             } else { // client side
                 world.playSound(entityplayer, new BlockPos(entityplayer.posX, entityplayer.posY, entityplayer.posZ), SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
             }
@@ -128,7 +127,7 @@ public class ItemParachute extends Item {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void playFlyingSound(EntityPlayer entityplayer) {
+    private void playFlyingSound(PlayerEntity entityplayer) {
         if (ConfigHandler.ClientConfig.getUseFlyingSound()) {
             Minecraft.getInstance().getSoundHandler().play(new ParachuteFlyingSound(entityplayer));
         }

@@ -21,21 +21,21 @@
 
 package com.parachute.client;
 
-import com.parachute.common.EntityParachute;
-import net.minecraft.client.audio.MovingSound;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import com.parachute.common.ParachuteEntity;
+import net.minecraft.client.audio.TickableSound;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ParachuteFlyingSound extends MovingSound {
-    private final EntityPlayer player;
+public class ParachuteFlyingSound extends TickableSound {
+    private final PlayerEntity player;
     private int time;
 
-    public ParachuteFlyingSound(EntityPlayer player) {
+    public ParachuteFlyingSound(PlayerEntity player) {
         super(SoundEvents.ITEM_ELYTRA_FLYING, SoundCategory.PLAYERS);
         this.player = player;
         volume = 0.1f;
@@ -48,7 +48,7 @@ public class ParachuteFlyingSound extends MovingSound {
     public void tick() {
         ++time;
 
-        if (player.isAlive() && (time <= 20 || (player.isPassenger() && player.getRidingEntity() instanceof EntityParachute))) {
+        if (player.isAlive() && (time <= 20 || (player.isPassenger() && player.getRidingEntity() instanceof ParachuteEntity))) {
             double dx = player.posX - player.prevPosX;
             double dz = player.posZ - player.prevPosZ;
             double dy = player.posY - player.prevPosY;

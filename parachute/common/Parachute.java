@@ -23,9 +23,10 @@ package com.parachute.common;
 import com.parachute.client.HudCompassRenderer;
 import com.parachute.client.ModKeyBinding;
 import com.parachute.client.ParachuteInputEvent;
-import com.parachute.client.RenderParachute;
+import com.parachute.client.ParachuteRenderer;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
@@ -74,7 +75,7 @@ public class Parachute {
 
     @SuppressWarnings("unused")
     private void initClient(final FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
+        RenderingRegistry.registerEntityRenderingHandler(ParachuteEntity.class, ParachuteRenderer::new);
         ModKeyBinding.registerKeyBinding();
 
         MinecraftForge.EVENT_BUS.register(new ParachuteInputEvent());
@@ -84,7 +85,7 @@ public class Parachute {
     @SuppressWarnings("unused")
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
-        public static EntityType<EntityParachute> PARACHUTE;
+        public static EntityType<ParachuteEntity> PARACHUTE;
 
         public static Item PARACHUTE_ITEM;
         public static Item ITEM_PARACHUTE_PACK;
@@ -94,7 +95,11 @@ public class Parachute {
 
         @SubscribeEvent
         public static void onEntityRegistry(final RegistryEvent.Register<EntityType<?>> event) {
-            PARACHUTE = EntityType.Builder.create(EntityParachute.class, EntityParachute::new).tracker(80, 5, true).build(MODID);
+            PARACHUTE = EntityType.Builder.<ParachuteEntity>func_220322_a(ParachuteEntity::new, EntityClassification.MISC).func_220321_a(3.25f, (1.0f / 16.0f)).build(MODID);
+//            setsetTrackingRange(80);
+//            setUpdateInterval(5);
+//            setShouldReceiveVelocityUpdates(true);
+            
             PARACHUTE.setRegistryName(new ResourceLocation(MODID, Parachute.PARACHUTE_NAME));
 
             event.getRegistry().register(PARACHUTE);
@@ -102,10 +107,10 @@ public class Parachute {
 
         @SubscribeEvent
         public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
-            PARACHUTE_ITEM = new ItemParachute(new Item.Properties().maxStackSize(4).group(ItemGroup.TRANSPORTATION))
+            PARACHUTE_ITEM = new ParachuteItem(new Item.Properties().maxStackSize(4).group(ItemGroup.TRANSPORTATION))
                     .setRegistryName(new ResourceLocation(Parachute.MODID, Parachute.PARACHUTE_NAME));
 
-            ITEM_PARACHUTE_PACK = new ItemParachutePack(new Item.Properties().maxStackSize(1))
+            ITEM_PARACHUTE_PACK = new ParachutePackItem(new Item.Properties().maxStackSize(1))
                     .setRegistryName(new ResourceLocation(Parachute.MODID, Parachute.PACK_NAME));
 
             event.getRegistry().registerAll(PARACHUTE_ITEM, ITEM_PARACHUTE_PACK);
@@ -120,7 +125,7 @@ public class Parachute {
         }
     }
 
-    public static boolean isFalling(EntityPlayer player) {
+    public static boolean isFalling(PlayerEntity player) {
         return (player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder());
     }
 

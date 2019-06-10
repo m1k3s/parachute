@@ -1,5 +1,5 @@
 /*
- * ItemParachutePack.java
+ * ParachutePackItem.java
  *
  *  Copyright (c) 2019 Michael Sheppard
  *
@@ -20,21 +20,22 @@
  */
 package com.parachute.common;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.world.World;
+
 
 
 // this item is eye candy only. The parachute pack is placed as armor
 // on the player when the parachute item is selected in the hot bar.
-public class ItemParachutePack extends ItemArmor {
+public class ParachutePackItem extends ArmorItem {
 
-    public ItemParachutePack(Properties props) {
-        super(ArmorMaterial.LEATHER, EntityEquipmentSlot.CHEST, props);
+    public ParachutePackItem(Properties props) {
+        super(ArmorMaterial.LEATHER, EquipmentSlotType.CHEST, props);
     }
 
     // if the player has tried to move the parachute pack item to another inventory slot
@@ -43,17 +44,17 @@ public class ItemParachutePack extends ItemArmor {
     // Todo: ideally it would be better if the pack item was not selectable at all.
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (stack.getItem() instanceof ItemParachutePack) {
-            if (Parachute.isServerSide(worldIn) && entityIn instanceof EntityPlayer) {
-                if (EntityEquipmentSlot.CHEST.getIndex() != itemSlot) {
-                    ((EntityPlayer) entityIn).inventory.deleteStack(stack);
+        if (stack.getItem() instanceof ParachutePackItem) {
+            if (Parachute.isServerSide(worldIn) && entityIn instanceof PlayerEntity) {
+                if (EquipmentSlotType.CHEST.getIndex() != itemSlot) {
+                    ((PlayerEntity) entityIn).inventory.deleteStack(stack);
                 }
             }
         }
     }
 
     @Override
-    public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
+    public String getArmorTexture(ItemStack itemstack, Entity entity, EquipmentSlotType slot, String type) {
         if (itemstack.getItem() == Parachute.RegistryEvents.ITEM_PARACHUTE_PACK) {
             return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
         }

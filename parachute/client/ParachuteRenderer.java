@@ -1,5 +1,5 @@
 /*
- * RenderParachute.java
+ * ParachuteRenderer.java
  *
  *  Copyright (c) 2019 Michael Sheppard
  *
@@ -20,17 +20,16 @@
  */
 package com.parachute.client;
 
-import com.parachute.common.EntityParachute;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.parachute.common.Parachute;
 
 import java.util.Random;
 
+import com.parachute.common.ParachuteEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,39 +38,41 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderParachute extends Render<EntityParachute> {
+public class ParachuteRenderer extends EntityRenderer<ParachuteEntity> {
 
     private static String curColor;
-    protected ModelBase modelParachute = new ModelParachute();
+    protected final ParachuteModel parachuteModel = new ParachuteModel();
     private static ResourceLocation parachuteTexture = null;
     private static final Random rand = new Random(System.currentTimeMillis());
     private final float SCALE = 1.0f / 16.0f;
 
-    public RenderParachute(RenderManager rm) {
+    public ParachuteRenderer(EntityRendererManager rm) {
         super(rm);
         shadowSize = 0.0F;
         curColor = "random";
     }
 
     @Override
-    public void doRender(@Nonnull EntityParachute entityparachute, double x, double y, double z, float rotationYaw, float partialTicks) {
+    public void doRender(@Nonnull ParachuteEntity parachuteEntity, double x, double y, double z, float rotationYaw, float partialTicks) {
         GlStateManager.pushMatrix();
 
         GlStateManager.translated(x, y, z);
         GlStateManager.rotatef(90.0f - rotationYaw, 0.0f, 1.0f, 0.0f);
-        bindEntityTexture(entityparachute);
+        bindEntityTexture(parachuteEntity);
 
-        modelParachute.render(entityparachute, partialTicks, 0.0F, 0.0F, 0.0F, 0.0F, SCALE);
-        if (entityparachute.getControllingPassenger() != null && Minecraft.getInstance().gameSettings.thirdPersonView > 0) {
-            EntityPlayer rider = (EntityPlayer) entityparachute.getControllingPassenger();
+        parachuteModel.render(parachuteEntity, partialTicks, 0.0F, 0.0F, 0.0F, 0.0F, SCALE);
+        if (parachuteEntity.getControllingPassenger() != null && Minecraft.getInstance().gameSettings.thirdPersonView > 0) {
+            PlayerEntity rider = (PlayerEntity) parachuteEntity.getControllingPassenger();
             renderParachuteCords(rider);
         }
 
         GlStateManager.popMatrix();
-        super.doRender(entityparachute, x, y, z, rotationYaw, partialTicks);
+        super.doRender(parachuteEntity, x, y, z, rotationYaw, partialTicks);
     }
 
-    public void renderParachuteCords(EntityPlayer rider) {
+    public boolean isMultiPass() { return false; }
+
+    public void renderParachuteCords(PlayerEntity rider) {
         final float b = rider.getBrightness();
 
         // six section parachute
@@ -96,7 +97,7 @@ public class RenderParachute extends Render<EntityParachute> {
 
         GlStateManager.pushMatrix();
 
-        GlStateManager.disableTexture2D();
+        GlStateManager.disableTexture();
         GlStateManager.disableLighting();
 
         GlStateManager.scalef(0.0625F, -1.0F, SCALE);
@@ -109,7 +110,7 @@ public class RenderParachute extends Render<EntityParachute> {
         GL11.glEnd();
 
         GlStateManager.enableLighting();
-        GlStateManager.enableTexture2D();
+        GlStateManager.enableTexture();
 
         GlStateManager.popMatrix();
     }
@@ -182,7 +183,7 @@ public class RenderParachute extends Render<EntityParachute> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull EntityParachute entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull ParachuteEntity entity) {
         parachuteTexture = getParachuteColor(curColor);
         return parachuteTexture;
     }

@@ -21,14 +21,14 @@
 
 package com.parachute.client;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.parachute.common.ConfigHandler;
-import com.parachute.common.EntityParachute;
+import com.parachute.common.ParachuteEntity;
 import com.parachute.common.Parachute;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -38,7 +38,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
-public class HudCompassRenderer extends Gui {
+public class HudCompassRenderer extends AbstractGui {
     protected static final ResourceLocation COMPASS_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-compass.png");
     protected static final ResourceLocation HOME_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-home.png");
     protected static final ResourceLocation RETICULE_RED_TEXTURE = new ResourceLocation(Parachute.MODID + ":" + "textures/gui/hud-reticule_red.png");
@@ -107,8 +107,8 @@ public class HudCompassRenderer extends Gui {
             int textX = hudX + (HUD_WIDTH / 2);
             int textY = Y_PADDING + (HUD_HEIGHT / 2);
 
-            if (MINECRAFT.player.getRidingEntity() instanceof EntityParachute) {
-                EntityParachute chute = (EntityParachute) MINECRAFT.player.getRidingEntity();
+            if (MINECRAFT.player.getRidingEntity() instanceof ParachuteEntity) {
+                ParachuteEntity chute = (ParachuteEntity) MINECRAFT.player.getRidingEntity();
                 if (chute == null) {
                     return;
                 }
@@ -197,7 +197,7 @@ public class HudCompassRenderer extends Gui {
         GlStateManager.pushMatrix();
 
         MINECRAFT.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(screenX, HudCompassRenderer.Y_PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
+        blit(screenX, HudCompassRenderer.Y_PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
 
         GlStateManager.popMatrix();
     }
@@ -214,7 +214,7 @@ public class HudCompassRenderer extends Gui {
         GlStateManager.translated(-tx, -ty, 0);
 
         MINECRAFT.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(screenX, HudCompassRenderer.Y_PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
+        blit(screenX, HudCompassRenderer.Y_PADDING, 0, 0, HudCompassRenderer.HUD_WIDTH, HudCompassRenderer.HUD_HEIGHT);
 
         GlStateManager.popMatrix();
     }
@@ -280,9 +280,9 @@ public class HudCompassRenderer extends Gui {
 
     // icons rendering in upper right corner
     private boolean isRenderingEffectsIcons() {
-        return (MINECRAFT.player.isPotionActive(MobEffects.ABSORPTION) ||
-                MINECRAFT.player.isPotionActive(MobEffects.FIRE_RESISTANCE) ||
-                MINECRAFT.player.isPotionActive(MobEffects.REGENERATION) ||
-                MINECRAFT.player.isPotionActive(MobEffects.RESISTANCE));
+        return (MINECRAFT.player.isPotionActive(Effects.ABSORPTION) ||
+                MINECRAFT.player.isPotionActive(Effects.FIRE_RESISTANCE) ||
+                MINECRAFT.player.isPotionActive(Effects.REGENERATION) ||
+                MINECRAFT.player.isPotionActive(Effects.RESISTANCE));
     }
 }

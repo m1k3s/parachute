@@ -1,5 +1,5 @@
 /*
- * ModelParachute.java
+ * ParachuteModel.java
  *
  *  Copyright (c) 2019 Michael Sheppard
  *
@@ -20,21 +20,23 @@
  */
 package com.parachute.client;
 
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.client.renderer.entity.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import com.parachute.common.ParachuteEntity;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ModelParachute extends ModelBase {
+@OnlyIn(Dist.CLIENT)
+public class ParachuteModel extends EntityModel<ParachuteEntity> {
+    private RendererModel[] sections = new RendererModel[6];
 
-    public ModelRenderer[] sections = new ModelRenderer[6];
-
-    public ModelParachute() {
-        sections[0] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
-        sections[1] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
-        sections[2] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
-        sections[3] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
-        sections[4] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
-        sections[5] = new ModelRenderer(this, 0, 0).setTextureSize(16, 16);
+    public ParachuteModel() {
+        sections[0] = new RendererModel(this, 0, 0).setTextureSize(16, 16);
+        sections[1] = new RendererModel(this, 0, 0).setTextureSize(16, 16);
+        sections[2] = new RendererModel(this, 0, 0).setTextureSize(16, 16);
+        sections[3] = new RendererModel(this, 0, 0).setTextureSize(16, 16);
+        sections[4] = new RendererModel(this, 0, 0).setTextureSize(16, 16);
+        sections[5] = new RendererModel(this, 0, 0).setTextureSize(16, 16);
 
         int x = 16; // front/back
         int y = 2;  // up/down
@@ -63,13 +65,13 @@ public class ModelParachute extends ModelBase {
     }
 
     public void renderCanopy(float scale) {
-        for (ModelRenderer pmr : sections) {
+        for (RendererModel pmr : sections) {
             pmr.render(scale);
         }
     }
 
-    @Override
-    public void render(Entity entity, float x, float y, float z, float yaw, float pitch, float scale) {
+    public void render(ParachuteEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        func_212844_a_(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         renderCanopy(scale);
     }
 

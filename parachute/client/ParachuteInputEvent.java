@@ -21,9 +21,9 @@
 
 package com.parachute.client;
 
-import com.parachute.common.EntityParachute;
+import com.parachute.common.ParachuteEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -32,9 +32,9 @@ public class ParachuteInputEvent {
     @SubscribeEvent
     public void inputEvent(InputUpdateEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityPlayer) {
-            if (entity.isPassenger() && (entity.getRidingEntity() instanceof EntityParachute)) {
-                ((EntityParachute) entity.getRidingEntity()).updateInputs(event.getMovementInput());
+        if (entity instanceof PlayerEntity) {
+            if (entity.isPassenger() && (entity.getRidingEntity() instanceof ParachuteEntity)) {
+                ((ParachuteEntity) entity.getRidingEntity()).updateInputs(event.getMovementInput());
             }
         }
     }

@@ -20,13 +20,13 @@
  */
 package com.parachute.common;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.util.EnumHand;
-import net.minecraftforge.client.GuiIngameForge;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.util.Hand;
+import net.minecraftforge.client.ForgeIngameGui;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class PlayerTickEventHandler {
@@ -48,32 +48,32 @@ public class PlayerTickEventHandler {
     // Remove the ITEM_PARACHUTE_PACK if the player is no longer holding the PARACHUTE_ITEM
     // as long as the player is not on the parachute. If there is already an
     // armor item in the armor slot do nothing.
-    private void togglePlayerParachutePack(EntityPlayer player) {
+    private void togglePlayerParachutePack(PlayerEntity player) {
         if (player != null) {
-            ItemStack armor = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+            ItemStack armor = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
             ItemStack heldItemMainhand = player.getHeldItemMainhand();
-            ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(EnumHand.OFF_HAND);
-            boolean deployed = player.getRidingEntity() instanceof EntityParachute;
+            ItemStack heldItem = !heldItemMainhand.isEmpty() ? heldItemMainhand : player.getHeldItem(Hand.OFF_HAND);
+            boolean deployed = player.getRidingEntity() instanceof ParachuteEntity;
 
-            if (!deployed && armor.getItem() instanceof ItemParachutePack && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemParachute))) {
-                player.inventory.armorInventory.set(EntityEquipmentSlot.CHEST.getIndex(), ItemStack.EMPTY);
-            } else if (heldItem.getItem() instanceof ItemParachute && armor.isEmpty()) {
-                player.inventory.armorInventory.set(EntityEquipmentSlot.CHEST.getIndex(), new ItemStack(Parachute.RegistryEvents.ITEM_PARACHUTE_PACK));
+            if (!deployed && armor.getItem() instanceof ParachutePackItem && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ParachuteItem))) {
+                player.inventory.armorInventory.set(EquipmentSlotType.CHEST.getIndex(), ItemStack.EMPTY);
+            } else if (heldItem.getItem() instanceof ParachuteItem && armor.isEmpty()) {
+                player.inventory.armorInventory.set(EquipmentSlotType.CHEST.getIndex(), new ItemStack(Parachute.RegistryEvents.ITEM_PARACHUTE_PACK));
             }
         }
     }
 
     // do not display the armorbar if the parachute is selected in the hot bar
     // and no other armor is being worn
-    private void armorBarRenderingHandler(EntityPlayer player) {
+    private void armorBarRenderingHandler(PlayerEntity player) {
         if (player != null) {
-            for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-                if (player.getItemStackFromSlot(slot).getItem() instanceof ItemArmor) {
-                    displayArmorBar = !(player.getItemStackFromSlot(slot).getItem() instanceof ItemParachutePack);
+            for (EquipmentSlotType slot : EquipmentSlotType.values()) {
+                if (player.getItemStackFromSlot(slot).getItem() instanceof ArmorItem) {
+                    displayArmorBar = !(player.getItemStackFromSlot(slot).getItem() instanceof ParachutePackItem);
                 }
             }
             if (Parachute.isClientSide(player.world)) {
-                GuiIngameForge.renderArmor = displayArmorBar;
+                ForgeIngameGui.renderArmor = displayArmorBar;
             }
         }
     }
@@ -81,21 +81,21 @@ public class PlayerTickEventHandler {
     // Handles the Automatic Activation Device, if the AAD is active
     // and the player is actually wearing the parachute, and the immediate
     // AAD option is active, deploy after minFallDistance is reached.
-    private void autoActivateDevice(EntityPlayer player) {
+    private void autoActivateDevice(PlayerEntity player) {
         boolean aadState = Parachute.getAADState();
 
-        if (aadState && !(player.getRidingEntity() instanceof EntityParachute)) {
+        if (aadState && !(player.getRidingEntity() instanceof ParachuteEntity)) {
             ItemStack heldItem = null;
             Iterable<ItemStack> heldEquipment = player.getHeldEquipment();
             for (ItemStack itemStack : heldEquipment) {
-                if (itemStack != null && itemStack.getItem() instanceof ItemParachute) {
+                if (itemStack != null && itemStack.getItem() instanceof ParachuteItem) {
                     heldItem = itemStack;
                 }
             }
             double AAD_FALL_DISTANCE = 5.0;
             if (player.fallDistance > AAD_FALL_DISTANCE) {
-                if (heldItem != null && heldItem.getItem() instanceof ItemParachute) {
-                    ((ItemParachute) heldItem.getItem()).deployParachute(player.world, player);
+                if (heldItem != null && heldItem.getItem() instanceof ParachuteItem) {
+                    ((ParachuteItem) heldItem.getItem()).deployParachute(player.world, player);
                 }
             }
         }
