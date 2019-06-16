@@ -70,12 +70,12 @@ public class ParachuteRenderer extends EntityRenderer<ParachuteEntity> {
         super.doRender(parachuteEntity, x, y, z, rotationYaw, partialTicks);
     }
 
-    public boolean isMultiPass() { return false; }
+//    public boolean isMultiPass() { return false; }
 
     public void renderParachuteCords(PlayerEntity rider) {
         final float b = rider.getBrightness();
 
-        // six section parachute
+        // six section PARACHUTE
         final float[] x = { // front/back
                 -8f, 0f, 8f, 0f, -8f, 0f,
                 8f, 0f, -8f, 0f, 8f, 0f,

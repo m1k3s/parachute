@@ -62,7 +62,7 @@ public class ParachuteItem extends Item {
 
     public boolean deployParachute(World world, PlayerEntity entityplayer) {
         ParachuteEntity chute = new ParachuteEntity(world, entityplayer.posX, entityplayer.posY + OFFSET, entityplayer.posZ);
-        chute.rotationYaw = entityplayer.rotationYaw; // set parachute facing player direction
+        chute.rotationYaw = entityplayer.rotationYaw; // set PARACHUTE facing player direction
 
         // check for block collisions
         if (world.checkBlockCollision(entityplayer.getBoundingBox().grow(-0.1D))) {
@@ -72,14 +72,14 @@ public class ParachuteItem extends Item {
         float volume = 1.0F;
         chute.playSound(Parachute.RegistryEvents.OPENCHUTE, volume, pitch());
 
-        if (Parachute.isClientSide(world)) { // client side
+        if (world.isRemote) { // client side
             ParachuteRenderer.setParachuteColor(ConfigHandler.ClientConfig.getChuteColor());
             playFlyingSound(entityplayer);
         } else { // server side
             world.func_217376_c(chute);
         }
         entityplayer.startRiding(chute);
-        entityplayer.addStat(Stats.ITEM_USED.get(this)); // update parachute deployed statistics
+        entityplayer.addStat(Stats.ITEM_USED.get(this)); // update PARACHUTE deployed statistics
 
         ItemStack itemstack = null;
         Iterable<ItemStack> heldEquipment = entityplayer.getHeldEquipment();
@@ -90,7 +90,7 @@ public class ParachuteItem extends Item {
         }
         if (itemstack != null) {
             boolean damageable = itemstack.isDamageable();
-            if (!entityplayer.abilities.isCreativeMode || damageable) {
+            if (!entityplayer.playerAbilities.isCreativeMode || damageable) {
                 if (ConfigHandler.CommonConfig.getSingleUse()) {
                     itemstack.shrink(1);
                 } else {
@@ -106,7 +106,7 @@ public class ParachuteItem extends Item {
     private void toggleAAD(ItemStack itemstack, World world, PlayerEntity entityplayer) {
         if (entityplayer != null) {
             boolean aadState = Parachute.getAADState();
-            if (Parachute.isServerSide(world)) { // server side
+            if (!world.isRemote) { // server side
                 aadState = !aadState;
                 Parachute.setAadState(aadState);
                 itemstack.setDisplayName(new StringTextComponent(aadState ? "Parachute|AUTO" : "Parachute"));

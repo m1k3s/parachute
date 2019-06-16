@@ -68,7 +68,7 @@ public class ParachuteEntity extends Entity {
 
     private final static double DRIFT = 0.004; // value applied to motionY to descend or DRIFT downward
     private final static double ASCEND = DRIFT * -10.0; // -0.04 - value applied to motionY to ascend
-    private final static double OFFSET = 2.5; // player Y offset from parachute
+    private final static double OFFSET = 2.5; // player Y offset from PARACHUTE
     private final static float HEAD_TURN_ANGLE = 120.0f;
     private final static double DECAY_MOMENTUM = 0.97;
 
@@ -100,7 +100,7 @@ public class ParachuteEntity extends Entity {
     public ParachuteEntity(World world, double x, double y, double z) {
         this(Parachute.RegistryEvents.PARACHUTE, world);
         setPosition(x, y, z);
-        func_213317_d(Vec3d.ZERO);
+        setMotion(Vec3d.ZERO);
         prevPosX = x;
         prevPosY = y;
         prevPosZ = z;
@@ -129,7 +129,7 @@ public class ParachuteEntity extends Entity {
         return getBoundingBox();
     }
 
-    // skydiver should hang when on the parachute and then
+    // skydiver should hang when on the PARACHUTE and then
     // pick up legs when landing.
     @Override
     public boolean shouldRiderSit() {
@@ -155,9 +155,9 @@ public class ParachuteEntity extends Entity {
 
     @Override
     @Nonnull
-    public IPacket<?> func_213297_N() {
-        return new SSpawnObjectPacket(getEntityId(), getUniqueID(), posX, posY, posZ, rotationPitch, rotationYaw, Parachute.RegistryEvents.PARACHUTE, 1, func_213322_ci());
-//        return new SSpawnObjectPacket(this);
+    public IPacket<?> createSpawnPacket() {
+//        return new SSpawnObjectPacket(getEntityId(), getUniqueID(), posX, posY, posZ, rotationPitch, rotationYaw, getType(), 1, getMotion());
+        return new SSpawnObjectPacket(this);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class ParachuteEntity extends Entity {
     }
 
     @Override
-    protected void func_213281_b(@Nonnull CompoundNBT p_213281_1_) {
+    protected void writeAdditional(@Nonnull CompoundNBT p_213281_1_) {
 
     }
 
@@ -211,7 +211,7 @@ public class ParachuteEntity extends Entity {
         }
 
         // forward & vertical motion
-        func_213293_j(velocityX, velocityY, velocityZ);
+        setMotion(velocityX, velocityY, velocityZ);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -220,13 +220,12 @@ public class ParachuteEntity extends Entity {
         velocityX = x;
         velocityY = y;
         velocityZ = z;
-        func_213293_j(velocityX, velocityY, velocityZ);
+        setMotion(velocityX, velocityY, velocityZ);
     }
 
     // updateInputs is called by ParachuteInputEvent class
     public void updateInputs(MovementInput input) {
-        Parachute.getLogger().info("############### updateInputs() ################");
-        if (isBeingRidden() && Parachute.isClientSide(world)) {
+        if (isBeingRidden() && world.isRemote) {
             double motionFactor = 0.0f;
             boolean WASDSteering = ConfigHandler.ClientConfig.getSteeringControl();
 
@@ -265,7 +264,7 @@ public class ParachuteEntity extends Entity {
             double motionY = currentDescentRate() * (-1);
             double motionX = MathHelper.sin((float) Math.toRadians(-rotationYaw)) * motionFactor;
             double motionZ = MathHelper.cos((float) Math.toRadians(rotationYaw)) * motionFactor;
-            func_213317_d(func_213322_ci().add(motionX, motionY, motionZ));
+            setMotion(getMotion().add(motionX, motionY, motionZ));
 
             if (((ConfigHandler.CommonConfig.getWeatherAffectsDrift() && isBadWeather()) || constantTurbulence) && rand.nextBoolean()) {
                 applyTurbulence(world.isThundering());
@@ -280,8 +279,8 @@ public class ParachuteEntity extends Entity {
     public void tick() {
         Entity skyDiver = getControllingPassenger();
         // the player has pressed LSHIFT or been killed,
-        // may be necessary for LSHIFT to kill the parachute
-        if (skyDiver == null && Parachute.isServerSide(world)) { // server side
+        // may be necessary for LSHIFT to kill the PARACHUTE
+        if (skyDiver == null && !world.isRemote) { // server side
             remove();
             return;
         }
@@ -302,18 +301,18 @@ public class ParachuteEntity extends Entity {
         }
 
         // apply momentum/decay
-        Vec3d curMotion = func_213322_ci();
+        Vec3d curMotion = getMotion();
         double motionX = curMotion.x * DECAY_MOMENTUM;
         double motionY = curMotion.y * (curMotion.y < 0.0 ? 0.96 : 0.98);
         double motionZ = curMotion.z * DECAY_MOMENTUM;
         deltaRotation *= 0.9;
-        func_213293_j(motionX, motionY, motionZ);
+        setMotion(motionX, motionY, motionZ);
 
-        // move the parachute with the motion equations applied
-        func_213315_a(MoverType.SELF, func_213322_ci());
+        // move the PARACHUTE with the motion equations applied
+        move(MoverType.SELF, getMotion());
 
         // something bad happened, somehow the skydiver was killed.
-        if (Parachute.isServerSide(world) && skyDiver != null && !skyDiver.isAlive()) { // server side
+        if (!world.isRemote/*)*/ && skyDiver != null && !skyDiver.isAlive()) { // server side
             skyDiver.stopRiding();
         }
 
@@ -376,8 +375,8 @@ public class ParachuteEntity extends Entity {
         Vec3d v1 = new Vec3d(posX, posY, posZ);
         Vec3d v2 = new Vec3d(bp.getX(), bp.getY(), bp.getZ());
         RayTraceResult mop = world.func_217299_a(new RayTraceContext(v1, v2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, this));
-        if (mop.func_216346_c() == RayTraceResult.Type.BLOCK) {
-            BlockPos blockpos = new BlockPos(mop.func_216347_e().x, mop.func_216347_e().y, mop.func_216347_e().z);
+        if (mop.getType() == RayTraceResult.Type.BLOCK) {
+            BlockPos blockpos = new BlockPos(mop.getHitVec().x, mop.getHitVec().y, mop.getHitVec().z);
             return isHeatSource(blockpos);
         }
         return false;
@@ -440,12 +439,12 @@ public class ParachuteEntity extends Entity {
     }
 
     // generate condensation trails at the trailing edge
-    // of the parachute. Yes, I know that most parachutes
+    // of the PARACHUTE. Yes, I know that most parachutes
     // don't generate contrails (no engines), but most worlds
     // aren't made of block with cubic cows either. If you
     // like, you can think of the trails as chemtrails.
     private void generateContrails(boolean ascending) {
-        Vec3d motionVec = func_213322_ci();
+        Vec3d motionVec = getMotion();
         double velocity = Math.sqrt(motionVec.x * motionVec.x + motionVec.z * motionVec.z);
         double cosYaw = 2.25 * Math.cos(Math.toRadians(90.0 + rotationYaw));
         double sinYaw = 2.25 * Math.sin(Math.toRadians(90.0 + rotationYaw));
@@ -484,7 +483,7 @@ public class ParachuteEntity extends Entity {
     // grass/vines, or snow/snow layers
     private void checkForPlayerCollisions(Entity passenger) {
         AxisAlignedBB bb = passenger.getBoundingBox();
-        if (Parachute.isServerSide(world) && world.checkBlockCollision(bb)) {
+        if (!world.isRemote && world.checkBlockCollision(bb)) {
             // if in water check stop dismount-in-water flag, check for solid block below water
             if (world.isMaterialInBB(bb, Material.WATER)) {
                 if (!rideInWater) {
@@ -504,7 +503,7 @@ public class ParachuteEntity extends Entity {
                 }
             } else if (world.isMaterialInBB(bb, Material.LEAVES)) { // pass through leaves
                 return;
-            } else if (world.isMaterialInBB(bb, Material.VINE)) { // handle special case tallgrass
+            } else if (world.isMaterialInBB(bb, Material.TALL_PLANTS)) { // handle special case tallgrass/tallplants
                 // check for tallgrass, only stop riding when reaching solid block below
                 BlockPos bp = new BlockPos(passenger.posX, passenger.posY, passenger.posZ);
                 bp.down(Math.round((float) bb.minY));

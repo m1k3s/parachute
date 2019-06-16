@@ -29,6 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ParachuteInputEvent {
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void inputEvent(InputUpdateEvent event) {
         Entity entity = event.getEntity();

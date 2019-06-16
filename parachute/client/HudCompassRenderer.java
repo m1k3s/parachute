@@ -141,7 +141,7 @@ public class HudCompassRenderer extends AbstractGui {
                 // draw the home direction ring
                 drawTextureWithRotation((float) homeDir, HOME_TEXTURE, hudX);
 
-                // draw the "where the hell is the front of the parachute" color-coded reticule
+                // draw the "where the hell is the front of the PARACHUTE" color-coded reticule
                 // red = not front facing, yellow =  +/-10 degrees, green = +/-2 desgrees
                 float playerLook = MathHelper.wrapDegrees(MINECRAFT.player.getRotationYawHead() - chute.rotationYaw);
                 if (playerLook <= 2.5 && playerLook >= -2.5) {
@@ -280,9 +280,9 @@ public class HudCompassRenderer extends AbstractGui {
 
     // icons rendering in upper right corner
     private boolean isRenderingEffectsIcons() {
-        return (MINECRAFT.player.isPotionActive(Effects.ABSORPTION) ||
-                MINECRAFT.player.isPotionActive(Effects.FIRE_RESISTANCE) ||
-                MINECRAFT.player.isPotionActive(Effects.REGENERATION) ||
-                MINECRAFT.player.isPotionActive(Effects.RESISTANCE));
+        return (MINECRAFT.player.isPotionActive(Effects.field_76444_x) ||
+                MINECRAFT.player.isPotionActive(Effects.field_76426_n) ||
+                MINECRAFT.player.isPotionActive(Effects.field_76428_l) ||
+                MINECRAFT.player.isPotionActive(Effects.field_76429_m));
     }
 }

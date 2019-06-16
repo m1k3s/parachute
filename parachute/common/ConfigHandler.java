@@ -57,7 +57,7 @@ public class ConfigHandler {
                    .push("CommonConfig");
 
             singleUse = builder
-                    .comment("set to true for parachute single use [default: false]")
+                    .comment("set to true for PARACHUTE single use [default: false]")
                     .translation("config.parachutemod.singleUse")
                     .define("singleUse", false);
 
@@ -98,7 +98,7 @@ public class ConfigHandler {
                     .define("constantTurbulence", false);
 
             showContrails = builder
-                    .comment("set to true to show contrails from parachute [default: true]")
+                    .comment("set to true to show contrails from PARACHUTE [default: true]")
                     .translation("config.parachutemod.showContrails")
                     .define("showContrails", true);
 

@@ -44,9 +44,9 @@ public class PlayerTickEventHandler {
     }
 
     // Check the players currently held item and if it is a
-    // PARACHUTE_ITEM set a ITEM_PARACHUTE_PACK in the chestplate armor slot.
-    // Remove the ITEM_PARACHUTE_PACK if the player is no longer holding the PARACHUTE_ITEM
-    // as long as the player is not on the parachute. If there is already an
+    // PARACHUTE_ITEM set a PARACHUTEPACK_ITEM in the chestplate armor slot.
+    // Remove the PARACHUTEPACK_ITEM if the player is no longer holding the PARACHUTE_ITEM
+    // as long as the player is not on the PARACHUTE. If there is already an
     // armor item in the armor slot do nothing.
     private void togglePlayerParachutePack(PlayerEntity player) {
         if (player != null) {
@@ -58,12 +58,12 @@ public class PlayerTickEventHandler {
             if (!deployed && armor.getItem() instanceof ParachutePackItem && (heldItem.isEmpty() || !(heldItem.getItem() instanceof ParachuteItem))) {
                 player.inventory.armorInventory.set(EquipmentSlotType.CHEST.getIndex(), ItemStack.EMPTY);
             } else if (heldItem.getItem() instanceof ParachuteItem && armor.isEmpty()) {
-                player.inventory.armorInventory.set(EquipmentSlotType.CHEST.getIndex(), new ItemStack(Parachute.RegistryEvents.ITEM_PARACHUTE_PACK));
+                player.inventory.armorInventory.set(EquipmentSlotType.CHEST.getIndex(), new ItemStack(Parachute.RegistryEvents.PARACHUTEPACK_ITEM));
             }
         }
     }
 
-    // do not display the armorbar if the parachute is selected in the hot bar
+    // do not display the armorbar if the PARACHUTE is selected in the hot bar
     // and no other armor is being worn
     private void armorBarRenderingHandler(PlayerEntity player) {
         if (player != null) {
@@ -72,14 +72,14 @@ public class PlayerTickEventHandler {
                     displayArmorBar = !(player.getItemStackFromSlot(slot).getItem() instanceof ParachutePackItem);
                 }
             }
-            if (Parachute.isClientSide(player.world)) {
+            if (player.world.isRemote) {
                 ForgeIngameGui.renderArmor = displayArmorBar;
             }
         }
     }
 
     // Handles the Automatic Activation Device, if the AAD is active
-    // and the player is actually wearing the parachute, and the immediate
+    // and the player is actually wearing the PARACHUTE, and the immediate
     // AAD option is active, deploy after minFallDistance is reached.
     private void autoActivateDevice(PlayerEntity player) {
         boolean aadState = Parachute.getAADState();

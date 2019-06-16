@@ -30,22 +30,22 @@ import net.minecraft.world.World;
 
 
 
-// this item is eye candy only. The parachute pack is placed as armor
-// on the player when the parachute item is selected in the hot bar.
+// this item is eye candy only. The PARACHUTE pack is placed as armor
+// on the player when the PARACHUTE item is selected in the hot bar.
 public class ParachutePackItem extends ArmorItem {
 
     public ParachutePackItem(Properties props) {
         super(ArmorMaterial.LEATHER, EquipmentSlotType.CHEST, props);
     }
 
-    // if the player has tried to move the parachute pack item to another inventory slot
+    // if the player has tried to move the PARACHUTE pack item to another inventory slot
     // delete the stack unless the slot is the armor plate slot, the item is only for display
     // if the pack item is dropped getEntityLifespan takes care of that.
     // Todo: ideally it would be better if the pack item was not selectable at all.
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (stack.getItem() instanceof ParachutePackItem) {
-            if (Parachute.isServerSide(worldIn) && entityIn instanceof PlayerEntity) {
+            if (!worldIn.isRemote && entityIn instanceof PlayerEntity) {
                 if (EquipmentSlotType.CHEST.getIndex() != itemSlot) {
                     ((PlayerEntity) entityIn).inventory.deleteStack(stack);
                 }
@@ -55,7 +55,7 @@ public class ParachutePackItem extends ArmorItem {
 
     @Override
     public String getArmorTexture(ItemStack itemstack, Entity entity, EquipmentSlotType slot, String type) {
-        if (itemstack.getItem() == Parachute.RegistryEvents.ITEM_PARACHUTE_PACK) {
+        if (itemstack.getItem() instanceof ParachutePackItem) {//== Parachute.RegistryEvents.PARACHUTEPACK_ITEM) {
             return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";
         }
         return Parachute.MODID.toLowerCase() + ":textures/models/armor/pack.png";

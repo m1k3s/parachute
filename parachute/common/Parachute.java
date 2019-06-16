@@ -31,7 +31,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -42,6 +41,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -83,37 +83,57 @@ public class Parachute {
     }
 
     @SuppressWarnings("unused")
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid = Parachute.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @ObjectHolder(Parachute.MODID)
     public static class RegistryEvents {
-        public static EntityType<ParachuteEntity> PARACHUTE;
+        public final static EntityType<ParachuteEntity> PARACHUTE = null;
 
-        public static Item PARACHUTE_ITEM;
-        public static Item ITEM_PARACHUTE_PACK;
+        public final static Item PARACHUTE_ITEM = null;
+        public static Item PARACHUTEPACK_ITEM = null;
 
-        public static SoundEvent OPENCHUTE;
-        public static SoundEvent LIFTCHUTE;
+        public static SoundEvent OPENCHUTE = null;
+        public static SoundEvent LIFTCHUTE = null;
 
         @SubscribeEvent
         public static void onEntityRegistry(final RegistryEvent.Register<EntityType<?>> event) {
-            PARACHUTE = EntityType.Builder.<ParachuteEntity>func_220322_a(ParachuteEntity::new, EntityClassification.MISC).func_220321_a(3.25f, (1.0f / 16.0f)).build(MODID);
-//            setsetTrackingRange(80);
-//            setUpdateInterval(5);
-//            setShouldReceiveVelocityUpdates(true);
-            
-            PARACHUTE.setRegistryName(new ResourceLocation(MODID, Parachute.PARACHUTE_NAME));
+//            PARACHUTE = EntityType.Builder.<ParachuteEntity>func_220322_a(ParachuteEntity::new, EntityClassification.MISC)
+//                    .setTrackingRange(80)
+//                    .setUpdateInterval(5)
+//                    .setShouldReceiveVelocityUpdates(true)
+//                    .func_220321_a(3.25f, (1.0f / 16.0f))
+//                    .build(Parachute.MODID);
+//
+//            PARACHUTE.setRegistryName(Parachute.MODID, Parachute.PARACHUTE_NAME);
+//
+//            event.getRegistry().register(PARACHUTE);
 
-            event.getRegistry().register(PARACHUTE);
+            event.getRegistry().registerAll(EntityType.Builder.<ParachuteEntity>create(ParachuteEntity::new, EntityClassification.MISC)
+                    .setTrackingRange(80)
+                    .setUpdateInterval(5)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .size(3.25f, (1.0f / 16.0f))
+                    .build(Parachute.MODID)
+                    .setRegistryName(Parachute.MODID, Parachute.PARACHUTE_NAME));
         }
 
         @SubscribeEvent
         public static void onItemRegistry(final RegistryEvent.Register<Item> event) {
-            PARACHUTE_ITEM = new ParachuteItem(new Item.Properties().maxStackSize(4).group(ItemGroup.TRANSPORTATION))
-                    .setRegistryName(new ResourceLocation(Parachute.MODID, Parachute.PARACHUTE_NAME));
+//            PARACHUTE_ITEM = new ParachuteItem(new Item.Properties()
+//                    .maxStackSize(4)
+//                    .group(ItemGroup.TRANSPORTATION))
+//                    .setRegistryName(Parachute.MODID, Parachute.PARACHUTE_NAME);
+//
+            PARACHUTEPACK_ITEM = new ParachutePackItem(new Item.Properties()
+                    .maxStackSize(1))
+                    .setRegistryName(Parachute.MODID, Parachute.PACK_NAME);
+//
+//            event.getRegistry().registerAll(PARACHUTE_ITEM, PARACHUTEPACK_ITEM);
+            event.getRegistry().registerAll(new ParachuteItem(new Item.Properties()
+                    .maxStackSize(4)
+                    .group(ItemGroup.TRANSPORTATION))
+                    .setRegistryName(Parachute.MODID, Parachute.PARACHUTE_NAME),
 
-            ITEM_PARACHUTE_PACK = new ParachutePackItem(new Item.Properties().maxStackSize(1))
-                    .setRegistryName(new ResourceLocation(Parachute.MODID, Parachute.PACK_NAME));
-
-            event.getRegistry().registerAll(PARACHUTE_ITEM, ITEM_PARACHUTE_PACK);
+                    PARACHUTEPACK_ITEM);
         }
 
         @SubscribeEvent
@@ -140,15 +160,6 @@ public class Parachute {
 
     public static void setAadState(boolean state) {
         aadState = state;
-    }
-
-    // convienience methods
-    public static boolean isClientSide(World w) {
-        return w.isRemote;
-    }
-
-    public static boolean isServerSide(World w) {
-        return !w.isRemote;
     }
 
 }
